@@ -1,5 +1,3 @@
-# README #
-
 ### CrowdScribe ###
 
 Website facilitating book publishing
