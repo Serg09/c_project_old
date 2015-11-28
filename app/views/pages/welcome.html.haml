@@ -1,6 +1,36 @@
 -# Top section, guy in jacket
 %section#top-section
-  .row
-    .col-md-5.col-md-offset-7
-      =image_tag 'quote.png', class: 'quote-image'
-      =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
+  .container
+    .row
+      .col-md-5.col-md-offset-7
+        =image_tag 'quote.png', class: 'quote-image'
+        =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
+
+%section#middle-section
+  .container
+    .row
+      .col-md-12.text-center
+        %h1 What do you need help with?
+        %p
+          There is no need to use a giant publisher to get great publishing results.
+          At CrowdScribed, we give you access to a wide range of progressional service via our Book Incubator.
+          We can help with editing, printing, graphic design, marketing, and even funding your book.
+          Our development tools will help you get your project down the road.
+    .row
+      .col-md-4.text-center
+        =image_tag 'money.png', class: 'help-image'
+        %h2 You don't have the funds to publish your book?
+        %p Our digital marketing tools will help you harness the power of the crowd to raise money for your book.
+      .col-md-4.text-center
+        =image_tag 'pencil.png', class: 'help-image'
+        %h2 Maybe you just want help editing your book?
+        %p Professional editora are available to assist.
+      .col-md-4.text-center
+        =image_tag 'arrow.png', class: 'help-image'
+        %h2 Perhaps you are having a bit of writers block?
+        %p You will have access to experienced authors who can help you get back on track.
+    .row
+      .col-md-12
+        %p This and many more tools are available in our incubator.
+        %p Get started today
+        =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'

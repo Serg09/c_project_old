@@ -7,12 +7,27 @@
   margin-right: auto;
 }
 
-#top-section {
+@mixin section-background() {
   background-attachment: fixed;
-  background-image: url(<%= asset_path 'guy_in_sport_coat.jpg' %>);
   background-position: left top;
   background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#top-section {
+  @include section-background;
+  background-image: url(<%= asset_path 'guy_in_sport_coat.jpg' %>);
   height: 550px;
+}
+
+#middle-section {
+  @include section-background;
+  background-image: url(<%= asset_path 'city.jpg' %>);
+  color: #fff;
+  font-family: "Quicksand", Arial, Helvetica, sans-serif;
+  h1 {
+    text-transform: capitalize;
+  }
 }
 
 .quote-image {
@@ -26,4 +41,9 @@
   padding: .8em 2em;
   width: 12em;
   text-transform: uppercase;
+}
+
+.help-image {
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
