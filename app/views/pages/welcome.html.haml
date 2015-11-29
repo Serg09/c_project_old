@@ -11,7 +11,7 @@
     .row
       .col-md-12.text-center
         %h1 What do you need help with?
-        %p
+        %p.larger
           There is no need to use a giant publisher to get great publishing results.
           At CrowdScribed, we give you access to a wide range of progressional service via our Book Incubator.
           We can help with editing, printing, graphic design, marketing, and even funding your book.
@@ -19,18 +19,18 @@
     .row
       .col-md-4.text-center
         =image_tag 'money.png', class: 'help-image'
-        %h2 You don't have the funds to publish your book?
+        .larger You don't have the funds to publish your book?
         %p Our digital marketing tools will help you harness the power of the crowd to raise money for your book.
       .col-md-4.text-center
         =image_tag 'pencil.png', class: 'help-image'
-        %h2 Maybe you just want help editing your book?
+        .larger Maybe you just want help editing your book?
         %p Professional editora are available to assist.
       .col-md-4.text-center
         =image_tag 'arrow.png', class: 'help-image'
-        %h2 Perhaps you are having a bit of writers block?
+        .larger Perhaps you are having a bit of writers block?
         %p You will have access to experienced authors who can help you get back on track.
     .row
-      .col-md-12
-        %p This and many more tools are available in our incubator.
-        %p Get started today
+      .col-md-12.text-center
+        %p.larger This and many more tools are available in our incubator.
+        %p.larger Get started today
         =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
