@@ -3,13 +3,14 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title CrowdScribe
+    %link{ rel: 'icon', type: 'image/png', href: asset_path('crowdscribed_logo_cropped.png') }
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
     = current_user.email if user_signed_in?
 
-    %nav.navbar.navbar-inverse.navbar-fixed-top
+    %nav.navbar.navbar-default.navbar-fixed-top
       .container
         .navbar-header
           %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
@@ -17,9 +18,9 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand{:href => "#"} CrowdScribe
+          =link_to image_tag(asset_path('crowdscribed_logo.png')), root_path
         #navbar.collapse.navbar-collapse
-          %ul.nav.navbar-nav
+          %ul.nav.navbar-nav.navbar-right
             %li.active
               %a{href: "#"} About
             %li
@@ -28,8 +29,9 @@
               %a{href: "#contact"} Books
             %li
               %a{href: "#contact"} Signup
-    .container
-      #main_content
-        = yield
-    %script{src: "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
-    %script{src: "../../dist/js/bootstrap.min.js"}
+    #main_content
+      = yield
+
+    %footer
+      .container
+        Crowdscribed 2014 | All Rights Reserved

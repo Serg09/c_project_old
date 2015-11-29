@@ -12,9 +12,7 @@ default: &default
 
 development:
   <<: *default
-  host: localhost
-  username: app_user
-  password: 123456
+  username: doug
   database: crowdscribe_development
 
 # Warning: The database defined as "test" will be erased and

@@ -1,3 +1,28 @@
 #main_content {
-  margin-top: 4em;
+  margin-top: 5em;
+}
+
+.nav.navbar-nav li a {
+  text-transform: uppercase;
+}
+
+footer {
+  background: #282a2b;
+  color: #8C8989;
+  padding: 2em 0;
+  text-shadow: 1px 2px 1px #000;
+  font-family: 'PT Sans', Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Quicksand Regular'),
+       local('Quicksand-Regular'),
+       font-url('Quicksand-Regular.ttf') format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
