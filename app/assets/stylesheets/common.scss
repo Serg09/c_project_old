@@ -22,3 +22,15 @@ footer {
   font-style: normal;
   font-weight: normal;
 }
+@font-face {
+  font-family: Quicksand;
+  src: asset-url('Quicksand-Bold.otf');
+  font-style: normal;
+  font-weight: bold;
+}
+@font-face {
+  font-family: Quicksand;
+  src: asset-url('Quicksand-Italic.otf');
+  font-style: italic;
+  font-weight: bold;
+}
