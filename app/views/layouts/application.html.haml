@@ -43,7 +43,11 @@
             %li
               %a{href: "#contact"} Signup
     #main_content
-      = yield
+      -if content_for? :title_bar
+        .title-bar
+          .container
+            =yield :title_bar
+      =yield
 
     %footer
       .container
