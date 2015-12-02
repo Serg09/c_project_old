@@ -22,7 +22,20 @@
         #navbar.collapse.navbar-collapse
           %ul.nav.navbar-nav.navbar-right
             %li.active
-              %a{href: "#"} About
+              %a.dropdown-toggle{ 'data-toggle' => 'dropdown', :role => 'button', 'aria-haspopup' => 'true' }
+                About
+                %span.caret
+              %ul.dropdown-menu
+                %li
+                  %a{ :href => pages_package_pricing_path } Package Pricing
+                %li
+                  %a{ :href => pages_a_la_carte_pricing_path } A la carte Pricing
+                %li
+                  %a{ :href => pages_faqs_path } FAQs
+                %li
+                  %a{ :href => pages_about_us_path } About Us
+                %li
+                  %a{ :href => pages_contact_us_path } Contact Us
             %li
               %a{href: "#about"} Authors
             %li
@@ -30,7 +43,11 @@
             %li
               %a{href: "#contact"} Signup
     #main_content
-      = yield
+      -if content_for? :title_bar
+        .title-bar
+          .container
+            =yield :title_bar
+      =yield
 
     %footer
       .container
