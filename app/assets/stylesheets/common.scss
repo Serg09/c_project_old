@@ -4,6 +4,8 @@
 
 .nav.navbar-nav li a {
   text-transform: uppercase;
+  font-family: 'Maven-Pro', arial, helvetica, sans-serif;
+  font-size: 16px;
 }
 
 .title-bar {
@@ -72,6 +74,13 @@ footer {
 @font-face {
   font-family: PT-Sans;
   src: asset-url('PTS55F.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Maven-Pro;
+  src: asset-url('MavenPro-Regular.ttf');
   font-style: normal;
   font-weight: normal;
 }
