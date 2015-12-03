@@ -14,6 +14,32 @@
   text-transform: uppercase;
 }
 
+h1 {
+  font-family: "Quicksand", Arial, Helvetica, sans-serif;
+  color: #F90;
+  font-weight: bold;
+  font-size: 26px;
+  line-height: 27px;
+}
+
+h2 {
+  font-family: "Quicksand", Arial, Helvetica, sans-serif;
+  color: #333;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+body {
+  color: #747474;
+  font-family: "PT-Sans", Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+  p {
+    margin-bottom: 20px;
+  }
+}
+
 footer {
   background: #282a2b;
   color: #8C8989;

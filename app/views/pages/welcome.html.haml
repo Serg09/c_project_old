@@ -1,12 +1,12 @@
 -# Top section, guy in jacket
-%section#top-section
+%section#top-section.welcome
   .container
     .row
       .col-md-5.col-md-offset-7
         =image_tag 'quote.png', class: 'quote-image'
         =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
 
-%section#middle-section
+%section#middle-section.welcome
   .container
     .row
       .col-md-12.text-center
@@ -35,7 +35,7 @@
         %p.larger Get started today
         =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
 
-%section#bottom-section
+%section#bottom-section.welcome
   .container
     .row
       .col-md-8
