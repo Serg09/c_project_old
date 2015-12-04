@@ -36,8 +36,13 @@
                   %a{ :href => pages_about_us_path } About Us
                 %li
                   %a{ :href => pages_contact_us_path } Contact Us
-            %li
-              %a{href: "#about"} Authors
+            %li.active
+              %a.dropdown-toggle{ 'data-toggle' => 'dropdown', :role => 'button', 'aria-haspopup' => 'true' }
+                Authors
+                %span.caret
+              %ul.dropdown-menu
+                %li
+                  %a{ :href => pages_book_incubator_path } Book Incubator
             %li
               %a{href: "#contact"} Books
             %li
