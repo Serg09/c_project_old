@@ -19,4 +19,7 @@ class PagesController < ApplicationController
 
   def book_incubator
   end
+
+  def why
+  end
 end

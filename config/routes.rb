@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   get 'pages/about_us'
   get 'pages/contact_us'
   get 'pages/book_incubator'
+  get 'pages/why'
   root to: 'pages#welcome'
 end
