@@ -22,4 +22,7 @@ class PagesController < ApplicationController
 
   def why
   end
+
+  def books
+  end
 end

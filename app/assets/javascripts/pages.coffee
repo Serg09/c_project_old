@@ -1,3 +1,12 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+$(->
+  $('.book-caption-trigger').hover ->
+    $('figcaption', this).show "fade", {easing: 'easeInOutExpo'}, 500
+    return
+  , ->
+    $('figcaption', this).hide "fade", {easing: 'easeInOutQuart'}, 500
+    return
+  return
+)
