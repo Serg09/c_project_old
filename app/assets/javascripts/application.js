@@ -16,4 +16,5 @@
 //= require twitter/bootstrap
 //= require bootstrap
 //= require turbolinks
+//= require masonry.pkgd.min
 //= require_tree .

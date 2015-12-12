@@ -3,7 +3,12 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(->
   $('.book-caption-trigger').hover ->
-    $('figcaption', this).show "fade", {easing: 'easeInOutExpo'}, 500
+    parent = $(this)
+    css = parent.position()
+    css.height = parent.height()
+    css.width = parent.width()
+    console.log css
+    $('figcaption', this).css(css).show "fade", {easing: 'easeInOutExpo'}, 500
     return
   , ->
     $('figcaption', this).hide "fade", {easing: 'easeInOutQuart'}, 500
