@@ -44,11 +44,14 @@ body {
   }
 }
 
+.btn {
+  text-transform: uppercase;
+}
+
 .hero-btn {
   @include center-block;
   margin-top: 1em;
   padding: .8em 2em;
-  text-transform: uppercase;
 }
 
 .lead-image {
@@ -59,7 +62,7 @@ body {
   margin: 0 1em 0.5em 0;
 }
 
-footer {
+body > footer {
   background: #282a2b;
   color: #8C8989;
   padding: 2em 0;
