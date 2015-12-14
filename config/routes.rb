@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   get 'pages/klososky'
   get 'pages/rewilding'
   get 'pages/discipling'
+  get 'pages/predicament'
   root to: 'pages#welcome'
 end
