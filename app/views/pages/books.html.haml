@@ -1,0 +1,12 @@
+=content_for :title_bar do
+  Books
+.container
+  .row
+    .col-md-10.col-md-offset-1
+      .grid
+        -@books.each do |book|
+          .grid-item{ class: book[:height] ? "grid-item--height#{book[:height]}" : nil }
+            =link_to book[:url], target: book[:target] do
+              =figure_tag book[:image], alt: book[:title] do
+                =book[:caption]
+

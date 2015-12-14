@@ -44,14 +44,32 @@ body {
   }
 }
 
+.clear {
+  clear: both;
+}
+
+.btn {
+  text-transform: uppercase;
+}
+
 .hero-btn {
   @include center-block;
   margin-top: 1em;
   padding: .8em 2em;
-  text-transform: uppercase;
 }
 
-footer {
+.lead-image {
+  margin-top: 1em;
+}
+
+.inline-image {
+  margin: 0 1em 0.5em 0;
+}
+.right-image {
+  margin: 0 0 0.5em 1em;
+}
+
+body > footer {
   background: #282a2b;
   color: #8C8989;
   padding: 2em 0;
