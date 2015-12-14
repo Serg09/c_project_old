@@ -13,5 +13,6 @@ Rails.application.routes.draw do
   get 'pages/rewilding'
   get 'pages/discipling'
   get 'pages/predicament'
+  get 'pages/covenant'
   root to: 'pages#welcome'
 end
