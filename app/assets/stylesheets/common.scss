@@ -44,6 +44,10 @@ body {
   }
 }
 
+.clear {
+  clear: both;
+}
+
 .btn {
   text-transform: uppercase;
 }
@@ -60,6 +64,9 @@ body {
 
 .inline-image {
   margin: 0 1em 0.5em 0;
+}
+.right-image {
+  margin: 0 0 0.5em 1em;
 }
 
 body > footer {
