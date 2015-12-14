@@ -1,28 +1,4 @@
 class PagesController < ApplicationController
-  def welcome
-  end
-
-  def package_pricing
-  end
-
-  def a_la_carte_pricing
-  end
-
-  def faqs
-  end
-
-  def about_us
-  end
-
-  def contact_us
-  end
-
-  def book_incubator
-  end
-
-  def why
-  end
-
   def books
     @books = [
       { height: 4, title: 'Love at First Click', image: 'books/love-at-first-click.jpg', caption: 'My whole life changed on September 10, when he accepted my friend request on Facebook, a popular social networking site. His name was Noah Knight, and this is our story.', url: 'http://www.amazon.com/Love-First-Click-Mona-Lin/dp/0990591719', target: '_blank' },
