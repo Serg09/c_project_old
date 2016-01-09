@@ -54,6 +54,9 @@
         .title-bar
           .container
             =yield :title_bar
+
+      =render 'flash' if flash.any? || flash_test?
+
       =yield
 
     %footer

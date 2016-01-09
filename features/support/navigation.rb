@@ -10,6 +10,7 @@ module Navigation
     case identifier
     when "the main menu" then "#main-menu"
     when "the page title" then ".title-bar"
+    when "the notification area" then "#notifications"
     else raise "Unrecognized locator identifier \"#{identifier}\""
     end
   end
