@@ -41,7 +41,6 @@ gem 'pg'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'rspec-rails'
 end
 
 group :development do
@@ -54,5 +53,8 @@ end
 
 group :test do
   gem 'sqlite3'
+  gem 'rspec-rails'
+  gem 'cucumber-rails'
+  gem 'database_cleaner'
 end
 
