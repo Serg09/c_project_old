@@ -54,6 +54,7 @@ end
 group :test do
   gem 'sqlite3'
   gem 'rspec-rails'
+  gem 'rspec-collection_matchers'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'email_spec'
