@@ -7,7 +7,6 @@ $(->
     css = parent.position()
     css.height = parent.height()
     css.width = parent.width()
-    console.log css
     $('figcaption', this).css(css).show "fade", {easing: 'easeInOutExpo'}, 500
     return
   , ->
