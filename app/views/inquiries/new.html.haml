@@ -1,0 +1,11 @@
+=content_for :title_bar do
+  Contact us
+
+%p
+  We thought we included all you would need to know, but just maybe we weren’t
+  able to answer your question. If so, please let us know how we can help you.
+
+=form_for(@inquiry) do |f|
+  .form-group
+    =f.label :first_name, class: 'control-label'
+    =f.text_field :first_name, class: 'form-control'

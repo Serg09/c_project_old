@@ -1,4 +1,4 @@
-When /^I am on the (.*)$/ do |identifier|
+When /^I am on (.*)$/ do |identifier|
   visit path_for(identifier)
 end
 
