@@ -1,6 +1,6 @@
 class InquiriesController < ApplicationController
   def new
-    @inquiry = {first_name: "John"}
+    @inquiry = Inquiry.new
   end
 
   def create

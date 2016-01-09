@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :inquiries, only: [:new]
+  resources :inquiries, only: [:new, :create]
 
   get 'pages/welcome'
   get 'pages/package_pricing'
