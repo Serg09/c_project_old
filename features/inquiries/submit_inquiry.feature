@@ -5,8 +5,6 @@ Feature: An unauthenticated user submits an inquiry
   I want to be able to submit an inquiry
 
   Scenario: An unauthenticated user submits an inquery
-    # Given there is an administrator user with email address "admin@cs.com" and password "please01"
-
     When I am on the welcome page
     Then I should see "Contact us" within the main menu
 
@@ -24,12 +22,3 @@ Feature: An unauthenticated user submits an inquiry
 
     When "info@crowdscribed.com" opens the email
     Then they should see "What can I do about the squirrels in my attic?" in the email body
-
-    # When I am signed in as "admin@cs.com/please01"
-    # And I am on the welcome page
-    # Then I should see "Inquiries" within the main menu
-    # When I click "Inquiries" within the main menu
-    # Then I should see "Inquiries" within the page title
-    # And I should see the following inquiries table
-    #   | First name | Last name | Email        | 
-    #   | John       | Doe       | john@doe.com |
