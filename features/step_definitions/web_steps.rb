@@ -15,6 +15,6 @@ Then /^(.*) within (.*)$/ do |step_content, context|
   within(locator){step(step_content)}
 end
 
-Then /^I should see ""$/ do |content|
+Then /^I should see "([^"]+)"$/ do |content|
   expect(page).to have_content(content)
 end
