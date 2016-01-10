@@ -34,6 +34,11 @@ describe Inquiry do
       inquiry = Inquiry.new attributes.except(:email)
       expect(inquiry).to have_at_least(1).error_on :email
     end
+
+    it 'must be well formatted' do
+      inquiry = Inquiry.new attributes.merge(email: 'notvalid')
+      expect(inquiry).to have_at_least(1).error_on :email
+    end
   end
 
   describe '#body' do

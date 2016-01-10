@@ -14,6 +14,7 @@
 
 class Inquiry < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :email, :body
+  validates_format_of :email, with: /\A[\w\._\+-]+@[\w\._]+\.[a-z]{2,6}\z/
 
   def full_name
     "#{first_name} #{last_name}"
