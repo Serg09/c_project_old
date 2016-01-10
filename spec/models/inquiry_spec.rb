@@ -49,4 +49,11 @@ describe Inquiry do
       expect(inquiry).not_to be_archived
     end
   end
+
+  describe '#full_name' do
+    it 'combines the first and last names' do
+      inquiry = Inquiry.new attributes
+      expect(inquiry.full_name).to eq 'John Doe'
+    end
+  end
 end
