@@ -19,6 +19,6 @@ Feature: An unauthenticated user submits an inquiry
     Then I should see "Your inquiry has been accepted." within the notification area
     And I should see "Books" within the page title
 
-    Then "info@crowdscribed.com" should receive an email with subject "New inquery"
+    Then "info@crowdscribed.com" should receive an email with subject "New Inquiry"
     When "info@crowdscribed.com" opens the email
     Then they should see "What can I do about the squirrels in my attic?" in the email body
