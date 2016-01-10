@@ -49,11 +49,13 @@ end
 #
 
 Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails?$/ do |address, amount|
-  expect(unread_emails_for(address).size).to eq(parse_email_count(amount))
+  emails = unread_emails_for(address)
+  expect(emails.size).to eq parse_email_count(amount)
 end
 
 Then /^(?:I|they|"([^"]*?)") should have (an|no|\d+) emails?$/ do |address, amount|
-  expect(mailbox_for(address).size).to eq(parse_email_count(amount))
+  emails = mailbox_for(address)
+  expect(emails.size).to eq parse_email_count(amount)
 end
 
 Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with subject "([^"]*?)"$/ do |address, amount, subject|
@@ -149,7 +151,7 @@ end
 
 Then /^there should be (an|no|\d+) attachments? named "([^"]*?)"$/ do |amount, filename|
   attachments = current_email_attachments.select { |a| a.filename == filename }
-  expect(attachments.size).to eq(parse_email_count(amount))
+  expect(attachments.size).to eq parse_email_count(amount)
 end
 
 Then /^attachment (\d+) should be named "([^"]*?)"$/ do |index, filename|
@@ -157,7 +159,8 @@ Then /^attachment (\d+) should be named "([^"]*?)"$/ do |index, filename|
 end
 
 Then /^there should be (an|no|\d+) attachments? of type "([^"]*?)"$/ do |amount, content_type|
-  expect(current_email_attachments.select { |a| a.content_type.include?(content_type) }.size).to eq parse_email_count(amount)
+  attachments = current_email_attachments.select { |a| a.content_type.include?(content_type) }
+  expect(attachments.size).to eq parse_email_count(amount)
 end
 
 Then /^attachment (\d+) should be of type "([^"]*?)"$/ do |index, content_type|
