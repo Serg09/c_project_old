@@ -7,7 +7,10 @@ class InquiriesController < ApplicationController
 
   def create
     @inquiry = Inquiry.new inquiry_params
-    flash[:notice] = 'Your inquiry has been accepted.' if @inquiry.save
+    if @inquiry.save
+      flash[:notice] = 'Your inquiry has been accepted.'
+      InquiryMailer.submission_notification(@inquiry).deliver_now
+    end
     respond_with @inquiry, location: pages_books_path
   end
 
