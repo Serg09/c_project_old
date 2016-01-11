@@ -10,18 +10,22 @@
         able to answer your question. If so, please let us know how we can help you.
 
       =form_for(@inquiry) do |f|
-        .form-group
+        .form-group{ :class => form_group_class(@inquiry, :first_name) }
           =f.label :first_name, class: 'control-label'
           =f.text_field :first_name, class: 'form-control'
-        .form-group
+          =help_blocks @inquiry, :first_name
+        .form-group{ :class => form_group_class(@inquiry, :last_name) }
           =f.label :last_name, class: 'control-label'
           =f.text_field :last_name, class: 'form-control'
-        .form-group
+          =help_blocks @inquiry, :last_name
+        .form-group{ :class => form_group_class(@inquiry, :email) }
           =f.label :email, class: 'control-label'
           =f.email_field :email, class: 'form-control'
-        .form-group
+          =help_blocks @inquiry, :email
+        .form-group{ :class => form_group_class(@inquiry, :body) }
           =f.label :body, 'How can we help?', class: 'control-label'
           =f.text_area :body, class: 'form-control'
+          =help_blocks @inquiry, :body
         .form-group
           =f.submit 'Submit', class: 'btn btn-primary'
     .col-md-4.col-md-offset-1

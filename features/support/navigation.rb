@@ -9,6 +9,7 @@ module Navigation
   def locator_for(identifier)
     case identifier
     when "the main menu" then "#main-menu"
+    when "the main content" then "#main_content"
     when "the page title" then ".title-bar"
     when "the notification area" then "#notifications"
     else raise "Unrecognized locator identifier \"#{identifier}\""

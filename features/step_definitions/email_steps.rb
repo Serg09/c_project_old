@@ -53,6 +53,11 @@ Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails?$/ do |address, a
   expect(emails.size).to eq parse_email_count(amount)
 end
 
+Then /^(?:I|they|"([^"]*?)") should not receive any emails?$/ do |address|
+  emails = unread_emails_for(address)
+  expect(emails.size).to eq 0
+end
+
 Then /^(?:I|they|"([^"]*?)") should have (an|no|\d+) emails?$/ do |address, amount|
   emails = mailbox_for(address)
   expect(emails.size).to eq parse_email_count(amount)

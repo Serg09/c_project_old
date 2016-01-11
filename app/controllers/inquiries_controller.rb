@@ -10,6 +10,8 @@ class InquiriesController < ApplicationController
     if @inquiry.save
       flash[:notice] = 'Your inquiry has been accepted.'
       InquiryMailer.submission_notification(@inquiry).deliver_now
+    else
+      flash[:alert] = 'We were unable to accept your inquiry.'
     end
     respond_with @inquiry, location: pages_books_path
   end
