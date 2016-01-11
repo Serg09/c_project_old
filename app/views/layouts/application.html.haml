@@ -20,7 +20,7 @@
             %span.icon-bar
           =link_to image_tag(asset_path('crowdscribed_logo.png')), root_path
         #navbar.collapse.navbar-collapse
-          %ul.nav.navbar-nav.navbar-right
+          %ul#main-menu.nav.navbar-nav.navbar-right
             %li.active
               %a.dropdown-toggle{ 'data-toggle' => 'dropdown', :role => 'button', 'aria-haspopup' => 'true' }
                 About
@@ -35,7 +35,7 @@
                 %li
                   %a{ :href => pages_about_us_path } About Us
                 %li
-                  %a{ :href => pages_contact_us_path } Contact Us
+                  %a{ :href => new_inquiry_path} Contact us
             %li.active
               %a.dropdown-toggle{ 'data-toggle' => 'dropdown', :role => 'button', 'aria-haspopup' => 'true' }
                 Authors
@@ -54,6 +54,9 @@
         .title-bar
           .container
             =yield :title_bar
+
+      =render 'flash' if flash.any? || flash_test?
+
       =yield
 
     %footer

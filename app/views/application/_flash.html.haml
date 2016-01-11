@@ -1,0 +1,9 @@
+.container
+  .row
+    .col-md-12
+      #notifications
+        -flash.each do |k, v|
+          .alert.alert-dismissible{ :class => flash_key_to_alert_class(k), :role => 'alert' }
+            %button.close{ :type => 'button', 'data-dimiss' => 'alert', 'aria-label' => 'Close' }
+              %span{ 'aria-hidden' => true } &times;
+            =v
