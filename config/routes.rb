@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   devise_for :authors, controllers: { registrations: 'authors/registrations' }
-  devise_for :users
 
   resources :inquiries, only: [:new, :create]
 

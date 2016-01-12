@@ -8,8 +8,6 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    = current_user.email if user_signed_in?
-
     %nav.navbar.navbar-default.navbar-fixed-top
       .container
         .navbar-header
