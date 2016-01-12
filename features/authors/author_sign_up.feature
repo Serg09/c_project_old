@@ -6,10 +6,10 @@ Feature: An author signs up
 
   Scenario: A user signs up successfully
     When I am on the welcome page
-    Then I should see "Sign up" within the main menu
+    Then I should see "Signup" within the main menu
 
-    When I click "Sign up" within the main menu
-    Then I should see "Sign up" within the page title
+    When I click "Signup" within the main menu
+    Then I should see "Signup" within the page title
 
     When I fill in "First name" with "John"
     And I fill in "Last name" with "Doe"
@@ -26,7 +26,7 @@ Feature: An author signs up
     And I should see "Request accpeted" within the page title
     And I should see "Your request will be reviewed as soon as possible. Once it is approved, you will receive an email with information about how to proceed." within the main content
 
-    When an administrator has approved my account
+    When an administrator approves the account for author john@doe.com
     And I am on the welcome page
     Then I should see "Sign in" within the main menu
 

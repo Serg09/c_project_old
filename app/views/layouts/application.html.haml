@@ -48,7 +48,7 @@
             %li
               =link_to 'Books', pages_books_path
             %li
-              %a{href: "#contact"} Signup
+              =link_to 'Signup', new_author_registration_path
     #main_content
       -if content_for? :title_bar
         .title-bar

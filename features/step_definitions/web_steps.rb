@@ -6,6 +6,14 @@ When /^I fill in "([^"]+)" with "([^"]+)"$/ do |locator, content|
   fill_in locator, with: content
 end
 
+When /^I select "([^"]+)" from "([^"]+)"$/ do |value, locator|
+  select value, from: locator
+end
+
+When /^I check "([^"]+)"$/ do |locator|
+  check locator
+end
+
 When /^I click "([^"]+)"$/ do |locator|
   click_on locator
 end
