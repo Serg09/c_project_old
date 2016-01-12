@@ -1,21 +1,34 @@
-%h2 Sign up
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = devise_error_messages!
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  .field
-    = f.label :password
-    - if @minimum_password_length
-      %em
-        (#{@minimum_password_length} characters minimum)
-    %br/
-    = f.password_field :password, autocomplete: "off"
-  .field
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
-  .actions
-    = f.submit "Sign up"
-= render "devise/shared/links"
+=content_for :title_bar do
+  Signup
+
+%p &nbsp;
+.container
+  .row
+    .col-md-5
+      %p
+        Here at CrowdScribed we handle things a bit differently. We really
+        want to get to know our authors so we can understand their wants and
+        needs. You will be assigned a personal marketing/editing advisor to
+        help you along the way. We just need a couple of bits of information
+        to get started.
+
+      =form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+        .form-group{ :class => form_group_class(resource, :email) }
+          = f.label :email, class: 'control-label'
+          = f.email_field :email, autofocus: true, class: 'form-control'
+          =help_blocks resource, :email
+        .form-group{ :class => form_group_class(resource, :password) }
+          = f.label :password, class: 'control-label'
+          - if @minimum_password_length
+            %em
+              (#{@minimum_password_length} characters minimum)
+          = f.password_field :password, autocomplete: "off", class: 'form-control'
+          =help_blocks resource, :password
+        .form-group{ :class => form_group_class(resource, :password_confirmation) }
+          = f.label :password_confirmation, class: 'control-label'
+          = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
+          =help_blocks resource, :password_confirmation
+        .form-group
+          = f.submit "Sign up", class: 'btn btn-primary'
+    .col-md-5.col-md-offset-2
+      = render "devise/shared/links"
