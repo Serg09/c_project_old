@@ -16,11 +16,11 @@ Feature: An author signs up
     And I fill in "Email" with "john@doe.com"
     And I select "Starter (Free)" from "Which package would you like?"
     And I fill in "Phone number" with "214-555-0000"
-    And I check "It is ok if my advisor contacts me by phone"
+    And I check "It is OK if my advisor contacts me by phone"
     And I fill in "Username" with "jdoe"
     And I fill in "Password" with "please01"
     And I fill in "Password confirmation" with "please01"
-    And I click "Submit"
+    And I click "Sign up"
 
     Then I should see "Your request for access has been accepted." within the notification area.
     And I should see "Request accpeted" within the page title
