@@ -1,5 +1,5 @@
 class Authors::RegistrationsController < Devise::RegistrationsController
-# before_filter :configure_sign_up_params, only: [:create]
+  before_filter :configure_sign_up_params, only: [:create]
 # before_filter :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -10,7 +10,11 @@ class Authors::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super do |resource|
-      flash[:alert] = 'We were unable to save your registration.' unless resource.valid?
+      if resource.valid?
+        flash[:notice] = 'Your request for access has been accepted.'
+      else
+        flash[:alert] = 'We were unable to save your registration.'
+      end
     end
   end
 
@@ -41,9 +45,16 @@ class Authors::RegistrationsController < Devise::RegistrationsController
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.for(:sign_up) << :attribute
-  # end
+  def configure_sign_up_params
+    [:username,
+     :first_name,
+     :last_name,
+     :phone_number,
+     :contactable,
+     :package_id].each do |a|
+       devise_parameter_sanitizer.for(:sign_up) << a
+     end
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params
@@ -51,9 +62,9 @@ class Authors::RegistrationsController < Devise::RegistrationsController
   # end
 
   # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+  def after_sign_up_path_for(resource)
+    pages_sign_up_confirmation_path
+  end
 
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)

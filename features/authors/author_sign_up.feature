@@ -22,7 +22,7 @@ Feature: An author signs up
     And I fill in "Password confirmation" with "please01"
     And I click "Sign up"
 
-    Then I should see "Your request for access has been accepted." within the notification area.
+    Then I should see "A message with a confirmation link has been sent to your email address." within the notification area
     And I should see "Request accpeted" within the page title
     And I should see "Your request will be reviewed as soon as possible. Once it is approved, you will receive an email with information about how to proceed." within the main content
 

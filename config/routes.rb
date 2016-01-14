@@ -17,5 +17,6 @@ Rails.application.routes.draw do
   get 'pages/predicament'
   get 'pages/covenant'
   get 'pages/piatt'
+  get 'pages/sign_up_confirmation'
   root to: 'pages#welcome'
 end
