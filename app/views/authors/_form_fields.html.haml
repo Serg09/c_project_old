@@ -1,6 +1,6 @@
 .form-group{ :class => form_group_class(author, :first_name) }
   =f.label :first_name, class: 'control-label'
-  =f.text_field :first_name, class: 'form-control', :required => true
+  =f.text_field :first_name, class: 'form-control', required: true, autofocus: true
   =help_blocks author, :first_name
 .form-group{ :class => form_group_class(author, :last_name) }
   =f.label :last_name, class: 'control-label'
