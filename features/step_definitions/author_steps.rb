@@ -1,7 +1,10 @@
 AUTHOR = Transform /author (.+@.+)/ do |email|
-  nil
+  author = Author.find_by(email: email)
+  expect(author).not_to be_nil
+  author
 end
 
 When /^an administrator approves the account for (#{AUTHOR})$/ do |author|
-  pending "Need to implement this step"
+  author.status = Author.accepted
+  author.save!
 end

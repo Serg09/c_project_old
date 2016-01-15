@@ -24,12 +24,17 @@ Feature: An author signs up
 
     Then I should see "A message with a confirmation link has been sent to your email address." within the notification area
     And I should see "Sign up complete!" within the page title
+    And "john@doe.com" should receive an email with subject "Confirmation instructions"
+
+    When I open the email
+    And I click the first link in the email
+    Then I should see "Your email address has been successfully confirmed." within the notification area
+    And I should see "Approval pending" within the page title
 
     When an administrator approves the account for author john@doe.com
-    And I am on the welcome page
-    Then I should see "Sign in" within the main menu
+    Then "john@doe.com" should receive an email with subject "Account approved"
 
-    When I click "Sign in" within the main menu
+    When I click the first link in the email
     Then I should see "Sign in" within the page title
 
     When I fill in "Username" with "jdoe"

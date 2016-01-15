@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :authors, controllers: { registrations: 'authors/registrations' }
+  devise_for :authors, controllers: {
+    registrations: 'authors/registrations',
+    confirmations: 'authors/confirmations'
+  }
 
   resources :inquiries, only: [:new, :create]
 
@@ -18,5 +21,6 @@ Rails.application.routes.draw do
   get 'pages/covenant'
   get 'pages/piatt'
   get 'pages/sign_up_confirmation'
+  get 'pages/account_pending'
   root to: 'pages#welcome'
 end

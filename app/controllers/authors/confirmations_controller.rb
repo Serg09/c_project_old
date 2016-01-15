@@ -10,9 +10,10 @@ class Authors::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+  def show
+    super
+    AuthorMailer.account_pending_notification(resource).deliver_now if resource.errors.empty?
+  end
 
   # protected
 
@@ -22,7 +23,7 @@ class Authors::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # The path used after confirmation.
-  # def after_confirmation_path_for(resource_name, resource)
-  #   super(resource_name, resource)
-  # end
+  def after_confirmation_path_for(resource_name, resource)
+    pages_account_pending_path
+  end
 end

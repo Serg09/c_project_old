@@ -84,4 +84,32 @@ RSpec.describe Author, type: :model do
       expect(a2).to have_at_least(1).error_on :username
     end
   end
+
+  describe '#status' do
+    it 'defaults to "pending"' do
+      author = Author.new attributes
+      expect(author.status).to eq 'pending'
+      expect(author).to be_status_pending
+    end
+
+    context 'when set to "pending"' do
+      it 'can be set to "accepted"' do
+        author = Author.create! attributes
+        author.status = Author.accepted
+        expect(author).to be_valid
+      end
+
+      it 'can be set to "rejected"' do
+        author = Author.create! attributes
+        author.status = Author.rejected
+        expect(author).to be_valid
+      end
+
+      it 'cannot be set to anything except "accepted" or "rejected"' do
+        author = Author.create! attributes
+        author.status = 'notvalid'
+        expect(author).to have_at_least(1).error_on :status
+      end
+    end
+  end
 end

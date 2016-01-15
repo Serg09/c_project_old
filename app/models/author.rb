@@ -37,6 +37,24 @@ class Author < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable
 
+  STATUSES = %w(pending accepted rejected)
+
   validates_presence_of :first_name, :last_name, :username
   validates_uniqueness_of :username
+  validates_inclusion_of :status, in: STATUSES
+
+
+  class << self
+    STATUSES.each do |s|
+      define_method s do
+        s
+      end
+    end
+  end
+
+  STATUSES.each do |s|
+    define_method "status_#{s}?" do
+      self.status == s
+    end
+  end
 end
