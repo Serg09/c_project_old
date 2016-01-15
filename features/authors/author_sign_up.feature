@@ -23,8 +23,7 @@ Feature: An author signs up
     And I click "Sign up"
 
     Then I should see "A message with a confirmation link has been sent to your email address." within the notification area
-    And I should see "Request accpeted" within the page title
-    And I should see "Your request will be reviewed as soon as possible. Once it is approved, you will receive an email with information about how to proceed." within the main content
+    And I should see "Sign up complete!" within the page title
 
     When an administrator approves the account for author john@doe.com
     And I am on the welcome page
