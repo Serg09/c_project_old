@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AuthorsController, type: :controller do
   include Devise::TestHelpers
 
-  let (:author) { FactoryGirl.create(:author) }
+  let (:author) { FactoryGirl.create(:author, email: 'john@doe.com') }
 
   context 'for an authenticated user' do
     context 'that is the author in question' do

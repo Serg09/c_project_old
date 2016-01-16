@@ -1,15 +1,10 @@
 class AuthorsController < ApplicationController
   before_filter :authenticate_author!
-  before_filter :load_author
+  load_and_authorize_resource
 
   respond_to :html
 
   def show
-
-    puts "show"
-    puts current_author
-
-    authorize! :show, @author
   end
 
   def edit
@@ -25,9 +20,5 @@ class AuthorsController < ApplicationController
 
   def author_params
     params.require(:author).permit(:first_name, :last_name, :phone_number, :contactable)
-  end
-
-  def load_author
-    @author ||= current_author
   end
 end

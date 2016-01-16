@@ -9,10 +9,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    @current_ability ||= Ability.new nil
+    @current_ability ||= Ability.new current_author
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to author_root_path, alert: excpetion.message
+    redirect_to author_root_path, alert: exception.message
   end
 end
