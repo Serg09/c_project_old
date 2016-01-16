@@ -1,0 +1,29 @@
+=content_for :title_bar do
+  My profile
+
+.container.container-default
+  .row
+    .col-md-3
+      %table.table
+        %tr
+          %th First name
+          %td= @author.first_name
+        %tr
+          %th Last name
+          %td= @author.last_name
+        %tr
+          %th Email
+          %td= @author.email
+        %tr
+          %th Username
+          %td= @author.username
+        %tr
+          %th Phone number
+          %td= @author.phone_number
+        %tr
+          %th OK to contact me
+          %td
+            -if @author.contactable?
+              &#x2713;
+            -else
+              &#x2715;

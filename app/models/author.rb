@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: users
+# Table name: authors
 #
 #  id                     :integer          not null, primary key
 #  email                  :string           default(""), not null
@@ -22,17 +22,39 @@
 #  locked_at              :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  username               :string           not null
+#  first_name             :string           not null
+#  last_name              :string           not null
+#  phone_number           :string
+#  contactable            :boolean          default(FALSE), not null
+#  package_id             :integer
 #
 
-class User < ActiveRecord::Base
+class Author < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable,
-         :registerable,
-         :recoverable,
-         :rememberable,
-         :trackable,
-         :validatable,
-         :confirmable,
-         :lockable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable, :lockable
+
+  STATUSES = %w(pending accepted rejected)
+
+  validates_presence_of :first_name, :last_name, :username
+  validates_uniqueness_of :username
+  validates_inclusion_of :status, in: STATUSES
+
+
+  class << self
+    STATUSES.each do |s|
+      define_method s do
+        s
+      end
+    end
+  end
+
+  STATUSES.each do |s|
+    define_method "status_#{s}?" do
+      self.status == s
+    end
+  end
 end
