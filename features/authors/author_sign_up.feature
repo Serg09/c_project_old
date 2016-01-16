@@ -1,4 +1,3 @@
-@wip
 Feature: An author signs up
   As an unauthenticated user
   In order to use the services offered by the site

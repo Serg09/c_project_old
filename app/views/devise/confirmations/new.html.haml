@@ -6,6 +6,12 @@
   .row
     .col-md-4
       = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
+
+
+        -resource.errors.full_messages.each do |m|
+          .alert.alert-danger{ :role => 'alert' }
+            =m
+
         .form-group{ :class => form_group_class(resource, :email) }
           = f.label :email, class: 'control-label'
           = f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: 'form-control'
