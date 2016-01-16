@@ -23,5 +23,7 @@ Rails.application.routes.draw do
   get 'pages/piatt'
   get 'pages/sign_up_confirmation'
   get 'pages/account_pending'
+
+  get 'authors', to: 'authors#show', as: :author_root
   root to: 'pages#welcome'
 end

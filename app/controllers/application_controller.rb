@@ -7,4 +7,12 @@ class ApplicationController < ActionController::Base
     return author_path(resource) if resource.is_a? Author
     super resource
   end
+
+  def current_ability
+    @current_ability ||= Ability.new nil
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to author_root_path, alert: excpetion.message
+  end
 end

@@ -45,21 +45,21 @@ RSpec.describe AuthorsController, type: :controller do
       describe 'get :show' do
         it 'redirects to user\'s profile page' do
           get :show, id: author
-          expect(response).to redirect_to author_path(other_author)
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe 'get :edit' do
         it 'redirects to user\'s profile page' do
           get :edit, id: author
-          expect(response).to redirect_to author_path(other_author)
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe 'patch :update' do
         it 'redirects to user\'s profile page' do
           patch :update, id: author, author: { first_name: 'Jimbob' }
-          expect(response).to redirect_to author_path(other_author)
+          expect(response).to redirect_to author_root_path
         end
 
         it 'does not update the specified author' do
