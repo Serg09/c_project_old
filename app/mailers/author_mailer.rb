@@ -10,4 +10,9 @@ class AuthorMailer < ApplicationMailer
     @author = author
     mail to: author.email, subject: 'Account approved'
   end
+
+  def account_rejected_notification(author)
+    @author = author
+    mail to: author.email, subject: 'Account rejected'
+  end
 end

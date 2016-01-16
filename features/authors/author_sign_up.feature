@@ -58,3 +58,18 @@ Feature: An author signs up
     Then I should see "Approval pending" within the page title
     And I should see "Unable to sign in. Your account is still pending approval by the administrator." within the notification area
 
+  Scenario: An author attempts to sign in after his account has been rejected
+    When an administrator rejects the account for author john@doe.com
+    Then "john@doe.com" should receive an email with subject "Account rejected"
+
+    When I am on the welcome page
+    Then I should see "Log in" within the main menu
+
+    When I click "Log in" within the main menu
+    Then I should see "Log in" within the page title
+
+    When I fill in "Email" with "john@doe.com"
+    And I fill in "Password" with "please01"
+    And I click "Sign in"
+    Then I should see "Log in" within the page title
+    And I should see "Unable to sign in. Your account has been rejected by the administrator." within the notification area
