@@ -1,6 +1,7 @@
 class AuthorsController < ApplicationController
   before_filter :authenticate_author!
-  load_and_authorize_resource
+  before_filter :load_author
+  authorize_resource
 
   respond_to :html
 
@@ -20,5 +21,9 @@ class AuthorsController < ApplicationController
 
   def author_params
     params.require(:author).permit(:first_name, :last_name, :phone_number, :contactable)
+  end
+
+  def load_author
+    @author = params[:id] ? Author.find(params[:id]) : current_author
   end
 end
