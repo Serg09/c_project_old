@@ -39,8 +39,8 @@ Feature: An author signs up
     And I click the first link in the email
     Then I should see "Sign in" within the page title
 
-    When I fill in "Username" with "jdoe"
+    When I fill in "Email" with "john@doe.com"
     And I fill in "Password" with "please01"
     And I click "Sign in"
-    Then I should see "You have been signed in successfully" within the notification area
+    Then I should see "Signed in successfully" within the notification area
     And I should see "My profile" within the page title
