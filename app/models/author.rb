@@ -28,6 +28,7 @@
 #  phone_number           :string
 #  contactable            :boolean          default(FALSE), not null
 #  package_id             :integer
+#  status                 :string(10)       default("pending"), not null
 #
 
 class Author < ActiveRecord::Base
