@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   }
 
   resources :inquiries, only: [:new, :create]
-  resources :authors, only: [:show, :edit, :update]
+  resources :authors, only: [:show, :edit, :update, :index]
 
   get 'pages/welcome'
   get 'pages/package_pricing'
@@ -27,5 +27,6 @@ Rails.application.routes.draw do
   get 'pages/account_pending'
 
   get 'authors', to: 'authors#show', as: :author_root
+  get 'admin', to: 'authors#index', as: :admin_root
   root to: 'pages#welcome'
 end

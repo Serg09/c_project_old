@@ -33,12 +33,18 @@
               %a{ :href => pages_book_incubator_path } Book Incubator
             %li
               %a{ :href => pages_why_path } Why CrowdScribed?
-            %li
-              -if author_signed_in?
-                =link_to 'Log out', destroy_author_session_path, method: :delete
-              -else
+            -if administrator_signed_in?
+              %li
+                =link_to 'Manage authors', authors_path
+            -unless author_signed_in?
+              %li
                 =link_to 'Log in', new_author_session_path
         %li
           =link_to 'Books', pages_books_path
         %li
-          =link_to 'Signup', new_author_registration_path
+          -if author_signed_in?
+            =link_to 'Sign out', destroy_author_session_path, method: :delete
+          -if administrator_signed_in?
+            =link_to 'Sign out', destroy_administrator_session_path, method: :delete
+          -else
+            =link_to 'Signup', new_author_registration_path
