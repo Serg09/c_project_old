@@ -8,7 +8,7 @@
     = csrf_meta_tags
   %body
     =render 'shared/admin_navigation'
-    #main_content
+    #admin_content
       -if content_for? :page_title
         %h1#page_title
           =yield :page_title
