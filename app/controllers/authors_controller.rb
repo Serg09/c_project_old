@@ -1,6 +1,6 @@
 class AuthorsController < ApplicationController
-  before_filter :authenticate_user!, only: [:show, :edit, :update]
-  before_filter :load_author, only: [:show, :edit, :update]
+  before_filter :authenticate_user!, only: [:show, :edit, :update, :accept, :reject]
+  before_filter :load_author, only: [:show, :edit, :update, :accept, :reject]
 
   respond_to :html
 
@@ -28,6 +28,20 @@ class AuthorsController < ApplicationController
     @author.update_attributes author_params
     flash[:notice] = "Your profile was updated successfully." if @author.save
     respond_with @author
+  end
+
+  def accept
+    authorize! :accept, @author
+    @author.status = Author.accepted
+    flash[:notice] = 'The author has been accepted successfully.' if @author.save
+    redirect_to authors_path
+  end
+
+  def reject
+    authorize! :reject, @author
+    @author.status = Author.rejected
+    flash[:notice] = 'The author has been rejected successfully.' if @author.save
+    redirect_to authors_path
   end
 
   private

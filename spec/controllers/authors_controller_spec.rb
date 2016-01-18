@@ -45,6 +45,34 @@ RSpec.describe AuthorsController, type: :controller do
           expect(response).to redirect_to author_path(author)
         end
       end
+
+      describe 'patch :accept' do
+        it 'redirects to the author root page' do
+          patch :accept, id: author
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the status of the author' do
+          expect do
+            patch :accept, id: author
+            author.reload
+          end.not_to change(author, :status)
+        end
+      end
+
+      describe 'patch :reject' do
+        it 'redirects to the author root page' do
+          patch :reject, id: author
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the status of the author' do
+          expect do
+            patch :reject, id: author
+            author.reload
+          end.not_to change(author, :status)
+        end
+      end
     end
 
     context 'that is not the author in question' do
@@ -78,6 +106,34 @@ RSpec.describe AuthorsController, type: :controller do
           end.not_to change(author, :first_name)
         end
       end
+
+      describe 'patch :accept' do
+        it 'redirects to the author root page' do
+          patch :accept, id: author
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the status of the author' do
+          expect do
+            patch :accept, id: author
+            author.reload
+          end.not_to change(author, :status)
+        end
+      end
+
+      describe 'patch :reject' do
+        it 'redirects to the author root page' do
+          patch :reject, id: author
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the status of the author' do
+          expect do
+            patch :reject, id: author
+            author.reload
+          end.not_to change(author, :status)
+        end
+      end
     end
   end
 
@@ -96,6 +152,34 @@ RSpec.describe AuthorsController, type: :controller do
       it "is successful" do
         get :show, id: author
         expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe 'patch :accept' do
+      it 'redirects to the authors index page' do
+        patch :accept, id: author
+        expect(response).to redirect_to authors_path
+      end
+
+      it 'changes the status of the author to "accepted"' do
+        expect do
+          patch :accept, id: author
+          author.reload
+        end.to change(author, :status).to Author.accepted
+      end
+    end
+
+    describe 'patch :reject' do
+      it 'redirects to the authors index page' do
+        patch :reject, id: author
+        expect(response).to redirect_to authors_path
+      end
+
+      it 'changes the status of the author to "rejected"' do
+        expect do
+          patch :reject, id: author
+          author.reload
+        end.to change(author, :status).to Author.rejected
       end
     end
   end
@@ -126,6 +210,34 @@ RSpec.describe AuthorsController, type: :controller do
           patch :update, id: author, author: { first_name: 'Jimbob' }
           author.reload
         end.not_to change(author, :first_name)
+      end
+    end
+
+    describe 'patch :accept' do
+      it 'redirects to the sign in page' do
+        patch :accept, id: author
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the status of the author' do
+        expect do
+          patch :accept, id: author
+          author.reload
+        end.not_to change(author, :status)
+      end
+    end
+
+    describe 'patch :reject' do
+      it 'redirects to the sign in page' do
+        patch :reject, id: author
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the status of the author' do
+        expect do
+          patch :reject, id: author
+          author.reload
+        end.not_to change(author, :status)
       end
     end
   end
