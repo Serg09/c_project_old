@@ -1,0 +1,17 @@
+%nav.navbar.navbar-default
+  .container-fluid
+    .navbar-header
+      %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only
+          Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+      =link_to image_tag(asset_path('crowdscribed_logo.png')), root_path
+    #navbar.navbar-collapse.collapse
+      %ul.nav.navbar-nav
+        %li.active
+          =link_to 'Authors', authors_path
+        -if administrator_signed_in?
+          %li
+            =link_to 'Sign out', destroy_administrator_session_path, method: :delete

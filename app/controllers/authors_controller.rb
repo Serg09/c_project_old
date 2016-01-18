@@ -7,6 +7,10 @@ class AuthorsController < ApplicationController
   respond_to :html
 
   def index
+    @authors = Author.all
+    respond_with @authors do |format|
+      format.html { render layout: 'admin' }
+    end
   end
 
   def show
