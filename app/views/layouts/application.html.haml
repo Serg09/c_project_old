@@ -10,10 +10,10 @@
   %body
     =render 'shared/navigation'
     #main_content
-      -if content_for? :title_bar
-        .title-bar
+      -if content_for? :page_title
+        #page-title.title-bar
           .container
-            =yield :title_bar
+            =yield :page_title
 
       =render 'flash' if flash.any? || flash_test?
 
