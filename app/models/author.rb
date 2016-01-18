@@ -28,6 +28,7 @@
 #  phone_number           :string
 #  contactable            :boolean          default(FALSE), not null
 #  package_id             :integer
+#  status                 :string(10)       default("pending"), not null
 #
 
 class Author < ActiveRecord::Base
@@ -56,5 +57,9 @@ class Author < ActiveRecord::Base
     define_method "status_#{s}?" do
       self.status == s
     end
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 end

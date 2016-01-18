@@ -35,10 +35,13 @@
               %a{ :href => pages_why_path } Why CrowdScribed?
             %li
               -if author_signed_in?
-                =link_to 'Log out', destroy_author_session_path, method: :delete
+                =link_to 'Log out', destroy_author_session, method: :delete
               -else
                 =link_to 'Log in', new_author_session_path
         %li
           =link_to 'Books', pages_books_path
         %li
-          =link_to 'Signup', new_author_registration_path
+          -if author_signed_in?
+            =link_to 'Sign out', destroy_author_session_path, method: :delete
+          -else
+            =link_to 'Signup', new_author_registration_path

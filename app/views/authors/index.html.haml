@@ -1,0 +1,19 @@
+=content_for :page_title do
+  Authors
+
+.container
+  .row
+    .col-md-6
+      %table.table.table-striped
+        %tr
+          %th Signup date
+          %th Name
+          %th Email
+          %th Phone
+        -@authors.each do |author|
+          %tr
+            %td= author.created_at
+            %td= author.full_name
+            %td= author.email
+            %td= author.phone_number
+

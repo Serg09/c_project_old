@@ -1,9 +1,17 @@
 class AuthorsController < ApplicationController
-  before_filter :authenticate_author!
-  before_filter :load_author
+  before_filter :authenticate_author!, only: [:show, :edit, :update]
+  before_filter :authenticate_administrator!, only: [:index]
+  before_filter :load_author, only: [:show, :edit, :update]
   authorize_resource
 
   respond_to :html
+
+  def index
+    @authors = Author.all
+    respond_with @authors do |format|
+      format.html { render layout: 'admin' }
+    end
+  end
 
   def show
   end

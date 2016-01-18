@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     return author_path(resource) if resource.is_a? Author
+    return admin_root_path if resource.is_a? Administrator
     super resource
   end
 

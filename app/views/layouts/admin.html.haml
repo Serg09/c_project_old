@@ -1,0 +1,24 @@
+!!!
+%html
+  %head
+    %title Crowdscribe Administration
+    %link{ rel: 'icon', type: 'image/png', href: asset_path('crowdscribed_logo_cropped.png') }
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    =render 'shared/admin_navigation'
+    #admin_content
+      -if content_for? :page_title
+        .container
+          .row
+            .col-md-12
+              %h1#page_title
+                =yield :page_title
+      =render 'flash' if flash.any? || flash_test?
+      =yield
+    %footer
+      .container
+        .row
+          .col-md-12
+            Crowdscribed 2014 | All Rights Reserved

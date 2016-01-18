@@ -2,6 +2,7 @@ module Navigation
   def path_for(identifier)
     case identifier
     when "the welcome page" then "/"
+    when "the administrator sign in page" then "/admin/sign_in"
     else raise "Unrecognized path identifier \"#{identifier}\""
     end
   end
@@ -12,6 +13,7 @@ module Navigation
     when "the main content" then "#main_content"
     when "the page title" then ".title-bar"
     when "the notification area" then "#notifications"
+    when "the watermark" then "#watermark"
     else raise "Unrecognized locator identifier \"#{identifier}\""
     end
   end
