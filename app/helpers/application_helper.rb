@@ -19,6 +19,10 @@ module ApplicationHelper
     false
   end
 
+  def format_date_time(datetime)
+    datetime.strftime '%-m/%-d/%Y %I:%M %p'
+  end
+
   def form_group_class(model, attribute)
     model.errors[attribute].any? ? 'has-error' : nil
   end
