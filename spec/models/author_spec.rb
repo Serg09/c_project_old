@@ -112,4 +112,11 @@ RSpec.describe Author, type: :model do
       end
     end
   end
+
+  describe '#full_name' do
+    it 'concatenates the first and last names' do
+      author = Author.new attributes.merge(first_name: 'John', last_name: 'Doe')
+      expect(author.full_name).to eq 'John Doe'
+    end
+  end
 end
