@@ -5,7 +5,16 @@ RSpec.describe AuthorsController, type: :controller do
 
   let (:author) { FactoryGirl.create(:author, email: 'john@doe.com') }
 
-  context 'for an authenticated user' do
+  context 'for an authenticated author' do
+
+    describe "get :index" do
+      it "redirects to the author root path" do
+        sign_in author
+        get :index
+        expect(response).to redirect_to author_root_path
+      end
+    end
+
     context 'that is the author in question' do
       before(:each) { sign_in author }
 
@@ -43,21 +52,21 @@ RSpec.describe AuthorsController, type: :controller do
       before(:each) { sign_in other_author }
 
       describe 'get :show' do
-        it 'redirects to user\'s profile page' do
+        it 'redirects to author\'s profile page' do
           get :show, id: author
           expect(response).to redirect_to author_root_path
         end
       end
 
       describe 'get :edit' do
-        it 'redirects to user\'s profile page' do
+        it 'redirects to author\'s profile page' do
           get :edit, id: author
           expect(response).to redirect_to author_root_path
         end
       end
 
       describe 'patch :update' do
-        it 'redirects to user\'s profile page' do
+        it 'redirects to author\'s profile page' do
           patch :update, id: author, author: { first_name: 'Jimbob' }
           expect(response).to redirect_to author_root_path
         end
@@ -68,6 +77,25 @@ RSpec.describe AuthorsController, type: :controller do
             author.reload
           end.not_to change(author, :first_name)
         end
+      end
+    end
+  end
+
+  context 'for an administrator' do
+    let (:admin) { FactoryGirl.create(:administrator) }
+    before(:each) { sign_in admin }
+
+    describe "get :index" do
+      it "is successful" do
+        get :index
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "get :show" do
+      it "is successful" do
+        get :show, id: author
+        expect(response).to have_http_status(:success)
       end
     end
   end
