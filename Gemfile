@@ -29,6 +29,7 @@ gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 gem 'pg'
 gem 'cancan'
+gem 'simple-navigation'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
