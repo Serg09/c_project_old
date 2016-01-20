@@ -21,7 +21,7 @@ Feature: Approve an author
     When I click "John Doe" within the authors table
     Then I should see "Author" within the page title
     When I click "Accept"
-    Then I should see "The author has been approved successfully." within the notification area
+    Then I should see "The author has been accepted successfully." within the notification area
     And I should see "Authors" within the page title
     And I should see the following authors table
       | Signup date | Name     | Email        |
