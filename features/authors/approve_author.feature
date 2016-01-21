@@ -3,7 +3,6 @@ Feature: Approve an author
   In order to control who has access to certain parts of the site
   I need to be able to approve a request for an author account
 
-  @wip
   Scenario: An administrator approves an author request
     Given there is an administrator with email "admin@cs.com" and password "please01"
     And there is a pending author named "John Doe" with email "john@doe.com" submitted on 1/17/2016

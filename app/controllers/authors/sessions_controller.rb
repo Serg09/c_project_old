@@ -29,11 +29,11 @@ class Authors::SessionsController < Devise::SessionsController
   def ensure_author_approved!
     author = Author.find_by(email: sign_in_params[:email])
     case author.try(:status)
-    when Author.pending
+    when Author.PENDING
       flash[:warning] = 'Unable to sign in. Your account is still pending approval by the administrator.'
       redirect_to pages_account_pending_path
       return false
-    when Author.rejected
+    when Author.REJECTED
       redirect_to new_author_session_path, alert: 'Unable to sign in. Your account has been rejected by the administrator.'
       return false
     end

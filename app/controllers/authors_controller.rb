@@ -6,7 +6,7 @@ class AuthorsController < ApplicationController
 
   def index
     authorize! :read, Author
-    @authors = Author.all
+    @authors = Author.where(status: query_status)
     respond_with @authors do |format|
       format.html { render layout: 'admin' }
     end
@@ -57,5 +57,9 @@ class AuthorsController < ApplicationController
 
   def load_author
     @author = params[:id] ? Author.find(params[:id]) : current_author
+  end
+
+  def query_status
+    params[:status] || Author.PENDING
   end
 end

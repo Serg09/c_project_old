@@ -9,7 +9,7 @@ DATE = Transform /(\d{1,2})\/(\d{1,2})\/(\d{4})/ do |month, date, year|
 end
 
 When /^an administrator approves the account for (#{AUTHOR})$/ do |author|
-  author.status = Author.accepted
+  author.status = Author.ACCEPTED
   author.save!
   # Doing this here as it will be the controller that handles this
   # in production and this is easier than recreating the web steps
@@ -18,7 +18,7 @@ When /^an administrator approves the account for (#{AUTHOR})$/ do |author|
 end
 
 When /^an administrator rejects the account for (#{AUTHOR})$/ do |author|
-  author.status = Author.rejected
+  author.status = Author.REJECTED
   author.save!
   # Doing this here as it will be the controller that handles this
   # in production and this is easier than recreating the web steps
