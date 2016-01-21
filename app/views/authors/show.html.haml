@@ -1,5 +1,8 @@
-=content_for :title_bar do
-  My profile
+=content_for :page_title do
+  -if administrator_signed_in?
+    Author
+  -else
+    My profile
 
 .container.container-default
   .row
@@ -27,3 +30,12 @@
               &#x2713;
             -else
               &#x2715;
+    -if administrator_signed_in?
+      .col-md-2.btn-stack
+        -unless @author.accepted?
+          =button_to 'Accept', accept_author_path(@author), method: :patch, class: 'btn btn-success btn-block', title: "Click here to approve this author's account."
+        -unless @author.rejected?
+          =button_to 'Reject', reject_author_path(@author), method: :patch, class: 'btn btn-danger btn-block', title: "Click here to reject this author's account."
+  .row
+    .col-md-6
+      =link_to 'Back', authors_path, class: 'btn btn-default'

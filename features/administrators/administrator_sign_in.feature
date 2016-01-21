@@ -6,11 +6,11 @@ Feature: Administrator sign in
   Scenario: An administrator signs in successfully
     Given there is an administrator with email "admin@cs.com" and password "please01"
     When I am on the administrator sign in page
-    And I should see "Log in" within the page title
+    Then I should see "Log in" within the page title
 
     When I fill in "Email" with "admin@cs.com"
     And I fill in "Password" with "please01"
     And I click "Sign in"
 
     Then I should see "Signed in successfully" within the notification area
-    And I should see "Manage authors" within the main menu
+    And I should see "Authors" within the main menu

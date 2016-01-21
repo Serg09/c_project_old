@@ -4,6 +4,12 @@ module ApplicationHelper
     'alert' => 'danger'
   }
 
+  def author_nav_item_caption
+    pending_count = Author.pending.count
+    return 'Authors' if pending_count == 0
+    "Authors <span class=\"badge\">#{pending_count}</span>".html_safe
+  end
+
   def flash_key_to_alert_class(flash_key)
     "alert-#{FLASH_MAP[flash_key] || flash_key}"
   end
@@ -17,6 +23,10 @@ module ApplicationHelper
       true
     end
     false
+  end
+
+  def format_date_time(datetime)
+    datetime.strftime '%-m/%-d/%Y %I:%M %p'
   end
 
   def form_group_class(model, attribute)

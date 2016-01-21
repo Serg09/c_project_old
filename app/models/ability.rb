@@ -3,6 +3,6 @@ class Ability
 
   def initialize(author)
     author ||= Author.new
-    can :manage, Author, id: author.id
+    can [:show, :update, :edit], Author, id: author.id
   end
 end

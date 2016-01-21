@@ -4,16 +4,15 @@
 .container
   .row
     .col-md-6
-      %table.table.table-striped
+      =render_navigation context: :admin, level: 2
+      %table#authors-table.table.table-striped
         %tr
           %th Signup date
           %th Name
           %th Email
-          %th Phone
         -@authors.each do |author|
           %tr
-            %td= author.created_at
-            %td= author.full_name
+            %td= format_date_time(author.created_at)
+            %td= link_to author.full_name, author_path(author)
             %td= author.email
-            %td= author.phone_number
 

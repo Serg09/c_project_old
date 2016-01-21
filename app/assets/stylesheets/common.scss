@@ -72,6 +72,7 @@ body {
 body > footer {
   background: #282a2b;
   color: #8C8989;
+  margin-top: 2em;
   padding: 2em 0;
   text-shadow: 1px 2px 1px #000;
   font-family: 'PT Sans', Arial, Helvetica, sans-serif;
@@ -81,6 +82,10 @@ body > footer {
 
 #notifications {
   margin-top: 1em;
+}
+
+.btn-stack .btn {
+  margin-bottom: .5em;
 }
 
 @font-face {

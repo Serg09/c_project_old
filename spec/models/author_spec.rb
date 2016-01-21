@@ -89,19 +89,19 @@ RSpec.describe Author, type: :model do
     it 'defaults to "pending"' do
       author = Author.new attributes
       expect(author.status).to eq 'pending'
-      expect(author).to be_status_pending
+      expect(author).to be_pending
     end
 
     context 'when set to "pending"' do
       it 'can be set to "accepted"' do
         author = Author.create! attributes
-        author.status = Author.accepted
+        author.status = Author.ACCEPTED
         expect(author).to be_valid
       end
 
       it 'can be set to "rejected"' do
         author = Author.create! attributes
-        author.status = Author.rejected
+        author.status = Author.REJECTED
         expect(author).to be_valid
       end
 
@@ -117,6 +117,39 @@ RSpec.describe Author, type: :model do
     it 'concatenates the first and last names' do
       author = Author.new attributes.merge(first_name: 'John', last_name: 'Doe')
       expect(author.full_name).to eq 'John Doe'
+    end
+  end
+
+  shared_context :multi_status do
+    let!(:p1) { FactoryGirl.create(:author, first_name: 'John', status: Author.PENDING) }
+    let!(:p2) { FactoryGirl.create(:author, first_name: 'Jake', status: Author.PENDING) }
+    let!(:a1) { FactoryGirl.create(:author, first_name: 'Mike', status: Author.ACCEPTED) }
+    let!(:a2) { FactoryGirl.create(:author, first_name: 'Mark', status: Author.ACCEPTED) }
+    let!(:r1) { FactoryGirl.create(:author, first_name: 'Fred', status: Author.REJECTED) }
+    let!(:r2) { FactoryGirl.create(:author, first_name: 'Ferb', status: Author.REJECTED) }
+  end
+
+  describe '::pending' do
+    include_context :multi_status
+    it 'lists the authors in pending status' do
+      authors = Author.pending.map(&:first_name)
+      expect(authors).to eq %w(John Jake)
+    end
+  end
+
+  describe '::accepted' do
+    include_context :multi_status
+    it 'lists the authors in accepted status' do
+      authors = Author.accepted.map(&:first_name)
+      expect(authors).to eq %w(Mike Mark)
+    end
+  end
+
+  describe '::rejected' do
+    include_context :multi_status
+    it 'lists the authors in rejected status' do
+      authors = Author.accepted.map(&:first_name)
+      expect(authors).to eq %w(Mike Mark)
     end
   end
 end

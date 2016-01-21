@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   }
 
   resources :inquiries, only: [:new, :create]
-  resources :authors, only: [:show, :edit, :update, :index]
+  resources :authors, only: [:show, :edit, :update, :index] do
+    member do
+      patch :accept
+      patch :reject
+    end
+  end
 
   get 'pages/welcome'
   get 'pages/package_pricing'

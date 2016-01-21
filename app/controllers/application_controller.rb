@@ -10,7 +10,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    @current_ability ||= Ability.new current_author
+    @current_ability ||= initialize_ability
+  end
+
+  def initialize_ability
+    return AdministratorAbility.new if administrator_signed_in?
+    Ability.new current_author
   end
 
   rescue_from CanCan::AccessDenied do |exception|
