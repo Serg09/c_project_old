@@ -1,2 +1,16 @@
-%h1 Inquiries#show
-%p Find me in app/views/inquiries/show.html.haml
+=content_for :page_title do
+  Inquiry
+
+.container
+  .row
+    .col-md-6
+      %dl
+        %dt Name
+        %dd= @inquiry.full_name
+        %dt Email
+        %dd= @inquiry.email
+        %dt Received
+        %dd= format_date_time(@inquiry.created_at)
+
+      .well
+        =@inquiry.body

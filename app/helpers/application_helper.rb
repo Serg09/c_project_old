@@ -26,7 +26,7 @@ module ApplicationHelper
   end
 
   def format_date_time(datetime)
-    datetime.strftime '%-m/%-d/%Y %I:%M %p'
+    datetime.strftime '%-m/%-d/%Y %l:%M %p'
   end
 
   def form_group_class(model, attribute)

@@ -4,10 +4,6 @@ AUTHOR = Transform /author (.+@.+)/ do |email|
   author
 end
 
-DATE = Transform /(\d{1,2})\/(\d{1,2})\/(\d{4})/ do |month, date, year|
-  Date.new(year.to_i, month.to_i, date.to_i)
-end
-
 When /^an administrator approves the account for (#{AUTHOR})$/ do |author|
   author.status = Author.ACCEPTED
   author.save!

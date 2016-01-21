@@ -16,19 +16,15 @@ class InquiriesController < ApplicationController
     respond_with @inquiry, location: pages_books_path
   end
 
-  def edit
-  end
-
   def update
   end
 
   def index
+    @inquiries = Inquiry.all
   end
 
   def show
-  end
-
-  def destroy
+    @inquiry = Inquiry.find(params[:id])
   end
 
   private

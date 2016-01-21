@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     confirmations: 'authors/confirmations'
   }
 
-  resources :inquiries, only: [:new, :create]
+  resources :inquiries, only: [:index, :new, :create, :show]
   resources :authors, only: [:show, :edit, :update, :index] do
     member do
       patch :accept
