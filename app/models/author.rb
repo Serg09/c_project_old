@@ -53,7 +53,7 @@ class Author < ActiveRecord::Base
   end
 
   STATUSES.each do |s|
-    define_method "status_#{s}?" do
+    define_method "#{s}?" do
       self.status == s
     end
   end

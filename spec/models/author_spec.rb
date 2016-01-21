@@ -89,7 +89,7 @@ RSpec.describe Author, type: :model do
     it 'defaults to "pending"' do
       author = Author.new attributes
       expect(author.status).to eq 'pending'
-      expect(author).to be_status_pending
+      expect(author).to be_pending
     end
 
     context 'when set to "pending"' do
