@@ -5,9 +5,9 @@ module ApplicationHelper
   }
 
   def author_nav_item_caption
-    pending_count = Author.count #TODO Need to get the correct number
-    return 'Authors' if pending_count.zero?
-    "Authors <span class=\"badge\">#{Author.count}</span>".html_safe
+    pending_count = Author.pending.count
+    return 'Authors' if pending_count == 0
+    "Authors <span class=\"badge\">#{pending_count}</span>".html_safe
   end
 
   def flash_key_to_alert_class(flash_key)
