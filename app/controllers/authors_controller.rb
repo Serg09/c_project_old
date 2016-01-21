@@ -32,14 +32,14 @@ class AuthorsController < ApplicationController
 
   def accept
     authorize! :accept, @author
-    @author.status = Author.accepted
+    @author.status = Author.ACCEPTED
     flash[:notice] = 'The author has been accepted successfully.' if @author.save
     redirect_to authors_path
   end
 
   def reject
     authorize! :reject, @author
-    @author.status = Author.rejected
+    @author.status = Author.REJECTED
     flash[:notice] = 'The author has been rejected successfully.' if @author.save
     redirect_to authors_path
   end

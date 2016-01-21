@@ -44,10 +44,9 @@ class Author < ActiveRecord::Base
   validates_uniqueness_of :username
   validates_inclusion_of :status, in: STATUSES
 
-
   class << self
     STATUSES.each do |s|
-      define_method s do
+      define_method s.upcase do
         s
       end
     end
@@ -58,6 +57,10 @@ class Author < ActiveRecord::Base
       self.status == s
     end
   end
+
+  scope :pending, -> { where(status: Author.PENDING) }
+  scope :accepted, -> { where(status: Author.ACCEPTED) }
+  scope :rejected, -> { where(status: Author.REJECTED) }
 
   def full_name
     "#{first_name} #{last_name}"

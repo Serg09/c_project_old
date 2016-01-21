@@ -12,7 +12,7 @@ FactoryGirl.define do
     password_confirmation "please01"
     contactable true
     package_id 1
-    status Author.pending
+    status Author.PENDING
 
     after(:create) do |author, evaluator|
       author.confirm if evaluator.confirmed
