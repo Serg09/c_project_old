@@ -3,6 +3,6 @@ class InquiryMailer < ApplicationMailer
 
   def submission_notification(inquiry)
     @inquiry = inquiry
-    mail to: 'info@crowdscribed.com', subject: 'New Inquiry'
+    mail to: 'info@crowdscribed.com', subject: "Crowdscribe inquiry #{('%06d' % inquiry.id)}"
   end
 end
