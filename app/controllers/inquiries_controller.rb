@@ -28,7 +28,7 @@ class InquiriesController < ApplicationController
 
   def index
     authorize! :index, Inquiry
-    @inquiries = html_true?(params[:archived]) ? Inquiry.archived : Inquiry.active
+    @inquiries = requested_inquiries.paginate(page: params[:page])
     respond_with @inquiries do |format|
       format.html { render layout: 'admin' }
     end
@@ -49,5 +49,13 @@ class InquiriesController < ApplicationController
 
   def load_inquiry
     @inquiry = Inquiry.find(params[:id])
+  end
+
+  def requested_archived?
+    html_true?(params[:archived])
+  end
+
+  def requested_inquiries
+    requested_archived? ? Inquiry.archived : Inquiry.active
   end
 end

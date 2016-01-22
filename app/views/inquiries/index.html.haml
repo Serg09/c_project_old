@@ -15,3 +15,4 @@
             %td= link_to inquiry.full_name, inquiry_path(inquiry)
             %td= email_link inquiry
             %td= format_date_time(inquiry.created_at)
+      =will_paginate @inquiries, renderer: BootstrapPagination::Rails
