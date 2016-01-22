@@ -21,6 +21,9 @@ class InquiriesController < ApplicationController
 
   def index
     @inquiries = Inquiry.all
+    respond_with @inquiries do |format|
+      format.html { render layout: 'admin' }
+    end
   end
 
   def show
