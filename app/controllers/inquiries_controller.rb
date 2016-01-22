@@ -1,4 +1,6 @@
 class InquiriesController < ApplicationController
+  include ApplicationHelper
+
   before_filter :load_inquiry, only: [:show, :archive]
   respond_to :html
 
@@ -20,13 +22,13 @@ class InquiriesController < ApplicationController
   def archive
     authorize! :update, @inquiry
     @inquiry.archived = true
-    flash[:notice] = 'The inquiry was archived successfully.' if @inquiry.save
+    flash[:notice] = 'The inquiry has been archived successfully.' if @inquiry.save
     respond_with @inquiry, location: inquiries_path
   end
 
   def index
     authorize! :index, Inquiry
-    @inquiries = Inquiry.all
+    @inquiries = html_true?(params[:archived]) ? Inquiry.archived : Inquiry.active
     respond_with @inquiries do |format|
       format.html { render layout: 'admin' }
     end

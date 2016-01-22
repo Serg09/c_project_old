@@ -3,7 +3,6 @@ Feature: Resolve an inquiry
   In order to track communication with customers
   I need to be able to mark an inquiry as resolved
 
-  @wip
   Scenario: An administrator resolves an inquiry
     Given there is an administrator with email "admin@cs.com" and password "please01"
     And user "John Doe" with email "john@doe.com" has submitted an inquiry asking "How much for the dog?" at 3:42 PM on 2/27/2016

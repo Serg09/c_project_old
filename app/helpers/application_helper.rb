@@ -4,6 +4,11 @@ module ApplicationHelper
     'alert' => 'danger'
   }
 
+  def author_path?(status)
+    return false unless request_uri.path.starts_with? '/author'
+    (request_query[:status] || Author.PENDING) == status
+  end
+
   def author_nav_item_caption
     pending_count = Author.pending.count
     return 'Authors' if pending_count == 0
@@ -45,5 +50,32 @@ module ApplicationHelper
     pending_count = Inquiry.active.count
     return 'Inquiries' if pending_count == 0
     "Inquiries <span class=\"badge\">#{pending_count}</span>".html_safe
+  end
+
+  def inquiry_path?(archived)
+    return false unless request_uri.path.starts_with? '/inquiries'
+    archived == html_true?(request_query[:archived])
+  end
+
+  def parse_query(query)
+    return {} unless query
+    query.split('&')
+      .map { |equation| equation.split('=') }
+      .reduce({}) do |h, a|
+        h[a[0].to_sym] = a[1]
+        h
+      end
+  end
+
+  def html_true?(value)
+    %w(1 true).include? (value || '').downcase
+  end
+
+  def request_query
+    @request_query ||= parse_query(request_uri.query)
+  end
+
+  def request_uri
+    @request_uri ||= URI.parse(request.original_url)
   end
 end
