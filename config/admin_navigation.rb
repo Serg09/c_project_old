@@ -10,7 +10,7 @@ SimpleNavigation::Configuration.run do |navigation|
       authors.item :accepted, 'Accepted', authors_path(status: :accepted), highlights_on: -> { params[:status] == 'accepted' }
       authors.item :rejected, 'Rejected', authors_path(status: :rejected), highlights_on: -> { params[:status] == 'rejected' }
     end
-    primary.item :inquiries, 'Inquiries', inquiries_path
+    primary.item :inquiries, inquiry_nav_item_caption, inquiries_path
     primary.item :administrators, 'Administrators', '/'
     primary.item :sign_out, 'Sign out', destroy_administrator_session_path, if: -> { administrator_signed_in? }, method: :delete
   end

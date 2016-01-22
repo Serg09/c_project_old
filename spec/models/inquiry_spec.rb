@@ -61,4 +61,27 @@ describe Inquiry do
       expect(inquiry.full_name).to eq 'John Doe'
     end
   end
+
+  shared_context :multiple do
+    let!(:a1) { FactoryGirl.create(:inquiry, first_name: 'Jane') }
+    let!(:a2) { FactoryGirl.create(:inquiry, first_name: 'John') }
+    let!(:v1) { FactoryGirl.create(:inquiry, first_name: 'Mike', archived: true) }
+    let!(:v2) { FactoryGirl.create(:inquiry, first_name: 'Mark', archived: true) }
+  end
+
+  describe '::active' do
+    include_context :multiple
+    it 'returns the active inquiries' do
+      active = Inquiry.active.map(&:first_name)
+      expect(active).to eq %w(Jane John)
+    end
+  end
+
+  describe '::archived' do
+    include_context :multiple
+    it 'returns the archived inquiries' do
+      archived = Inquiry.archived.map(&:first_name)
+      expect(archived).to eq %w(Mike Mark)
+    end
+  end
 end

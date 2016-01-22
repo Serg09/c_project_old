@@ -40,4 +40,10 @@ module ApplicationHelper
       content_tag :span, m, class: 'help-block'
     end.join('').html_safe
   end
+
+  def inquiry_nav_item_caption
+    pending_count = Inquiry.active.count
+    return 'Inquiries' if pending_count == 0
+    "Inquiries <span class=\"badge\">#{pending_count}</span>".html_safe
+  end
 end

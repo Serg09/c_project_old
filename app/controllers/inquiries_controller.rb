@@ -34,6 +34,9 @@ class InquiriesController < ApplicationController
 
   def show
     authorize! :show, @inquiry
+    respond_with @inquiry do |format|
+      format.html { render layout: 'admin' }
+    end
   end
 
   private
