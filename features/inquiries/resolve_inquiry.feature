@@ -21,7 +21,7 @@ Feature: Resolve an inquiry
     Then I should see "Inquiry" within the page title
     And I should see "How much for the dog?" within the main content
 
-    When I click "Resolve" within the main content
-    Then I should see "The inquiry has been marked as resolved" within the notification area
+    When I click "Archive" within the main content
+    Then I should see "The inquiry has been archived successfully" within the notification area
     And I should see the following inquiries table
      | Name     | Email        |          Received |
