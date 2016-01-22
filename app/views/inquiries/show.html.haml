@@ -8,7 +8,7 @@
         %dt Name
         %dd= @inquiry.full_name
         %dt Email
-        %dd= @inquiry.email
+        %dd= email_link @inquiry
         %dt Received
         %dd= format_date_time(@inquiry.created_at)
 

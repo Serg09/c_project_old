@@ -13,5 +13,5 @@
         -@inquiries.each do |inquiry|
           %tr
             %td= link_to inquiry.full_name, inquiry_path(inquiry)
-            %td= inquiry.email
+            %td= email_link inquiry
             %td= format_date_time(inquiry.created_at)
