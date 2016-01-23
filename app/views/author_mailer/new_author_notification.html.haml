@@ -1,0 +1,21 @@
+:css
+  th {
+    text-align: right;
+  }
+%h1 New author
+
+%p
+  A new author has signed up at CrowdScribed.com.
+
+%table
+  %tr
+    %th Name:
+    %td= @author.full_name
+  -if @author.phone_number && @author.contactable?
+    %tr
+      %th Phone:
+      %td= @author.phone_number
+
+%p
+  =link_to 'Click here', new_administrator_session_url
+  to administer author submissions.

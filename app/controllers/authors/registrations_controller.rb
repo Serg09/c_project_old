@@ -12,6 +12,7 @@ class Authors::RegistrationsController < Devise::RegistrationsController
     super do |resource|
       if resource.valid?
         flash[:notice] = 'Your request for access has been accepted.'
+        AuthorMailer.new_author_notification(resource).deliver_now
       else
         flash[:alert] = 'We were unable to save your registration.'
       end

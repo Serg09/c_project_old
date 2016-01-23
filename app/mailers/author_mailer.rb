@@ -1,5 +1,11 @@
 class AuthorMailer < ApplicationMailer
-  default from: 'accounts@crowdscribe.com'
+  default from: 'noreply@crowdscribed.com'
+
+  def new_author_notification(author)
+    inline_images
+    @author = author
+    mail to: 'info@crowdscribed.com', subject: 'New author'
+  end
 
   def account_pending_notification(author)
     inline_images

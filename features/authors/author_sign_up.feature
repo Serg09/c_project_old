@@ -30,6 +30,7 @@ Feature: An author signs up
     Then I should see "Your email address has been successfully confirmed." within the notification area
     And I should see "Approval pending" within the page title
     And "john@doe.com" should receive an email with subject "Approval pending"
+    And "info@crowdscribed.com" should receive an email with subject "New author"
 
   Scenario: A user signs up successfully
     When an administrator approves the account for author john@doe.com
