@@ -1,3 +1,33 @@
+!!!
 %hmtl
-  %body
-    = yield
+  %head
+    :css
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #747474;
+        font-size: 12pt;
+        line-height: 20px;
+      }
+      h1 {
+        color: #F90;
+        font-weight: bold;
+        font-size: 26px;
+        line-height: 27px;
+      }
+      h2 {
+        color: #333;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 24px;
+      }
+      .main-content {
+        padding: 16px;
+      }
+  %body{ style: 'margin: 0;' }
+    %table
+      %tr
+        %td
+          =image_tag attachments['logo.png'].url
+      %tr
+        %td.main-content
+          = yield
