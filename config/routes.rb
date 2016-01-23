@@ -14,6 +14,12 @@ Rails.application.routes.draw do
     end
   end
   resources :authors, only: [:show, :edit, :update, :index] do
+    resource :bio, only: [:show, :create, :edit, :update] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
     member do
       patch :accept
       patch :reject
