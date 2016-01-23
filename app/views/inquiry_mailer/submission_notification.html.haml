@@ -1,7 +1,24 @@
-%h1 Inquiry
-
-%h2 From
-=@inquiry.full_name
+:css
+  .message-body {
+    padding: 2em;
+    background-color: #EEE;
+    border-radius: .5em;
+  }
+%h1
+  Inquiry
+  ='%06d' % @inquiry.id
 
 %p
+  A new inquiry has been submitted at #{h @inquiry.created_at.strftime('%l:%M') } on #{h @inquiry.created_at.strftime('%m/%d/%Y (%Z)') }
+
+%p
+  =@inquiry.full_name
+  &lt;
+  =link_to @inquiry.email, "mailto:#{@inquiry.email}?subject=Crowdscribe Inquiry #{'%06d' % @inquiry.id}"
+  &gt;
+
+%p.message-body
   =@inquiry.body
+
+=link_to 'Sign in', new_administrator_session_url, target: '_blank'
+to manage inquiries.

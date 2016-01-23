@@ -70,7 +70,8 @@ Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with subject "([
 end
 
 Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with subject \/([^"]*?)\/$/ do |address, amount, subject|
-  emails = unread_emails_for(address).select { |m| m.subject =~ Regexp.new(subject) }
+  regex = Regexp.new(subject)
+  emails = unread_emails_for(address).select { |m| regex =~ m.subject }
   expect(emails.size).to eq parse_email_count(amount)
 end
 

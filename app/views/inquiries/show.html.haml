@@ -1,2 +1,18 @@
-%h1 Inquiries#show
-%p Find me in app/views/inquiries/show.html.haml
+=content_for :page_title do
+  Inquiry
+
+.container.default-container
+  .row
+    .col-md-6
+      %dl
+        %dt Name
+        %dd= @inquiry.full_name
+        %dt Email
+        %dd= email_link @inquiry
+        %dt Received
+        %dd= format_date_time(@inquiry.created_at)
+
+      .well
+        =@inquiry.body
+    .col-md-6
+      =link_to 'Archive', archive_inquiry_path(@inquiry), class: 'btn btn-success', method: :patch

@@ -1,2 +1,18 @@
-%h1 Inquiries#index
-%p Find me in app/views/inquiries/index.html.haml
+=content_for :page_title do
+  Inquiries
+
+.container
+  .row
+    .col-md-6
+      =render_navigation context: :admin, level: 2
+      %table#inquiries-table.table.table-striped
+        %tr
+          %th Name
+          %th Email
+          %th Received
+        -@inquiries.each do |inquiry|
+          %tr
+            %td= link_to inquiry.full_name, inquiry_path(inquiry)
+            %td= email_link inquiry
+            %td= format_date_time(inquiry.created_at)
+      =will_paginate @inquiries, renderer: BootstrapPagination::Rails

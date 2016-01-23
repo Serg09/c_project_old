@@ -1,4 +1,7 @@
 class InquiriesController < ApplicationController
+  include ApplicationHelper
+
+  before_filter :load_inquiry, only: [:show, :archive]
   respond_to :html
 
   def new
@@ -16,24 +19,43 @@ class InquiriesController < ApplicationController
     respond_with @inquiry, location: pages_books_path
   end
 
-  def edit
-  end
-
-  def update
+  def archive
+    authorize! :update, @inquiry
+    @inquiry.archived = true
+    flash[:notice] = 'The inquiry has been archived successfully.' if @inquiry.save
+    respond_with @inquiry, location: inquiries_path
   end
 
   def index
+    authorize! :index, Inquiry
+    @inquiries = requested_inquiries.paginate(page: params[:page])
+    respond_with @inquiries do |format|
+      format.html { render layout: 'admin' }
+    end
   end
 
   def show
-  end
-
-  def destroy
+    authorize! :show, @inquiry
+    respond_with @inquiry do |format|
+      format.html { render layout: 'admin' }
+    end
   end
 
   private
 
   def inquiry_params
     params.require(:inquiry).permit(:first_name, :last_name, :email, :body)
+  end
+
+  def load_inquiry
+    @inquiry = Inquiry.find(params[:id])
+  end
+
+  def requested_archived?
+    html_true?(params[:archived])
+  end
+
+  def requested_inquiries
+    requested_archived? ? Inquiry.archived : Inquiry.active
   end
 end

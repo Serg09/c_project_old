@@ -18,7 +18,11 @@ class ApplicationController < ActionController::Base
     Ability.new current_author
   end
 
+  def access_denied_redirect_path
+    author_signed_in? ? author_root_path : root_path
+  end
+
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to author_root_path, alert: exception.message
+    redirect_to access_denied_redirect_path, alert: exception.message
   end
 end

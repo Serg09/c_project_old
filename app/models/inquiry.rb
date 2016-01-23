@@ -16,6 +16,9 @@ class Inquiry < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :email, :body
   validates_format_of :email, with: /\A[\w\._\+-]+@[\w\._]+\.[a-z]{2,6}\z/
 
+  scope :active, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
+
   def full_name
     "#{first_name} #{last_name}"
   end
