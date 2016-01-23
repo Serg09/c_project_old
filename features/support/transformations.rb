@@ -6,3 +6,8 @@ DATE_TIME = Transform /(\d{1,2}):(\d{2}) (AM|PM) on (\d{1,2})\/(\d{1,2})\/(\d{4}
   hour_offset = am_pm.upcase == "AM" ? 0 : 12
   DateTime.new(year.to_i, month.to_i, date.to_i, hour.to_i + hour_offset, minute.to_i)
 end
+
+AUTHOR = Transform /author "([^"]+)"/ do |email|
+  author = Author.find_by(email: email)
+  expect(author).not_to be_nil
+end
