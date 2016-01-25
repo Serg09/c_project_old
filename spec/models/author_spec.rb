@@ -152,4 +152,11 @@ RSpec.describe Author, type: :model do
       expect(authors).to eq %w(Mike Mark)
     end
   end
+
+  describe '#bios' do
+    it 'lists the bios for the author' do
+      author = Author.new(attributes)
+      expect(author).to have(0).bios
+    end
+  end
 end
