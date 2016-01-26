@@ -4,6 +4,16 @@ class Bio < ActiveRecord::Base
   validates_presence_of :author_id, :text
   validate :links, :contains_valid_links
 
+  STATUSES = %w(pending approved rejected)
+
+  class << self
+    STATUSES.each do |status|
+      define_method status.upcase do
+        status
+      end
+    end
+  end
+
   private
 
   def contains_valid_links

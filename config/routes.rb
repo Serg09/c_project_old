@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
   end
   resources :authors, only: [:show, :edit, :update, :index] do
-    resources :bios, only: [:index, :show, :create]
+    resources :bios, only: [:index, :create]
     member do
       patch :accept
       patch :reject

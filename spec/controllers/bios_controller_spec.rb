@@ -4,43 +4,71 @@ RSpec.describe BiosController, type: :controller do
   include Devise::TestHelpers
 
   let (:author) { FactoryGirl.create(:author, status: Author.ACCEPTED) }
+  let (:bio) { FactoryGirl.create(:bio, author: author) }
+  let (:approved_bio) { FactoryGirl.create(:bio, author: author, status: Bio.APPROVED) }
   let (:attributes) do
     {
-
+      text: 'This is some stuff about me',
+      links: [
+        {site: :facekbook, url: 'http://www.facebook.com/some_dude'},
+        {site: :twitter, url: 'http://www.twitter.com/some_dude'}
+      ]
     }
   end
 
   context 'for an authenticated author' do
+    before(:each) { sign_in author}
+
+    describe 'get :index' do
+      it 'is successful' do
+        get :index
+        expect(response).to have_http_status :success
+      end
+    end
+
+    describe 'get :new' do
+      it 'is successful' do
+        get :new
+        expect(response).to have_http_status :success
+      end
+    end
+
+    describe 'post :create' do
+      it 'redirects to the bio page' do
+        post :create, bio: attributes
+        expect(response).to redirect_to bios_path
+      end
+
+      it 'create a new bio record' do
+        expect do
+          post :create, bio: attributes
+          author.bios.reload
+        end.to change(author.bios, :count).by(1)
+      end
+    end
+
     context 'that owns the bio' do
-      before(:each) { sign_in author}
-
-      describe 'get :index' do
-        it 'is successful' do
-          get :index
-          expect(response).to have_http_status :success
-        end
-      end
-      describe 'get :new' do
-        it 'is successful' do
-          get :new
-          expect(response).to have_http_status :success
-        end
-      end
-      describe 'post :create' do
-        it 'redirects to the bio page' do
-        end
-
-        it 'create a new bio record'
-      end
       describe "get :show" do
-        it 'is successful'
+        it 'is successful' do
+          get :show, id: bio
+          expect(response).to have_http_status(:success)
+        end
       end
+
       describe "get :edit" do
-        it 'is successful'
+        it 'is successful' do
+          get :edit, id: bio
+          expect(response).to have_http_status(:success)
+        end
       end
+
       context 'for an approved bio' do
         describe 'put :update' do
-          it 'redirects to the show bio page'
+          it 'redirects to the show bio page' do
+            put :update, id: approved_bio, bio: attributes
+            expect(response).to redirect_to bio_path(approved_bio)
+          end
+
           it 'does not update the bio'
         end
         describe 'patch :approve' do
