@@ -1,5 +1,6 @@
 class BiosController < ApplicationController
   before_filter :load_author
+  before_filter :load_bio, only: [:edit, :update, :show, :approve, :reject]
 
   respond_to :html
 
@@ -18,6 +19,20 @@ class BiosController < ApplicationController
   def edit
   end
 
+  def update
+    if @bio.approved?
+      @bio = @author.bios.new(bio_params)
+    else
+      @bio.update_attributes bio_params
+    end
+    flash[:notice] = "Your bio has been updated successfully and is waiting for administrative approval." if @bio.save
+    respond_with @bio, location: bio_path
+  end
+
+  def approve
+    redirect_to author_root_path
+  end
+
   private
 
   def bio_params
@@ -26,5 +41,9 @@ class BiosController < ApplicationController
 
   def load_author
     @author = author_signed_in? ? current_author : Author.find(params[:author_id])
+  end
+
+  def load_bio
+    @bio = Bio.find(params[:id])
   end
 end

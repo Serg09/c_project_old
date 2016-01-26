@@ -66,14 +66,36 @@ RSpec.describe BiosController, type: :controller do
         describe 'put :update' do
           it 'redirects to the show bio page' do
             put :update, id: approved_bio, bio: attributes
-            expect(response).to redirect_to bio_path(approved_bio)
+            expect(response).to redirect_to bio_path
           end
 
-          it 'does not update the bio'
+          it 'does not update the bio' do
+            expect do
+              put :update, id: approved_bio, bio: attributes
+              approved_bio.reload
+            end.not_to change(approved_bio, :text)
+          end
+
+          it 'creates a new bio with the specified attributes' do
+            approved_bio # create the bio before starting the expectation
+            expect do
+              put :update, id: approved_bio, bio: attributes
+            end.to change(author.bios, :count).by(1)
+          end
         end
+
         describe 'patch :approve' do
-          it 'redirects to the author home page'
-          it 'does not update the bio'
+          it 'redirects to the author home page' do
+            patch :approve, id: approved_bio
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the bio' do
+            expect do
+              patch :approve, id: approved_bio
+              approved_bio.reload
+            end.not_to change(approved_bio, :status)
+          end
         end
         describe 'patch :reject' do
           it 'redirects to the author home page'
