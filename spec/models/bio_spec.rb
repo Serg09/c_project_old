@@ -57,4 +57,16 @@ RSpec.describe Bio, type: :model do
       expect(bio).to have_at_least(1).error_on :links
     end
   end
+
+  describe '#status' do
+    it 'defaults to "pending" if not specified' do
+      bio = Bio.new attributes
+      expect(bio).to be_pending
+    end
+
+    it 'cannot be anything besides "pending", "approved", or "rejected"' do
+      bio = Bio.new attributes.merge(status: 'notvalid')
+      expect(bio).to have_at_least(1).error_on :status
+    end
+  end
 end

@@ -1,16 +1,23 @@
 class Bio < ActiveRecord::Base
+  STATUSES = %w(pending approved rejected)
+
   belongs_to :author
   serialize :links, Array
-  validates_presence_of :author_id, :text
+  validates_presence_of :author_id, :text, :status
+  validates_inclusion_of :status, in: STATUSES
   validate :links, :contains_valid_links
-
-  STATUSES = %w(pending approved rejected)
 
   class << self
     STATUSES.each do |status|
       define_method status.upcase do
         status
       end
+    end
+  end
+
+  STATUSES.each do |status|
+    define_method "#{status}?" do
+      self.status == status
     end
   end
 
