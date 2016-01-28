@@ -133,7 +133,7 @@ RSpec.describe BiosController, type: :controller do
 
       describe "get :show" do
         it 'is successful' do
-          get :show, id: bio
+          get :show, id: approved_bio
           expect(response).to have_http_status :success
         end
       end
@@ -193,56 +193,157 @@ RSpec.describe BiosController, type: :controller do
     end
 
     describe 'post :create' do
-      it 'redirects to the administrator home page'
-      it 'does not create a new bio'
+      it 'redirects to the administrator home page' do
+        post :create, author_id: author, bio: attributes
+        expect(response).to redirect_to admin_root_path
+      end
+
+      it 'does not create a new bio' do
+        expect do
+          post :create, author_id: author, bio: attributes
+        end.not_to change(Bio, :count)
+      end
     end
+
     describe "get :show" do
-      it 'is successful'
+      it 'is successful' do
+        get :show, id: bio
+        expect(response).to have_http_status :success
+      end
     end
+
     describe "get :edit" do
-      it 'redirects to the administrator home page'
+      it 'redirects to the administrator home page' do
+        get :edit, id: bio
+        expect(response).to redirect_to admin_root_path
+      end
     end
+
     context 'and an unapproved bio' do
       describe 'put :update' do
-        it 'redirects to the administrator home page'
-        it 'does not update the bio'
+        it 'redirects to the administrator home page' do
+          put :update, id: bio, bio: attributes
+          expect(response).to redirect_to admin_root_path
+        end
+
+        it 'does not update the bio' do
+          expect do
+            put :update, id: bio, bio: attributes
+          end.not_to change(bio, :text)
+        end
       end
+
       describe 'patch :approve' do
-        it 'redirects to the bio index page'
-        it 'updates the bio'
+        it 'redirects to the bio index page' do
+          patch :approve, id: bio
+          expect(response).to redirect_to author_bios_path(author)
+        end
+
+        it 'updates the bio' do
+          expect do
+            patch :approve, id: bio
+            bio.reload
+          end.to change(bio, :status).to Bio.APPROVED
+        end
       end
       describe 'patch :reject' do
-        it 'redirects to the bio index page'
-        it 'updates the bio'
+        it 'redirects to the bio index page' do
+          patch :reject, id: bio
+          expect(response).to redirect_to author_bios_path(author)
+        end
+
+        it 'updates the bio' do
+          expect do
+            patch :reject, id: bio
+            bio.reload
+          end.to change(bio, :status).to Bio.REJECTED
+        end
       end
     end
   end
 
   context 'for an unauthenticated user' do
     describe 'get :index' do
-      it 'renders the most recently approved bio for the author'
+      it 'is successful' do
+        get :index, author_id: author
+        expect(response).to have_http_status :success
+      end
     end
+
     describe 'get :new' do
-      it 'redirects to the sign in page'
+      it 'redirects to the sign in page' do
+        get :new, author_id: author
+        expect(response).to redirect_to new_author_session_path
+      end
     end
+
     describe 'post :create' do
-      it 'redirects to the sign in page'
-      it 'does not create a new bio'
+      it 'redirects to the sign in page' do
+        post :create, author_id: author, bio: attributes
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not create a new bio' do
+        expect do
+          post :create, author_id: author, bio: attributes
+        end.not_to change(Bio, :count)
+      end
     end
-    describe "get :show" do
-      it 'is successful'
+
+    context 'for an approved bio' do
+      describe "get :show" do
+        it 'is successful' do
+          get :show, id: approved_bio
+          expect(response).to have_http_status :success
+        end
+      end
     end
+
+    context 'for an unapproved bio' do
+      describe 'get :show' do
+        it 'redirects to the welcome page' do
+          # TODO will this give the proper behavior in production?
+          expect do
+            get :show, id: bio
+          end.to raise_exception ActionController::RoutingError
+        end
+      end
+    end
+
     describe "get :edit" do
-      it 'redirects to the sign in page'
+      it 'redirects to the sign in page' do
+        get :edit, id: bio
+        expect(response).to redirect_to new_author_session_path
+      end
     end
+
     context 'and an unapproved bio' do
       describe 'patch :approve' do
-        it 'redirects the sign in page'
-        it 'does not update the bio'
+        it 'redirects the sign in page' do
+          patch :approve, id: bio
+          expect(response).to redirect_to new_author_session_path
+        end
+
+        it 'does not update the bio' do
+          expect do
+            patch :approve, id: bio
+            bio.reload
+          end.not_to change(bio, :status)
+        end
       end
+
       describe 'patch :reject' do
-        it 'redirects to the sign in page'
-        it 'does not update the bio'
+        it 'redirects to the sign in page' do
+          patch :reject, id: bio
+          expect(response).to redirect_to new_author_session_path
+        end
+
+        it 'does not update the bio' do
+          expect do
+            patch :reject, id: bio
+            bio.reload
+          end.not_to change(bio, :status)
+        end
       end
     end
   end

@@ -1,6 +1,7 @@
 class BiosController < ApplicationController
-  before_filter :load_author
+  before_filter :authenticate_user!, only: [:new, :create, :edit, :approve, :reject]
   before_filter :load_bio, only: [:edit, :update, :show, :approve, :reject]
+  before_filter :load_author
 
   respond_to :html
 
@@ -11,11 +12,13 @@ class BiosController < ApplicationController
 
   def create
     @bio = @author.bios.new(bio_params)
+    authorize! :create, @bio
     flash[:notice] = "Your bio was saved successfully. It is now waiting for administrative approval." if @bio.save
     respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
   end
 
   def show
+    not_found! unless @bio.approved? || can?(:show, @bio)
   end
 
   def edit
@@ -34,11 +37,23 @@ class BiosController < ApplicationController
   end
 
   def approve
-    redirect_to author_root_path
+    authorize! :approve, @bio
+    @bio.status = Bio.APPROVED
+    if @bio.save
+      redirect_to author_bios_path(@author), notice: "The bio has been approved successfully."
+    else
+      render :show
+    end
   end
 
   def reject
-    redirect_to author_root_path
+    authorize! :reject, @bio
+    @bio.status = Bio.REJECTED
+    if @bio.save
+      redirect_to author_bios_path(@author), notice: "The bio has been rejected successfully."
+    else
+      render :show
+    end
   end
 
   private
@@ -48,7 +63,11 @@ class BiosController < ApplicationController
   end
 
   def load_author
-    @author = author_signed_in? ? current_author : Author.find(params[:author_id])
+    if @bio
+      @author = @bio.author
+    else
+      @author = author_signed_in? ?  current_author : Author.find(params[:author_id])
+    end
   end
 
   def load_bio
