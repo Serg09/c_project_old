@@ -35,6 +35,9 @@ class Bio < ActiveRecord::Base
     end
   end
 
+  scope :pending, -> { where(status: Bio.PENDING).order('created_at DESC') }
+  scope :approved, -> { where(status: Bio.APPROVED).order('created_at DESC') }
+
   private
 
   def contains_valid_links

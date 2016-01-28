@@ -69,4 +69,29 @@ RSpec.describe Bio, type: :model do
       expect(bio).to have_at_least(1).error_on :status
     end
   end
+
+  shared_context :multiple_bios do
+    let!(:p1) { FactoryGirl.create(:bio) }
+    let!(:p2) { FactoryGirl.create(:bio) }
+    let!(:a1) { FactoryGirl.create(:approved_bio) }
+    let!(:a2) { FactoryGirl.create(:approved_bio) }
+    let!(:r1) { FactoryGirl.create(:rejected_bio) }
+    let!(:r2) { FactoryGirl.create(:rejected_bio) }
+  end
+
+  describe '::pending' do
+    include_context :multiple_bios
+
+    it 'lists bios with a status of "pending"' do
+      expect(Bio.pending.map(&:id)).to eq [p2.id, p1.id]
+    end
+  end
+
+  describe '::approved' do
+    include_context :multiple_bios
+
+    it 'lists bios with a status of "approved"' do
+      expect(Bio.approved.map(&:id)).to eq [a2.id, a1.id]
+    end
+  end
 end
