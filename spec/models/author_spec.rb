@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Author, type: :model do
+  let (:author) { FactoryGirl.create(:author) }
+
   let (:attributes) do
     {
       first_name: 'John',
@@ -158,5 +160,88 @@ RSpec.describe Author, type: :model do
       author = Author.new(attributes)
       expect(author).to have(0).bios
     end
+  end
+
+  describe '#working_bio' do
+    context 'when the author has no bios' do
+      it 'returns null' do
+        expect(author.working_bio).to be_nil
+      end
+    end
+
+    context 'when the author has an approved bio' do
+      let!(:bio) { FactoryGirl.create(:approved_bio, author: author) }
+
+      it 'returns the approved bio' do
+        expect(author.working_bio.try(:id)).to eq(bio.id)
+      end
+    end
+
+    context 'when the author has a pending bio' do
+      let!(:bio) { FactoryGirl.create(:pending_bio, author: author) }
+
+      it 'returns the pending bio' do
+        expect(author.working_bio.try(:id)).to eq(bio.id)
+      end
+    end
+
+    context 'when the author has an approved bio and a more recent pending bio' do
+      let!(:a) { FactoryGirl.create(:approved_bio, author: author) }
+      let!(:p) { FactoryGirl.create(:pending_bio, author: author) }
+
+      it 'returns the pending bio' do
+        expect(author.working_bio.try(:id)).to eq p.id
+      end
+    end
+    context 'when the author has a rejected bio' do
+      let!(:bio) { FactoryGirl.create(:rejected_bio, author: author) }
+
+      it 'returns nil' do
+        expect(author.working_bio).to be_nil
+      end
+    end
+  end
+
+  describe '#active_bio' do
+    context 'for an author with no bios' do
+      it 'returns nil' do
+        expect(author.active_bio).to be_nil
+      end
+    end
+
+    context 'for an author with an approved bio' do
+      let!(:bio) { FactoryGirl.create(:approved_bio, author: author) }
+
+      it 'returns the approved bio' do
+        expect(author.active_bio.try(:id)).to eq(bio.id)
+      end
+    end
+
+    context 'for an author with multiple approved bios' do
+      let!(:b1) { FactoryGirl.create(:approved_bio, author: author) }
+      let!(:b2) { FactoryGirl.create(:approved_bio, author: author) }
+
+      it 'returns the must recently approved bio' do
+        expect(author.active_bio.try(:id)).to eq b2.id
+      end
+    end
+  end
+
+  describe '#pending_bio' do
+    context 'for an author with no bios' do
+      it 'returns nil' do
+        expect(author.pending_bio).to be_nil
+      end
+    end
+    context 'for an author with a pending bio' do
+      let!(:bio) { FactoryGirl.create(:pending_bio, author: author) }
+
+      it 'returns the pending bio' do
+        expect(author.pending_bio.try(:id)).to eq bio.id
+      end
+    end
+    # An author should never have more than one pending bio, as updating 
+    # a pending bio should update the one that already exists and updating
+    # an approved bio creates a pending bio
   end
 end
