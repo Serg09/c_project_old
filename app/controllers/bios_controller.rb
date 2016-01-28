@@ -17,6 +17,19 @@ class BiosController < ApplicationController
     respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
   end
 
+  def index
+    if author_signed_in?
+      # Show the most recent non-rejected bio
+      @bio = @author.working_bio
+      render :show
+    elsif administrator_signed_in?
+      @bios = @author.bios
+      respond_with @bios
+    else
+      redirect_to new_author_session_path
+    end
+  end
+
   def show
     not_found! unless @bio.approved? || can?(:show, @bio)
   end
