@@ -1,67 +1,128 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-  body {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
-
-  div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
-
-  div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-
-  h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
-
-  div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-  </style>
-</head>
-
-<body>
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <div>
-      <h1>The page you were looking for doesn't exist.</h1>
-      <p>You may have mistyped the address or the page may have moved.</p>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <title>CrowdScribe</title>
+    <link href='/assets/crowdscribed_logo_cropped-efe6bc1cc44f5bb935d911d4e29213b0ef5d761e340bfc95b222b8f34c1d4ce0.png' rel='icon' type='image/png'>
+    <link rel="stylesheet" media="all" href="/assets/bios.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css?body=1" data-turbolinks-track="true" />
+    <link rel="stylesheet" media="all" href="/assets/bootstrap_and_overrides.self-d86757cf1151ac05047f652b553a58447b17d400a1813aa20170897001fc04e2.css?body=1" data-turbolinks-track="true" />
+    <link rel="stylesheet" media="all" href="/assets/common.self-535de5d7366325d6925877d5837e5cf93694217ea1c7abe6a5955035cc8a8f91.css?body=1" data-turbolinks-track="true" />
+    <link rel="stylesheet" media="all" href="/assets/mixins.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css?body=1" data-turbolinks-track="true" />
+    <link rel="stylesheet" media="all" href="/assets/pages.self-3efc3d6e1040a38e18ea49fdeca579986c861bf645ebd51ade789ea7c83b81c4.css?body=1" data-turbolinks-track="true" />
+    <link rel="stylesheet" media="all" href="/assets/application.self-e80e8f2318043e8af94dddc2adad5a4f09739a8ebb323b3ab31cd71d45fd9113.css?body=1" data-turbolinks-track="true" />
+    <script src="/assets/jquery.self-a714331225dda820228db323939889f149aec0127aeb06255646b616ba1ca419.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/jquery-ui.self-1676c0b9bcf3b4c9c2d9e23025e58ddb3ca991c20d7b070752116800c9099bf9.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/jquery_ujs.self-d456baa54c1fa6be2ec3711f0a72ddf7a5b2f34a6b4f515f33767d6207b7d4b3.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/transition.self-db278e3a8fa6249c16796b113ebd29e11ef4e2cd021618ed84895d524a4511e0.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/alert.self-ebce91ec66c71bcee451ea7da9128fd1bf8faa02c6d22ea04c598423431e4c08.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/modal.self-ab1767545e27c0dbd36971e656ae4927171f673e3d932cdec2cbef39e991952b.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/dropdown.self-8bb9309b6c24a4ba6b94026a049d25b13bdc0553b6fe83255c14a715ba624cc4.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/scrollspy.self-bd0c6724cdc75302fe98dfeff923112b76c1673cf4a0752a7050b7feea15594c.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/tab.self-7e3ee4a243bb416b5f0111a0be08f8547c5d72ba71fe4afe4a4a007f5cb4e10e.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/tooltip.self-d7f9330825307d053f68da11bb9ddc9b070df72deef3d115f2f3d55f66b17457.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/popover.self-cd672ecad3b549e1dbd89bfd044e5812d6fdade56f42d48e3acee0c3f4614526.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/button.self-ceb562de883e04359bb2c06f07bdf6ecf065cc8a5027e2e58857c5e91b0b68e3.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/collapse.self-a87553101c955a01e2e8c81fad69a16582ddbf58fe95d5eb335dde5567af7647.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/carousel.self-5d09995e01b647168888180d40e271f9a6759d68ae7ac029d7026af58813d376.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap/affix.self-14e04bbe71282aa039322ab93e3a3a886ddede5f59a2f365f7c861f697bbeb21.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/twitter/bootstrap.self-fbfa5ad7d9aa0afe439ec4ff3883acc4cb92b62cb67c40d674320c9aa1d4642d.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/bootstrap.self-fdc98dee79ee88255e10cac6caa91338165cb76cf0d263744d8d90011fc2ef8f.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/turbolinks.self-c37727e9bd6b2735da5c311aa83fead54ed0be6cc8bd9a65309e9c5abe2cbfff.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/masonry.pkgd.min.self-f7d4601738f6439a1f90a0a26e82c0af182c29e0d8fc1ed4231cb41aec2a49ae.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/bios.self-877aef30ae1b040ab8a3aba4e3e309a11d7f2612f44dde450b5c157aa5f95c05.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/pages.self-8e40fce5d055f91e7b5bb3a893eb43c61e75020c6adbc5ee336e39079beb6a34.js?body=1" data-turbolinks-track="true"></script>
+    <script src="/assets/application.self-10ad0916cf31256fe71785e8dc9cc297a96b1cdf7b74aeb61711199b9a3d003f.js?body=1" data-turbolinks-track="true"></script>
+    <meta name="csrf-param" content="authenticity_token" />
+    <meta name="csrf-token" content="BigU3V2E2gG9JBG1A/W/16TfkoDf6ghA5TX0uGmvEQNnjje7uJ4C5XtR2pEVw3n0JsQq/Ovp7h3j2cHRFRGVCQ==" />
+  </head>
+  <body>
+    <nav class='navbar navbar-default navbar-fixed-top'>
+      <div class='container'>
+        <div class='navbar-header'>
+          <button aria-controls='navbar' aria-expanded='false' class='navbar-toggle collapsed' data-target='#navbar' data-toggle='collapse' type='button'>
+            <span class='sr-only'>Toggle navigation</span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
+          <a href="/"><img src="/assets/crowdscribed_logo-bd1743e090547933ee5f01dffb8326ab1326abbf5d36ecc69a34d9e1bada0619.png" alt="Crowdscribed logo bd1743e090547933ee5f01dffb8326ab1326abbf5d36ecc69a34d9e1bada0619" /></a>
+        </div>
+        <div class='collapse navbar-collapse' id='navbar'>
+          <ul class='nav navbar-nav navbar-right' id='main-menu'>
+            <li>
+              <a aria-haspopup='true' class='dropdown-toggle' data-toggle='dropdown' role='button'>
+                About
+                <span class='caret'></span>
+              </a>
+              <ul class='dropdown-menu'>
+                <li>
+                  <a href='/pages/package_pricing'>Package Pricing</a>
+                </li>
+                <li>
+                  <a href='/pages/a_la_carte_pricing'>A la carte Pricing</a>
+                </li>
+                <li>
+                  <a href='/pages/faqs'>FAQs</a>
+                </li>
+                <li>
+                  <a href='/pages/about_us'>About Us</a>
+                </li>
+                <li>
+                  <a href='/inquiries/new'>Contact us</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a aria-haspopup='true' class='dropdown-toggle' data-toggle='dropdown' role='button'>
+                Authors
+                <span class='caret'></span>
+              </a>
+              <ul class='dropdown-menu'>
+                <li>
+                  <a href='/pages/book_incubator'>Book Incubator</a>
+                </li>
+                <li>
+                  <a href='/pages/why'>Why CrowdScribed?</a>
+                </li>
+                <li>
+                  <a href="/authors/sign_in">Log in</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/pages/books">Books</a>
+            </li>
+            <li>
+              <a href="/authors/sign_up">Signup</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div id='main_content'>
+      <div class='title-bar' id='page-title'>
+        <div class='container'>
+          Not found
+        </div>
+      </div>
+      
+      
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-9'>
+            <h1>Oops!</h1>
+            We weren't able to find the information you were looking for. Please check the URL and try again.
+          </div>
+          <div class='col-md-3'>
+            <img src="/assets/edifice-ed10f3d6d1ea85d65d45fb9021c1674a2844ff02950e900e4e5c7f59bffe2448.jpg" alt="Edifice ed10f3d6d1ea85d65d45fb9021c1674a2844ff02950e900e4e5c7f59bffe2448" />
+          </div>
+        </div>
+      </div>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
-  </div>
-</body>
+    <footer>
+      <div class='container'>
+        Crowdscribed 2014 | All Rights Reserved
+      </div>
+    </footer>
+  </body>
 </html>
