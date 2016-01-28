@@ -3,5 +3,6 @@ class AdministratorAbility
 
   def initialize
     can :manage, :all
+    cannot :create, Bio
   end
 end

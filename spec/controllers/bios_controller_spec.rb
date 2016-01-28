@@ -98,41 +98,100 @@ RSpec.describe BiosController, type: :controller do
           end
         end
         describe 'patch :reject' do
-          it 'redirects to the author home page'
-          it 'does not update the bio'
+          it 'redirects to the author home page' do
+            patch :reject, id: approved_bio
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the bio' do
+            expect do
+              patch :reject, id: approved_bio
+              approved_bio.reload
+            end.not_to change(approved_bio, :status)
+          end
         end
       end
       context 'for an unapproved bio' do
         describe 'put :update' do
-          it 'redirects to the show bio page'
-          it 'updates the bio'
+          it 'redirects to the show bio page' do
+            patch :approve, id: bio
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'updates the bio' do
+            expect do
+              patch :approve, id: bio
+              approved_bio.reload
+            end.not_to change(approved_bio, :status)
+          end
         end
       end
     end
     context 'that does not own the bio' do
-      describe 'get :index' do
-        it 'redirects to the author home page'
-      end
+      let (:other_author) { FactoryGirl.create(:author, status: Author.ACCEPTED) }
+      before(:each) { sign_in other_author }
+
       describe "get :show" do
-        it 'redirects to the author home page'
+        it 'is successful' do
+          get :show, id: bio
+          expect(response).to have_http_status :success
+        end
       end
+
       describe "get :edit" do
-        it 'redirects to the author home page'
+        it 'redirects to the author home page' do
+          get :edit, id: bio
+          expect(response).to redirect_to author_root_path
+        end
+      end
+
+      describe 'put :update' do
+        it 'redirects to the author home page' do
+          put :update, id: bio, bio: attributes
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not update the bio' do
+          expect do
+            put :update, id: bio, bio: attributes
+            bio.reload
+          end.not_to change(bio, :text)
+        end
       end
       describe 'put :update' do
-        it 'redirects to the author home page'
-        it 'does not update the bio'
+        it 'redirects to the show bio page' do
+          patch :approve, id: bio
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'updates the bio' do
+          expect do
+            patch :approve, id: bio
+            bio.reload
+          end.not_to change(bio, :status)
+        end
       end
     end
   end
 
   context 'for an authenticated administrator' do
+    let (:admin) { FactoryGirl.create(:administrator) }
+    before(:each) { sign_in admin }
+
     describe 'get :index' do
-      it 'is successful'
+      it 'is successful' do
+        get :index, author_id: author.id
+        expect(response).to have_http_status :success
+      end
     end
+
     describe 'get :new' do
-      it 'redirects to the administrator home page'
+      it 'redirects to the administrator home page' do
+        get :new, author_id: author
+        expect(response).to redirect_to admin_root_path
+      end
     end
+
     describe 'post :create' do
       it 'redirects to the administrator home page'
       it 'does not create a new bio'

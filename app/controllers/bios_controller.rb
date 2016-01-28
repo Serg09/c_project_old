@@ -5,6 +5,8 @@ class BiosController < ApplicationController
   respond_to :html
 
   def new
+    @bio = @author.bios.new
+    authorize! :create, @bio
   end
 
   def create
@@ -17,9 +19,11 @@ class BiosController < ApplicationController
   end
 
   def edit
+    authorize! :update, @bio
   end
 
   def update
+    authorize! :update, @bio
     if @bio.approved?
       @bio = @author.bios.new(bio_params)
     else
@@ -30,6 +34,10 @@ class BiosController < ApplicationController
   end
 
   def approve
+    redirect_to author_root_path
+  end
+
+  def reject
     redirect_to author_root_path
   end
 
