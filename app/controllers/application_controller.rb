@@ -19,7 +19,14 @@ class ApplicationController < ActionController::Base
   end
 
   def access_denied_redirect_path
-    author_signed_in? ? author_root_path : root_path
+    case
+    when author_signed_in?
+      author_root_path
+    when administrator_signed_in?
+      admin_root_path
+    else
+      root_path
+    end
   end
 
   rescue_from CanCan::AccessDenied do |exception|
