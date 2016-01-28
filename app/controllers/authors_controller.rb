@@ -50,11 +50,6 @@ class AuthorsController < ApplicationController
 
   private
 
-  def authenticate_user!
-    return if administrator_signed_in?
-    authenticate_author!
-  end
-
   def author_params
     params.require(:author).permit(:first_name, :last_name, :phone_number, :contactable)
   end
