@@ -1,0 +1,21 @@
+=content_for :page_title do
+  New bio
+
+.container.default-container
+  .row
+    .col-md-6
+      =form_for([@author, @bio]) do |f|
+        .from-group{ :class => form_group_class(@bio, :text) }
+          =f.label :text, class: 'control-label'
+          =f.text_area :text, class: 'form-control extra-bottom', autofocus: true, rows: 5
+          =help_blocks @bio, :text
+        .form-group
+          %label{ :class => 'control-label' } Photo
+          %input{ :type => 'text', :readonly => 'true', :placeholder => 'Not ready yet', :class => 'form-control' }
+        -@bio.links.each do |link|
+          .form-group{ :class => form_group_class(link, :url) }
+            =label_tag "bio[links][#{link.site}][url]", link.site, class: 'control-label'
+            =text_field_tag "bio[links][#{link.site}][url]", link.url, class: 'form-control', value: link.url
+            =help_blocks link, :url
+        .form-group
+          =f.submit 'Submit', class: 'btn btn-primary'

@@ -10,6 +10,14 @@ class Link
     linkedin:  { label: 'LinkedIn',  host: 'www.linkedin.com' }
   }
 
+  def self.blank_links
+    SITES.map{ |k, v| Link.new({site: k})}
+  end
+
+  def self.site_label(key)
+    SITES[key][:label]
+  end
+
   attr_accessor :site, :url
 
   validates_presence_of :site, :url

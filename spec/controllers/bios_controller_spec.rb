@@ -9,10 +9,10 @@ RSpec.describe BiosController, type: :controller do
   let (:attributes) do
     {
       text: 'This is some stuff about me',
-      links: [
-        {site: :facekbook, url: 'http://www.facebook.com/some_dude'},
-        {site: :twitter, url: 'http://www.twitter.com/some_dude'}
-      ]
+      links: {
+        facekbook: { url: 'http://www.facebook.com/some_dude' },
+        twitter: { url: 'http://www.twitter.com/some_dude' }
+      }
     }
   end
 

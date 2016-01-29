@@ -16,10 +16,10 @@ class Bio < ActiveRecord::Base
   STATUSES = %w(pending approved rejected)
 
   belongs_to :author
+  validates_associated :links
   serialize :links, Array
   validates_presence_of :author_id, :text, :status
   validates_inclusion_of :status, in: STATUSES
-  validate :links, :contains_valid_links
 
   class << self
     STATUSES.each do |status|
@@ -37,18 +37,4 @@ class Bio < ActiveRecord::Base
 
   scope :pending, -> { where(status: Bio.PENDING).order('created_at DESC') }
   scope :approved, -> { where(status: Bio.APPROVED).order('created_at DESC') }
-
-  private
-
-  def contains_valid_links
-    link_errors = links.map{ |l| validate_link(l) }.flatten
-    errors.add(:links, link_errors.to_sentence) if link_errors.any?
-  end
-
-  def validate_link(link)
-    result = []
-    result << 'Site must be specified' unless link.has_key?(:site)
-    result << 'URL must be specified' unless link.has_key?(:url)
-    result
-  end
 end

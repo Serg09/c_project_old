@@ -14,13 +14,13 @@ Rails.application.routes.draw do
     end
   end
   resources :authors, only: [:show, :edit, :update, :index] do
-    resources :bios, only: [:index, :create]
+    resources :bios, only: [:new, :index, :create]
     member do
       patch :accept
       patch :reject
     end
   end
-  resources :bios, only: [:show, :edit, :update, :index, :new, :create] do
+  resources :bios, only: [:show, :edit, :update, :index] do
     member do
       patch :approve
       patch :reject
