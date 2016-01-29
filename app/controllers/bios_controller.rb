@@ -26,7 +26,8 @@ class BiosController < ApplicationController
       @bios = @author.bios
       respond_with @bios
     else
-      redirect_to new_author_session_path
+      @bio = @author.active_bio
+      render :show
     end
   end
 
