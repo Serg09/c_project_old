@@ -9,7 +9,6 @@ class BiosController < ApplicationController
     @bio = @author.bios.new
     authorize! :create, @bio
     @bio.links = Link.blank_links
-    authorize! :create, @bio
   end
 
   def create
