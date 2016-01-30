@@ -1,4 +1,3 @@
-@wip
 Feature: Submit a biography
   As an author
   In order to inform readers about my history
