@@ -48,6 +48,13 @@ RSpec.describe Bio, type: :model do
     end
   end
 
+  describe '#usable-links' do
+    it 'is a list of links that have valid URLs' do
+      bio = Bio.new(attributes)
+      expect(bio).to have(2).usable_links
+    end
+  end
+
   describe '#status' do
     it 'defaults to "pending" if not specified' do
       bio = Bio.new attributes

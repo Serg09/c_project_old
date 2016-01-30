@@ -47,4 +47,8 @@ class Bio < ActiveRecord::Base
       self.links = []
     end
   end
+
+  def usable_links
+    links.select{|link| link.url.present?}
+  end
 end
