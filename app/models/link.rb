@@ -63,8 +63,17 @@ class Link
     return unless url && url.present?
     uri = URI.parse(url)
     site_record = SITES[site]
-    errors.add :url, 'domain name must match the site' unless site_record && uri.host.end_with?(site_record[:host])
-    errors.add :url, 'must be a full URL' unless !!uri.scheme && !!uri.host && !!uri.path
+    if site_record
+      if !!uri.scheme && !!uri.host && !!uri.path
+        unless uri.host.end_with?(site_record[:host])
+          errors.add :url, 'domain name must match the site'
+        end
+      else
+        errors.add :url, 'must be a full URL'
+      end
+    else
+      errors.add :url, 'has an unrecognized site'
+    end
   rescue URI::InvalidURIError
     errors.add :url, 'must be a valid URL'
   end
