@@ -20,7 +20,7 @@ class Link
 
   attr_accessor :site, :url
 
-  validates_presence_of :site, :url
+  validates_presence_of :site
   validates_inclusion_of :site, in: SITES.keys
   validate :url, :is_a_valid_url
 
@@ -37,6 +37,7 @@ class Link
   private
 
   def is_a_valid_url
+    return unless url && url.present?
     uri = URI.parse(url)
     site_record = SITES[site]
     errors.add :url, 'domain name must match the site' unless site_record && uri.host == site_record[:host]

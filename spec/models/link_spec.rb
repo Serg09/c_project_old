@@ -26,9 +26,14 @@ RSpec.describe Link, type: :model do
   end
 
   describe '#url' do
-    it 'is required' do
+    it 'can be omitted' do
       link = Link.new attributes.except(:url)
-      expect(link).to have_at_least(1).error_on :url
+      expect(link).to be_valid
+    end
+
+    it 'can be an empty string' do
+      link = Link.new attributes.merge url: ""
+      expect(link).to be_valid
     end
 
     it 'must be a valid, fully qualified URL' do
