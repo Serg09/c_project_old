@@ -44,17 +44,7 @@ RSpec.describe Bio, type: :model do
   describe '#links' do
     it 'is a collection of links to social media sites' do
       bio = Bio.new(attributes)
-      expect(bio).to have(2).links
-    end
-
-    it 'rejects items that are missing :site' do
-      bio = Bio.new attributes.merge(links_attributes: [{url: 'http://www.facebook.com/john_doe'}])
-      expect(bio).to have_at_least(1).error_on :links
-    end
-
-    it 'rejects items that are missing :url' do
-      bio = Bio.new attributes.merge(links_attributes: [{site: 'Facebook'}])
-      expect(bio).to have_at_least(1).error_on :links
+      expect(bio).to have(6).links
     end
   end
 
