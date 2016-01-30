@@ -20,7 +20,14 @@ class Link
 
   def self.load(value)
     return blank_links unless value
-    JSON.load(value).map{|a| Link.new(a)}
+
+    saved_links = JSON.load(value).map{|a| Link.new(a)}
+    blank_links.map do |blank|
+      saved = saved_links.
+        select{|l| l.site == blank.site}.
+        first
+      saved || blank
+    end
   end
 
   def self.dump(links)
