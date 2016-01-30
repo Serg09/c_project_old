@@ -14,7 +14,7 @@ class BiosController < ApplicationController
     @bio = @author.bios.new(bio_params)
     authorize! :create, @bio
 
-    flash[:notice] = "Your bio was saved successfully. It is now waiting for administrative approval." if @bio.save
+    flash[:notice] = "Your bio has been submitted successfully. It is now waiting for administrative approval." if @bio.save
     respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
   end
 
