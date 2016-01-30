@@ -8,7 +8,7 @@ class Link
     tumblr:    { label: 'Tumblr',    host: 'www.tumblr.com'   },
     instagram: { label: 'Instagram', host: 'www.instagram.com'},
     linkedin:  { label: 'LinkedIn',  host: 'www.linkedin.com' }
-  }
+  }.with_indifferent_access
 
   def self.blank_links
     SITES.map{ |k, v| Link.new({site: k})}
@@ -28,6 +28,10 @@ class Link
     attributes ||= {}
     self.site = attributes[:site]
     self.url = attributes[:url]
+  end
+
+  def marked_for_destruction?
+    false
   end
 
   private

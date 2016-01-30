@@ -6,11 +6,11 @@ RSpec.describe Bio, type: :model do
     {
       author_id: author.id,
       text: 'This is some stuff about me. Dig it.',
-      links: [
-        {site: :facebook, url: 'http://www.facebook.com/john_doe' },
-        {site: :twitter, url: 'http://www.twitter.com/doe_john' }
+      links_attributes: [
+        {'site' => 'facebook', 'url' => 'http://www.facebook.com/john_doe' },
+        {'site' => 'twitter', 'url' => 'http://www.twitter.com/doe_john' }
       ]
-    }
+    }.with_indifferent_access
   end
 
   it 'can be created from valid attributes' do
@@ -48,12 +48,12 @@ RSpec.describe Bio, type: :model do
     end
 
     it 'rejects items that are missing :site' do
-      bio = Bio.new attributes.merge(links: [{url: 'http://www.facebook.com/john_doe'}])
+      bio = Bio.new attributes.merge(links_attributes: [{url: 'http://www.facebook.com/john_doe'}])
       expect(bio).to have_at_least(1).error_on :links
     end
 
     it 'rejects items that are missing :url' do
-      bio = Bio.new attributes.merge(links: [{site: 'Facebook'}])
+      bio = Bio.new attributes.merge(links_attributes: [{site: 'Facebook'}])
       expect(bio).to have_at_least(1).error_on :links
     end
   end

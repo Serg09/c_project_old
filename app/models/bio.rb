@@ -16,6 +16,7 @@ class Bio < ActiveRecord::Base
   STATUSES = %w(pending approved rejected)
 
   belongs_to :author
+  validates_associated :links
   serialize :links, Array
   validates_presence_of :author_id, :text, :status
   validates_inclusion_of :status, in: STATUSES
@@ -36,4 +37,14 @@ class Bio < ActiveRecord::Base
 
   scope :pending, -> { where(status: Bio.PENDING).order('created_at DESC') }
   scope :approved, -> { where(status: Bio.APPROVED).order('created_at DESC') }
+
+  def links_attributes=(list)
+    if list
+      self.links = list.map do |attr|
+        Link.new(attr)
+      end
+    else
+      self.links = []
+    end
+  end
 end

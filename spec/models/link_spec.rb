@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe Link, type: :model do
   let (:attributes) do
     {
-      site: :facebook,
-      url: 'http://www.facebook.com/john_doe'
-    }
+      'site' =>  'facebook',
+      'url' => 'http://www.facebook.com/john_doe'
+    }.with_indifferent_access
   end
 
   it 'can be created from valid attributes' do

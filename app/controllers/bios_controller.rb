@@ -16,10 +16,6 @@ class BiosController < ApplicationController
     @bio = @author.bios.new(bio_params)
     authorize! :create, @bio
 
-    @bio.links = params[:bio][:links].map do |attr|
-      Link.new attr
-    end
-
     flash[:notice] = "Your bio was saved successfully. It is now waiting for administrative approval." if @bio.save
     respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
   end
@@ -85,7 +81,7 @@ class BiosController < ApplicationController
   private
 
   def bio_params
-    params.require(:bio).permit(:text, :links_attributes)
+    params.require(:bio).permit(:text, links_attributes: [:site, :url])
   end
 
   def load_author
