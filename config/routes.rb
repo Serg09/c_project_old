@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
-  resources :bios, only: [:show, :edit, :update, :index] do
+  resources :bios, only: [:show, :edit, :update, :index, :new, :create] do
     member do
       patch :approve
       patch :reject
