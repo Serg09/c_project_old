@@ -36,6 +36,7 @@
           =button_to 'Accept', accept_author_path(@author), method: :patch, class: 'btn btn-success btn-block', title: "Click here to approve this author's account."
         -unless @author.rejected?
           =button_to 'Reject', reject_author_path(@author), method: :patch, class: 'btn btn-danger btn-block', title: "Click here to reject this author's account."
-  .row
-    .col-md-6
-      =link_to 'Back', authors_path, class: 'btn btn-default'
+  -if can? :index, Author
+    .row
+      .col-md-6
+        =link_to 'Back', authors_path, class: 'btn btn-default'

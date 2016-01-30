@@ -32,6 +32,8 @@
 #
 
 class Author < ActiveRecord::Base
+  has_many :bios
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -64,5 +66,17 @@ class Author < ActiveRecord::Base
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def active_bio
+    bios.approved.first
+  end
+
+  def pending_bio
+    bios.pending.first
+  end
+
+  def working_bio
+    pending_bio || active_bio
   end
 end

@@ -24,10 +24,4 @@ class AuthorMailer < ApplicationMailer
     @author = author
     mail to: author.email, subject: 'Account rejected'
   end
-
-  private
-
-  def inline_images
-    attachments.inline['logo.png'] = File.read('app/assets/images/crowdscribed_logo.png')
-  end
 end

@@ -11,7 +11,7 @@ RSpec.describe AuthorsController, type: :controller do
       it "redirects to the author root path" do
         sign_in author
         get :index
-        expect(response).to redirect_to author_root_path
+        expect(response).to redirect_to author_path(author)
       end
     end
 

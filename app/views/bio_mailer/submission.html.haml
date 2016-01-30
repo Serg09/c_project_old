@@ -1,0 +1,14 @@
+%h1 Bio submitted
+
+%p
+  =@bio.author.full_name
+  has submitted a bio, which now needs to be reviewed.
+
+%p
+  There are currently
+  =pluralize(Bio.pending.count, 'bio')
+  waiting to be approved.
+
+%p
+  =link_to 'Click here', bios_url
+  to review them.

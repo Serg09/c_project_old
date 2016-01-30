@@ -19,10 +19,28 @@ class ApplicationController < ActionController::Base
   end
 
   def access_denied_redirect_path
-    author_signed_in? ? author_root_path : root_path
+    case
+    when author_signed_in?
+      author_root_path
+    when administrator_signed_in?
+      admin_root_path
+    else
+      root_path
+    end
   end
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to access_denied_redirect_path, alert: exception.message
+  end
+
+  protected
+
+  def authenticate_user!
+    return if administrator_signed_in?
+    authenticate_author!
+  end
+
+  def not_found!
+    raise ActionController::RoutingError.new('Not Found')
   end
 end

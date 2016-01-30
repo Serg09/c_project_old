@@ -5,6 +5,10 @@ class AuthorsController < ApplicationController
   respond_to :html
 
   def index
+    if author_signed_in?
+      redirect_to author_path(current_author)
+      return
+    end
     authorize! :read, Author
     @authors = Author.where(status: query_status)
     respond_with @authors do |format|
@@ -45,11 +49,6 @@ class AuthorsController < ApplicationController
   end
 
   private
-
-  def authenticate_user!
-    return if administrator_signed_in?
-    authenticate_author!
-  end
 
   def author_params
     params.require(:author).permit(:first_name, :last_name, :phone_number, :contactable)
