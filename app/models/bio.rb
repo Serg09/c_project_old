@@ -16,7 +16,6 @@ class Bio < ActiveRecord::Base
   STATUSES = %w(pending approved rejected)
 
   belongs_to :author
-  validates_associated :links
   serialize :links, Array
   validates_presence_of :author_id, :text, :status
   validates_inclusion_of :status, in: STATUSES
