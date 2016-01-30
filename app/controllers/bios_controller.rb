@@ -14,11 +14,12 @@ class BiosController < ApplicationController
 
   def create
     @bio = @author.bios.new(bio_params)
-    @bio.links = params[:bio][:links].map do |k, v|
-      Link.new v.merge(site: k)
+    authorize! :create, @bio
+
+    @bio.links = params[:bio][:links].map do |attr|
+      Link.new attr
     end
 
-    authorize! :create, @bio
     flash[:notice] = "Your bio was saved successfully. It is now waiting for administrative approval." if @bio.save
     respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
   end
@@ -30,14 +31,14 @@ class BiosController < ApplicationController
       if @bio
         render :show
       else
-        redirect_to new_author_bio_path(@author)
+        redirect_to new_bio_path
       end
     elsif administrator_signed_in?
       @bios = @author.bios
       respond_with @bios
     else
       @bio = @author.active_bio
-      not_found! @bio
+      not_found! unless @bio
       render :show
     end
   end

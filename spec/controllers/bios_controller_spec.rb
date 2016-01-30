@@ -9,20 +9,55 @@ RSpec.describe BiosController, type: :controller do
   let (:attributes) do
     {
       text: 'This is some stuff about me',
-      links: {
-        facekbook: { url: 'http://www.facebook.com/some_dude' },
-        twitter: { url: 'http://www.twitter.com/some_dude' }
-      }
+      links: [
+        { site: 'facekbook', url: 'http://www.facebook.com/some_dude' },
+        { site: 'twitter',   url: 'http://www.twitter.com/some_dude' }
+      ]
     }
   end
 
   context 'for an authenticated author' do
     before(:each) { sign_in author}
 
-    describe 'get :index' do
-      it 'is successful' do
-        get :index
-        expect(response).to have_http_status :success
+    context 'with an approved bio' do
+      let!(:bio) { FactoryGirl.create(:approved_bio, author: author) }
+
+      describe 'get :index' do
+        it 'is successful' do
+          get :index
+          expect(response).to have_http_status :success
+        end
+      end
+    end
+
+    context 'with a pending bio' do
+      let!(:bio) { FactoryGirl.create(:pending_bio, author: author) }
+
+      describe 'get :index' do
+        it 'is successful' do
+          get :index
+          expect(response).to have_http_status :success
+        end
+      end
+    end
+
+    context 'with a rejected bio' do
+      let!(:bio) { FactoryGirl.create(:rejected_bio, author: author) }
+
+      describe 'get :index' do
+        it 'redirects to the new bio path' do
+          get :index
+          expect(response).to redirect_to new_bio_path
+        end
+      end
+    end
+
+    context 'with no bio' do
+      describe 'get :index' do
+        it 'redirects to the new bio path' do
+          get :index
+          expect(response).to redirect_to new_bio_path
+        end
       end
     end
 
@@ -263,10 +298,26 @@ RSpec.describe BiosController, type: :controller do
   end
 
   context 'for an unauthenticated user' do
-    describe 'get :index' do
-      it 'is successful' do
-        get :index, author_id: author
-        expect(response).to have_http_status :success
+    context 'and an author with an active bio' do
+      let!(:bio) { FactoryGirl.create(:approved_bio, author: author) }
+
+      describe 'get :index' do
+        it 'is successful' do
+          get :index, author_id: author
+          expect(response).to have_http_status :success
+        end
+      end
+    end
+
+    context 'and an author without an active bio' do
+      let!(:bio) { FactoryGirl.create(:pending_bio, author: author) }
+
+      describe 'get :index' do
+        it 'raises "resource not found"' do
+          expect do
+            get :index, author_id: author
+          end.to raise_exception ActionController::RoutingError
+        end
       end
     end
 
