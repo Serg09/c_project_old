@@ -1,13 +1,14 @@
 =content_for :page_title do
   Bio
 
-.container.default-container
+.container.container-default
   .row
     .col-md-6
       -if can?(:update, @bio) && @bio.pending?
-        %p.administrative This bio is under review. We will review it as soon as we can.
+        .alert.alert-info
+          This bio is under review. We will review it as soon as we can.
 
-      %h1 @bio.author.full_name
+      %h1= @bio.author.full_name
       %p= @bio.text
 
       -if @bio.usable_links.any?
@@ -17,4 +18,5 @@
             =image_tag "social/#{link.site}.png"
 
       -if can? :update, @bio
+        %p &nbsp;
         %p=link_to 'Edit', edit_bio_path(@bio), class: 'btn btn-default'
