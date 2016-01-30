@@ -20,13 +20,13 @@ Feature: Submit a biography
     And I fill in "Facebook" with "https://www.facebook.com/JasonMraz/"
     And I fill in "Twitter" with "https://twitter.com/jason_mraz"
     And I fill in "Instagram" with "https://www.instagram.com/jason_mraz/?hl=en"
-    And I fill in "Tumblr" with "jasonmraz.tumblr.com"
+    And I fill in "Tumblr" with "http://jasonmraz.tumblr.com/"
     And I fill in "LinkedIn" with "https://www.linkedin.com/in/jasonmraz"
     And I click "Submit"
     Then I should see "Your bio has been submitted successfully." within the notification area
-    And I should see "We will review your bio as soon as we can." within the main content
+    And I should see "This bio is under review. We will review it as soon as we can." within the main content
 
-    When an administrator has approved the bio for author "john@doe.com"
+    When an administrator has approved the bio for author john@doe.com
     And I am on the author home page
     When I click "Bio" within the main menu
     Then I should see "I sure have been writing words for a long time" within the main content
