@@ -1,3 +1,4 @@
+@wip
 Feature: Submit a biography
   As an author
   In order to inform readers about my history
@@ -24,6 +25,7 @@ Feature: Submit a biography
     And I click "Submit"
     Then I should see "Your bio has been submitted successfully." within the notification area
     And I should see "This bio is under review. We will review it as soon as we can." within the main content
+    And "info@crowdscribed.com" should receive an email with subject "New bio submission"
 
     When an administrator has approved the bio for author john@doe.com
     And I am on the author home page
