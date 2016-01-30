@@ -14,7 +14,10 @@ class BiosController < ApplicationController
     @bio = @author.bios.new(bio_params)
     authorize! :create, @bio
 
-    flash[:notice] = "Your bio has been submitted successfully. It is now waiting for administrative approval." if @bio.save
+    if @bio.save
+      flash[:notice] = "Your bio has been submitted successfully. It is now waiting for administrative approval."
+      BioMailer.submission(@bio).deliver_now
+    end
     respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
   end
 
@@ -28,7 +31,7 @@ class BiosController < ApplicationController
         redirect_to new_bio_path
       end
     elsif administrator_signed_in?
-      @bios = @author.bios
+      @bios = @author ? @author.bios : Bio.all
       respond_with @bios
     else
       @bio = @author.active_bio
@@ -83,11 +86,16 @@ class BiosController < ApplicationController
   end
 
   def load_author
-    if @bio
-      @author = @bio.author
-    else
-      @author = author_signed_in? ?  current_author : Author.find(params[:author_id])
-    end
+    @author = case
+              when @bio
+                @bio.author
+              when author_signed_in?
+                current_author
+              when params[:author_id]
+                Author.find(params[:author_id])
+              else
+                nil
+              end
   end
 
   def load_bio
