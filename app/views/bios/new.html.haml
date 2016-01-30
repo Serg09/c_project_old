@@ -13,9 +13,11 @@
           %label{ :class => 'control-label' } Photo
           %input{ :type => 'text', :readonly => 'true', :placeholder => 'Not ready yet', :class => 'form-control' }
         -@bio.links.each do |link|
+          - link_name = "bio[links_attributes][]"
           .form-group{ :class => form_group_class(link, :url) }
-            =label_tag "bio[links][#{link.site}][url]", link.site, class: 'control-label'
-            =text_field_tag "bio[links][#{link.site}][url]", link.url, class: 'form-control', value: link.url
+            =hidden_field_tag "#{link_name}[site]", link.site
+            =label_tag "#{link_name}[url]", Link.site_label(link.site), class: 'control-label'
+            =text_field_tag "#{link_name}[url]", link.url, class: 'form-control', value: link.url
             =help_blocks link, :url
         .form-group
           =f.submit 'Submit', class: 'btn btn-primary'
