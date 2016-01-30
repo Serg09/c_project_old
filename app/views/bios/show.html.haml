@@ -4,10 +4,17 @@
 .container.default-container
   .row
     .col-md-6
+      -if can?(:update, @bio) && @bio.pending?
+        %p.administrative This bio is under review. We will review it as soon as we can.
+
+      %h1 @bio.author.full_name
       %p= @bio.text
 
-      -@bio.links.select{|l| l.url.present?}.each do |link|
-        =link_to link.url, target: '_blank' do
-          =image_tag "social/#{link.site}.png"
+      -if @bio.usable_links.any?
+        %h1 Social Links
+        -@bio.usable_links.each do |link|
+          =link_to link.url, target: '_blank' do
+            =image_tag "social/#{link.site}.png"
+
       -if can? :update, @bio
         %p=link_to 'Edit', edit_bio_path(@bio), class: 'btn btn-default'
