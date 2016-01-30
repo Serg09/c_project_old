@@ -17,7 +17,7 @@ class Bio < ActiveRecord::Base
 
   belongs_to :author
   validates_associated :links
-  serialize :links, Array
+  serialize :links, Link
   validates_presence_of :author_id, :text, :status
   validates_inclusion_of :status, in: STATUSES
 

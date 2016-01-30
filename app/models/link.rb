@@ -18,6 +18,15 @@ class Link
     SITES[key][:label]
   end
 
+  def self.load(value)
+    return blank_links unless value
+    JSON.load(value).map{|a| Link.new(a)}
+  end
+
+  def self.dump(links)
+    JSON.dump(links.select{|l| l.url.present?}.map(&:attributes))
+  end
+
   attr_accessor :site, :url
 
   validates_presence_of :site
@@ -25,9 +34,16 @@ class Link
   validate :url, :is_a_valid_url
 
   def initialize(attributes = {})
-    attributes ||= {}
+    attributes = (attributes || {}).with_indifferent_access
     self.site = attributes[:site]
     self.url = attributes[:url]
+  end
+
+  def attributes
+    {
+      site: self.site,
+      url: self.url
+    }
   end
 
   def marked_for_destruction?
