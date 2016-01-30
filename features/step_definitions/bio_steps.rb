@@ -1,4 +1,5 @@
 When /^an administrator has approved the bio for (#{AUTHOR})$/ do |author|
-  #author.bio.status = Bio.APPROVED
-  fail 'Need to implement this step'
+  expect(author.pending_bio).not_to be_nil
+  author.pending_bio.status = Bio.APPROVED
+  author.pending_bio.save!
 end
