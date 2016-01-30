@@ -11,7 +11,7 @@ class Link
   }.with_indifferent_access
 
   def self.blank_links
-    SITES.map{ |k, v| Link.new({site: k})}
+    SITES.keys.map{|site| Link.new(site: site)}
   end
 
   def self.site_label(key)
