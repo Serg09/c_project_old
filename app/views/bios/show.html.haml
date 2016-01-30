@@ -6,6 +6,8 @@
     .col-md-6
       %p= @bio.text
 
-      -@bio.links.each do |link|
+      -@bio.links.select{|l| l.url.present?}.each do |link|
         =link_to link.url, target: '_blank' do
           =image_tag "social/#{link.site}.png"
+      -if can? :update, @bio
+        %p=link_to 'Edit', edit_bio_path(@bio), class: 'btn btn-default'
