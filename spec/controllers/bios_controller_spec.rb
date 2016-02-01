@@ -271,7 +271,7 @@ RSpec.describe BiosController, type: :controller do
       describe 'patch :approve' do
         it 'redirects to the bio index page' do
           patch :approve, id: bio
-          expect(response).to redirect_to author_bios_path(author)
+          expect(response).to redirect_to bios_path
         end
 
         it 'updates the bio' do
@@ -284,7 +284,7 @@ RSpec.describe BiosController, type: :controller do
       describe 'patch :reject' do
         it 'redirects to the bio index page' do
           patch :reject, id: bio
-          expect(response).to redirect_to author_bios_path(author)
+          expect(response).to redirect_to bios_path
         end
 
         it 'updates the bio' do

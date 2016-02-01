@@ -3,7 +3,7 @@ Feature: Approve a bio
   In order to allow a user's bio to become public
   I need to be able to approve it
 
-  Scenario: An administrator approves a pending bio
+  Background:
     Given there is an author named "John Doe" with email "john@doe.com" and password "please01"
     And author john@doe.com submitted the following bio on 2/27/2015
       | Text     | I'm, like, a writer, and stuff.  |
@@ -25,7 +25,14 @@ Feature: Approve a bio
     When I click "John Doe" within the bios table
     Then I should see "Bio" within the page title
 
+  Scenario: An administrator approves a pending bio
     When I click "Approve" within the main content
     Then I should see "The bio has been approved successfully." within the notification area
+    And I should see the following bios table
+      | Author   | Date submitted |
+
+  Scenario: An administrator rejects a pending bio
+    When I click "Reject" within the main content
+    Then I should see "The bio has been rejected successfully." within the notification area
     And I should see the following bios table
       | Author   | Date submitted |
