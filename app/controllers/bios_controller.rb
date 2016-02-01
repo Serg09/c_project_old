@@ -31,8 +31,10 @@ class BiosController < ApplicationController
         redirect_to new_bio_path
       end
     elsif administrator_signed_in?
-      @bios = @author ? @author.bios : Bio.all
-      respond_with @bios
+      @bios = @author ? @author.bios : bios_by_status
+      respond_with @bios do |format|
+        format.html{render :index, layout: 'admin'}
+      end
     else
       @bio = @author.active_bio
       not_found! unless @bio
@@ -42,6 +44,9 @@ class BiosController < ApplicationController
 
   def show
     not_found! unless @bio.approved? || can?(:show, @bio)
+    respond_with @bio do |format|
+      format.html{ render :show, layout: administrator_signed_in? ? 'admin' : 'application' }
+    end
   end
 
   def edit
@@ -63,7 +68,7 @@ class BiosController < ApplicationController
     authorize! :approve, @bio
     @bio.status = Bio.APPROVED
     if @bio.save
-      redirect_to author_bios_path(@author), notice: "The bio has been approved successfully."
+      redirect_to bios_path, notice: "The bio has been approved successfully."
     else
       render :show
     end
@@ -73,13 +78,17 @@ class BiosController < ApplicationController
     authorize! :reject, @bio
     @bio.status = Bio.REJECTED
     if @bio.save
-      redirect_to author_bios_path(@author), notice: "The bio has been rejected successfully."
+      redirect_to bios_path, notice: "The bio has been rejected successfully."
     else
       render :show
     end
   end
 
   private
+
+  def bios_by_status
+    Bio.where(status: params[:status] || :pending)
+  end
 
   def bio_params
     params.require(:bio).permit(:text, links_attributes: [:site, :url])
