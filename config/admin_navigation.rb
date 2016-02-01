@@ -10,6 +10,13 @@ SimpleNavigation::Configuration.run do |navigation|
       authors.item :accepted, 'Accepted', authors_path(status: :accepted), highlights_on: -> { author_path?(Author.ACCEPTED) }
       authors.item :rejected, 'Rejected', authors_path(status: :rejected), highlights_on: -> { author_path?(Author.REJECTED) }
     end
+    primary.item :bios, bio_nav_item_caption, bios_path do |bios|
+      bios.auto_highlight = false
+      bios.dom_class = 'nav nav-tabs'
+      bios.item :pending, 'Pending', bios_path, highlights_on: -> { bio_path?(Bio.PENDING) }
+      bios.item :approved, 'Approved', bios_path(status: :approved), highlights_on: -> { bio_path?(Bio.APPROVED) }
+      bios.item :rejected, 'Rejected', bios_path(status: :rejected), highlights_on: -> { bio_path?(Bio.REJECTED) }
+    end
     primary.item :inquiries, inquiry_nav_item_caption, inquiries_path do |inquiries|
       inquiries.auto_highlight = false
       inquiries.dom_class = 'nav nav-tabs'

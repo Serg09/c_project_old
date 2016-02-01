@@ -15,6 +15,17 @@ module ApplicationHelper
     "Authors <span class=\"badge\">#{pending_count}</span>".html_safe
   end
 
+  def bio_path?(status)
+    return false unless request_uri.path.starts_with? '/bio'
+    (request_query[:status] || Bio.PENDING) == status
+  end
+
+  def bio_nav_item_caption
+    pending_count = Bio.pending.count
+    return 'Bios' if pending_count == 0
+    "Bios <span class=\"badge\">#{pending_count}</span>".html_safe
+  end
+
   def flash_key_to_alert_class(flash_key)
     "alert-#{FLASH_MAP[flash_key] || flash_key}"
   end
@@ -28,6 +39,10 @@ module ApplicationHelper
       true
     end
     false
+  end
+
+  def format_date(date)
+    date.strftime '%-m/%-d/%Y'
   end
 
   def format_date_time(datetime)

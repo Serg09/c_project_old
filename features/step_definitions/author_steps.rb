@@ -37,6 +37,14 @@ Given /^there is an? (?:(rejected|accepted|pending) )?author named "([^"]+)" wit
                               created_at: created_at)
 end
 
+Given /^there is an author named "([\S]+)\s([^"]+)" with email "([^"]+)" and password "([^"]+)"$/ do |first_name, last_name, email, password|
+  FactoryGirl.create(:author, first_name: first_name,
+                              last_name: last_name,
+                              email: email,
+                              password: password,
+                              password_confirmation: password)
+end
+
 Given /^I am signed in as an author with "([^\/]+)\/([^"]+)"$/ do |email, password|
   visit new_author_session_path
   fill_in 'Email', with: email
