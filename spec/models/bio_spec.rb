@@ -12,6 +12,7 @@ RSpec.describe Bio, type: :model do
       ]
     }.with_indifferent_access
   end
+  let (:photo_file) { Rails.root.join('spec', 'fixtures', 'files', 'author_photo', 'image/jpeg') }
 
   it 'can be created from valid attributes' do
     bio = Bio.new(attributes)
@@ -90,5 +91,22 @@ RSpec.describe Bio, type: :model do
     it 'lists bios with a status of "approved"' do
       expect(Bio.approved.map(&:id)).to eq [a2.id, a1.id]
     end
+  end
+
+  describe '#photo_file' do
+    it 'accepts an uploaded file containing a photo for the bio' do
+      bio = Bio.new attributes.merge(photo_file: photo_file)
+      expect(bio.photo_file).not_to be_nil
+    end
+
+    it 'creates an image record on save'# do
+    #  expect do
+    #    bio = Bio.new attributes.merge(photo_file: photo_file)
+    #    bio.save
+    #  end.to change(Image, :count).by(1)
+    #end
+
+    it 'creates an image binary record on save'
+    it 'updates photo_id to point to the image record'
   end
 end

@@ -20,6 +20,8 @@ class Bio < ActiveRecord::Base
   serialize :links, Link
   validates_presence_of :author_id, :text, :status
   validates_inclusion_of :status, in: STATUSES
+  
+  attr_accessor :photo_file
 
   class << self
     STATUSES.each do |status|

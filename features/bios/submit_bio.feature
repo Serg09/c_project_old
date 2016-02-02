@@ -1,3 +1,4 @@
+@wip
 Feature: Submit a biography
   As an author
   In order to inform readers about my history
@@ -14,7 +15,7 @@ Feature: Submit a biography
     Then I should see "New bio" within the page title
 
     When I fill in "Text" with "I sure have been writing words for a long time now. I'm starting to get pretty good at it, too."
-    #And I select file "author_photo.jpg" for "Photo"
+    And I select file "author_photo.jpg" for "Photo"
     And I fill in "YouTube" with "https://www.youtube.com/watch?v=JvkbFc-th28"
     And I fill in "Facebook" with "https://www.facebook.com/JasonMraz/"
     And I fill in "Twitter" with "https://twitter.com/jason_mraz"

@@ -10,8 +10,8 @@
           =f.text_area :text, class: 'form-control extra-bottom', autofocus: true, rows: 5
           =help_blocks @bio, :text
         .form-group
-          %label{ :class => 'control-label' } Photo
-          %input{ :type => 'text', :readonly => 'true', :placeholder => 'Not ready yet', :class => 'form-control' }
+          =f.label :photo_file, class: 'control-label'
+          =f.file_field :photo_file, class: 'form-control'
         -@bio.links.each do |link|
           - link_id = "bio_links_attributes_#{link.site}_"
           - link_name = "bio[links_attributes][]"
