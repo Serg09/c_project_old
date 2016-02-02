@@ -2,17 +2,19 @@ require 'rails_helper'
 
 RSpec.describe Bio, type: :model do
   let (:author) { FactoryGirl.create(:author) }
+  let (:photo) { FactoryGirl.create(:image, author: author) }
   let (:attributes) do
     {
       author_id: author.id,
       text: 'This is some stuff about me. Dig it.',
+      photo_id: photo.id,
       links_attributes: [
         {'site' => 'facebook', 'url' => 'http://www.facebook.com/john_doe' },
         {'site' => 'twitter', 'url' => 'http://www.twitter.com/doe_john' }
       ]
     }.with_indifferent_access
   end
-  let (:photo_file) { Rails.root.join('spec', 'fixtures', 'files', 'author_photo', 'image/jpeg') }
+  let (:photo_file) { Rails.root.join('spec', 'fixtures', 'files', 'author_photo.jpg') }
 
   it 'can be created from valid attributes' do
     bio = Bio.new(attributes)
@@ -39,7 +41,10 @@ RSpec.describe Bio, type: :model do
   end
 
   describe '#photo' do
-    it 'is a reference to a photo'
+    it 'is a reference to a photo' do
+      bio = Bio.new attributes
+      expect(bio.photo).not_to be_nil
+    end
   end
 
   describe '#links' do
@@ -94,19 +99,41 @@ RSpec.describe Bio, type: :model do
   end
 
   describe '#photo_file' do
+    let (:attributes) do
+      {
+        author_id: author.id,
+        photo_file: photo_file,
+        text: 'This is some stuff about me. Dig it.',
+        links_attributes: [
+          {'site' => 'facebook', 'url' => 'http://www.facebook.com/john_doe' },
+          {'site' => 'twitter', 'url' => 'http://www.twitter.com/doe_john' }
+        ]
+      }.with_indifferent_access
+    end
+
     it 'accepts an uploaded file containing a photo for the bio' do
-      bio = Bio.new attributes.merge(photo_file: photo_file)
+      bio = Bio.new attributes
       expect(bio.photo_file).not_to be_nil
     end
 
-    it 'creates an image record on save'# do
-    #  expect do
-    #    bio = Bio.new attributes.merge(photo_file: photo_file)
-    #    bio.save
-    #  end.to change(Image, :count).by(1)
-    #end
+    it 'creates an image record on save' do
+      expect do
+        bio = Bio.new attributes
+        bio.save
+      end.to change(Image, :count).by(1)
+    end
 
-    it 'creates an image binary record on save'
-    it 'updates photo_id to point to the image record'
+    it 'creates an image binary record on save' do
+      expect do
+        bio = Bio.new attributes
+        bio.save
+      end.to change(ImageBinary, :count).by(1)
+    end
+
+    it 'updates photo_id to point to the image record' do
+      bio = Bio.new attributes
+      bio.save
+      expect(bio.photo_id).to be Image.last.id
+    end
   end
 end

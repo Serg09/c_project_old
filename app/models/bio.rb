@@ -15,7 +15,10 @@
 class Bio < ActiveRecord::Base
   STATUSES = %w(pending approved rejected)
 
+  before_save :save_photo
+
   belongs_to :author
+  belongs_to :photo, class_name: Image
   validates_associated :links
   serialize :links, Link
   validates_presence_of :author_id, :text, :status
@@ -52,5 +55,23 @@ class Bio < ActiveRecord::Base
 
   def usable_links
     links.select{|link| link.url.present?}
+  end
+
+  private
+
+  def save_photo
+    return unless photo_file
+    data = photo_file.read
+    hash_id = Image.hash_id(data)
+    image = Image.find_by(hash_id: hash_id)
+    unless image
+      image_binary = ImageBinary.create!(data: data)
+      image = Image.create!(author: author,
+                            image_binary: image_binary,
+                            hash_id: hash_id,
+                            mime_type: 'image/jpeg') # TODO Read this from the input file
+
+    end
+    self.photo_id = image.id
   end
 end

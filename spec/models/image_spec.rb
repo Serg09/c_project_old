@@ -63,4 +63,11 @@ RSpec.describe Image, type: :model do
       expect(i2).to have_at_least(1).error_on :hash_id
     end
   end
+
+  describe '#author' do
+    it 'is a reference to the author that owns the image' do
+      image = Image.new attributes
+      expect(image.author.full_name).to eq author.full_name
+    end
+  end
 end
