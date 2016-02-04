@@ -59,8 +59,14 @@ class Bio < ActiveRecord::Base
 
   private
 
+  def photo_file_mime_type
+    return photo_file.content_type if photo_file.respond_to?(:content_type)
+    'image/jpeg'
+  end
+
   def save_photo
     return unless photo_file
+
     data = photo_file.read
     hash_id = Image.hash_id(data)
     image = Image.find_by(hash_id: hash_id)
@@ -69,7 +75,7 @@ class Bio < ActiveRecord::Base
       image = Image.create!(author: author,
                             image_binary: image_binary,
                             hash_id: hash_id,
-                            mime_type: 'image/jpeg') # TODO Read this from the input file
+                            mime_type: photo_file_mime_type)
 
     end
     self.photo_id = image.id

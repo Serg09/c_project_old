@@ -14,6 +14,7 @@
 class Image < ActiveRecord::Base
   belongs_to :author
   belongs_to :image_binary
+  has_many :bios, foreign_key: 'photo_id'
 
   validates_presence_of :author_id, :image_binary_id, :hash_id
   validates_length_of :hash_id, is: 40

@@ -70,4 +70,11 @@ RSpec.describe Image, type: :model do
       expect(image.author.full_name).to eq author.full_name
     end
   end
+
+  describe '#bios' do
+    it 'lists the bios associated with the image' do
+      image = Image.new attributes
+      expect(image).to have(0).bios
+    end
+  end
 end

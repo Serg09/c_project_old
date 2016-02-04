@@ -10,6 +10,8 @@
 
       %h1= @bio.author.full_name
       %p= @bio.text
+      -if @bio.photo_id.present?
+        %img{ src: image_path(@bio.photo_id) }
 
       -if @bio.usable_links.any?
         %h1 Social Links

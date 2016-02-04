@@ -91,7 +91,7 @@ class BiosController < ApplicationController
   end
 
   def bio_params
-    params.require(:bio).permit(:text, links_attributes: [:site, :url])
+    params.require(:bio).permit(:text, :photo_file, links_attributes: [:site, :url])
   end
 
   def load_author
