@@ -15,7 +15,10 @@
 class Bio < ActiveRecord::Base
   STATUSES = %w(pending approved rejected)
 
-  before_save :save_photo
+  MAX_IMAGE_WIDTH = 1024
+  MAX_IMAGE_HEIGHT = 1024
+
+  before_save :process_photo_file
 
   belongs_to :author
   belongs_to :photo, class_name: Image
@@ -64,10 +67,16 @@ class Bio < ActiveRecord::Base
     'image/jpeg'
   end
 
-  def save_photo
+  def process_photo_file
     return unless photo_file
 
-    data = photo_file.read
+    magick = Magick::Image.from_blob(photo_file.read).first
+    scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+    image = find_or_create_image(scaled_magick.to_blob)
+    self.photo_id = image.id
+  end
+
+  def find_or_create_image(data)
     hash_id = Image.hash_id(data)
     image = Image.find_by(hash_id: hash_id)
     unless image
@@ -78,6 +87,6 @@ class Bio < ActiveRecord::Base
                             mime_type: photo_file_mime_type)
 
     end
-    self.photo_id = image.id
+    image
   end
 end

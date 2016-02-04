@@ -9,9 +9,9 @@
           This bio is under review. We will review it as soon as we can.
 
       %h1= @bio.author.full_name
-      %p= @bio.text
       -if @bio.photo_id.present?
-        %img{ src: image_path(@bio.photo_id) }
+        %img{ src: image_path(@bio.photo_id), class: 'img-rounded img-responsive' }
+      %p= @bio.text
 
       -if @bio.usable_links.any?
         %h1 Social Links

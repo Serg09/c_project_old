@@ -31,6 +31,7 @@ gem 'pg'
 gem 'cancan'
 gem 'simple-navigation'
 gem 'will_paginate-bootstrap'
+gem 'rmagick'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
