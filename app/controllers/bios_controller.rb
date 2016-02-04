@@ -36,7 +36,7 @@ class BiosController < ApplicationController
         format.html{render :index, layout: 'admin'}
       end
     else
-      @bio = @author.active_bio
+      @bio = @author.try(:active_bio)
       not_found! unless @bio
       render :show
     end

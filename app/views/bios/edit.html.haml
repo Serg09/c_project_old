@@ -1,2 +1,8 @@
-%h1 Bios#edit
-%p Find me in app/views/bios/edit.html.haml
+=content_for :page_title do
+  Edit bio
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for(@bio) do |f|
+        =render 'form_fields', f: f

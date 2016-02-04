@@ -3,24 +3,28 @@
 
 .container.container-default
   .row
-    .col-md-6
+    .col-md-12
       -if can?(:update, @bio) && @bio.pending?
         .alert.alert-info
           This bio is under review. We will review it as soon as we can.
-
       %h1= @bio.author.full_name
+  .row
+    .col-md-5
       -if @bio.photo_id.present?
         %img{ src: image_path(@bio.photo_id), class: 'img-rounded img-responsive' }
-      %p= @bio.text
 
       -if @bio.usable_links.any?
         %h1 Social Links
         -@bio.usable_links.each do |link|
           =link_to link.url, target: '_blank' do
             =image_tag "social/#{link.site}.png"
+    .col-md-5
+      -if @bio.approved?
+        = mark_up(@bio.text)
+      -else
+        %p= @bio.text
 
       -if can? :update, @bio
-        %p &nbsp;
         %p=link_to 'Edit', edit_bio_path(@bio), class: 'btn btn-default'
     -if administrator_signed_in?
       .col-md-2.btn-stack
