@@ -17,7 +17,7 @@
         %h1 Social Links
         -@bio.usable_links.each do |link|
           =link_to link.url, target: '_blank' do
-            =image_tag "social/#{link.site}.png"
+            =image_tag "social/#{link.site}.png", class: 'img-circle'
     .col-md-5
       -if @bio.approved?
         = mark_up(@bio.text)
