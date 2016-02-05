@@ -61,7 +61,7 @@ class BiosController < ApplicationController
       @bio.update_attributes bio_params
     end
     flash[:notice] = "Your bio has been updated successfully and is waiting for administrative approval." if @bio.save
-    respond_with @bio, location: bio_path
+    respond_with @bio, location: bio_path(@bio)
   end
 
   def approve
