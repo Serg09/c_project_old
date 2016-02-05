@@ -1,0 +1,17 @@
+.from-group{ :class => form_group_class(@bio, :text) }
+  =f.label :text, class: 'control-label'
+  =f.text_area :text, class: 'form-control extra-bottom', autofocus: true, rows: 5
+  =help_blocks @bio, :text
+.form-group
+  =f.label :photo_file, class: 'control-label'
+  =f.file_field :photo_file, class: 'form-control'
+-@bio.links.each do |link|
+  - link_id = "bio_links_attributes_#{link.site}_"
+  - link_name = "bio[links_attributes][]"
+  .form-group{ :class => form_group_class(link, :url) }
+    =hidden_field_tag "#{link_name}[site]", link.site
+    =label_tag "#{link_id}url", Link.site_label(link.site), class: 'control-label'
+    =text_field_tag "#{link_name}[url]", link.url, id: "#{link_id}url", class: 'form-control', value: link.url
+    =help_blocks link, :url
+.form-group
+  =f.submit 'Submit', class: 'btn btn-primary'

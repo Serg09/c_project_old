@@ -101,7 +101,7 @@ RSpec.describe BiosController, type: :controller do
         describe 'put :update' do
           it 'redirects to the show bio page' do
             put :update, id: approved_bio, bio: attributes
-            expect(response).to redirect_to bio_path
+            expect(response).to redirect_to bio_path(Bio.last)
           end
 
           it 'does not update the bio' do

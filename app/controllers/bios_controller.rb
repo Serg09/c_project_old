@@ -36,7 +36,7 @@ class BiosController < ApplicationController
         format.html{render :index, layout: 'admin'}
       end
     else
-      @bio = @author.active_bio
+      @bio = @author.try(:active_bio)
       not_found! unless @bio
       render :show
     end
@@ -61,7 +61,7 @@ class BiosController < ApplicationController
       @bio.update_attributes bio_params
     end
     flash[:notice] = "Your bio has been updated successfully and is waiting for administrative approval." if @bio.save
-    respond_with @bio, location: bio_path
+    respond_with @bio, location: bio_path(@bio)
   end
 
   def approve
@@ -91,7 +91,7 @@ class BiosController < ApplicationController
   end
 
   def bio_params
-    params.require(:bio).permit(:text, links_attributes: [:site, :url])
+    params.require(:bio).permit(:text, :photo_file, links_attributes: [:site, :url])
   end
 
   def load_author

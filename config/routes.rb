@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
+  resources :images, only: :show
 
   get 'pages/welcome'
   get 'pages/package_pricing'

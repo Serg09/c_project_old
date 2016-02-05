@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126232326) do
+ActiveRecord::Schema.define(version: 20160202000643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,24 @@ ActiveRecord::Schema.define(version: 20160126232326) do
     t.text     "links"
     t.string   "status",     default: "pending", null: false
   end
+
+  create_table "image_binaries", force: :cascade do |t|
+    t.binary   "data",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.integer  "author_id",                  null: false
+    t.integer  "image_binary_id",            null: false
+    t.string   "hash_id",         limit: 40, null: false
+    t.string   "mime_type",       limit: 20, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "images", ["author_id"], name: "index_images_on_author_id", using: :btree
+  add_index "images", ["hash_id"], name: "index_images_on_hash_id", unique: true, using: :btree
 
   create_table "inquiries", force: :cascade do |t|
     t.string   "first_name",                 null: false

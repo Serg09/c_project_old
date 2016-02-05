@@ -1,24 +1,8 @@
 =content_for :page_title do
   New bio
 
-.container.default-container
+.container.container-default
   .row
     .col-md-6
       =form_for([@author, @bio]) do |f|
-        .from-group{ :class => form_group_class(@bio, :text) }
-          =f.label :text, class: 'control-label'
-          =f.text_area :text, class: 'form-control extra-bottom', autofocus: true, rows: 5
-          =help_blocks @bio, :text
-        .form-group
-          %label{ :class => 'control-label' } Photo
-          %input{ :type => 'text', :readonly => 'true', :placeholder => 'Not ready yet', :class => 'form-control' }
-        -@bio.links.each do |link|
-          - link_id = "bio_links_attributes_#{link.site}_"
-          - link_name = "bio[links_attributes][]"
-          .form-group{ :class => form_group_class(link, :url) }
-            =hidden_field_tag "#{link_name}[site]", link.site
-            =label_tag "#{link_id}url", Link.site_label(link.site), class: 'control-label'
-            =text_field_tag "#{link_name}[url]", link.url, id: "#{link_id}url", class: 'form-control', value: link.url
-            =help_blocks link, :url
-        .form-group
-          =f.submit 'Submit', class: 'btn btn-primary'
+        =render 'form_fields', f: f
