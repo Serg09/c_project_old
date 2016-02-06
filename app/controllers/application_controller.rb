@@ -18,6 +18,10 @@ class ApplicationController < ActionController::Base
     Ability.new current_author
   end
 
+  def ensure_sign_in_allowed
+    not_found! if AppSetting.sign_in_disabled?
+  end
+
   def access_denied_redirect_path
     case
     when author_signed_in?
