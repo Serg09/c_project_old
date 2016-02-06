@@ -6,9 +6,9 @@ class AppSetting < ActiveRecord::Base
     end
   end
 
-  def self.method_missing(method_name)
+  def self.method_missing(method_name, *args, &block)
     value = app_setting_value(method_name)
-    return value unless value.nil?
+    return value if value || well_known_setting_name?(method_name)
 
     super
   end
@@ -21,5 +21,9 @@ class AppSetting < ActiveRecord::Base
       Rails.logger.warn "Unrecognized data type #{app_setting.data_type} for setting #{app_setting.name}"
       nil
     end
+  end
+
+  def self.well_known_setting_name?(name)
+    %w(sign_in_disabled).include? name.to_s.chomp('?')
   end
 end

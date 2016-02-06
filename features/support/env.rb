@@ -53,6 +53,12 @@ end
 #   end
 #
 
+Before do
+  if AppSetting.count == 0
+    AppSetting.create!(name: 'sign_in_disabled', value: 'false', data_type: 'boolean')
+  end
+end
+
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
