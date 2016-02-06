@@ -1,11 +1,22 @@
 class AppSetting < ActiveRecord::Base
-  def self.method_missing(method_name)
-    app_setting = find_by(name: method_name.to_s.chomp('?'))
-    return nil unless app_setting
+  def self.app_setting_value(name)
+    name = name.to_s.chomp('?')
+    Rails.cache.fetch("app_setting:#{name}", expires_in: 1.hour) do
+      find_by(name: name).try(:typed_value)
+    end
+  end
 
-    case app_setting.data_type
+  def self.method_missing(method_name)
+    value = app_setting_value(method_name)
+    return value unless value.nil?
+
+    super
+  end
+
+  def typed_value
+    case data_type
     when 'boolean'
-      app_setting.value.downcase == 'true'
+      value.downcase == 'true'
     else
       Rails.logger.warn "Unrecognized data type #{app_setting.data_type} for setting #{app_setting.name}"
       nil
