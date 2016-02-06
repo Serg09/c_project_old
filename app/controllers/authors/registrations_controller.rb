@@ -1,5 +1,6 @@
 class Authors::RegistrationsController < Devise::RegistrationsController
   before_filter :configure_sign_up_params, only: [:create]
+  before_filter :ensure_sign_in_allowed, only: [:new, :create]
 # before_filter :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up

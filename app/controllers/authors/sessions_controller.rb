@@ -1,5 +1,6 @@
 class Authors::SessionsController < Devise::SessionsController
 # before_filter :configure_sign_in_params, only: [:create]
+  before_filter :ensure_sign_in_allowed, only: [:new, :create]
 
   # GET /resource/sign_in
   # def new
