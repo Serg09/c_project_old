@@ -1,4 +1,5 @@
 %nav.navbar.navbar-default.navbar-fixed-top
+  =render 'shared/top_bar'
   .container
     .navbar-header
       %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
@@ -46,7 +47,5 @@
           =link_to 'Books', pages_books_path
         %li
           -if !AppSetting.sign_in_disabled?
-            -if author_signed_in?
-              =link_to 'Sign out', destroy_author_session_path, method: :delete
-            -else
+            -unless author_signed_in?
               =link_to 'Signup', new_author_registration_path

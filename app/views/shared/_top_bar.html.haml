@@ -1,0 +1,23 @@
+#top_bar
+  .container
+    .row
+      .col-md-7.col-md-offset-5.text-right
+        -if author_signed_in?
+          =current_author.full_name
+          -if !AppSetting.sign_in_disabled?
+            |
+            =link_to 'Sign out', destroy_author_session_path, method: :delete, title: 'Click here to end your session.'
+        -else
+          =form_tag session_path(:author), class: 'form-inline' do
+            .form-group
+              =label_tag 'author[email]', 'Email', class: 'sr-only'
+              =text_field_tag 'author[email]', nil, class: 'form-control', placeholder: 'Email'
+            .form-group
+              =label_tag 'author[password]', 'Password', class: 'sr-only'
+              =password_field_tag 'author[password]', nil, class: 'form-control', placeholder: 'Password'
+            .checkbox
+              =label_tag 'author[remember_me]' do
+                =check_box_tag 'author[remember_me]'
+                Remember me
+            .form-group
+              =submit_tag 'Sign in', class: 'btn btn-default'
