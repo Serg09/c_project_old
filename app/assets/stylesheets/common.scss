@@ -90,6 +90,20 @@ body > footer {
   font-family: 'PT Sans', Arial, Helvetica, sans-serif;
   font-size: 12px;
   line-height: 20px;
+  text-align: center;
+}
+
+ul.footer-menu{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    display: inline-block;
+    width: 20em;
+    a {
+      color: #8C8989;
+    }
+  }
 }
 
 .container-default {
