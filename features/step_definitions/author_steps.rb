@@ -16,7 +16,7 @@ When /^an administrator rejects the account for (#{AUTHOR})$/ do |author|
   AuthorMailer.account_rejected_notification(author).deliver_now
 end
 
-Given /^there is an? (?:(rejected|accepted|pending) )?author with email "([^"]+)" and password "([^"]+)"$/ do |status, email, password|
+Given /^there is an? (?:(rejected|accepted|pending) )?author with email (?:address )?"([^"]+)" and password "([^"]+)"$/ do |status, email, password|
   status ||= Author.ACCEPTED
   FactoryGirl.create(:author, email: email,
                               password: password,

@@ -8,7 +8,7 @@ Feature: Add a book
     Given there is an author with email address "john@doe.com" and password "please01"
     And I am signed in as an author with "john@doe.com/please01"
 
-    When I am on the home page
+    When I am on the author home page
     Then I should see "Manage my books" within the main menu
 
     When I click "Manage my books" within the main menu
@@ -21,7 +21,7 @@ Feature: Add a book
     And I fill in "Short description" with "Sam I Am does not like green eggs and ham."
     And I fill in "Long description" with "Blah blah blah blah"
     And I fill in "Sample" with "Blah blah blah blah blah blah blah"
-    And I select "Children's" and "Poetry" from "Genres"
+    And I choose "Children's" and "Poetry" within the genre list
     And I select file "book_cover.jpg" for "Cover image"
     And I click "Submit"
 
