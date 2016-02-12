@@ -12,12 +12,12 @@ Feature: An author signs up
 
     When I fill in "First name" with "John"
     And I fill in "Last name" with "Doe"
-    And I fill in "Email" with "john@doe.com"
+    And I fill in "Email" with "john@doe.com" within the main content
     And I select "Starter (Free)" from "Which package would you like?"
     And I fill in "Phone number" with "214-555-0000"
     And I check "It is OK if my advisor contacts me by phone"
     And I fill in "Username" with "jdoe"
-    And I fill in "Password" with "please01"
+    And I fill in "Password" with "please01" within the main content
     And I fill in "Password confirmation" with "please01"
     And I click "Sign up"
 
@@ -40,9 +40,9 @@ Feature: An author signs up
     And I click the first link in the email
     Then I should see "Log in" within the page title
 
-    When I fill in "Email" with "john@doe.com"
-    And I fill in "Password" with "please01"
-    And I click "Sign in"
+    When I fill in "Email" with "john@doe.com" within the main content
+    And I fill in "Password" with "please01" within the main content
+    And I click "Sign in" within the main content
     Then I should see "Signed in successfully" within the notification area
     And I should see "My profile" within the page title
 
@@ -53,9 +53,9 @@ Feature: An author signs up
     When I click "Log in" within the main menu
     Then I should see "Log in" within the page title
 
-    When I fill in "Email" with "john@doe.com"
-    And I fill in "Password" with "please01"
-    And I click "Sign in"
+    When I fill in "Email" with "john@doe.com" within the main content
+    And I fill in "Password" with "please01" within the main content
+    And I click "Sign in" within the main content
     Then I should see "Approval pending" within the page title
     And I should see "Unable to sign in. Your account is still pending approval by the administrator." within the notification area
 
@@ -69,8 +69,8 @@ Feature: An author signs up
     When I click "Log in" within the main menu
     Then I should see "Log in" within the page title
 
-    When I fill in "Email" with "john@doe.com"
-    And I fill in "Password" with "please01"
-    And I click "Sign in"
+    When I fill in "Email" with "john@doe.com" within the main content
+    And I fill in "Password" with "please01" within the main content
+    And I click "Sign in" within the main content
     Then I should see "Log in" within the page title
     And I should see "Unable to sign in. Your account has been rejected by the administrator." within the notification area

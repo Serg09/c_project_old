@@ -12,7 +12,7 @@ Feature: An unauthenticated user submits an inquiry
 
     When I fill in "First name" with "John"
     And I fill in "Last name" with "Doe"
-    And I fill in "Email" with "john@doe.com"
+    And I fill in "Email" with "john@doe.com" within the main content
     And I fill in "How can we help?" with "What can I do about the squirrels in my attic?"
     And I click "Submit"
     Then I should see "Your inquiry has been accepted." within the notification area
