@@ -21,10 +21,10 @@ class BootstrapNavigationRenderer < SimpleNavigation::Renderer::Base
   end
 
   def tag_for(item)
-    if suppress_link?(item)
-      content_tag('span', item.name, link_options_for(item).except(:method))
-    else
+    if item.sub_navigation || !suppress_link?(item)
       link_to(link_content(item), item.url, options_for(item))
+    else
+      content_tag('span', item.name, link_options_for(item).except(:method))
     end
   end
 
