@@ -13,7 +13,7 @@
 #
 
 class Bio < ActiveRecord::Base
-  STATUSES = %w(pending approved rejected)
+  include Approvable
 
   MAX_IMAGE_WIDTH = 1024
   MAX_IMAGE_HEIGHT = 1024
@@ -24,27 +24,9 @@ class Bio < ActiveRecord::Base
   belongs_to :photo, class_name: Image
   validates_associated :links
   serialize :links, Link
-  validates_presence_of :author_id, :text, :status
-  validates_inclusion_of :status, in: STATUSES
+  validates_presence_of :author_id, :text
   
   attr_accessor :photo_file
-
-  class << self
-    STATUSES.each do |status|
-      define_method status.upcase do
-        status
-      end
-    end
-  end
-
-  STATUSES.each do |status|
-    define_method "#{status}?" do
-      self.status == status
-    end
-  end
-
-  scope :pending, -> { where(status: Bio.PENDING).order('created_at DESC') }
-  scope :approved, -> { where(status: Bio.APPROVED).order('created_at DESC') }
 
   def links_attributes=(list)
     if list
