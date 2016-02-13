@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BiosController, type: :controller do
   include Devise::TestHelpers
 
-  let (:author) { FactoryGirl.create(:author, status: Author.ACCEPTED) }
+  let (:author) { FactoryGirl.create(:approved_author) }
   let (:bio) { FactoryGirl.create(:bio, author: author) }
   let (:approved_bio) { FactoryGirl.create(:bio, author: author, status: Bio.APPROVED) }
   let (:attributes) do
@@ -163,7 +163,7 @@ RSpec.describe BiosController, type: :controller do
       end
     end
     context 'that does not own the bio' do
-      let (:other_author) { FactoryGirl.create(:author, status: Author.ACCEPTED) }
+      let (:other_author) { FactoryGirl.create(:approved_author) }
       before(:each) { sign_in other_author }
 
       describe "get :show" do

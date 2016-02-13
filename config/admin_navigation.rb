@@ -7,7 +7,7 @@ SimpleNavigation::Configuration.run do |navigation|
       authors.auto_highlight = false
       authors.dom_class = 'nav nav-tabs'
       authors.item :pending, 'Pending', authors_path, highlights_on: -> { author_path?(Author.PENDING) }
-      authors.item :accepted, 'Accepted', authors_path(status: :accepted), highlights_on: -> { author_path?(Author.ACCEPTED) }
+      authors.item :accepted, 'Accepted', authors_path(status: :accepted), highlights_on: -> { author_path?(Author.APPROVED) }
       authors.item :rejected, 'Rejected', authors_path(status: :rejected), highlights_on: -> { author_path?(Author.REJECTED) }
     end
     primary.item :bios, bio_nav_item_caption, bios_path, if: ->{administrator_signed_in?} do |bios|

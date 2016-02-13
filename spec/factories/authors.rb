@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :author do
+  factory :author, aliases: [:pending_author] do
     transient do
       confirmed true
     end
@@ -16,6 +16,14 @@ FactoryGirl.define do
 
     after(:create) do |author, evaluator|
       author.confirm if evaluator.confirmed
+    end
+
+    factory :approved_author do
+      status Author.APPROVED
+    end
+
+    factory :rejected_author do
+      status Author.REJECTED
     end
   end
 end

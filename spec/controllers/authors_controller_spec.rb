@@ -165,7 +165,7 @@ RSpec.describe AuthorsController, type: :controller do
         expect do
           patch :accept, id: author
           author.reload
-        end.to change(author, :status).to Author.ACCEPTED
+        end.to change(author, :status).to Author.APPROVED
       end
     end
 
