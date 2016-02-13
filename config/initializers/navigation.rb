@@ -1,0 +1,2 @@
+SimpleNavigation.register_renderer bootstrap_navigation_renderer: BootstrapNavigationRenderer
+

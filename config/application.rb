@@ -24,6 +24,8 @@ module Crowdscribe
     config.active_record.raise_in_transactional_callbacks = true
 
     config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+
+    config.autoload_paths << Rails.root.join('lib')
   end
 end
 

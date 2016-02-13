@@ -9,43 +9,5 @@
         %span.icon-bar
       =link_to image_tag(asset_path('crowdscribed_logo.png')), root_path
     #navbar.collapse.navbar-collapse
-      %ul#main-menu.nav.navbar-nav.navbar-right
-        %li.active
-          %a.dropdown-toggle{ 'data-toggle' => 'dropdown', :role => 'button', 'aria-haspopup' => 'true' }
-            About
-            %span.caret
-          %ul.dropdown-menu
-            %li
-              %a{ :href => pages_package_pricing_path } Package Pricing
-            %li
-              %a{ :href => pages_a_la_carte_pricing_path } A la carte Pricing
-            %li
-              %a{ :href => pages_faqs_path } FAQs
-            %li
-              %a{ :href => pages_about_us_path } About Us
-            %li
-              %a{ :href => new_inquiry_path} Contact us
-        %li.active
-          %a.dropdown-toggle{ 'data-toggle' => 'dropdown', :role => 'button', 'aria-haspopup' => 'true' }
-            Authors
-            %span.caret
-          %ul.dropdown-menu
-            %li
-              %a{ :href => pages_book_incubator_path } Book Incubator
-            %li
-              %a{ :href => pages_why_path } Why CrowdScribed?
-            -if !AppSetting.sign_in_disabled?
-              -if author_signed_in?
-                %li
-                  =link_to 'Bio', author_bios_path(current_author)
-                %li
-                  =link_to 'Log out', destroy_author_session_path, method: :delete
-              -else
-                %li
-                  =link_to 'Log in', new_author_session_path
-        %li
-          =link_to 'Books', pages_books_path
-        %li
-          -if !AppSetting.sign_in_disabled?
-            -unless author_signed_in?
-              =link_to 'Signup', new_author_registration_path
+      #main-menu
+        =render_navigation renderer: :bootstrap_navigation_renderer, expand_all: true
