@@ -9,10 +9,10 @@ Feature: Add a book
     And I am signed in as an author with "john@doe.com/please01"
 
     When I am on the author home page
-    Then I should see "Manage my books" within the main menu
+    Then I should see "My books" within the main menu
 
-    When I click "Manage my books" within the main menu
-    Then I should see "Manage my books" within the page title
+    When I click "My books" within the main menu
+    Then I should see "My books" within the page title
 
     When I click "Add" within the main content
     Then I should see "New book" within the page title

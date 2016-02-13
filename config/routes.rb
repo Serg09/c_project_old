@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   end
   resources :authors, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
+    resources :books, only: [:new, :index, :create]
     member do
       patch :accept
       patch :reject
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
+  resources :books, only: [:show, :edit, :update, :destroy]
   resources :images, only: :show
 
   get 'pages/welcome'
