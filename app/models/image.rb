@@ -12,6 +12,9 @@
 #
 
 class Image < ActiveRecord::Base
+  MAX_IMAGE_WIDTH = 1024
+  MAX_IMAGE_HEIGHT = 1024
+
   belongs_to :author
   belongs_to :image_binary
   has_many :bios, foreign_key: 'photo_id'
@@ -22,5 +25,30 @@ class Image < ActiveRecord::Base
 
   def self.hash_id(data)
     Digest::SHA1.hexdigest(data)
+  end
+
+  def self.find_or_create_from_file(file, author)
+    # read and resize the image
+    magick = Magick::Image.from_blob(file.read).first
+    scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+    data = scaled_magick.to_blob
+
+    # see if the image is already present in the database
+    hash_id = hash_id(data)
+    image = find_by(hash_id: hash_id, author_id: author.id)
+
+    # create the image record if it doesn't exist
+    unless image
+      image_binary = ImageBinary.create!(data: data)
+      image = create!(author: author,
+                      image_binary: image_binary,
+                      hash_id: hash_id,
+                      mime_type: file.respond_to?(:content_type) ?
+                        file.content_type :
+                        'image/jpeg')
+
+    end
+
+    image
   end
 end

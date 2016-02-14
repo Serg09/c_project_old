@@ -15,9 +15,6 @@
 class Bio < ActiveRecord::Base
   include Approvable
 
-  MAX_IMAGE_WIDTH = 1024
-  MAX_IMAGE_HEIGHT = 1024
-
   before_save :process_photo_file
 
   belongs_to :author
@@ -44,31 +41,10 @@ class Bio < ActiveRecord::Base
 
   private
 
-  def photo_file_mime_type
-    return photo_file.content_type if photo_file.respond_to?(:content_type)
-    'image/jpeg'
-  end
-
   def process_photo_file
     return unless photo_file
 
-    magick = Magick::Image.from_blob(photo_file.read).first
-    scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
-    image = find_or_create_image(scaled_magick.to_blob)
+    image = Image.find_or_create_from_file(photo_file, author)
     self.photo_id = image.id
-  end
-
-  def find_or_create_image(data)
-    hash_id = Image.hash_id(data)
-    image = Image.find_by(hash_id: hash_id)
-    unless image
-      image_binary = ImageBinary.create!(data: data)
-      image = Image.create!(author: author,
-                            image_binary: image_binary,
-                            hash_id: hash_id,
-                            mime_type: photo_file_mime_type)
-
-    end
-    image
   end
 end
