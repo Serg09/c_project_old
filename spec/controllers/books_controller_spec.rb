@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BooksController, type: :controller do
   let (:author) { FactoryGirl.create(:author) }
-  let (:book_attributes) { {} }
+  let (:book_attributes) { FactoryGirl.attributes_for(:book, author: author) }
 
   context 'for an authenticated author' do
     describe 'get :index' do
@@ -22,7 +22,7 @@ RSpec.describe BooksController, type: :controller do
     describe 'post :create' do
       it 'redirects to the book page' do
         post :create, author_id: author, book: book_attributes
-        expect(response).to redirect_to author_books_page(author)
+        expect(response).to redirect_to book_path(Book.last)
       end
 
       it 'creates a new book record' do
