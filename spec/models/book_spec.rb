@@ -18,14 +18,21 @@ RSpec.describe Book, type: :model do
     expect(book).to be_valid
   end
 
-  describe 'author_id' do
+  describe '#author_id' do
     it 'is required' do
       book = Book.new attributes.except(:author_id)
       expect(book).to have_at_least(1).error_on :author_id
     end
   end
 
-  describe 'title' do
+  describe '#author' do
+    it 'is a reference to the author that owns the book' do
+      book = Book.new attributes
+      expect(book.author).not_to be_nil
+    end
+  end
+
+  describe '#title' do
     it 'is required' do
       book = Book.new attributes.except(:title)
       expect(book).to have_at_least(1).error_on :title
@@ -40,8 +47,8 @@ RSpec.describe Book, type: :model do
     end
   end
 
-  describe 'short description' do
-    it 'is require' do
+  describe '#short_description' do
+    it 'is required' do
       book = Book.new attributes.except :short_description
       expect(book).to have_at_least(1).error_on :short_description
     end
@@ -55,7 +62,7 @@ RSpec.describe Book, type: :model do
     end
   end
 
-  describe 'cover_image_file' do
+  describe '#cover_image_file' do
     it 'creates a new image record in the database' do
       expect do
         book = Book.new attributes.merge(cover_image_file: image_file)

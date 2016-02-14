@@ -244,4 +244,11 @@ RSpec.describe Author, type: :model do
     # a pending bio should update the one that already exists and updating
     # an approved bio creates a pending bio
   end
+
+  describe '#books' do
+    it 'contains a list of the authors books' do
+      author = Author.new(attributes)
+      expect(author).to have(0).books
+    end
+  end
 end

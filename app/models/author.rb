@@ -35,6 +35,7 @@ class Author < ActiveRecord::Base
   include Approvable
 
   has_many :bios
+  has_many :books
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
