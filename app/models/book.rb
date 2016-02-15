@@ -14,6 +14,8 @@
 #
 
 class Book < ActiveRecord::Base
+  include Approvable
+
   belongs_to :author
 
   before_save :process_cover_image_file

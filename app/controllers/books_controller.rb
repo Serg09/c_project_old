@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  before_filter :load_book, only: [:show, :edit, :update]
   before_filter :load_author, only: [:create]
   respond_to :html
 
@@ -6,6 +7,7 @@ class BooksController < ApplicationController
   end
 
   def show
+    authorize! :show, @book
   end
 
   def new
@@ -18,9 +20,14 @@ class BooksController < ApplicationController
   end
 
   def edit
+    authorize! :update, @book
   end
 
   def update
+    authorize! :update, @book
+    @book.update_attributes book_params
+    flash[:notice] = 'The book was updated successfully.' if @book.save
+    respond_with @book
   end
 
   private
@@ -31,5 +38,9 @@ class BooksController < ApplicationController
 
   def load_author
     @author = Author.find(params[:author_id])
+  end
+
+  def load_book
+    @book = Book.find(params[:id])
   end
 end
