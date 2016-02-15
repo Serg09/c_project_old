@@ -77,4 +77,11 @@ RSpec.describe Image, type: :model do
       expect(image).to have(0).bios
     end
   end
+
+  describe '#books' do
+    it 'lists the books associated with the image' do
+      image = Image.new attributes
+      expect(image).to have(0).books
+    end
+  end
 end

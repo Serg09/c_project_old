@@ -6,7 +6,7 @@ class Ability
     can [:show, :update, :edit], Author, id: author.id
     can [:create, :show, :update, :edit], Bio, author_id: author.id
     can :show, Image do |image|
-      image.bios.approved.any? || (image.author_id == author.id && image.bios.pending.any?)
+      image.can_be_viewed_by?(author)
     end
     can :show, Book do |book|
       book.approved? || book.author_id == author.id

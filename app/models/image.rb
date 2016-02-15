@@ -18,6 +18,7 @@ class Image < ActiveRecord::Base
   belongs_to :author
   belongs_to :image_binary
   has_many :bios, foreign_key: 'photo_id'
+  has_many :books, foreign_key: 'cover_image_id'
 
   validates_presence_of :author_id, :image_binary_id, :hash_id
   validates_length_of :hash_id, is: 40
@@ -50,5 +51,14 @@ class Image < ActiveRecord::Base
     end
 
     image
+  end
+
+  def can_be_viewed_by?(author)
+    collections = [bios, books]
+    if author_id == author.id
+      collections.select{|c| c.pending.any?}
+    else
+      collections.select{|c| c.approved.any?}
+    end
   end
 end
