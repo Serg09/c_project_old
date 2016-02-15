@@ -39,4 +39,48 @@ namespace :seed do
       logger.info "created administrator account #{admin.inspect}"
     end
   end
+
+  desc 'Create the default set of genres'
+  task genres: :environment do
+    [
+      'Science Fiction',
+      'Comedy/Humor',
+      'Drama',
+      'Comic',
+      'Crime/Detective',
+      'Fable/Fairytale',
+      'Fantasy',
+      'Historical Fiction',
+      'Mythology',
+      'Short Story',
+      'Suspense/Thriller',
+      'Action & Adventure',
+      'Romance',
+      'Mystery',
+      'Horror',
+      'Self Help',
+      'Non- Fiction',
+      'Tragedy',
+      'Young- adult fiction',
+      'Sports',
+      'Biography',
+      'Memoir',
+      'Journal',
+      'History',
+      'Religion',
+      'Supernatural',
+      'Poetry',
+      'Travel',
+      'Health',
+      'Children’s'
+    ].each do |name|
+      genre = Genre.new name: name
+      if genre.valid?
+        genre.save!
+        logger.info "created genre #{genre.name}"
+      else
+        logger.warn "genre #{genre.name} already exists."
+      end
+    end
+  end
 end

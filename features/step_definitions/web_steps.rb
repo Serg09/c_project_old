@@ -10,8 +10,9 @@ When /^I select "([^"]+)" from "([^"]+)"$/ do |value, locator|
   select value, from: locator
 end
 
-When /^I check "([^"]+)"$/ do |locator|
-  check locator
+When /^I check "([^"]+)"(?: and "([^"]+)")?$/ do |locator1, locator2|
+  check locator1
+  check locator2
 end
 
 When /^I click "([^"]+)"$/ do |locator|

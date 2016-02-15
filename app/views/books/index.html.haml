@@ -10,7 +10,7 @@
           %th &nbsp;
         -@books.each do |book|
           %tr
-            %td= book.title
+            %td= link_to book.title, book_path(book)
             %td= link_to 'Edit', edit_book_path(book)
       -if @author
         =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'

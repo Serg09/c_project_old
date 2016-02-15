@@ -22,6 +22,7 @@ class BooksController < ApplicationController
   def create
     @book = @author.books.new(book_params)
     authorize! :create, @book
+    genres_from_params.each{|genre| @book.genres << genre}
     if @book.save
       flash[:notice] = 'Your book has been submitted successfully.'
       BookMailer.submission(@book).deliver_now
@@ -44,6 +45,11 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(:title, :short_description, :long_description, :cover_image_file)
+  end
+
+  def genres_from_params
+    return [] unless params[:genres]
+    params[:genres].map{|id| Genre.find(id)}
   end
 
   def load_author

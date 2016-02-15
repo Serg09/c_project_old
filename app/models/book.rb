@@ -17,6 +17,9 @@ class Book < ActiveRecord::Base
   include Approvable
 
   belongs_to :author
+  has_and_belongs_to_many :genres
+
+  accepts_nested_attributes_for :genres
 
   before_save :process_cover_image_file
 

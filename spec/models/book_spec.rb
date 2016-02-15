@@ -83,4 +83,14 @@ RSpec.describe Book, type: :model do
       expect(book.cover_image_id).not_to be_nil
     end
   end
+
+  describe '#genres' do
+    let!(:g1) { FactoryGirl.create(:genre) }
+    let!(:g2) { FactoryGirl.create(:genre) }
+
+    it 'is a list of genres to which the book belongs' do
+      book = Book.new attributes
+      expect(book).to have(0).genres
+    end
+  end
 end

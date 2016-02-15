@@ -2,7 +2,5 @@
   New book
 
 .container.container-default
-  .row
-    .col-md-6
-      =form_for([@author, @book]) do |f|
-        =render 'form_fields', f: f
+  =form_for([@author, @book]) do |f|
+    =render 'form_fields', f: f

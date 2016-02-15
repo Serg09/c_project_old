@@ -25,6 +25,9 @@ RSpec.describe BooksController, type: :controller do
     end
 
     describe 'post :create' do
+      let!(:genre1) { FactoryGirl.create(:genre) }
+      let!(:genre2) { FactoryGirl.create(:genre) }
+
       it 'redirects to the book page' do
         post :create, author_id: author, book: book_attributes
         expect(response).to redirect_to book_path(Book.last)
@@ -34,6 +37,12 @@ RSpec.describe BooksController, type: :controller do
         expect do
           post :create, author_id: author, book: book_attributes
         end.to change(Book, :count).by(1)
+      end
+
+      it 'links the book to the specified genres' do
+        post :create, author_id: author, book: book_attributes, genres: [1]
+        book = Book.last
+        expect(book).to have(1).genre
       end
     end
 

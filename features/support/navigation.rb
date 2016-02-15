@@ -19,6 +19,7 @@ module Navigation
     when "the main content" then "#main_content"
     when "the page title" then "#page-title"
     when "the notification area" then "#notifications"
+    when "the genre list" then '.genre-list'
     when /the (.*) table/ then  "##{description_to_id($1)}-table"
     else raise "Unrecognized locator identifier \"#{identifier}\""
     end

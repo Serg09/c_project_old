@@ -8,6 +8,10 @@
         .alert.alert-info
           This book is under review. We will review it as soon as we can.
       %h1= @book.title
+      -if @book.genres.any?
+        %ul.tag-list
+          -@book.genres.each do |genre|
+            %li=genre.name
   .row
     -if @book.cover_image_id
       .col-md-5
