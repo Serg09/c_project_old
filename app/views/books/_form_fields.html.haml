@@ -1,0 +1,19 @@
+.form-group{ :class => form_group_class(@book, :title) }
+  =f.label :title, class: 'control-label'
+  =f.text_field :title, class: 'form-control', autofocus: true
+  =help_blocks @book, :title
+.form-group{ :class => form_group_class(@book, :short_description) }
+  =f.label :short_description, class: 'control-label'
+  =f.text_area :short_description, class: 'form-control', rows: 5
+  =help_blocks @book, :short_description
+.form-group{ :class => form_group_class(@book, :long_description) }
+  =f.label :long_description, class: 'control-label'
+  =f.text_area :long_description, class: 'form-control', rows: 10
+  =help_blocks @book, :long_description
+.form-group
+  =f.label :cover_image_file, class: 'control-label'
+  =f.file_field :cover_image_file, class: 'form-control'
+  =help_blocks @book, :cover_image_file
+.form-group
+  =f.submit 'Submit', class: 'btn btn-primary', title: 'Click here to submit the book.'
+  =link_to 'Back', administrator_signed_in? ? books_path : author_books_path(@author), class: 'btn btn-default', title: 'Click here to return to the list of books.'

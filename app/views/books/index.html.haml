@@ -1,2 +1,16 @@
-%h1 Books#index
-%p Find me in app/views/books/index.html.haml
+=content_for :page_title do
+  My books
+
+.container.container-default
+  .row
+    .col-md-6
+      %table.table.table-striped
+        %tr
+          %th Title
+          %th &nbsp;
+        -@books.each do |book|
+          %tr
+            %td= book.title
+            %td= link_to 'Edit', edit_book_path(book)
+      -if @author
+        =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'

@@ -1,2 +1,16 @@
-%h1 Books#show
-%p Find me in app/views/books/show.html.haml
+=content_for :page_title do
+  Book
+
+.container.container-default
+  .row
+    .col-md-12
+      -if can?(:update, @book) && @book.pending?
+        .alert.alert-info
+          This book is under review. We will review it as soon as we can.
+      %h1= @book.title
+  .row
+    -if @book.cover_image_id
+      .col-md-5
+        %img{ src: image_path(@book.cover_image_id), class: 'img-rounded img-responsize' }
+    .col-md-5
+      =mark_up @book.short_description

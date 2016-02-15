@@ -4,6 +4,10 @@ class BooksController < ApplicationController
   respond_to :html
 
   def index
+    @author = Author.find(params[:author_id]) if params[:author_id].present?
+    @books = administrator_signed_in? ?
+      Book.all :
+      @author.try(:books)
   end
 
   def show
@@ -18,7 +22,7 @@ class BooksController < ApplicationController
   def create
     @book = @author.books.new(book_params)
     authorize! :create, @book
-    flash[:notice] = 'The book was created successfully.' if @book.save
+    flash[:notice] = 'Your book has been submitted successfully.' if @book.save
     respond_with @book
   end
 

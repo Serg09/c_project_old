@@ -1,2 +1,8 @@
-%h1 Books#new
-%p Find me in app/views/books/new.html.haml
+=content_for :page_title do
+  New book
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for([@author, @book]) do |f|
+        =render 'form_fields', f: f
