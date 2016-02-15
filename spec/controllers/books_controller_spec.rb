@@ -161,95 +161,195 @@ RSpec.describe BooksController, type: :controller do
         end
       end
 
+      # does not own the book
       context 'that is approved' do
         describe 'get :show' do
-          it 'is successful'
+          it 'is successful' do
+            get :show, id: approved_book
+            expect(response).to have_http_status :success
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: approved_book
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the book'
+          it 'redirects to the home page' do
+            patch :update, id: approved_book, book: book_attributes
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :update, id: approved_book, book: book_attributes.merge(title: 'New title')
+              approved_book.reload
+            end.not_to change(approved_book, :title)
+          end
         end
       end
 
+      # does not own the book
       context 'that is rejected' do
         describe 'get :show' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :show, id: rejected_book
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: rejected_book
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the book'
+          it 'redirects to the home page' do
+            patch :update, id: rejected_book, book: book_attributes
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
+              rejected_book.reload
+            end.not_to change(rejected_book, :title)
+          end
         end
       end
     end
   end
 
   context 'for an authenticated administrator' do
+    let (:admin) { FactoryGirl.create(:administrator) }
+    before(:each) { sign_in admin }
+
     describe 'get :index' do
-      it 'is successful'
+      it 'is successful' do
+        get :index
+        expect(response).to have_http_status :success
+
+        get :index, author: author
+        expect(response).to have_http_status :success
+      end
     end
 
     describe 'get :new' do
-      it 'redirects to the home page'
+      it 'redirects to the home page' do
+        get :new, author_id: author
+        expect(response).to redirect_to admin_root_path
+      end
     end
 
     describe 'post :create' do
-      it 'redirects to the home page'
-      it 'does not create a book record'
+      it 'redirects to the home page' do
+        post :create, author_id: author, book: book_attributes
+        expect(response).to redirect_to admin_root_path
+      end
+
+      it 'does not create a book record' do
+        expect do
+          post :create, author_id: author, book: book_attributes
+        end.not_to change(Book, :count)
+      end
     end
 
+    # for an administrator
     describe 'get :show' do
       context 'for book pending approval' do
         describe 'get :show' do
-          it 'is successful'
+          it 'is successful' do
+            get :show, id: pending_book
+            expect(response).to have_http_status :success
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: pending_book
+            expect(response).to redirect_to admin_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the book'
+          it 'redirects to the home page' do
+            patch :update, id: pending_book, book: book_attributes
+            expect(response).to redirect_to admin_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :update, id: pending_book, book: book_attributes.merge(title: 'New title')
+              pending_book.reload
+            end.not_to change(pending_book, :title)
+          end
         end
       end
 
+      # for an administrator
       context 'for a book that is approved' do
         describe 'get :show' do
-          it 'is successful'
+          it 'is successful' do
+            get :show, id: approved_book
+            expect(response).to have_http_status :success
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: approved_book
+            expect(response).to redirect_to admin_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the book'
+          it 'redirects to the home page' do
+            patch :update, id: approved_book, book: book_attributes
+            expect(response).to redirect_to admin_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :update, id: approved_book, book: book_attributes.merge(title: 'New title')
+              approved_book.reload
+            end.not_to change(approved_book, :title)
+          end
         end
       end
 
+      # for an administrator
       context 'for a book that is rejected' do
         describe 'get :show' do
-          it 'is successful'
+          it 'is successful' do
+            get :show, id: rejected_book
+            expect(response).to have_http_status :success
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: rejected_book
+            expect(response).to redirect_to admin_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the book'
+          it 'redirects to the home page' do
+            patch :update, id: rejected_book, book: book_attributes
+            expect(response).to redirect_to admin_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
+              rejected_book.reload
+            end.not_to change(rejected_book, :title)
+          end
         end
       end
     end
@@ -263,41 +363,114 @@ RSpec.describe BooksController, type: :controller do
       end
     end
 
-    describe "get #show" do
-      it "is successful" do
-        get :show
-        expect(response).to have_http_status(:success)
-      end
-    end
-
     describe "get #new" do
-      it "redirects to the author sign in page" do
-        get :new
-        expect(response).to redirect_to new_author_session_path
+      it "redirects to the home page" do
+        get :new, author_id: author
+        expect(response).to redirect_to root_path
       end
     end
 
     describe "post #create" do
-      it "redirects to the author sign in page" do
-        post :create
-        expect(response).to redirect_to new_author_session_path
+      it "redirects to the home page" do
+        post :create, author_id: author, book: book_attributes
+        expect(response).to redirect_to root_path
       end
-      it 'does not create a book record'
+
+      it 'does not create a book record' do
+        expect do
+          post :create, author_id: author, book: book_attributes
+        end.not_to change(Book, :count)
+      end
     end
 
-    describe "get #edit" do
-      it "redirects to the author sign in page" do
-        get :edit
-        expect(response).to redirect_to new_author_session_path
+    describe 'for a book that is pending approval' do
+      describe "get #show" do
+        it "redirects to the sign in page" do
+          get :show, id: pending_book
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      describe "get #edit" do
+        it "redirects to the home page" do
+          get :edit, id: pending_book
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      describe "patch #update" do
+        it "redirects to the home page" do
+          patch :update, id: pending_book, book: book_attributes
+          expect(response).to redirect_to root_path
+        end
+
+        it 'does not update the book record' do
+          expect do
+            patch :update, id: pending_book, book: book_attributes.merge(title: 'New title')
+            pending_book.reload
+          end.not_to change(pending_book, :title)
+        end
       end
     end
 
-    describe "patch #update" do
-      it "redirects to the author sign in page" do
-        patch :update
-        expect(response).to redirect_to new_author_session_path
+    describe 'for a book that is approved' do
+      describe "get #show" do
+        it "is successful" do
+          get :show, id: approved_book
+          expect(response).to have_http_status :success
+        end
       end
-      it 'does not update the book record'
+
+      describe "get #edit" do
+        it "redirects to the home page" do
+          get :edit, id: approved_book
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      describe "patch #update" do
+        it "redirects to the home page" do
+          patch :update, id: approved_book, book: book_attributes
+          expect(response).to redirect_to root_path
+        end
+
+        it 'does not update the book record' do
+          expect do
+            patch :update, id: approved_book, book: book_attributes.merge(title: 'New title')
+            approved_book.reload
+          end.not_to change(approved_book, :title)
+        end
+      end
+    end
+
+    describe 'for a book that is rejected' do
+      describe "get #show" do
+        it "redirects to the home page" do
+          get :show, id: rejected_book
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      describe "get #edit" do
+        it "redirects to the home page" do
+          get :edit, id: rejected_book
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      describe "patch #update" do
+        it "redirects to the home page" do
+          patch :update, id: rejected_book, book: book_attributes
+          expect(response).to redirect_to root_path
+        end
+
+        it 'does not update the book record' do
+          expect do
+            patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
+            rejected_book.reload
+          end.not_to change(rejected_book, :title)
+        end
+      end
     end
   end
 end

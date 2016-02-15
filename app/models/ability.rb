@@ -8,8 +8,10 @@ class Ability
     can :show, Image do |image|
       image.bios.approved.any? || (image.author_id == author.id && image.bios.pending.any?)
     end
-    can :show, Book, author_id: author.id
-    can :update, Book do |book|
+    can :show, Book do |book|
+      book.approved? || book.author_id == author.id
+    end
+    can [:update, :create], Book do |book|
       author.id == book.author_id && book.pending?
     end
   end

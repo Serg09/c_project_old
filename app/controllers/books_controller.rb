@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_filter :load_book, only: [:show, :edit, :update]
-  before_filter :load_author, only: [:create]
+  before_filter :load_author, only: [:new, :create]
   respond_to :html
 
   def index
@@ -11,10 +11,13 @@ class BooksController < ApplicationController
   end
 
   def new
+    @book = Book.new author_id: @author.id
+    authorize! :create, @book
   end
 
   def create
     @book = @author.books.new(book_params)
+    authorize! :create, @book
     flash[:notice] = 'The book was created successfully.' if @book.save
     respond_with @book
   end

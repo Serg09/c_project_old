@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
-  resources :books, only: [:show, :edit, :update, :destroy]
+  resources :books, only: [:index, :show, :edit, :update]
   resources :images, only: :show
 
   get 'pages/welcome'
