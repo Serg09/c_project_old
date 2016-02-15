@@ -12,7 +12,7 @@ end
 
 When /^I check "([^"]+)"(?: and "([^"]+)")?$/ do |locator1, locator2|
   check locator1
-  check locator2
+  check locator2 if locator2
 end
 
 When /^I click "([^"]+)"$/ do |locator|
