@@ -1,4 +1,3 @@
-@wip
 Feature: Add a book
   As an author
   In order to acquire readers for my book
