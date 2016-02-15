@@ -5,25 +5,27 @@ module ApplicationHelper
   }
 
   def author_path?(status)
-    return false unless request_uri.path.starts_with? '/author'
-    (request_query[:status] || Author.PENDING) == status
+    matches_path? '/author', {status: status}, {status: Author.PENDING}
   end
 
   def author_nav_item_caption
-    pending_count = Author.pending.count
-    return 'Authors' if pending_count == 0
-    "Authors <span class=\"badge\">#{pending_count}</span>".html_safe
+    nav_item_caption 'Authors', Author.pending.count
   end
 
   def bio_path?(status)
-    return false unless request_uri.path.starts_with? '/bio'
-    (request_query[:status] || Bio.PENDING) == status
+    matches_path? '/author', {status: status}, {status: Author.PENDING}
   end
 
   def bio_nav_item_caption
-    pending_count = Bio.pending.count
-    return 'Bios' if pending_count == 0
-    "Bios <span class=\"badge\">#{pending_count}</span>".html_safe
+    nav_item_caption 'Bios', Bio.pending.count
+  end
+
+  def book_path?(status)
+    matches_path? '/book', {status: status}, {status: Book.PENDING}
+  end
+
+  def book_nav_item_caption
+    nav_item_caption 'Books', Book.pending.count
   end
 
   def flash_key_to_alert_class(flash_key)
@@ -98,5 +100,17 @@ module ApplicationHelper
 
   def request_uri
     @request_uri ||= URI.parse(request.original_url)
+  end
+
+  private
+
+  def matches_path?(path_root, query, defaults)
+    return false unless request_uri.path.starts_with? path_root
+    query.all?{|k,v| (request_query[k] || defaults[k]) == v}
+  end
+
+  def nav_item_caption(caption, pending_count)
+    return caption if pending_count == 0
+    "#{caption} <span class=\"badge\">#{pending_count}</span>".html_safe
   end
 end
