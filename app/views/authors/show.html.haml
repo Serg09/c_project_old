@@ -32,8 +32,8 @@
               &#x2715;
     -if administrator_signed_in?
       .col-md-2.btn-stack
-        -unless @author.accepted?
-          =button_to 'Accept', accept_author_path(@author), method: :patch, class: 'btn btn-success btn-block', title: "Click here to approve this author's account."
+        -unless @author.approved?
+          =button_to 'Approve', accept_author_path(@author), method: :patch, class: 'btn btn-success btn-block', title: "Click here to approve this author's account."
         -unless @author.rejected?
           =button_to 'Reject', reject_author_path(@author), method: :patch, class: 'btn btn-danger btn-block', title: "Click here to reject this author's account."
   -if can? :index, Author
