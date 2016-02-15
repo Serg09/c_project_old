@@ -1,0 +1,11 @@
+Book submitted
+
+=@book.author.full_name
+has submitted a book, #{h @book.title}, which now needs to be reviewed.
+
+There are currently
+=pluralize(Book.pending.count, 'book')
+waiting to be approved.
+
+Follow the link below to review them
+=books_url

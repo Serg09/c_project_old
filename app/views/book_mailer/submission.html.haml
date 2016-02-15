@@ -1,0 +1,14 @@
+%h1 Book submitted
+
+%p
+  =@book.author.full_name
+  has submitted a book, #{h =@book.title}, which now needs to be reviewed.
+
+%p
+  There are currently
+  =pluralize(Book.pending.count, 'book')
+  waiting to be approved.
+
+%p
+  =link_to 'Click here', books_url
+  to review them.

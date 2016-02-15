@@ -22,7 +22,10 @@ class BooksController < ApplicationController
   def create
     @book = @author.books.new(book_params)
     authorize! :create, @book
-    flash[:notice] = 'Your book has been submitted successfully.' if @book.save
+    if @book.save
+      flash[:notice] = 'Your book has been submitted successfully.'
+      BookMailer.submission(@book).deliver_now
+    end
     respond_with @book
   end
 
