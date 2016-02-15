@@ -7,7 +7,7 @@
       -if can?(:update, @book) && @book.pending?
         .alert.alert-info
           This book is under review. We will review it as soon as we can.
-      %h1= @book.title
+      %h1#book-title= @book.title
       -if @book.genres.any?
         %ul.tag-list
           -@book.genres.each do |genre|
@@ -18,3 +18,6 @@
         %img{ src: image_path(@book.cover_image_id), class: 'img-rounded img-responsive' }
     .col-md-5
       =mark_up @book.long_description || @book.short_description
+    -if administrator_signed_in?
+      .col-md-2.btn-stack
+        =render 'shared/approval_buttons', resource: @book

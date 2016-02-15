@@ -46,15 +46,15 @@ RSpec.describe AuthorsController, type: :controller do
         end
       end
 
-      describe 'patch :accept' do
+      describe 'patch :approve' do
         it 'redirects to the author root page' do
-          patch :accept, id: author
+          patch :approve, id: author
           expect(response).to redirect_to author_root_path
         end
 
         it 'does not change the status of the author' do
           expect do
-            patch :accept, id: author
+            patch :approve, id: author
             author.reload
           end.not_to change(author, :status)
         end
@@ -107,15 +107,15 @@ RSpec.describe AuthorsController, type: :controller do
         end
       end
 
-      describe 'patch :accept' do
+      describe 'patch :approve' do
         it 'redirects to the author root page' do
-          patch :accept, id: author
+          patch :approve, id: author
           expect(response).to redirect_to author_root_path
         end
 
         it 'does not change the status of the author' do
           expect do
-            patch :accept, id: author
+            patch :approve, id: author
             author.reload
           end.not_to change(author, :status)
         end
@@ -155,15 +155,15 @@ RSpec.describe AuthorsController, type: :controller do
       end
     end
 
-    describe 'patch :accept' do
+    describe 'patch :approve' do
       it 'redirects to the authors index page' do
-        patch :accept, id: author
+        patch :approve, id: author
         expect(response).to redirect_to authors_path
       end
 
-      it 'changes the status of the author to "accepted"' do
+      it 'changes the status of the author to "approveed"' do
         expect do
-          patch :accept, id: author
+          patch :approve, id: author
           author.reload
         end.to change(author, :status).to Author.APPROVED
       end
@@ -213,15 +213,15 @@ RSpec.describe AuthorsController, type: :controller do
       end
     end
 
-    describe 'patch :accept' do
+    describe 'patch :approve' do
       it 'redirects to the sign in page' do
-        patch :accept, id: author
+        patch :approve, id: author
         expect(response).to redirect_to new_author_session_path
       end
 
       it 'does not change the status of the author' do
         expect do
-          patch :accept, id: author
+          patch :approve, id: author
           author.reload
         end.not_to change(author, :status)
       end

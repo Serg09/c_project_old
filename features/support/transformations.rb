@@ -9,6 +9,6 @@ end
 
 AUTHOR = Transform /author (.+@.+)/ do |email|
   author = Author.find_by(email: email)
-  expect(author).not_to be_nil
+  expect(author).not_to be_nil, "Author with email \"#{email}\" not found"
   author
 end

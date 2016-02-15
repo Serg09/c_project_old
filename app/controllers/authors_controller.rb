@@ -1,6 +1,6 @@
 class AuthorsController < ApplicationController
-  before_filter :authenticate_user!, only: [:show, :edit, :update, :accept, :reject]
-  before_filter :load_author, only: [:show, :edit, :update, :accept, :reject]
+  before_filter :authenticate_user!, only: [:show, :edit, :update, :approve, :reject]
+  before_filter :load_author, only: [:show, :edit, :update, :approve, :reject]
 
   respond_to :html
 
@@ -34,8 +34,8 @@ class AuthorsController < ApplicationController
     respond_with @author
   end
 
-  def accept
-    authorize! :accept, @author
+  def approve
+    authorize! :approve, @author
     @author.status = Author.APPROVED
     flash[:notice] = 'The author has been approved successfully.' if @author.save
     redirect_to authors_path

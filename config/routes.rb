@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     resources :bios, only: [:new, :index, :create]
     resources :books, only: [:new, :index, :create]
     member do
-      patch :accept
+      patch :approve
       patch :reject
     end
   end
@@ -27,7 +27,12 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
-  resources :books, only: [:index, :show, :edit, :update]
+  resources :books, only: [:index, :show, :edit, :update] do
+    member do
+      patch :approve
+      patch :reject
+    end
+  end
   resources :images, only: :show
 
   get 'pages/welcome'

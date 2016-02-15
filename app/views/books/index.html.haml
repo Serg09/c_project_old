@@ -1,16 +1,27 @@
 =content_for :page_title do
-  My books
+  -if author_signed_in? && current_author.id == params[:author_id].to_i
+    My books
+  -else
+    Books
 
 .container.container-default
   .row
     .col-md-6
-      %table.table.table-striped
+      %table#books-table.table.table-striped
         %tr
           %th Title
-          %th &nbsp;
+          -if @books.any?{|b| can? :edit, b}
+            %th &nbsp;
+          -if administrator_signed_in?
+            %th Author
+            %th.text-right Date submitted
         -@books.each do |book|
           %tr
             %td= link_to book.title, book_path(book)
-            %td= link_to 'Edit', edit_book_path(book)
+            -if can? :edit, book
+              %td= link_to 'Edit', edit_book_path(book)
+            -if administrator_signed_in?
+              %td= book.author.full_name
+              %td.text-right= format_date(book.created_at)
       -if @author
         =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'

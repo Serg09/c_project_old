@@ -56,9 +56,9 @@ class Image < ActiveRecord::Base
   def can_be_viewed_by?(author)
     collections = [bios, books]
     if author_id == author.id
-      collections.select{|c| c.pending.any?}
+      collections.any?{|c| c.pending.any?}
     else
-      collections.select{|c| c.approved.any?}
+      collections.any?{|c| c.approved.any?}
     end
   end
 end
