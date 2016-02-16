@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_filter :load_book, only: [:show, :edit, :update]
+  before_filter :load_book, only: [:show, :edit, :update, :approve, :reject]
   before_filter :load_author, only: [:new, :create]
   respond_to :html
 
@@ -39,6 +39,26 @@ class BooksController < ApplicationController
     @book.update_attributes book_params
     flash[:notice] = 'The book was updated successfully.' if @book.save
     respond_with @book
+  end
+
+  def approve
+    authorize! :approve, @book
+    @book.status = Book.APPROVED
+    if @book.save
+      redirect_to books_path, notice: 'The book has been approved successfully.'
+    else
+      render :show
+    end
+  end
+
+  def reject
+    authorize! :reject, @book
+    @book.status = Book.REJECTED
+    if @book.save
+      redirect_to books_path, notice: 'The book has been rejected successfully.'
+    else
+      render :show
+    end
   end
 
   private

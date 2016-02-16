@@ -75,7 +75,36 @@ RSpec.describe BooksController, type: :controller do
             end.to change(pending_book, :title).to('The new title')
           end
         end
+
+        describe 'patch :approve' do
+          it 'redirects to the home page' do
+            patch :approve, id: pending_book
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :approve, id: pending_book
+              pending_book.reload
+            end.not_to change(pending_book, :status)
+          end
+        end
+
+        describe 'patch :reject' do
+          it 'redirects to the home page' do
+            patch :reject, id: pending_book
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :reject, id: pending_book
+              pending_book.reload
+            end.not_to change(pending_book, :status)
+          end
+        end
       end
+
       context 'that is approved' do
         describe 'get :show' do
           it 'is successful' do
@@ -166,6 +195,34 @@ RSpec.describe BooksController, type: :controller do
               patch :update, id: pending_book, book: book_attributes.merge(title: 'The new title')
               pending_book.reload
             end.not_to change(pending_book, :title)
+          end
+        end
+
+        describe 'patch :approve' do
+          it 'redirects to the home page' do
+            patch :approve, id: pending_book
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :approve, id: pending_book
+              pending_book.reload
+            end.not_to change(pending_book, :status)
+          end
+        end
+
+        describe 'patch :reject' do
+          it 'redirects to the home page' do
+            patch :reject, id: pending_book
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book' do
+            expect do
+              patch :reject, id: pending_book
+              pending_book.reload
+            end.not_to change(pending_book, :status)
           end
         end
       end
@@ -362,6 +419,34 @@ RSpec.describe BooksController, type: :controller do
         end
       end
     end
+
+    describe 'patch :approve' do
+      it 'redirects to the book index page' do
+        patch :approve, id: pending_book
+        expect(response).to redirect_to books_path
+      end
+
+      it 'changes the status of the book to "approved"' do
+        expect do
+          patch :approve, id: pending_book
+          pending_book.reload
+        end.to change(pending_book, :status).to Book.APPROVED
+      end
+    end
+
+    describe 'patch :reject' do
+      it 'redirects to the book index page' do
+        patch :reject, id: pending_book
+        expect(response).to redirect_to books_path
+      end
+
+      it 'changes the status of the book to "rejected"' do
+        expect do
+          patch :reject, id: pending_book
+          pending_book.reload
+        end.to change(pending_book, :status).to Book.REJECTED
+      end
+    end
   end
 
   context 'for an unauthenticated user' do
@@ -418,6 +503,34 @@ RSpec.describe BooksController, type: :controller do
             patch :update, id: pending_book, book: book_attributes.merge(title: 'New title')
             pending_book.reload
           end.not_to change(pending_book, :title)
+        end
+      end
+
+      describe 'patch :approve' do
+        it 'redirects to the home page' do
+          patch :approve, id: pending_book
+          expect(response).to redirect_to root_path
+        end
+
+        it 'does not update the book' do
+          expect do
+            patch :approve, id: pending_book
+            pending_book.reload
+          end.not_to change(pending_book, :status)
+        end
+      end
+
+      describe 'patch :reject' do
+        it 'redirects to the home page' do
+          patch :reject, id: pending_book
+          expect(response).to redirect_to root_path
+        end
+
+        it 'does not update the book' do
+          expect do
+            patch :reject, id: pending_book
+            pending_book.reload
+          end.not_to change(pending_book, :status)
         end
       end
     end
