@@ -45,6 +45,7 @@ class BooksController < ApplicationController
     authorize! :approve, @book
     @book.status = Book.APPROVED
     if @book.save
+      BookMailer.approval(@book).deliver_now
       redirect_to books_path, notice: 'The book has been approved successfully.'
     else
       render :show
