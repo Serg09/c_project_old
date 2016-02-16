@@ -12,4 +12,10 @@ class BookMailer < ApplicationMailer
     @book = book
     mail to: book.author.email, subject: 'Your book has been approved!'
   end
+
+  def rejection(book)
+    inline_images
+    @book = book
+    mail to: book.author.email, subject: 'Your book has been rejected'
+  end
 end

@@ -56,6 +56,7 @@ class BooksController < ApplicationController
     authorize! :reject, @book
     @book.status = Book.REJECTED
     if @book.save
+      BookMailer.rejection(@book).deliver_now
       redirect_to books_path, notice: 'The book has been rejected successfully.'
     else
       render :show
