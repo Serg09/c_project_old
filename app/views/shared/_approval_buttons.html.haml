@@ -1,4 +1,4 @@
 -unless resource.approved?
-  =button_to 'Approve', send("approve_admin_#{resource.class.name.downcase}_path", resource), method: :patch, class: 'btn btn-success btn-block', title: "Click here to approve the #{resource.class.name.downcase}."
+  =button_to 'Approve', send(approve_path(resource)), method: :patch, class: 'btn btn-success btn-block', title: "Click here to approve the #{resource.class.name.downcase}."
 -unless resource.rejected?
-  =button_to 'Reject', send("reject_admin_#{resource.class.name.downcase}_path", resource), method: :patch, class: 'btn btn-danger btn-block', title: "Click here to reject the #{resource.class.name.downcase}."
+  =button_to 'Reject', send(reject_path(resource)), method: :patch, class: 'btn btn-danger btn-block', title: "Click here to reject the #{resource.class.name.downcase}."
