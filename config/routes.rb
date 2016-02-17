@@ -8,11 +8,7 @@ Rails.application.routes.draw do
     confirmations: 'authors/confirmations'
   }
 
-  resources :inquiries, only: [:index, :new, :create, :show] do
-    member do
-      patch :archive
-    end
-  end
+  resources :inquiries, only: [:new, :create]
   resources :authors, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
     resources :books, only: [:new, :index, :create]
@@ -34,6 +30,14 @@ Rails.application.routes.draw do
     end
   end
   resources :images, only: :show
+
+  namespace :admin do
+    resources :inquiries, only: [:index, :show] do
+      member do
+        patch :archive
+      end
+    end
+  end
 
   get 'pages/welcome'
   get 'pages/package_pricing'

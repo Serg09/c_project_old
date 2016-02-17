@@ -1,7 +1,7 @@
 =content_for :page_title do
   Inquiry
 
-.container.default-container
+.container
   .row
     .col-md-6
       %dl
@@ -15,4 +15,4 @@
       .well
         =@inquiry.body
     .col-md-6
-      =link_to 'Archive', archive_inquiry_path(@inquiry), class: 'btn btn-success', method: :patch
+      =link_to 'Archive', archive_admin_inquiry_path(@inquiry), class: 'btn btn-success', method: :patch

@@ -70,7 +70,7 @@ module ApplicationHelper
   end
 
   def inquiry_path?(archived)
-    return false unless request_uri.path.starts_with? '/inquiries'
+    return false unless request_uri.path.starts_with? '/admin/inquiries'
     archived == html_true?(request_query[:archived])
   end
 

@@ -24,11 +24,11 @@ SimpleNavigation::Configuration.run do |navigation|
       books.item :approved, 'Approved', books_path(status: :approved), highlights_on: -> { book_path?(Book.APPROVED) }
       books.item :rejected, 'Rejected', books_path(status: :rejected), highlights_on: -> { book_path?(Book.REJECTED) }
     end
-    primary.item :inquiries, inquiry_nav_item_caption, inquiries_path, if: ->{administrator_signed_in?} do |inquiries|
+    primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path, if: ->{administrator_signed_in?} do |inquiries|
       inquiries.auto_highlight = false
       inquiries.dom_class = 'nav nav-tabs'
-      inquiries.item :active, 'Active', inquiries_path, highlights_on: -> { inquiry_path?(false) }
-      inquiries.item :archived, 'Archived', inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
+      inquiries.item :active, 'Active', admin_inquiries_path, highlights_on: -> { inquiry_path?(false) }
+      inquiries.item :archived, 'Archived', admin_inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
     end
     primary.item :administrators, 'Administrators', '/', if: ->{administrator_signed_in?}
     primary.item :sign_out, 'Sign out', destroy_administrator_session_path, if: -> { administrator_signed_in? }, method: :delete
