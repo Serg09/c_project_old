@@ -1,0 +1,15 @@
+=content_for :page_title do
+  Bios
+
+.container.container-default
+  .row
+    .col-md-6
+      =render_navigation context: :admin, level: 2
+      %table#bios-table.table.table-striped
+        %tr
+          %th Author
+          %th Date submitted
+        -@bios.each do |bio|
+          %tr
+            %td= link_to bio.author.full_name, bio_path(bio)
+            %td= format_date(bio.created_at)

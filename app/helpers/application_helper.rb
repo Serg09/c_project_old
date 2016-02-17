@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def bio_path?(status)
-    matches_path? '/author', {status: status}, {status: Author.PENDING}
+    matches_path? '/admin/bio', {status: status}, {status: Author.PENDING}
   end
 
   def bio_nav_item_caption

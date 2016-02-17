@@ -17,12 +17,7 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
-  resources :bios, only: [:show, :edit, :update, :index, :new, :create] do
-    member do
-      patch :approve
-      patch :reject
-    end
-  end
+  resources :bios, only: [:show, :edit, :update, :index, :create, :new]
   resources :books, only: [:index, :show, :edit, :update] do
     member do
       patch :approve
@@ -35,6 +30,12 @@ Rails.application.routes.draw do
     resources :inquiries, only: [:index, :show] do
       member do
         patch :archive
+      end
+    end
+    resources :bios, only: [:index, :show] do
+      member do
+        patch :approve
+        patch :reject
       end
     end
   end

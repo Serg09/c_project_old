@@ -40,11 +40,19 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_user!
+
+    Rails.logger.warn 'Remove authenticate_user! method and use authenticate_author!'
+
     return if administrator_signed_in?
     authenticate_author!
   end
 
   def not_found!
     raise ActionController::RoutingError.new('Not Found')
+  end
+
+  # Redirects to the home page so as not to give away the admin sign in path
+  def safe_authenticate_administrator!
+    redirect_to root_path unless administrator_signed_in?
   end
 end

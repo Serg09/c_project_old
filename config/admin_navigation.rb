@@ -10,12 +10,12 @@ SimpleNavigation::Configuration.run do |navigation|
       authors.item :accepted, 'Accepted', authors_path(status: :accepted), highlights_on: -> { author_path?(Author.APPROVED) }
       authors.item :rejected, 'Rejected', authors_path(status: :rejected), highlights_on: -> { author_path?(Author.REJECTED) }
     end
-    primary.item :bios, bio_nav_item_caption, bios_path, if: ->{administrator_signed_in?} do |bios|
+    primary.item :bios, bio_nav_item_caption, admin_bios_path, if: ->{administrator_signed_in?} do |bios|
       bios.auto_highlight = false
       bios.dom_class = 'nav nav-tabs'
-      bios.item :pending, 'Pending', bios_path, highlights_on: -> { bio_path?(Bio.PENDING) }
-      bios.item :approved, 'Approved', bios_path(status: :approved), highlights_on: -> { bio_path?(Bio.APPROVED) }
-      bios.item :rejected, 'Rejected', bios_path(status: :rejected), highlights_on: -> { bio_path?(Bio.REJECTED) }
+      bios.item :pending, 'Pending', admin_bios_path, highlights_on: -> { bio_path?(Bio.PENDING) }
+      bios.item :approved, 'Approved', admin_bios_path(status: :approved), highlights_on: -> { bio_path?(Bio.APPROVED) }
+      bios.item :rejected, 'Rejected', admin_bios_path(status: :rejected), highlights_on: -> { bio_path?(Bio.REJECTED) }
     end
     primary.item :books, book_nav_item_caption, books_path, if: ->{administrator_signed_in?} do |books|
       books.auto_highlight = false
