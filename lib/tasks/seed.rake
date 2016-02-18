@@ -24,6 +24,26 @@ namespace :seed do
     end
   end
 
+  desc 'Create a certain number of bios (with new authors). (COUNT=10)'
+  task bios: :environment do
+    count = (ENV['COUNT'] || 10).to_i
+    logger.info "creating #{count} bios"
+    (0..count).each do
+      i = FactoryGirl.create(:bio)
+      logger.debug "created #{i.inspect}"
+    end
+  end
+
+  desc 'Create a certain number of bios (with new authors). (COUNT=10)'
+  task books: :environment do
+    count = (ENV['COUNT'] || 10).to_i
+    logger.info "creating #{count} books"
+    (0..count).each do
+      i = FactoryGirl.create(:pending_book)
+      logger.debug "created #{i.inspect}"
+    end
+  end
+
   desc 'Create an administrator account'
   task administrator: :environment do
     attributes = {
