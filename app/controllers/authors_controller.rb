@@ -1,26 +1,22 @@
 class AuthorsController < ApplicationController
-  before_filter :authenticate_user!, only: [:show, :edit, :update, :approve, :reject]
-  before_filter :load_author, only: [:show, :edit, :update, :approve, :reject]
+  before_filter :authenticate_user!, only: [:show, :edit, :update]
+  before_filter :load_author, only: [:show, :edit, :update]
 
   respond_to :html
 
   def index
     if author_signed_in?
       redirect_to author_path(current_author)
-      return
-    end
-    authorize! :read, Author
-    @authors = Author.where(status: query_status)
-    respond_with @authors do |format|
-      format.html { render layout: 'admin' }
+    else
+      #TODO Do we need to be able to list authors for unauthenticated users?
+      flash[:warn] = "We were unable to find the information you were looking for. Please check the URL and try again."
+      redirect_to root_path
     end
   end
 
   def show
     authorize! :show, @author
-    respond_with @author do |format|
-      format.html { render layout: administrator_signed_in? ? 'admin' : 'application' }
-    end
+    respond_with @author
   end
 
   def edit
@@ -34,20 +30,6 @@ class AuthorsController < ApplicationController
     respond_with @author
   end
 
-  def approve
-    authorize! :approve, @author
-    @author.status = Author.APPROVED
-    flash[:notice] = 'The author has been approved successfully.' if @author.save
-    redirect_to authors_path
-  end
-
-  def reject
-    authorize! :reject, @author
-    @author.status = Author.REJECTED
-    flash[:notice] = 'The author has been rejected successfully.' if @author.save
-    redirect_to authors_path
-  end
-
   private
 
   def author_params
@@ -56,9 +38,5 @@ class AuthorsController < ApplicationController
 
   def load_author
     @author = params[:id] ? Author.find(params[:id]) : current_author
-  end
-
-  def query_status
-    params[:status] || Author.PENDING
   end
 end

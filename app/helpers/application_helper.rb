@@ -19,7 +19,7 @@ module ApplicationHelper
   end
 
   def author_path?(status)
-    matches_path? '/author', {status: status}, {status: Author.PENDING}
+    matches_path? '/admin/author', {status: status}, {status: Author.PENDING}
   end
 
   def author_nav_item_caption

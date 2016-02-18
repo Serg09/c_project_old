@@ -13,6 +13,6 @@
         -@authors.each do |author|
           %tr
             %td= format_date_time(author.created_at)
-            %td= link_to author.full_name, author_path(author)
+            %td= link_to author.full_name, admin_author_path(author)
             %td= author.email
 
