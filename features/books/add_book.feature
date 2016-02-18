@@ -25,9 +25,9 @@ Feature: Add a book
     When I fill in "Title" with "Green Eggs and Ham"
     And I fill in "Short description" with "Sam I Am does not like green eggs and ham."
     And I fill in "Long description" with "Blah blah blah blah"
-    #And I fill in "Sample" with "Blah blah blah blah blah blah blah"
     And I check "Children's" and "Poetry" within the genre list
     And I select file "book_cover.jpg" for "Cover image"
+    And I select file "sample.pdf" for "Sample"
     And I click "Submit"
 
     Then I should see "Your book has been submitted successfully." within the notification area

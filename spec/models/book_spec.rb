@@ -4,6 +4,7 @@ RSpec.describe Book, type: :model do
   let (:author) { FactoryGirl.create(:author) }
   let (:image) { FactoryGirl.create(:image, author: author) }
   let (:image_file) { Rails.root.join('spec', 'fixtures', 'files', 'author_photo.jpg') }
+  let (:sample_file) { Rails.root.join('spec', 'fixtures', 'files', 'sample.pdf') }
   let (:attributes) do
     {
       author_id: author.id,
@@ -91,6 +92,28 @@ RSpec.describe Book, type: :model do
     it 'is a list of genres to which the book belongs' do
       book = Book.new attributes
       expect(book).to have(0).genres
+    end
+  end
+
+  describe '#sample_file' do
+    it 'creates a new image record in the database' do
+      expect do
+        book = Book.new(attributes.merge(sample_file: sample_file))
+        book.save!
+      end.to change(Image, :count).by(1)
+    end
+
+    it 'creates a new image_binary record in the database' do
+      expect do
+        book = Book.new(attributes.merge(sample_file: sample_file))
+        book.save!
+      end.to change(ImageBinary, :count).by(1)
+    end
+
+    it 'sets the sample_id field for the book record' do
+      book = Book.new(attributes.merge(sample_file: sample_file))
+      book.save!
+      expect(book.sample_id).not_to be_nil
     end
   end
 end
