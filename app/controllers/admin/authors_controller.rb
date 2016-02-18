@@ -6,7 +6,7 @@ class Admin::AuthorsController < ApplicationController
 
   def index
     authorize! :read, Author
-    @authors = Author.where(status: query_status)
+    @authors = Author.where(status: query_status).paginate(page: params[:page])
     respond_with @authors
   end
 

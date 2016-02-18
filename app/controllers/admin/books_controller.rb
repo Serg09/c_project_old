@@ -6,7 +6,7 @@ class Admin::BooksController < ApplicationController
   layout 'admin'
 
   def index
-    @books = books_by_status
+    @books = books_by_status.paginate(page: params[:page])
   end
 
   def show

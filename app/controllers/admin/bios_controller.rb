@@ -6,7 +6,7 @@ class Admin::BiosController < ApplicationController
 
   def index
     authorize! :index, Bio
-    @bios = bios_by_status
+    @bios = bios_by_status.paginate(page: params[:page])
     respond_with @bios
   end
 

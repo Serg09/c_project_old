@@ -13,3 +13,4 @@
           %tr
             %td= link_to bio.author.full_name, bio_path(bio)
             %td= format_date(bio.created_at)
+      =will_paginate @bios, renderer: BootstrapPagination::Rails

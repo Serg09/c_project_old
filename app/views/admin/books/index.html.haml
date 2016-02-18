@@ -18,5 +18,4 @@
             %td= link_to book.title, admin_book_path(book)
             %td= book.author.full_name
             %td.text-right= format_date(book.created_at)
-      -if @author
-        =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'
+      =will_paginate @books, renderer: BootstrapPagination::Rails

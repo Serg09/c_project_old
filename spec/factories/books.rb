@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :book, aliases: [:approved_book] do
-    author
+    association :author, factory: :approved_author
     title { Faker::Book.title }
     short_description { Faker::Hipster.sentence(3) }
-    long_description { Faker::Hipster.paragraph(2) }
+    long_description { Faker::Hipster.paragraphs.join("\n") }
     status 'approved'
 
     factory :pending_book do
