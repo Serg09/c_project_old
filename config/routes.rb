@@ -14,12 +14,7 @@ Rails.application.routes.draw do
     resources :books, only: [:new, :index, :create]
   end
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
-  resources :books, only: [:index, :show, :edit, :update] do
-    member do
-      patch :approve
-      patch :reject
-    end
-  end
+  resources :books, only: [:index, :show, :edit, :update]
   resources :images, only: :show
 
   namespace :admin do
@@ -35,6 +30,12 @@ Rails.application.routes.draw do
       end
     end
     resources :bios, only: [:index, :show] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
+    resources :books, only: [:index, :show] do
       member do
         patch :approve
         patch :reject

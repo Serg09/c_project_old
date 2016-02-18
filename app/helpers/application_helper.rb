@@ -4,18 +4,12 @@ module ApplicationHelper
     'alert' => 'danger'
   }
 
-  # TODO Remove temporary method after moving all admin controllers to the admin namespace
   def approve_path(resource)
-    result = "approve_admin_#{resource.class.name.downcase}_path"
-    result = "approve_#{resource.class.name.downcase}_path" unless respond_to?(result)
-    result
+    "approve_admin_#{resource.class.name.downcase}_path"
   end
 
-  # TODO Remove temporary method after moving all admin controllers to the admin namespace
   def reject_path(resource)
-    result = "reject_admin_#{resource.class.name.downcase}_path"
-    result = "reject_#{resource.class.name.downcase}_path" unless respond_to?(result)
-    result
+    "reject_admin_#{resource.class.name.downcase}_path"
   end
 
   def author_path?(status)
@@ -35,7 +29,7 @@ module ApplicationHelper
   end
 
   def book_path?(status)
-    matches_path? '/book', {status: status}, {status: Book.PENDING}
+    matches_path? '/admin/book', {status: status}, {status: Book.PENDING}
   end
 
   def book_nav_item_caption

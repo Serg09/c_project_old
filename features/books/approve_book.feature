@@ -20,9 +20,9 @@ Feature: Approve a book
       | I Like Books | John Doe |       3/2/2016 |
 
     When I click "I Like Books" within the books table
-    Then I should see "I Like Books" within the book title
+    Then I should see "I Like Books" within the page title
 
-    When I click "Approve" within the main content
+    When I click "Approve" within the admin content
     Then I should see "Books" within the page title
     And I should see "The book has been approved successfully." within the notification area
     And "john@doe.com" should receive an email with subject "Your book has been approved!"

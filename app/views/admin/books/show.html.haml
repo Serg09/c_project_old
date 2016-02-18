@@ -1,0 +1,16 @@
+=content_for :page_title do
+  =@book.title
+
+.container.container-default
+  .row
+    .col-md-5
+      -if @book.cover_image_id
+        %img{ src: image_path(@book.cover_image_id), class: 'img-rounded img-responsive' }
+      -if @book.genres.any?
+        %ul.tag-list
+          -@book.genres.each do |genre|
+            %li=genre.name
+    .col-md-5
+      =mark_up @book.long_description.present? ? @book.long_description : @book.short_description
+    .col-md-2.btn-stack
+      =render 'shared/approval_buttons', resource: @book

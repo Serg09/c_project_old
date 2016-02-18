@@ -5,9 +5,7 @@ class BooksController < ApplicationController
 
   def index
     @author = Author.find(params[:author_id]) if params[:author_id].present?
-    @books = administrator_signed_in? ?
-      Book.all :
-      @author.try(:books)
+    @books = @author.try(:books) || Book.all
   end
 
   def show
@@ -39,28 +37,6 @@ class BooksController < ApplicationController
     @book.update_attributes book_params
     flash[:notice] = 'The book was updated successfully.' if @book.save
     respond_with @book
-  end
-
-  def approve
-    authorize! :approve, @book
-    @book.status = Book.APPROVED
-    if @book.save
-      BookMailer.approval(@book).deliver_now
-      redirect_to books_path, notice: 'The book has been approved successfully.'
-    else
-      render :show
-    end
-  end
-
-  def reject
-    authorize! :reject, @book
-    @book.status = Book.REJECTED
-    if @book.save
-      BookMailer.rejection(@book).deliver_now
-      redirect_to books_path, notice: 'The book has been rejected successfully.'
-    else
-      render :show
-    end
   end
 
   private
