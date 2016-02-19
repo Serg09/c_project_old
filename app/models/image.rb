@@ -55,8 +55,21 @@ class Image < ActiveRecord::Base
   end
 
   def can_be_viewed_by?(author)
-    collections = [bios, cover_of_books, sample_of_books]
-    return true if author_id == author.id && collections.any?{|c| c.pending.any?}
-    collections.any?{|c| c.approved.any?}
+    return true if author_id == author.id && references.any?{|r| r.pending?}
+    references.any?{|r| r.approved?}
+  end
+
+  private
+
+  def reference_collections
+    [bios, cover_of_books, sample_of_books]
+  end
+
+  def references
+    Enumerator::Lazy.new(reference_collections) do |yielder, collection|
+      collection.each do |reference|
+        yielder << reference
+      end
+    end
   end
 end
