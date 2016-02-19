@@ -125,6 +125,15 @@ ul.footer-menu{
   margin-bottom: 1em;
 }
 
+.sample-container {
+  margin: 1em 0;
+  text-align: center;
+}
+.sample-link {
+  font-weight: bold;
+  font-size: 110%;
+}
+
 @font-face {
   font-family: Quicksand;
   src: asset-url('Quicksand-Regular.otf');

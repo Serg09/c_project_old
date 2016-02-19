@@ -42,7 +42,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :short_description, :long_description, :cover_image_file)
+    params.require(:book).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)
   end
 
   def genres_from_params
