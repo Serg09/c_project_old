@@ -33,10 +33,10 @@ RSpec.describe Genre, type: :model do
     end
   end
 
-  describe '#books' do
+  describe '#book_versions' do
     it 'is a list of books having this genre' do
       genre = Genre.new attributes
-      expect(genre).to have(0).books
+      expect(genre).to have(0).book_versions
     end
   end
 end
