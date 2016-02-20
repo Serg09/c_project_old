@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218233457) do
+ActiveRecord::Schema.define(version: 20160220161222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,16 +93,22 @@ ActiveRecord::Schema.define(version: 20160218233457) do
     t.string   "status",     default: "pending", null: false
   end
 
-  create_table "books", force: :cascade do |t|
-    t.integer  "author_id",                                          null: false
+  create_table "book_versions", force: :cascade do |t|
+    t.integer  "book_id",                                            null: false
     t.string   "title",             limit: 255,                      null: false
     t.string   "short_description", limit: 1000,                     null: false
     t.text     "long_description"
     t.integer  "cover_image_id"
+    t.integer  "sample_id"
     t.string   "status",                         default: "pending", null: false
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
-    t.integer  "sample_id"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.integer  "author_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "books", ["author_id"], name: "index_books_on_author_id", using: :btree
