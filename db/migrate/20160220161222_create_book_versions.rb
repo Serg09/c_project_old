@@ -1,5 +1,7 @@
 class CreateBookVersions < ActiveRecord::Migration
   def up
+    # Books
+    # -----
     create_table :book_versions do |t|
       t.integer :book_id, null: false
       t.string :title, null: false, limit: 255
@@ -46,9 +48,33 @@ class CreateBookVersions < ActiveRecord::Migration
       t.remove :sample_id
       t.remove :status
     end
+
+    # Book - Genre links
+    # ------------------
+    records = Book.connection.execute('select book_id, genre_id from books_genres')
+    rename_table :books_genres, :book_versions_genres
+    rename_column :book_versions_genres, :book_id, :book_version_id
+    records.each do |record|
+      book = Book.find(record['book_id'])
+      sql = "update book_versions_genres set book_version_id = #{book.versions.first.id} where book_version_id = #{book.id} and genre_id = #{record['genre_id']}"
+      Book.connection.execute(sql)
+    end
   end
 
   def down
+    # Book - Genre links
+    # ------------------
+    records = Book.connection.execute('select book_version_id, genre_id from book_versions_genres')
+    rename_table :book_versions_genres, :books_genres
+    rename_column :books_genres, :book_version_id, :book_id
+    records.each do |record|
+      book_version = BookVersion.find(record['book_version_id'])
+      sql = "update books_genres set book_id = #{book_version.book_id} where book_id = #{book_version.id} and genre_id = #{record['genre_id']}"
+      Book.connection.execute(sql)
+    end
+
+    # Books
+    # -----
     change_table :books do |t|
       t.string :title, limit: 255
       t.string :short_description, limit: 1000
