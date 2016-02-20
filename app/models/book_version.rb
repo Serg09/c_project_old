@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: book_versions
+#
+#  id                :integer          not null, primary key
+#  book_id           :integer          not null
+#  title             :string(255)      not null
+#  short_description :string(1000)     not null
+#  long_description  :text
+#  cover_image_id    :integer
+#  sample_id         :integer
+#  status            :string           default("pending"), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
 class BookVersion < ActiveRecord::Base
   include Approvable
 
