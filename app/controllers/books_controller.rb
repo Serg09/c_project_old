@@ -35,7 +35,10 @@ class BooksController < ApplicationController
   def update
     authorize! :update, @book
     @book.update_attributes book_params
-    flash[:notice] = 'The book was updated successfully.' if @book.save
+    if @book.save
+      flash[:notice] = 'The book was updated successfully.'
+      BookMailer.edit_submission(@book).deliver_now
+    end
     respond_with @book
   end
 
@@ -62,5 +65,6 @@ class BooksController < ApplicationController
 
   def load_book
     @book = Book.find(params[:id])
+    @author = @book.author
   end
 end
