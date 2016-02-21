@@ -24,7 +24,7 @@ class BookVersion < ActiveRecord::Base
 
   before_save :process_cover_image_file, :process_sample_file
 
-  validates_presence_of :book_id, :title, :short_description
+  validates_presence_of :book, :title, :short_description
   validates :title, length: { maximum: 255 }
   validates :short_description, length: { maximum: 1000 }
 

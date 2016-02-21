@@ -15,8 +15,7 @@ class Admin::BooksController < ApplicationController
 
   def approve
     authorize! :approve, @book
-    @book.status = Book.APPROVED
-    if @book.save
+    if @book.approve
       BookMailer.approval(@book).deliver_now
       redirect_to admin_books_path, notice: 'The book has been approved successfully.'
     else
@@ -26,8 +25,7 @@ class Admin::BooksController < ApplicationController
 
   def reject
     authorize! :reject, @book
-    @book.status = Book.REJECTED
-    if @book.save
+    if @book.reject
       BookMailer.rejection(@book).deliver_now
       redirect_to admin_books_path, notice: 'The book has been rejected successfully.'
     else

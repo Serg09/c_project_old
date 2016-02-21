@@ -46,7 +46,6 @@ class CreateBookVersions < ActiveRecord::Migration
       t.remove :long_description
       t.remove :cover_image_id
       t.remove :sample_id
-      t.remove :status
     end
 
     # Book - Genre links
@@ -81,7 +80,6 @@ class CreateBookVersions < ActiveRecord::Migration
       t.text :long_description
       t.integer :cover_image_id
       t.integer :sample_id
-      t.string :status, null: false, default: 'pending'
     end
 
     sql = <<-SQL

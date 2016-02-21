@@ -18,10 +18,10 @@ RSpec.describe BookVersion, type: :model do
     expect(book_version).to be_valid
   end
 
-  describe '#book_id' do
+  describe '#book' do
     it 'is required' do
       book = BookVersion.new attributes.except(:book_id)
-      expect(book).to have_at_least(1).error_on :book_id
+      expect(book).to have_at_least(1).error_on :book
     end
   end
 
@@ -113,6 +113,12 @@ RSpec.describe BookVersion, type: :model do
       book = BookVersion.new(attributes.merge(sample_file: sample_file))
       book.save!
       expect(book.sample_id).not_to be_nil
+    end
+  end
+
+  describe '::pending' do
+    it 'returns the book versions with a status of "pending"' do
+      expect(BookVersion.pending.count).to eq 0
     end
   end
 end

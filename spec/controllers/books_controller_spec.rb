@@ -5,7 +5,13 @@ RSpec.describe BooksController, type: :controller do
   let (:pending_book) { FactoryGirl.create(:pending_book, author: author) }
   let (:approved_book) { FactoryGirl.create(:approved_book, author: author) }
   let (:rejected_book) { FactoryGirl.create(:rejected_book, author: author) }
-  let (:book_attributes) { FactoryGirl.attributes_for(:book, author: author) }
+  let (:book_attributes) do
+    {
+      title: 'My book about me',
+      short_description: 'This book is about me',
+      long_description: 'This book has lots of information that pretty much about one person: me.'
+    }
+  end
 
   context 'for an authenticated author' do
     before(:each) { sign_in author }

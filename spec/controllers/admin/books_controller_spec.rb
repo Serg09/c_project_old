@@ -64,7 +64,7 @@ RSpec.describe Admin::BooksController, type: :controller do
         expect do
           patch :approve, id: pending_book
           pending_book.reload
-        end.to change(pending_book, :status).to Book.APPROVED
+        end.to change(pending_book, :status).to BookVersion.APPROVED
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe Admin::BooksController, type: :controller do
         expect do
           patch :reject, id: pending_book
           pending_book.reload
-        end.to change(pending_book, :status).to Book.REJECTED
+        end.to change(pending_book, :status).to BookVersion.REJECTED
       end
     end
   end

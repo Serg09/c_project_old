@@ -13,14 +13,14 @@ class BooksController < ApplicationController
   end
 
   def new
-    @book = Book.new author_id: @author.id
+    @book = new_book
     authorize! :create, @book
   end
 
   def create
-    @book = @author.books.new(book_params)
+    @book = new_book(book_params)
     authorize! :create, @book
-    genres_from_params.each{|genre| @book.genres << genre}
+    genres_from_params.each{|genre| @book.versions[0].genres << genre}
     if @book.save
       flash[:notice] = 'Your book has been submitted successfully.'
       BookMailer.submission(@book).deliver_now
@@ -40,6 +40,12 @@ class BooksController < ApplicationController
   end
 
   private
+
+  def new_book(params = {})
+    book = @author.books.new
+    book.versions.new(params.merge(book: book))
+    book
+  end
 
   def book_params
     params.require(:book).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)

@@ -29,11 +29,11 @@ module ApplicationHelper
   end
 
   def book_path?(status)
-    matches_path? '/admin/book', {status: status}, {status: Book.PENDING}
+    matches_path? '/admin/book', {status: status}, {status: BookVersion.PENDING}
   end
 
   def book_nav_item_caption
-    nav_item_caption 'Books', Book.pending.count
+    nav_item_caption 'Books', BookVersion.pending.count
   end
 
   def flash_key_to_alert_class(flash_key)
