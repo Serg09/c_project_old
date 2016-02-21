@@ -54,6 +54,10 @@ class Book < ActiveRecord::Base
     version = BookVersion.PENDING
   end
 
+  scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
+  scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
+  scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
+
   private
 
   def latest_version
