@@ -14,5 +14,6 @@ class Ability
     can [:update, :create], Book do |book|
       author.id == book.author_id && book.pending?
     end
+    can :edit, Book, author_id: author.id
   end
 end

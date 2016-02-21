@@ -24,8 +24,13 @@ module Navigation
     when "the notification area" then "#notifications"
     when "the genre list" then '.genre-list'
     when /the (.*) table/ then  "##{description_to_id($1)}-table"
+    when /the (\d(?:st|nd|rd|th)) (.+) row/ then "##{hyphenize($2)}-table tr:nth-child(#{$1.to_i + 1})"
     else raise "Unrecognized locator identifier \"#{identifier}\""
     end
+  end
+
+  def hyphenize(words)
+    words.gsub(/\s/, "-").pluralize
   end
 end
 World(Navigation)
