@@ -1,4 +1,10 @@
 module BooksHelper
+  def book_index_class(book)
+    return 'warning' if book.pending?
+    return 'danger' if book.rejected?
+    return ''
+  end
+
   def genre_groups(group_count)
     result = Hash.new{|h, k| h[k] = []}
     Genre.alphabetized.each_with_index do |genre, index|

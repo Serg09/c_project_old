@@ -35,4 +35,4 @@
   .col-md-6
     .form-group
       =f.submit 'Submit', class: 'btn btn-primary', title: 'Click here to submit the book.'
-      =link_to 'Back', administrator_signed_in? ? books_path : author_books_path(@author), class: 'btn btn-default', title: 'Click here to return to the list of books.'
+      =link_to 'Back', author_books_path(@author), class: 'btn btn-default', title: 'Click here to return to the list of books.'
