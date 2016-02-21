@@ -1,11 +1,11 @@
 Bio submitted
+:plain
 
-=@bio.author.full_name
-has submitted a bio, which now needs to be reviewed.
+#{h @bio.author.full_name} has submitted a bio, which now needs to be reviewed.
+:plain
 
-There are currently
-=pluralize(Bio.pending.count, 'bio')
-waiting to be approved.
+There are currently #{h pluralize(Bio.pending.count, 'bio')} waiting to be approved.
+:plain
 
 Follow the link below to review them
 =bios_url

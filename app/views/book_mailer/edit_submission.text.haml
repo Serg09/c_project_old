@@ -1,7 +1,7 @@
-Book submitted
+Book edited
 :plain
 
-#{h @book.author.full_name} has submitted a book, #{h @book.title}, which now needs to be reviewed.
+#{h @book.author.full_name} has submitted an approved book, #{h @book.title}, which now needs to be reviewed again.
 :plain
 
 There are currently #{h pluralize(BookVersion.pending.count, 'book')} waiting to be approved.
