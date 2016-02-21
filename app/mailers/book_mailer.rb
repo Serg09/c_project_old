@@ -7,6 +7,12 @@ class BookMailer < ApplicationMailer
     mail to: "info@crowdscribed.com", subject: "New book submission"
   end
 
+  def edit_submission(book)
+    inline_images
+    @book = book
+    mail to: "info@crowdscribed.com", subject: "Book edit submission"
+  end
+
   def approval(book)
     inline_images
     @book = book

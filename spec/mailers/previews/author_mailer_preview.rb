@@ -11,7 +11,7 @@ class AuthorMailerPreview < ActionMailer::Preview
   end
 
   def account_approved_notification
-    author = Author.accepted.first || FactoryGirl.create(:approved_author)
+    author = Author.approved.first || FactoryGirl.create(:approved_author)
     AuthorMailer.account_approved_notification(author)
   end
 
