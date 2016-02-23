@@ -9,16 +9,19 @@ class BooksController < ApplicationController
   end
 
   def show
-    authorize! :show, @book
+    @book_version = author_signed_in? && current_author.id == @author.id ?
+      @book.pending_version :
+      @book.approved_version
+    authorize! :show, @book_version
   end
 
   def new
-    @book = new_book
+    @book = Book.new_book(@author)
     authorize! :create, @book
   end
 
   def create
-    @book = new_book(book_params)
+    @book = Book.new_book(@author, book_params)
     authorize! :create, @book
     genres_from_params.each{|genre| @book.versions[0].genres << genre}
     if @book.save
@@ -34,7 +37,17 @@ class BooksController < ApplicationController
 
   def update
     authorize! :update, @book
-    @book.update_attributes book_params
+    if @book.pending_version
+      @book.pending_version.update_attributes book_params
+      genres = genres_from_params
+      @book.pending_version.genres.reject{|g| !genres.include?(g.id)}
+      genres.select{|id| !@book.pending_version.genres.any?{|g| g.id == id}}.each do |genre|
+        @book.pending_versions.genres << genre
+      end
+    else
+      @book.new_version book_params
+      genres_from_params.each{|genre| @book.pending_version.genres << genre}
+    end
     if @book.save
       flash[:notice] = 'The book was updated successfully.'
       BookMailer.edit_submission(@book).deliver_now
@@ -43,12 +56,6 @@ class BooksController < ApplicationController
   end
 
   private
-
-  def new_book(params = {})
-    book = @author.books.new
-    book.versions.new(params.merge(book: book))
-    book
-  end
 
   def book_params
     params.require(:book).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)

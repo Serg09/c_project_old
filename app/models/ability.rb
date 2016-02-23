@@ -8,8 +8,8 @@ class Ability
     can :show, Image do |image|
       image.can_be_viewed_by?(author)
     end
-    can :show, Book do |book|
-      book.approved? || book.author_id == author.id
+    can :show, BookVersion do |book_version|
+      book_version.approved? || book_version.book.author_id == author.id
     end
     can [:update, :create], Book, author_id: author.id
   end

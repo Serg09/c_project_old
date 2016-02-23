@@ -13,22 +13,28 @@ class Book < ActiveRecord::Base
   validates_presence_of :author_id
   has_many :versions, class_name: 'BookVersion', dependent: :destroy, autosave: true
 
-  delegate :pending?,
-    :approved?,
-    :rejected?,
-    :title,
-    :short_description,
-    :long_description,
-    :cover_image_id,
-    :sample_id,
-    :genres,
-    :status,
-    to: :working_version
-
   def approve
     pending_version.status = BookVersion.APPROVED
     self.status = BookVersion.APPROVED
     pending_version.save && save
+  end
+
+  def approved_version
+    @approved_version ||= versions.approved.first
+  end
+
+  # Creates an returns a new book instance with
+  # a new book version instance for the specified
+  # author. Parameters are
+  # applied if they are specified
+  def self.new_book(author, params = {})
+    book = author.books.new
+    book.versions.new (params || {}).merge(book: book)
+    book
+  end
+
+  def pending_version
+    @pending_version ||= versions.pending.first
   end
 
   def reload
@@ -43,36 +49,7 @@ class Book < ActiveRecord::Base
     pending_version.save && save
   end
 
-  # Override the default implementation in order to handle the versioning
-  def update_attributes(attributes)
-    @working_version = nil
-    if latest_version.approved? || versions.none?
-      versions.new(attributes)
-    elsif latest_version.rejected? || latest_version.pending?
-      latest_version.update_attributes attributes.merge(status: BookVersion.PENDING)
-    end
-    version = BookVersion.PENDING
-  end
-
   scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
   scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
   scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
-
-  private
-
-  def latest_version
-    versions.order('created_at desc').first
-  end
-
-  def lookup_working_version
-    versions.first
-  end
-
-  def pending_version
-    @pending_version ||= versions.pending.first # assumes pending is sorted by date desc
-  end
-
-  def working_version
-    @working_version ||= lookup_working_version
-  end
 end

@@ -47,8 +47,8 @@ RSpec.describe BooksController, type: :controller do
 
       it 'links the book to the specified genres' do
         post :create, author_id: author, book: book_attributes, genres: [1]
-        book = Book.last
-        expect(book).to have(1).genre
+        book_version = BookVersion.last
+        expect(book_version).to have(1).genre
       end
     end
 
@@ -74,11 +74,12 @@ RSpec.describe BooksController, type: :controller do
             expect(response).to redirect_to book_path(pending_book)
           end
 
-          it 'updates the book' do
+          it 'updates the pending version of the book' do
+            pending_version = pending_book.pending_version
             expect do
               patch :update, id: pending_book, book: book_attributes.merge(title: 'The new title')
-              pending_book.reload
-            end.to change(pending_book, :title).to('The new title')
+              pending_version.reload
+            end.to change(pending_version, :title).to('The new title')
           end
         end
       end
