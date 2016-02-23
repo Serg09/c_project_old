@@ -105,21 +105,22 @@ ActiveRecord::Schema.define(version: 20160220161222) do
     t.datetime "updated_at",                                         null: false
   end
 
+  create_table "book_versions_genres", id: false, force: :cascade do |t|
+    t.integer "book_version_id", null: false
+    t.integer "genre_id",        null: false
+  end
+
+  add_index "book_versions_genres", ["book_version_id"], name: "index_book_versions_genres_on_book_version_id", using: :btree
+  add_index "book_versions_genres", ["genre_id"], name: "index_book_versions_genres_on_genre_id", using: :btree
+
   create_table "books", force: :cascade do |t|
-    t.integer  "author_id",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "author_id",                      null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",     default: "pending", null: false
   end
 
   add_index "books", ["author_id"], name: "index_books_on_author_id", using: :btree
-
-  create_table "books_genres", id: false, force: :cascade do |t|
-    t.integer "book_id",  null: false
-    t.integer "genre_id", null: false
-  end
-
-  add_index "books_genres", ["book_id"], name: "index_books_genres_on_book_id", using: :btree
-  add_index "books_genres", ["genre_id"], name: "index_books_genres_on_genre_id", using: :btree
 
   create_table "genres", force: :cascade do |t|
     t.string   "name",       limit: 50, null: false

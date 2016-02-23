@@ -31,6 +31,10 @@ class BookVersion < ActiveRecord::Base
   attr_accessor :cover_image_file, :sample_file
   delegate :author, to: :book
 
+  def long_or_short_description
+    long_description.present? ? long_description : short_description
+  end
+
   private
 
   def process_cover_image_file

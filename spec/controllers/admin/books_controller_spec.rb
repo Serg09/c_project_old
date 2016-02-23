@@ -80,6 +80,14 @@ RSpec.describe Admin::BooksController, type: :controller do
           pending_book.reload
         end.to change(pending_book, :status).to BookVersion.REJECTED
       end
+
+      it 'changes the status of the book version to "rejected"' do
+        version = pending_book.pending_version
+        expect do
+          patch :reject, id: pending_book
+          version.reload
+        end.to change(version, :status).to BookVersion.REJECTED
+      end
     end
   end
 

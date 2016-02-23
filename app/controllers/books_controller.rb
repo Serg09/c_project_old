@@ -21,13 +21,15 @@ class BooksController < ApplicationController
 
   def new
     @book = Book.new_book(@author)
+    @book_version = @book.pending_version
     authorize! :create, @book
   end
 
   def create
     @book = Book.new_book(@author, book_params)
+    @book_version = @book.pending_version
     authorize! :create, @book
-    genres_from_params.each{|genre| @book.versions[0].genres << genre}
+    genres_from_params.each{|genre| @book.pending_version.genres << genre}
     if @book.save
       flash[:notice] = 'Your book has been submitted successfully.'
       BookMailer.submission(@book).deliver_now
@@ -80,6 +82,7 @@ class BooksController < ApplicationController
 
   def load_book
     @book = Book.find(params[:id])
+    @book_version = @book.pending_version || @book.approved_version || @book.rejected_version
     @author = @book.author
   end
 end

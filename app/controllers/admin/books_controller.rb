@@ -41,5 +41,6 @@ class Admin::BooksController < ApplicationController
 
   def load_book
     @book = Book.find(params[:id])
+    @book_version = @book.pending_version || @book.approved_version || @book.rejected_version
   end
 end

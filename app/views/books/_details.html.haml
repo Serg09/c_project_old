@@ -1,13 +1,13 @@
 .row
   .col-md-4
-    -if book.cover_image_id
-      %img{ src: image_path(book.cover_image_id), class: 'img-rounded img-responsive' }
-    -if book.sample_id
+    -if book_version.cover_image_id
+      %img{ src: image_path(book_version.cover_image_id), class: 'img-rounded img-responsive' }
+    -if book_version.sample_id
       %p.sample-container
-        %a.sample-link{ href: image_path(book.sample_id), target: '_blank' } Download a sample
-    -if book.genres.any?
+        %a.sample-link{ href: image_path(book_version.sample_id), target: '_blank' } Download a sample
+    -if book_version.genres.any?
       %ul.tag-list
-        -book.genres.each do |genre|
+        -book_version.genres.each do |genre|
           %li=genre.name
   .col-md-8
-    =mark_up book.long_description.present? ? book.long_description : book.short_description
+    =mark_up book_version.long_or_short_description

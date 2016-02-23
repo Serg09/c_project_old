@@ -3,4 +3,5 @@
 
 .container.container-default
   =form_for([@author, @book]) do |f|
-    =render 'form_fields', f: f
+    =fields_for :version, @book_version do |version_fields|
+      =render 'form_fields', f: version_fields

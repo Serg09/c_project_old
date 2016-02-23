@@ -29,7 +29,7 @@ class Book < ActiveRecord::Base
   # applied if they are specified
   def self.new_book(author, params = {})
     book = author.books.new
-    book.versions.new (params || {}).merge(book: book)
+    book.pending_version = book.versions.new (params || {}).merge(book: book)
     book
   end
 
@@ -42,6 +42,10 @@ class Book < ActiveRecord::Base
     @pending_version ||= versions.pending.first
   end
 
+  def pending_version=(version)
+    @pending_version = version
+  end
+
   def reload
     super
     @pending_version = nil
@@ -52,6 +56,18 @@ class Book < ActiveRecord::Base
     pending_version.status = BookVersion.REJECTED
     self.status = BookVersion.REJECTED
     pending_version.save && save
+  end
+
+  def rejected_version
+    @rejected_version ||= versions.rejected.first
+  end
+
+  def public_title
+    approved_version.try(:title)
+  end
+
+  def administrative_title
+    (pending_version || approved_version || rejected_version).title
   end
 
   scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
