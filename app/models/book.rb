@@ -33,6 +33,11 @@ class Book < ActiveRecord::Base
     book
   end
 
+  def new_version!(params)
+    @pending_version = versions.new params
+    @pending_version.save
+  end
+
   def pending_version
     @pending_version ||= versions.pending.first
   end

@@ -34,34 +34,29 @@ RSpec.describe Book, type: :model do
     end
   end
 
-  describe '::find_working_version' do
-    context 'when an approved version and a pending version are present' do
-      let (:author) { book.author }
-      let (:book) { approved_book_version.book }
-      let (:approved_book_version) { FactoryGirl.create(:approved_book_version) }
-      let (:pending_book_version) { FactoryGirl.create(:pending_book_version, book: book) }
-      let (:other_author) { FactoryGirl.create(:approved_author) }
+  describe '#new_version!' do
+    let (:book) { FactoryGirl.create(:approved_book) }
+    let (:attributes) do
+      {
+        title: 'New title',
+        short_description: 'This one is short',
+        long_description: 'This on is long'
+      }
+    end
+    it 'creates a new version record' do
+      book.versions # reload the versions
+      expect do
+        book.new_version! attributes
+      end.to change(book.versions, :count).by(1)
+    end
 
-      context 'with no author' do
-        it 'returns the approved version' do
-          working_version = Book.find_working_version(nil, book.id)
-          expect(working_version).to be_approved
-        end
-      end
+    it 'returns true for success' do
+      expect(book.new_version!(attributes)).to be true
+    end
 
-      context 'with an author that does not own the book' do
-        it 'returns the approved version' do
-          working_version = Book.find_working_version(other_author, book.id)
-          expect(working_version).to be_approved
-        end
-      end
-
-      context 'with the author that owns the book' do
-        it 'returns the pending version' do
-          working_version = Book.find_working_version(author, book.id)
-          expect(working_version).to be_pending
-        end
-      end
+    it 'sets the #pending_version property' do
+      book.new_version! attributes
+      expect(book.pending_version.id).to be BookVersion.last.id
     end
   end
 end

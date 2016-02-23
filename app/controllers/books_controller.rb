@@ -9,9 +9,13 @@ class BooksController < ApplicationController
   end
 
   def show
-    @book_version = author_signed_in? && current_author.id == @author.id ?
-      @book.pending_version :
-      @book.approved_version
+    @book_version = if author_signed_in? && current_author.id == @author.id
+                      @book.pending_version ||
+                        @book.approved_version ||
+                        @book.versions.rejected.first
+                    else
+                      @book.approved_version
+                    end
     authorize! :show, @book_version
   end
 
@@ -39,13 +43,14 @@ class BooksController < ApplicationController
     authorize! :update, @book
     if @book.pending_version
       @book.pending_version.update_attributes book_params
-      genres = genres_from_params
-      @book.pending_version.genres.reject{|g| !genres.include?(g.id)}
-      genres.select{|id| !@book.pending_version.genres.any?{|g| g.id == id}}.each do |genre|
-        @book.pending_versions.genres << genre
+      # remove existing genres not posted
+      @book.pending_version.genres.reject{|existing| !genres_from_params.any?{|specified| specified.id == existing.id}}
+      # add posted genres not present
+      genres_from_params.each do |specified|
+        @book.pending_version.genres << specified unless @book.pending_versions.any?{|g| g.id == specified.id}
       end
     else
-      @book.new_version book_params
+      @book.new_version! book_params
       genres_from_params.each{|genre| @book.pending_version.genres << genre}
     end
     if @book.save
@@ -62,8 +67,11 @@ class BooksController < ApplicationController
   end
 
   def genres_from_params
-    return [] unless params[:genres]
-    params[:genres].map{|id| Genre.find(id)}
+    @genres_from_paramms ||= if params[:genres]
+                               params[:genres].map{|id| Genre.find(id)}
+                             else
+                               []
+                             end
   end
 
   def load_author
