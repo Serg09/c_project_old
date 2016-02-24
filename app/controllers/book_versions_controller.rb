@@ -1,0 +1,2 @@
+class BookVersionsController < ApplicationController
+end

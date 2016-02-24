@@ -45,7 +45,13 @@ RSpec.describe BooksController, type: :controller do
         end.to change(Book, :count).by(1)
       end
 
-      it 'links the book to the specified genres' do
+      it 'creates a new book version record' do
+        expect do
+          post :create, author_id: author, book: book_attributes
+        end.to change(BookVersion, :count).by(1)
+      end
+
+      it 'links the book version to the specified genres' do
         post :create, author_id: author, book: book_attributes, genres: [1]
         book_version = BookVersion.last
         expect(book_version).to have(1).genre
@@ -62,9 +68,9 @@ RSpec.describe BooksController, type: :controller do
         end
 
         describe 'get :edit' do
-          it 'is successful' do
+          it 'redirects to the edit page for the current version' do
             get :edit, id: pending_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to edit_book_version_path(pending_book.pending_version)
           end
         end
 
@@ -74,12 +80,11 @@ RSpec.describe BooksController, type: :controller do
             expect(response).to redirect_to book_path(pending_book)
           end
 
-          it 'updates the pending version of the book' do
-            pending_version = pending_book.pending_version
+          it 'does not update the book' do
             expect do
               patch :update, id: pending_book, book: book_attributes.merge(title: 'The new title')
-              pending_version.reload
-            end.to change(pending_version, :title).to('The new title')
+              pending_book.reload
+            end.not_to change(pending_book, :updated_at)
           end
         end
       end
@@ -93,9 +98,9 @@ RSpec.describe BooksController, type: :controller do
         end
 
         describe 'get :edit' do
-          it 'is successful' do
+          it 'redirects to the create version page' do
             get :edit, id: approved_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to create_book_book_version_path(approved_book)
           end
         end
 
@@ -105,21 +110,15 @@ RSpec.describe BooksController, type: :controller do
             expect(response).to redirect_to book_path(approved_book)
           end
 
-          it 'does not update the book version' do
-            version = approved_book.approved_version
+          it 'does not update the book' do
             expect do
               patch :update, id: approved_book, book: book_attributes.merge(title: 'The new title')
-              version.reload
-            end.not_to change(version, :title)
-          end
-
-          it 'creates a new version of the book' do
-            expect do
-              patch :update, id: approved_book, book: book_attributes.merge(title: 'The new title')
-            end.to change(approved_book.versions, :count).by(1)
+              approved_book.reload
+            end.not_to change(approved_book, :updated_at)
           end
         end
       end
+
       context 'that is rejected' do
         describe 'get :show' do
           it 'is successful' do
@@ -129,9 +128,9 @@ RSpec.describe BooksController, type: :controller do
         end
 
         describe 'get :edit' do
-          it 'is successful' do
+          it 'redirects to the create page' do
             get :edit, id: rejected_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to new_book_book_version_path(rejected_book)
           end
         end
 
@@ -141,19 +140,11 @@ RSpec.describe BooksController, type: :controller do
             expect(response).to redirect_to book_path(rejected_book)
           end
 
-          it 'does not update the book version' do
-            version = rejected_book.versions.rejected.first
-            expect do
-              patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
-              version.reload
-            end.not_to change(version, :title)
-          end
-
-          it 'creates a new book version' do
+          it 'does not update the book' do
             expect do
               patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
               rejected_book.reload
-            end.to change(rejected_book.versions, :count).by(1)
+            end.not_to change(rejected_book, :updated_at)
           end
         end
       end
@@ -184,12 +175,11 @@ RSpec.describe BooksController, type: :controller do
             expect(response).to redirect_to author_root_path
           end
 
-          it 'does not update the book version' do
-            version = pending_book.pending_version
+          it 'does not update the book' do
             expect do
               patch :update, id: pending_book, book: book_attributes.merge(title: 'The new title')
-              version.reload
-            end.not_to change(version, :title)
+              pending_book.reload
+            end.not_to change(pending_book, :updated_at)
           end
         end
       end
@@ -216,12 +206,11 @@ RSpec.describe BooksController, type: :controller do
             expect(response).to redirect_to author_root_path
           end
 
-          it 'does not update the book version' do
-            version = approved_book.approved_version
+          it 'does not update the book' do
             expect do
               patch :update, id: approved_book, book: book_attributes.merge(title: 'New title')
-              version.reload
-            end.not_to change(version, :title)
+              approved_book.reload
+            end.not_to change(version, :updated_at)
           end
         end
       end
@@ -249,11 +238,10 @@ RSpec.describe BooksController, type: :controller do
           end
 
           it 'does not update the book version' do
-            version = rejected_book.versions.rejected.first
             expect do
               patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
-              version.reload
-            end.not_to change(version, :title)
+              rejected_book.reload
+            end.not_to change(rejected_book, :updated_at)
           end
         end
       end
@@ -293,104 +281,6 @@ RSpec.describe BooksController, type: :controller do
         end.not_to change(Book, :count)
       end
     end
-
-    # for an administrator
-    describe 'get :show' do
-      context 'for book pending approval' do
-        describe 'get :show' do
-          it 'is successful' do
-            get :show, id: pending_book
-            expect(response).to have_http_status :success
-          end
-        end
-
-        describe 'get :edit' do
-          it 'redirects to the home page' do
-            get :edit, id: pending_book
-            expect(response).to redirect_to admin_root_path
-          end
-        end
-
-        describe 'patch :update' do
-          it 'redirects to the home page' do
-            patch :update, id: pending_book, book: book_attributes
-            expect(response).to redirect_to admin_root_path
-          end
-
-          it 'does not update the book version' do
-            version = pending_book.pending_version
-            expect do
-              patch :update, id: pending_book, book: book_attributes.merge(title: 'New title')
-              version.reload
-            end.not_to change(version, :title)
-          end
-        end
-      end
-
-      # for an administrator
-      context 'for a book that is approved' do
-        describe 'get :show' do
-          it 'is successful' do
-            get :show, id: approved_book
-            expect(response).to have_http_status :success
-          end
-        end
-
-        describe 'get :edit' do
-          it 'redirects to the home page' do
-            get :edit, id: approved_book
-            expect(response).to redirect_to admin_root_path
-          end
-        end
-
-        describe 'patch :update' do
-          it 'redirects to the home page' do
-            patch :update, id: approved_book, book: book_attributes
-            expect(response).to redirect_to admin_root_path
-          end
-
-          it 'does not update the book version' do
-            version = approved_book.approved_version
-            expect do
-              patch :update, id: approved_book, book: book_attributes.merge(title: 'New title')
-              version.reload
-            end.not_to change(version, :title)
-          end
-        end
-      end
-
-      # for an administrator
-      context 'for a book that is rejected' do
-        describe 'get :show' do
-          it 'is successful' do
-            get :show, id: rejected_book
-            expect(response).to have_http_status :success
-          end
-        end
-
-        describe 'get :edit' do
-          it 'redirects to the home page' do
-            get :edit, id: rejected_book
-            expect(response).to redirect_to admin_root_path
-          end
-        end
-
-        describe 'patch :update' do
-          it 'redirects to the home page' do
-            patch :update, id: rejected_book, book: book_attributes
-            expect(response).to redirect_to admin_root_path
-          end
-
-          it 'does not update the book version' do
-            version = rejected_book.versions.first
-            expect do
-              patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
-              version.reload
-            end.not_to change(version, :title)
-          end
-        end
-      end
-    end
   end
 
   context 'for an unauthenticated user' do
@@ -423,7 +313,7 @@ RSpec.describe BooksController, type: :controller do
 
     describe 'for a book that is pending approval' do
       describe "get #show" do
-        it "redirects to the sign in page" do
+        it "redirects to the home page" do
           get :show, id: pending_book
           expect(response).to redirect_to root_path
         end
@@ -442,12 +332,11 @@ RSpec.describe BooksController, type: :controller do
           expect(response).to redirect_to root_path
         end
 
-        it 'does not update the book record' do
-          version = pending_book.pending_version
+        it 'does not update the book' do
           expect do
             patch :update, id: pending_book, book: book_attributes.merge(title: 'New title')
-            version.reload
-          end.not_to change(version, :title)
+            pending_book.reload
+          end.not_to change(pending_book, :updated_at)
         end
       end
     end
@@ -473,12 +362,11 @@ RSpec.describe BooksController, type: :controller do
           expect(response).to redirect_to root_path
         end
 
-        it 'does not update the book version record' do
-          version = approved_book.approved_version
+        it 'does not update the book' do
           expect do
             patch :update, id: approved_book, book: book_attributes.merge(title: 'New title')
-            version.reload
-          end.not_to change(version, :title)
+            approved_book.reload
+          end.not_to change(approved_book, :updated_at)
         end
       end
     end
@@ -504,12 +392,11 @@ RSpec.describe BooksController, type: :controller do
           expect(response).to redirect_to root_path
         end
 
-        it 'does not update the book version record' do
-          version = rejected_book.versions.first
+        it 'does not update the book' do
           expect do
             patch :update, id: rejected_book, book: book_attributes.merge(title: 'New title')
-            version.reload
-          end.not_to change(version, :title)
+            rejected_book.reload
+          end.not_to change(rejected_book, :updated_at)
         end
       end
     end

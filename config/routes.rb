@@ -14,7 +14,10 @@ Rails.application.routes.draw do
     resources :books, only: [:new, :index, :create]
   end
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
-  resources :books, only: [:index, :show, :edit, :update]
+  resources :books, only: [:index, :show, :edit, :update] do
+    resources :book_versions, path: 'versions', only: [:new, :create, :index]
+  end
+  resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
 
   namespace :admin do
