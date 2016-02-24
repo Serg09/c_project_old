@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe BookVersionsController, type: :controller do
   let (:author) { FactoryGirl.create(:approved_author) }
   let (:book) { FactoryGirl.create(:approved_book, author: author) }
+  let (:approved_version) { book.approved_version }
   let (:pending_version) { FactoryGirl.create(:pending_book_version, book: book) }
   let (:attributes) do
     {
@@ -16,7 +17,7 @@ RSpec.describe BookVersionsController, type: :controller do
     describe 'get :index' do
       it 'is successful' do
         sign_in book.author
-        get :index
+        get :index, book_id: book
         expect(response).to have_http_status :success
       end
     end
@@ -28,26 +29,26 @@ RSpec.describe BookVersionsController, type: :controller do
         describe 'get :show' do
           it 'is successul' do
             get :show, id: pending_version
-            expoect(response).to have_http_status :success
+            expect(response).to have_http_status :success
           end
         end
 
         describe 'get :edit' do
           it 'is successful' do
-            get :edit, id: pending_
+            get :edit, id: pending_version
             expect(response).to have_http_status :success
           end
         end
 
         describe 'patch :update' do
           it 'redirects to the book page' do
-            patch :update, id: pending_version, book: book_attributes
+            patch :update, id: pending_version, book_version: attributes
             expect(response).to redirect_to book_path(book)
           end
 
           it 'updates the pending version of the book' do
             expect do
-              patch :update, id: pending_version, book: attributes
+              patch :update, id: pending_version, book_version: attributes
               pending_version.reload
             end.to change(pending_version, :title).to('New title')
           end
@@ -65,7 +66,7 @@ RSpec.describe BookVersionsController, type: :controller do
         describe 'get :edit' do
           it 'redirects to the create page' do
             get :edit, id: book.approved_version
-            expect(response).to redirect_to create_book_book_version_path(book)
+            expect(response).to redirect_to new_book_book_version_path(book)
           end
         end
 
@@ -123,30 +124,55 @@ RSpec.describe BookVersionsController, type: :controller do
 
       context 'that is pending approval' do
         describe 'get :show' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :show, id: pending_version
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: pending_version
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the pending version of the book'
+          it 'redirects to the home page' do
+            patch :update, id: pending_version, book_version: attributes
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the pending version of the book' do
+            expect do
+              patch :update, id: pending_version, book_version: attributes
+              pending_version.reload
+            end.not_to change(pending_version, :title)
+          end
         end
       end
 
       context 'that is approved' do
         describe 'get :show' do
-          it 'is successful'
+          it 'is successful' do
+            get :show, id: approved_version
+            expect(response).to have_http_status :success
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: approved_version
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the homepage'
+          it 'redirects to the homepage' do
+            patch :update, id: approved_version, book_version: attributes
+            expect(response).to redirect_to author_root_path
+          end
+
           it 'does not update the book version'
         end
       end
@@ -170,19 +196,39 @@ RSpec.describe BookVersionsController, type: :controller do
 
   context 'for an unauthenticated user' do
     describe 'get :index' do
-      it 'redirects to the home page'
+      it 'redirects to the home page' do
+        get :index, book_id: book
+        expect(response).to redirect_to root_path
+      end
     end
 
     context 'for a book that is pending' do
       describe 'get :show' do
-        it 'redirects to the home page'
+        it 'redirects to the home page' do
+          get :show, id: pending_version
+          expect(response).to redirect_to root_path
+        end
       end
+
       describe 'get :edit' do
-        it 'redirects to the home page'
+        it 'redirects to the home page' do
+          get :edit, id: pending_version
+          expect(response).to redirect_to root_path
+        end
       end
+
       describe 'patch :update' do
-        it 'redirects to the home page'
-        it 'does not update the book version'
+        it 'redirects to the home page' do
+          patch :update, id: pending_version, book_version: attributes
+          expect(response).to redirect_to root_path
+        end
+
+        it 'does not update the book version' do
+          expect do
+            patch :update, id: pending_version, book_version: attributes
+            pending_version.reload
+          end.not_to change(pending_version, :title)
+        end
       end
     end
   end

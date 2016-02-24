@@ -11,6 +11,9 @@ class Ability
     can :show, BookVersion do |book_version|
       book_version.approved? || book_version.book.author_id == author.id
     end
-    can [:update, :create], Book, author_id: author.id
+    can [:version, :update, :create], Book, author_id: author.id
+    can [:update, :edit], BookVersion do |book_version|
+      book_version.book.author_id == author.id && book_version.pending?
+    end
   end
 end
