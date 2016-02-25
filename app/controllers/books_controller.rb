@@ -16,7 +16,7 @@ class BooksController < ApplicationController
                     else
                       @book.approved_version
                     end
-    authorize! :show, @book_version
+    redirect_to book_version_path(@book_version)
   end
 
   def new
@@ -26,15 +26,13 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new_book(@author, book_version_params)
-    @book_version = @book.pending_version
-    authorize! :create, @book
-    genres_from_params.each{|genre| @book.pending_version.genres << genre}
-    if @book.save
+    @book_creator = BookCreator.new @author, book_version_params
+    authorize! :create, @book_creator.book
+    if @book_creator.create
       flash[:notice] = 'Your book has been submitted successfully.'
-      BookMailer.submission(@book).deliver_now
+      BookMailer.submission(@book_creator.book).deliver_now
     end
-    respond_with @book
+    respond_with @book_creator.book
   end
 
   def edit

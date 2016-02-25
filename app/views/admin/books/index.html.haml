@@ -1,8 +1,5 @@
 =content_for :page_title do
-  -if author_signed_in? && current_author.id == params[:author_id].to_i
-    My books
-  -else
-    Books
+  Books
 
 .container.container-default
   .row

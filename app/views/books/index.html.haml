@@ -14,8 +14,8 @@
             %th &nbsp;
         -@books.each do |book|
           %tr{ class: book_index_class(book) }
-            %td= link_to book.title, book_path(book)
+            %td= link_to book.administrative_title, book_path(book)
             -if can? :edit, book
-              %td= link_to 'Edit', edit_book_path(book)
+              %td= edit_book_link(book)
       -if author_signed_in? && current_author.id == @author.id
         =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'

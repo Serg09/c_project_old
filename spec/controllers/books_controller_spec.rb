@@ -5,11 +5,13 @@ RSpec.describe BooksController, type: :controller do
   let (:pending_book) { FactoryGirl.create(:pending_book, author: author) }
   let (:approved_book) { FactoryGirl.create(:approved_book, author: author) }
   let (:rejected_book) { FactoryGirl.create(:rejected_book, author: author) }
+  let (:genre) { FactoryGirl.create(:genre) }
   let (:book_version_attributes) do
     {
       title: 'My book',
       short_description: 'This is short',
-      long_description: 'This is long'
+      long_description: 'This is long',
+      genres: [genre.id]
     }
   end
   let (:attributes) do
@@ -57,7 +59,7 @@ RSpec.describe BooksController, type: :controller do
       end
 
       it 'links the book version to the specified genres' do
-        post :create, author_id: author, book_version: book_version_attributes, genres: [1]
+        post :create, author_id: author, book_version: book_version_attributes
         book_version = BookVersion.last
         expect(book_version).to have(1).genre
       end
@@ -66,9 +68,9 @@ RSpec.describe BooksController, type: :controller do
     context 'that owns the book' do
       context 'that is pending approval' do
         describe 'get :show' do
-          it 'is successful' do
+          it 'redirects to the show page for the pending version' do
             get :show, id: pending_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to book_version_path(pending_book.pending_version)
           end
         end
 
@@ -96,9 +98,9 @@ RSpec.describe BooksController, type: :controller do
 
       context 'that is approved' do
         describe 'get :show' do
-          it 'is successful' do
+          it 'redirects to the show page for the approved version' do
             get :show, id: approved_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to book_version_path(approved_book.approved_version)
           end
         end
 
@@ -126,7 +128,7 @@ RSpec.describe BooksController, type: :controller do
 
       context 'that is rejected' do
         describe 'get :show' do
-          it 'is successful' do
+          it 'redirects to the show page for the rejected version' do
             get :show, id: rejected_book
             expect(response).to have_http_status :success
           end

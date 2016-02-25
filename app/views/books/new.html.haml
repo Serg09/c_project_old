@@ -2,6 +2,5 @@
   New book
 
 .container.container-default
-  =form_for([@author, @book]) do |f|
-    =fields_for :version, @book_version do |version_fields|
-      =render 'form_fields', f: version_fields
+  =form_tag(author_books_path(@author), multipart: true) do
+    =render 'form_tag_fields'

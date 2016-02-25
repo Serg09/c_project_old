@@ -23,6 +23,10 @@ class Book < ActiveRecord::Base
     pending_version.save && save
   end
 
+  def approved?
+    versions.first.approved?
+  end
+
   def approved_version
     @approved_version ||= versions.approved.first
   end
@@ -40,6 +44,10 @@ class Book < ActiveRecord::Base
   def new_version!(params)
     @pending_version = versions.new params
     @pending_version.save
+  end
+
+  def pending?
+    versions.first.pending?
   end
 
   def pending_version
@@ -60,6 +68,10 @@ class Book < ActiveRecord::Base
     pending_version.status = BookVersion.REJECTED
     self.status = BookVersion.REJECTED
     pending_version.save && save
+  end
+
+  def rejected?
+    versions.first.rejected?
   end
 
   def rejected_version

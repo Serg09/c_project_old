@@ -1,3 +1,4 @@
+@wip
 Feature: Edit a book
   As an author
   In order to correct misinformation in a book
