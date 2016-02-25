@@ -24,7 +24,6 @@ RSpec.describe BookVersionsController, type: :controller do
         expect(response).to have_http_status :success
       end
     end
-
     context 'that owns the book' do
       before(:each) { sign_in author }
 
@@ -33,6 +32,27 @@ RSpec.describe BookVersionsController, type: :controller do
           it 'is successul' do
             get :show, id: pending_version
             expect(response).to have_http_status :success
+          end
+        end
+
+        describe 'get :new' do
+          it 'redirects to the edit page' do
+            get :new, book_id: pending_version.book
+            expect(response).to redirect_to edit_book_version_path(pending_version)
+          end
+        end
+
+        describe 'post :create' do
+          it 'redirects to the iedit page' do
+            post :create, book_id: pending_version.book, book_version: attributes
+            expect(response).to redirect_to edit_book_version_path(pending_version)
+          end
+
+          it 'does not create a new BookVersion record' do
+            pending_version # pre-load the version
+            expect do
+              post :create, book_id: pending_version.book, book_version: attributes
+            end.not_to change(book.versions, :count)
           end
         end
 
@@ -66,6 +86,26 @@ RSpec.describe BookVersionsController, type: :controller do
           end
         end
 
+        describe 'get :new' do
+          it 'is successful' do
+            get :new, book_id: book
+            expect(response).to have_http_status :success
+          end
+        end
+
+        describe 'post :create' do
+          it 'redirects to the created book version page' do
+            post :create, book_id: book, book_version: attributes
+            expect(response).to redirect_to book_version_path(BookVersion.last)
+          end
+
+          it 'creates a new BookVersion record' do
+            expect do
+              post :create, book_id: book, book_version: attributes
+            end.to change(book.versions, :count).by(1)
+          end
+        end
+
         describe 'get :edit' do
           it 'redirects to the create page' do
             get :edit, id: book.approved_version
@@ -96,8 +136,28 @@ RSpec.describe BookVersionsController, type: :controller do
           end
         end
 
+        describe 'get :new' do
+          it 'is successful' do
+            get :new, book_id: book
+            expect(response).to have_http_status :success
+          end
+        end
+
+        describe 'post :create' do
+          it 'redirects to the created book version page' do
+            post :create, book_id: book, book_version: attributes
+            expect(response).to redirect_to book_version_path(BookVersion.last)
+          end
+
+          it 'creates a new BookVersion record' do
+            expect do
+              post :create, book_id: book, book_version: attributes
+            end.to change(book.versions, :count).by(1)
+          end
+        end
+
         describe 'get :edit' do
-          it 'redirects to the create page' do
+          it 'redirects to the new page' do
             get :edit, id: rejected_book.rejected_version
             expect(response).to redirect_to new_book_book_version_path(rejected_book)
           end
@@ -122,6 +182,27 @@ RSpec.describe BookVersionsController, type: :controller do
     context 'that does not own the book' do
       let (:other_author) { FactoryGirl.create(:approved_author) }
       before(:each) { sign_in other_author }
+
+      describe 'get :new' do
+        it 'redirects to the home page' do
+          get :new, book_id: book
+          expect(response).to redirect_to author_root_path
+        end
+      end
+
+      describe 'post :create' do
+        it 'redirects to the home page' do
+          post :create, book_id: book, book_version: attributes
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not create a new BookVersion record' do
+          book # preload the book and version
+          expect do
+            post :create, book_id: book, book_version: attributes
+          end.not_to change(BookVersion, :count)
+        end
+      end
 
       context 'that is pending approval' do
         describe 'get :show' do
@@ -221,6 +302,15 @@ RSpec.describe BookVersionsController, type: :controller do
         get :index, book_id: book
         expect(response).to redirect_to root_path
       end
+    end
+
+    describe 'get :new' do
+      it 'redirects to the home page'
+    end
+
+    describe 'post :create' do
+      it 'redirects to the home page'
+      it 'does not create a new BookVersion record'
     end
 
     context 'for a book that is pending' do

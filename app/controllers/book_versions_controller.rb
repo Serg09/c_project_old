@@ -11,8 +11,37 @@ class BookVersionsController < ApplicationController
     authorize! :show, @book_version
   end
 
+  def new
+    if @book.pending_version
+      redirect_to edit_book_version_path(@book.pending_version)
+      return
+    end
+    @book_version = @book.versions.new
+    authorize! :create, @book_version
+  end
+
+  def create
+    if @book.pending_version
+      redirect_to edit_book_version_path(@book.pending_version)
+      return
+    end
+
+    @book_version = @book.versions.new(book_version_params)
+    authorize! :create, @book_version
+    if @book_version.save
+      flash[:notice] = 'The book was updated successfully.'
+      BookMailer.edit_submission(@book).deliver_now
+    end
+    respond_with @book_version
+  end
+
   def edit
-    with_permission
+    with_permission do
+      unless @book_version.pending?
+        redirect_to new_book_book_version_path(@book_version.book_id)
+        return
+      end
+    end
   end
 
   def update
