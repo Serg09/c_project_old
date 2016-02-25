@@ -4,6 +4,13 @@ namespace :seed do
     @logger ||= Logger.new(STDOUT)
   end
 
+  desc 'Create an author named John Doe'
+  task johndoe: :environment do
+    FactoryGirl.create(:author, first_name: 'John',
+                                last_name: 'Doe',
+                                email: 'john@doe.com')
+  end
+
   desc 'Create a certain number of inquiries. (COUNT=10)'
   task inquiries: :environment do
     count = (ENV['COUNT'] || 10).to_i
