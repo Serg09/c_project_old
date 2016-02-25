@@ -26,7 +26,7 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new_book(@author, book_params)
+    @book = Book.new_book(@author, book_version_params)
     @book_version = @book.pending_version
     authorize! :create, @book
     genres_from_params.each{|genre| @book.pending_version.genres << genre}
@@ -39,33 +39,39 @@ class BooksController < ApplicationController
 
   def edit
     authorize! :update, @book
+    redirect_to edit_book_redirect_path
   end
 
   def update
-    authorize! :update, @book
+    unless author_signed_in?
+      redirect_to root_path, notice: "We were not able to find the resource you requested."
+      return
+    end
+
+    unless current_author.id == @book.author_id
+      redirect_to author_root_path, notice: "We were not able to find the resource you requested."
+      return
+    end
+
     if @book.pending_version
-      @book.pending_version.update_attributes book_params
-      # remove existing genres not posted
-      @book.pending_version.genres.reject{|existing| !genres_from_params.any?{|specified| specified.id == existing.id}}
-      # add posted genres not present
-      genres_from_params.each do |specified|
-        @book.pending_version.genres << specified unless @book.pending_versions.any?{|g| g.id == specified.id}
-      end
+      redirect_to edit_book_version_path(@book.pending_version)
     else
-      @book.new_version! book_params
-      genres_from_params.each{|genre| @book.pending_version.genres << genre}
+      redirect_to new_book_book_version_path(@book)
     end
-    if @book.save
-      flash[:notice] = 'The book was updated successfully.'
-      BookMailer.edit_submission(@book).deliver_now
-    end
-    respond_with @book
   end
 
   private
 
-  def book_params
-    params.require(:book).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)
+  def book_version_params
+    params.require(:book_version).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)
+  end
+
+  def edit_book_redirect_path
+    if @book.pending_version
+      edit_book_version_path @book.pending_version
+    else
+      new_book_book_version_path @book
+    end
   end
 
   def genres_from_params

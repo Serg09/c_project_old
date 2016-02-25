@@ -13,6 +13,10 @@ class Book < ActiveRecord::Base
   validates_presence_of :author_id
   has_many :versions, class_name: 'BookVersion', dependent: :destroy, autosave: true
 
+  scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
+  scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
+  scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
+
   def approve
     pending_version.status = BookVersion.APPROVED
     self.status = BookVersion.APPROVED
@@ -67,10 +71,10 @@ class Book < ActiveRecord::Base
   end
 
   def administrative_title
-    (pending_version || approved_version || rejected_version).title
+    working_version.title
   end
 
-  scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
-  scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
-  scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
+  def working_version
+    pending_version || approved_version || rejected_version
+  end
 end

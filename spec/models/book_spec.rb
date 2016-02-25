@@ -59,4 +59,43 @@ RSpec.describe Book, type: :model do
       expect(book.pending_version.id).to be BookVersion.last.id
     end
   end
+
+  describe '#working_version' do
+    context 'for a book that is pending' do
+      it 'returns the pending version' do
+        book = FactoryGirl.create(:pending_book)
+        expect(book.working_version.id).to eq book.pending_version.id
+      end
+    end
+
+    context 'for a book that is approved' do
+      it 'returns the approved version' do
+        book = FactoryGirl.create(:approved_book)
+        expect(book.working_version.id).to eq book.approved_version.id
+      end
+    end
+
+    context 'for an approved book with a pending edit' do
+      it 'returns the pending version' do
+        book = FactoryGirl.create(:approved_book)
+        FactoryGirl.create(:pending_book_version, book: book)
+        expect(book.working_version.id).to eq book.pending_version.id
+      end
+    end
+
+    context 'for a book that is rejected' do
+      it 'returns the rejected version' do
+        book = FactoryGirl.create(:rejected_book)
+        expect(book.working_version.id).to eq book.rejected_version.id
+      end
+    end
+
+    context 'for an approved book with a rejected edit' do
+      it 'returns the approved version' do
+        book = FactoryGirl.create(:approved_book)
+        FactoryGirl.create(:rejected_book_version, book: book)
+        expect(book.working_version.id).to eq book.approved_version.id
+      end
+    end
+  end
 end

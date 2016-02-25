@@ -5,6 +5,9 @@ RSpec.describe BookVersionsController, type: :controller do
   let (:book) { FactoryGirl.create(:approved_book, author: author) }
   let (:approved_version) { book.approved_version }
   let (:pending_version) { FactoryGirl.create(:pending_book_version, book: book) }
+  let (:rejected_book) { FactoryGirl.create(:rejected_book, author: author) }
+  let (:rejected_version) { rejected_book.rejected_version }
+
   let (:attributes) do
     {
       title: 'New title', 
@@ -86,8 +89,6 @@ RSpec.describe BookVersionsController, type: :controller do
       end
 
       context 'that is rejected' do
-        let (:rejected_book) { FactoryGirl.create(:rejected_book, author: author) }
-
         describe 'get :show' do
           it 'is successful' do
             get :show, id: rejected_book.rejected_version
@@ -173,22 +174,42 @@ RSpec.describe BookVersionsController, type: :controller do
             expect(response).to redirect_to author_root_path
           end
 
-          it 'does not update the book version'
+          it 'does not update the book version' do
+            expect do
+              patch :update, id: approved_version, book_version: attributes
+              approved_version.reload
+            end.not_to change(approved_version, :title)
+          end
         end
       end
 
       context 'that is rejected' do
         describe 'get :show' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :show, id: rejected_version
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'get :edit' do
-          it 'redirects to the home page'
+          it 'redirects to the home page' do
+            get :edit, id: rejected_version
+            expect(response).to redirect_to author_root_path
+          end
         end
 
         describe 'patch :update' do
-          it 'redirects to the home page'
-          it 'does not update the book version'
+          it 'redirects to the home page' do
+            patch :update, id: rejected_version, book_version: attributes
+            expect(response).to redirect_to author_root_path
+          end
+
+          it 'does not update the book version' do
+            expect do
+              patch :update, id: rejected_version, book_version: attributes
+              rejected_version.reload
+            end.not_to change(rejected_version, :title)
+          end
         end
       end
     end # context: that does not own the book

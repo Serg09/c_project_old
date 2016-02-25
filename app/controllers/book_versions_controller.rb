@@ -49,7 +49,7 @@ class BookVersionsController < ApplicationController
       return
     end
 
-    unless current_author.id == book_author_id
+    unless current_author.id == @book_version.book.author_id
       # Not the owner, they can't edit it
       redirect_to author_root_path, notice: "We were not able to find the resource you requested."
       return
