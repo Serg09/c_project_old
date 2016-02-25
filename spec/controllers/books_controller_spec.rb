@@ -130,7 +130,7 @@ RSpec.describe BooksController, type: :controller do
         describe 'get :show' do
           it 'redirects to the show page for the rejected version' do
             get :show, id: rejected_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to book_version_path(rejected_book.rejected_version)
           end
         end
 
@@ -194,9 +194,9 @@ RSpec.describe BooksController, type: :controller do
       # does not own the book
       context 'that is approved' do
         describe 'get :show' do
-          it 'is successful' do
+          it 'redirects to the show page for the approved version' do
             get :show, id: approved_book
-            expect(response).to have_http_status :success
+            expect(response).to redirect_to book_version_path(approved_book.approved_version)
           end
         end
 
@@ -315,9 +315,9 @@ RSpec.describe BooksController, type: :controller do
 
     describe 'for a book that is approved' do
       describe "get #show" do
-        it "is successful" do
+        it "redirects to the show page for the approved version" do
           get :show, id: approved_book
-          expect(response).to have_http_status :success
+          expect(response).to redirect_to book_version_path(approved_book.approved_version)
         end
       end
 

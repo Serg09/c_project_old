@@ -10,13 +10,15 @@ class BooksController < ApplicationController
 
   def show
     @book_version = if author_signed_in? && current_author.id == @author.id
-                      @book.pending_version ||
-                        @book.approved_version ||
-                        @book.versions.rejected.first
+                      @book.working_version
                     else
                       @book.approved_version
                     end
-    redirect_to book_version_path(@book_version)
+    if @book_version
+      redirect_to book_version_path(@book_version)
+    else
+      redirect_to not_found_redirect_path, notice: "We were unable to find the resource you requested."
+    end
   end
 
   def new
@@ -61,7 +63,12 @@ class BooksController < ApplicationController
   private
 
   def book_version_params
-    params.require(:book_version).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)
+    params.require(:book_version).permit(:title,
+                                         :short_description,
+                                         :long_description,
+                                         :cover_image_file,
+                                         :sample_file,
+                                         genres: [])
   end
 
   def edit_book_redirect_path
@@ -72,14 +79,6 @@ class BooksController < ApplicationController
     end
   end
 
-  def genres_from_params
-    @genres_from_paramms ||= if params[:genres]
-                               params[:genres].map{|id| Genre.find(id)}
-                             else
-                               []
-                             end
-  end
-
   def load_author
     @author = Author.find(params[:author_id])
   end
@@ -88,5 +87,13 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
     @book_version = @book.pending_version || @book.approved_version || @book.rejected_version
     @author = @book.author
+  end
+
+  def not_found_redirect_path
+    if author_signed_in?
+      author_root_path
+    else
+      root_path
+    end
   end
 end
