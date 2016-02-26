@@ -14,7 +14,7 @@
             %th &nbsp;
         -@books.each do |book|
           %tr{ class: book_index_class(book) }
-            %td= link_to book.administrative_title, book_path(book)
+            %td= link_to book.administrative_title, book_version_path(book.working_version)
             -if can? :edit, book
               %td= edit_book_link(book)
       -if author_signed_in? && current_author.id == @author.id

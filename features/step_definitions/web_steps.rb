@@ -19,6 +19,12 @@ When /^I click "([^"]+)"$/ do |locator|
   click_on locator
 end
 
+When /^I click the (.*) button$/ do |button_name|
+  locator = ".#{hyphenize(button_name)}-button"
+  node = page.find(locator)
+  node.click
+end
+
 Then /^(.*) within (.*)$/ do |step_content, context|
   locator = locator_for context
   within(locator){step(step_content)}

@@ -18,7 +18,7 @@ Feature: Edit a book
       | Title            |
       | My Book Aboat Me |
 
-    When I click "Edit" within the 1st book row
+    When I click the edit button within the 1st book row
     Then I should see "Edit book" within the page title
 
     When I fill in "Title" with "My Book About Me"

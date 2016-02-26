@@ -11,7 +11,7 @@ module BooksHelper
            else
              new_book_book_version_path(book)
            end
-    link_to path, class: 'btn btn-default btn-xs', title: 'Click here to edit this book.'  do
+    link_to path, class: 'btn btn-default btn-xs edit-button', title: 'Click here to edit this book.'  do
       content_tag :span, '', :class => 'glyphicon glyphicon-pencil', 'aria-hidden' => true
     end
   end
