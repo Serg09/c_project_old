@@ -1,25 +1,25 @@
 .row
   .col-md-6
-    .form-group{ :class => form_group_class(@book_version, :title) }
+    .form-group{ :class => form_group_class(book_resource, :title) }
       =f.label :title, class: 'control-label'
       =f.text_field :title, class: 'form-control', autofocus: true
-      =help_blocks @book_version, :title
-    .form-group{ :class => form_group_class(@book_version, :short_description) }
+      =help_blocks book_resource, :title
+    .form-group{ :class => form_group_class(book_resource, :short_description) }
       =f.label :short_description, class: 'control-label'
       =f.text_area :short_description, class: 'form-control', rows: 5
-      =help_blocks @book_version, :short_description
-    .form-group{ :class => form_group_class(@book_version, :long_description) }
+      =help_blocks book_resource, :short_description
+    .form-group{ :class => form_group_class(book_resource, :long_description) }
       =f.label :long_description, class: 'control-label'
       =f.text_area :long_description, class: 'form-control', rows: 10
-      =help_blocks @book_version, :long_description
+      =help_blocks book_resource, :long_description
     .form-group
       =f.label :cover_image_file, class: 'control-label'
       =f.file_field :cover_image_file, class: 'form-control'
-      =help_blocks @book_version, :cover_image_file
+      =help_blocks book_resource, :cover_image_file
     .form-group
       =f.label :sample_file, class: 'control-label'
       =f.file_field :sample_file, class: 'form-control'
-      =help_blocks @book_version, :sample_file
+      =help_blocks book_resource, :sample_file
   .col-md-6
     .form-group
       =f.label :genres, 'Genres', class: 'control-label'
@@ -29,7 +29,7 @@
             -genre_group.each do |genre|
               .checkbox
                 =label_tag "genres_#{genre.id}" do
-                  =check_box_tag 'genres[]', genre.id, @book_version.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
+                  =check_box_tag 'genres[]', genre.id, book_resource.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
                   =genre.name
 .row
   .col-md-6

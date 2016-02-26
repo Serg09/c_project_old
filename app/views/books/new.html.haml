@@ -2,5 +2,5 @@
   New book
 
 .container.container-default
-  =form_tag(author_books_path(@author), multipart: true) do
-    =render 'form_tag_fields'
+  =form_for(@book_creator) do |f|
+    =render 'form_fields', f: f, book_resource: @book_creator

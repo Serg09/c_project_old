@@ -1,6 +1,13 @@
 class BookCreator
   attr_reader :book, :book_version
 
+  delegate :to_key, :persisted?, to: :book
+  delegate :title,
+    :short_description,
+    :long_description,
+    :genres,
+    to: :book_version
+
   def initialize(author, attributes = {})
     genres = (attributes || {}).delete(:genres) || []
     @book = author.books.new
@@ -20,5 +27,13 @@ class BookCreator
 
   def valid?
     @book.valid? && @book_version.valid?
+  end
+
+  def model_name
+    ActiveModel::Name.new(Book)
+  end
+
+  def to_model
+    self
   end
 end

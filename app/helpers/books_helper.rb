@@ -11,7 +11,9 @@ module BooksHelper
            else
              new_book_book_version_path(book)
            end
-    link_to 'Edit', path, class: 'btn btn-xs'
+    link_to path, class: 'btn btn-default btn-xs', title: 'Click here to edit this book.'  do
+      content_tag :span, '', :class => 'glyphicon glyphicon-pencil', 'aria-hidden' => true
+    end
   end
 
   def genre_groups(group_count)

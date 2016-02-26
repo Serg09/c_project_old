@@ -22,9 +22,8 @@ class BooksController < ApplicationController
   end
 
   def new
-    @book = Book.new_book(@author)
-    @book_version = @book.pending_version
-    authorize! :create, @book
+    @book_creator = BookCreator.new @author
+    authorize! :create, @book_creator.book
   end
 
   def create
