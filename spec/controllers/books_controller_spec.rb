@@ -42,24 +42,24 @@ RSpec.describe BooksController, type: :controller do
       let!(:genre2) { FactoryGirl.create(:genre) }
 
       it 'redirects to the book page' do
-        post :create, author_id: author, book_version: book_version_attributes 
+        post :create, author_id: author, book: book_version_attributes
         expect(response).to redirect_to book_path(Book.last)
       end
 
       it 'creates a new book record' do
         expect do
-          post :create, author_id: author, book_version: book_version_attributes 
+          post :create, author_id: author, book: book_version_attributes
         end.to change(Book, :count).by(1)
       end
 
       it 'creates a new book version record' do
         expect do
-          post :create, author_id: author, book_version: book_version_attributes 
+          post :create, author_id: author, book: book_version_attributes
         end.to change(BookVersion, :count).by(1)
       end
 
       it 'links the book version to the specified genres' do
-        post :create, author_id: author, book_version: book_version_attributes
+        post :create, author_id: author, book: book_version_attributes
         book_version = BookVersion.last
         expect(book_version).to have(1).genre
       end
@@ -272,13 +272,13 @@ RSpec.describe BooksController, type: :controller do
 
     describe "post #create" do
       it "redirects to the home page" do
-        post :create, author_id: author, book_version: book_version_attributes
+        post :create, author_id: author, book: book_version_attributes
         expect(response).to redirect_to root_path
       end
 
       it 'does not create a book record' do
         expect do
-          post :create, author_id: author, book_version: book_version_attributes
+          post :create, author_id: author, book: book_version_attributes
         end.not_to change(Book, :count)
       end
     end

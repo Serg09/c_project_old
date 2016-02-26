@@ -2,5 +2,5 @@
   New book
 
 .container.container-default
-  =form_for(@book_creator) do |f|
+  =form_for([@author, @book_creator]) do |f|
     =render 'form_fields', f: f, book_resource: @book_creator

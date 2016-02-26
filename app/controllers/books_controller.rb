@@ -27,7 +27,7 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book_creator = BookCreator.new @author, book_version_params
+    @book_creator = BookCreator.new @author, book_params
     authorize! :create, @book_creator.book
     if @book_creator.create
       flash[:notice] = 'Your book has been submitted successfully.'
@@ -61,13 +61,13 @@ class BooksController < ApplicationController
 
   private
 
-  def book_version_params
-    params.require(:book_version).permit(:title,
-                                         :short_description,
-                                         :long_description,
-                                         :cover_image_file,
-                                         :sample_file,
-                                         genres: [])
+  def book_params
+    params.require(:book).permit(:title,
+                                 :short_description,
+                                 :long_description,
+                                 :cover_image_file,
+                                 :sample_file,
+                                 genres: [])
   end
 
   def edit_book_redirect_path
