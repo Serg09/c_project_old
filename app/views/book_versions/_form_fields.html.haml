@@ -29,10 +29,10 @@
             -genre_group.each do |genre|
               .checkbox
                 =label_tag "genres_#{genre.id}" do
-                  =check_box_tag 'genres[]', genre.id, book_resource.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
+                  =check_box_tag 'book[genres][]', genre.id, book_resource.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
                   =genre.name
 .row
   .col-md-6
     .form-group
       =f.submit 'Submit', class: 'btn btn-primary', title: 'Click here to submit the book.'
-      =link_to 'Back', author_books_path(@author), class: 'btn btn-default', title: 'Click here to return to the list of books.'
+      =link_to 'Back', author_books_path(book_resource.author), class: 'btn btn-default', title: 'Click here to return to the list of books.'

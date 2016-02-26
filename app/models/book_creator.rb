@@ -1,7 +1,10 @@
 class BookCreator
   attr_reader :book, :book_version
 
-  delegate :to_key, :persisted?, to: :book
+  delegate :to_key,
+    :persisted?,
+    :author,
+    to: :book
   delegate :title,
     :short_description,
     :long_description,
