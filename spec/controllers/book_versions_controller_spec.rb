@@ -298,19 +298,31 @@ RSpec.describe BookVersionsController, type: :controller do
 
   context 'for an unauthenticated user' do
     describe 'get :index' do
-      it 'redirects to the home page' do
+      it 'redirects to the author sign in page' do
         get :index, book_id: book
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to new_author_session_path
       end
     end
 
     describe 'get :new' do
-      it 'redirects to the home page'
+      it 'redirects to the author sign in page' do
+        get :new, book_id: book
+        expect(response).to redirect_to new_author_session_path
+      end
     end
 
     describe 'post :create' do
-      it 'redirects to the home page'
-      it 'does not create a new BookVersion record'
+      it 'redirects to the author sign in page' do
+        post :create, book_id: book, book_version: attributes
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not create a new BookVersion record' do
+        book # preload the book record
+        expect do
+          post :create, book_id: book, book_version: attributes
+        end.not_to change(BookVersion, :count)
+      end
     end
 
     context 'for a book that is pending' do
@@ -322,16 +334,16 @@ RSpec.describe BookVersionsController, type: :controller do
       end
 
       describe 'get :edit' do
-        it 'redirects to the home page' do
+        it 'redirects to the author sign in page' do
           get :edit, id: pending_version
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
       end
 
       describe 'patch :update' do
-        it 'redirects to the home page' do
+        it 'redirects to the author sign in page' do
           patch :update, id: pending_version, book_version: attributes
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
 
         it 'does not update the book version' do

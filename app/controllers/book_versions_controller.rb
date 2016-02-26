@@ -1,4 +1,5 @@
 class BookVersionsController < ApplicationController
+  before_filter :authenticate_author!, except: [:show]
   before_filter :load_book_version, only: [:show, :edit, :update]
   before_filter :load_book, only: [:index, :new, :create]
   respond_to :html
