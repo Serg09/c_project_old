@@ -9,6 +9,8 @@ class BookCreator
     :short_description,
     :long_description,
     :genres,
+    :cover_image_id,
+    :sample_id,
     to: :book_version
 
   def initialize(author, attributes = {})
