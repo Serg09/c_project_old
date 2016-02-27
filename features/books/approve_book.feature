@@ -1,3 +1,4 @@
+@wip
 Feature: Approve a book
   As an administrator
   In order to allow a book listing to become public
