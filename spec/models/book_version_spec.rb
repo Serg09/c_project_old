@@ -121,4 +121,42 @@ RSpec.describe BookVersion, type: :model do
       expect(BookVersion.pending.count).to eq 0
     end
   end
+
+  describe '#new_copy' do
+    let (:genre1) { FactoryGirl.create(:genre) }
+    let (:genre2) { FactoryGirl.create(:genre) }
+    let (:source) { FactoryGirl.create(:approved_book_version, genres: [genre1, genre2]) }
+    let (:copy) { source.new_copy }
+    it 'returns a new instance of BookVersion' do
+      expect(copy).to be_a BookVersion
+    end
+
+    it 'sets the #title attribute on the new instance' do
+      expect(copy.title).to eq source.title
+    end
+
+    it 'sets the #short_description attribute on the new instance' do
+      expect(copy.short_description).to eq source.short_description
+    end
+
+    it 'sets the #long_description attribute on the new instance' do
+      expect(copy.long_description).to eq source.long_description
+    end
+
+    it 'sets the #cover_image_id attribute on the new instance' do
+      expect(copy.cover_image_id).to eq source.cover_image_id
+    end
+
+    it 'sets the #sample_id attribute on the new instance' do
+      expect(copy.sample_id).to eq source.sample_id
+    end
+
+    it 'adds the genres to the new instance' do
+      expect(copy.genres.map(&:id)).to eq [genre1.id, genre2.id]
+    end
+
+    it 'returns a non-persisted instance' do
+      expect(copy).not_to be_persisted
+    end
+  end
 end

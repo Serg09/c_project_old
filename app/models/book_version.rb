@@ -35,6 +35,19 @@ class BookVersion < ActiveRecord::Base
     long_description.present? ? long_description : short_description
   end
 
+  def new_copy
+    result = book.versions.new
+    [:title,
+     :short_description,
+     :long_description,
+     :cover_image_id,
+     :sample_id].each do |field|
+       result.send("#{field}=", self.send(field))
+     end
+     genres.each{|g| result.genres << g}
+     result
+  end
+
   private
 
   def process_cover_image_file
