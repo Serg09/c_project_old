@@ -13,13 +13,31 @@
       =f.text_area :long_description, class: 'form-control', rows: 10
       =help_blocks book_resource, :long_description
     .form-group
-      =f.label :cover_image_file, class: 'control-label'
-      =f.file_field :cover_image_file, class: 'form-control'
-      =help_blocks book_resource, :cover_image_file
+      -if book_resource.cover_image_id
+        .row
+          .col-sm-6
+            %img{ src: image_path(book_resource.cover_image_id), class: 'img img-responsive img-rounded pull-left' }
+          .col-sm-6
+            =f.label :cover_image_file, class: 'control-label'
+            =f.file_field :cover_image_file, class: 'form-control'
+            =help_blocks book_resource, :cover_image_file
+      -else
+        =f.label :cover_image_file, class: 'control-label'
+        =f.file_field :cover_image_file, class: 'form-control'
+        =help_blocks book_resource, :cover_image_file
     .form-group
       =f.label :sample_file, class: 'control-label'
-      =f.file_field :sample_file, class: 'form-control'
-      =help_blocks book_resource, :sample_file
+      -if book_resource.sample_id
+        .row
+          .col-sm-3
+            =link_to 'Download existing', image_path(book_resource.sample_id), class: 'sample-link'
+          .col-sm-9
+            =f.file_field :sample_file, class: 'form-control'
+            =help_blocks book_resource, :sample_file
+      -else
+        =f.label :sample_file, class: 'control-label'
+        =f.file_field :sample_file, class: 'form-control'
+        =help_blocks book_resource, :sample_file
   .col-md-6
     .form-group
       =f.label :genres, 'Genres', class: 'control-label'
