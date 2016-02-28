@@ -159,4 +159,40 @@ RSpec.describe BookVersion, type: :model do
       expect(copy).not_to be_persisted
     end
   end
+
+  describe '#approve!' do
+    let (:version) { FactoryGirl.create(:pending_book_version) }
+
+    it 'sets the status of the book version to approved' do
+      version.approve!
+      expect(version).to be_approved
+    end
+
+    it 'saves the book version' do
+      version.approve!
+      expect(version).not_to be_changed
+    end
+
+    it 'returns true on success' do
+      expect(version.approve!).to be true
+    end
+  end
+
+  describe '#reject!' do
+    let (:version) { FactoryGirl.create(:pending_book_version) }
+
+    it 'sets the status of the book version to rejected' do
+      version.reject!
+      expect(version).to be_rejected
+    end
+
+    it 'saves the book version' do
+       version.reject!
+       expect(version).not_to be_changed
+    end
+
+    it 'return strue on success' do
+      expect(version.reject!).to be true
+    end
+  end
 end

@@ -31,6 +31,18 @@ class BookVersion < ActiveRecord::Base
   attr_accessor :cover_image_file, :sample_file
   delegate :author, to: :book
 
+  def approve!
+    self.status = BookVersion.APPROVED
+    book.status = BookVersion.APPROVED
+    save && book.save
+  end
+
+  def reject!
+    self.status = BookVersion.REJECTED
+    book.status = BookVersion.REJECTED
+    save && book.save
+  end
+
   def long_or_short_description
     long_description.present? ? long_description : short_description
   end

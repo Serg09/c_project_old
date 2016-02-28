@@ -17,12 +17,6 @@ class Book < ActiveRecord::Base
   scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
   scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
 
-  def approve
-    pending_version.status = BookVersion.APPROVED
-    self.status = BookVersion.APPROVED
-    pending_version.save && save
-  end
-
   def approved?
     versions.first.approved?
   end
@@ -62,12 +56,6 @@ class Book < ActiveRecord::Base
     super
     @pending_version = nil
     @working_version = nil
-  end
-
-  def reject
-    pending_version.status = BookVersion.REJECTED
-    self.status = BookVersion.REJECTED
-    pending_version.save && save
   end
 
   def rejected?
