@@ -61,7 +61,13 @@ class BookVersionsController < ApplicationController
   end
 
   def book_version_params
-    params.require(:book_version).permit(:title, :short_description, :long_description, :cover_image_file, :sample_file)
+    params.require(:book_version).permit(:title,
+                                         :short_description,
+                                         :long_description,
+                                         :cover_image_file,
+                                         :cover_image_id,
+                                         :sample_file,
+                                         :sample_id)
   end
 
   def load_book
