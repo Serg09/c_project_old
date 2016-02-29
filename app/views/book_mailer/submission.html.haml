@@ -1,8 +1,8 @@
 %h1 Book submitted
 
 %p
-  =@book.author.full_name
-  has submitted a book, #{h =@book.pending_version.title}, which now needs to be reviewed.
+  =@book_version.book.author.full_name
+  has submitted a book, #{h =@book_version.title}, which now needs to be reviewed.
 
 %p
   There are currently

@@ -31,7 +31,7 @@ class BookVersionsController < ApplicationController
     authorize! :create, @book_version
     if @book_version.save
       flash[:notice] = 'The book was updated successfully.'
-      BookMailer.edit_submission(@book).deliver_now
+      BookMailer.edit_submission(@book_version).deliver_now
     end
     respond_with @book_version
   end

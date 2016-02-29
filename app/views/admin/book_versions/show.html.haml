@@ -1,9 +1,9 @@
 =content_for :page_title do
-  =@book.administrative_title
+  =@book_version.title
 
 .container.container-default
   .row
     .col-md-10
-      =render 'books/details', book_version: @book_version
+      =render 'book_versions/details', book_version: @book_version
     .col-md-2.btn-stack
       =render 'shared/approval_buttons', resource: @book_version

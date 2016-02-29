@@ -1,8 +1,8 @@
 %h1 Book edited
 
 %p
-  =@book.author.full_name
-  has edited an approved book, #{h =@book.pending_version.title}, which now needs to be reviewed again.
+  =@book_version.book.author.full_name
+  has edited an approved book, #{h =@book_version.title}, which now needs to be reviewed again.
 
 %p
   There are currently

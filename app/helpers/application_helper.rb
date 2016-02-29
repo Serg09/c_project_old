@@ -5,15 +5,11 @@ module ApplicationHelper
   }
 
   def approve_path(resource)
-    # TODO need to replace this hack with a real solution
-    resource = resource.book if resource.is_a? BookVersion
-    "approve_admin_#{resource.class.name.downcase}_path"
+    "approve_admin_#{resource.class.name.underscore}_path"
   end
 
   def reject_path(resource)
-    # TODO need to replace this hack with a real solution
-    resource = resource.book if resource.is_a? BookVersion
-    "reject_admin_#{resource.class.name.downcase}_path"
+    "reject_admin_#{resource.class.name.underscore}_path"
   end
 
   def author_path?(status)
