@@ -2,7 +2,7 @@
 module Approvable
   extend ActiveSupport::Concern
 
-  STATUSES = %w(pending approved rejected)
+  STATUSES = %w(pending approved rejected superseded)
 
   STATUSES.each do |status|
     define_method "#{status}?" do

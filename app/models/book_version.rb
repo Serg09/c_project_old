@@ -32,15 +32,16 @@ class BookVersion < ActiveRecord::Base
   delegate :author, to: :book
 
   def approve!
-    self.status = BookVersion.APPROVED
-    book.status = BookVersion.APPROVED
-    save && book.save
+    BookVersion.transaction do
+      book.approved_version.status = BookVersion.SUPERSEDED if book.approved_version
+      self.status = BookVersion.APPROVED
+      save
+    end
   end
 
   def reject!
     self.status = BookVersion.REJECTED
-    book.status = BookVersion.REJECTED
-    save && book.save
+    save
   end
 
   def long_or_short_description

@@ -176,6 +176,16 @@ RSpec.describe BookVersion, type: :model do
     it 'returns true on success' do
       expect(version.approve!).to be true
     end
+
+    context 'when another approved version exists' do
+      let (:book) { FactoryGirl.create(:approved_book) }
+      let!(:approved_version) { book.approved_version }
+      let!(:pending_version) { FactoryGirl.create(:pending_book_version, book: book) }
+      it 'sets the status of the existing approved version to "superseded"' do
+        pending_version.approve!
+        expect(approved_version).to be_superseded
+      end
+    end
   end
 
   describe '#reject!' do
