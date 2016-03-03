@@ -14,7 +14,8 @@ FactoryGirl.define do
                                           title: evaluator.title,
                                           short_description: evaluator.short_description,
                                           long_description: evaluator.long_description,
-                                          status: evaluator.status)
+                                          status: evaluator.status,
+                                          created_at: book.created_at)
     end
 
     factory :pending_book do
