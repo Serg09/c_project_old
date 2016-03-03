@@ -49,7 +49,7 @@
             -genre_group.each do |genre|
               .checkbox
                 =label_tag "genres_#{genre.id}" do
-                  =check_box_tag 'book[genres][]', genre.id, book_resource.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
+                  =check_box_tag "#{book_resource.model_name.to_s.underscore}[genres][]", genre.id, book_resource.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
                   =genre.name
 .row
   .col-md-6

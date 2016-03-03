@@ -29,6 +29,7 @@ class BookVersionsController < ApplicationController
 
     @book_version = @book.versions.new(book_version_params)
     authorize! :create, @book_version
+    genres_from_params.each{|g| @book_version.genres << g}
     if @book_version.save
       flash[:notice] = 'The book was updated successfully.'
       BookMailer.edit_submission(@book_version).deliver_now
@@ -48,6 +49,7 @@ class BookVersionsController < ApplicationController
   def update
     with_permission do
       authorize! :update, @book_version
+      genres_from_params.each{|g| @book_version.genres << g}
       @book_version.update_attributes book_version_params
       flash[:notice] = "The book was updated successfully." if @book_version.save
       respond_with @book_version, location: book_path(@book_version.book)
@@ -68,6 +70,15 @@ class BookVersionsController < ApplicationController
                                          :cover_image_id,
                                          :sample_file,
                                          :sample_id)
+  end
+
+  def genres_from_params
+    genre_ids = params.require(:book_version).permit(genres: [])[:genres]
+    if genre_ids
+      genre_ids.map{|id| Genre.find(id)}
+    else
+      []
+    end
   end
 
   def load_book
