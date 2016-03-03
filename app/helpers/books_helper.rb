@@ -1,6 +1,6 @@
 module BooksHelper
   def book_index_class(book)
-    return 'warning' if book.pending?
+    return 'warning' if book.pending_version
     return 'danger' if book.rejected?
     return ''
   end
