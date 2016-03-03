@@ -38,8 +38,7 @@ Rails.application.routes.draw do
         patch :reject
       end
     end
-    resources :books, only: [:index]
-    resources :book_versions, only: [:show] do
+    resources :book_versions, only: [:show, :index] do
       member do
         patch :approve
         patch :reject

@@ -17,12 +17,12 @@ SimpleNavigation::Configuration.run do |navigation|
       bios.item :approved, 'Approved', admin_bios_path(status: :approved), highlights_on: -> { bio_path?(Bio.APPROVED) }
       bios.item :rejected, 'Rejected', admin_bios_path(status: :rejected), highlights_on: -> { bio_path?(Bio.REJECTED) }
     end
-    primary.item :books, book_nav_item_caption, admin_books_path, if: ->{administrator_signed_in?} do |books|
+    primary.item :books, book_nav_item_caption, admin_book_versions_path, if: ->{administrator_signed_in?} do |books|
       books.auto_highlight = false
       books.dom_class = 'nav nav-tabs'
-      books.item :pending, 'Pending', admin_books_path, highlights_on: -> { book_path?(BookVersion.PENDING) }
-      books.item :approved, 'Approved', admin_books_path(status: :approved), highlights_on: -> { book_path?(BookVersion.APPROVED) }
-      books.item :rejected, 'Rejected', admin_books_path(status: :rejected), highlights_on: -> { book_path?(BookVersion.REJECTED) }
+      books.item :pending, 'Pending', admin_book_versions_path, highlights_on: -> { book_path?(BookVersion.PENDING) }
+      books.item :approved, 'Approved', admin_book_versions_path(status: :approved), highlights_on: -> { book_path?(BookVersion.APPROVED) }
+      books.item :rejected, 'Rejected', admin_book_versions_path(status: :rejected), highlights_on: -> { book_path?(BookVersion.REJECTED) }
     end
     primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path, if: ->{administrator_signed_in?} do |inquiries|
       inquiries.auto_highlight = false

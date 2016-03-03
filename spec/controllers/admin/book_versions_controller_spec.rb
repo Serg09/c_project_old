@@ -8,6 +8,13 @@ RSpec.describe Admin::BookVersionsController, type: :controller do
   context 'for an authenticated author' do
     before(:each) { sign_in author }
 
+    describe 'get :index' do
+      it 'redirects to the home page' do
+        get :index
+        expect(response).to redirect_to root_path
+      end
+    end
+
     describe 'patch :approve' do
       it 'redirects to the home page' do
         patch :approve, id: pending_book_version
@@ -41,10 +48,17 @@ RSpec.describe Admin::BookVersionsController, type: :controller do
     let (:admin) { FactoryGirl.create(:administrator) }
     before(:each) { sign_in admin }
 
+    describe 'get :index' do
+      it 'is successful' do
+        get :index
+        expect(response).to have_http_status :success
+      end
+    end
+
     describe 'patch :approve' do
       it 'redirects to the book index page' do
         patch :approve, id: pending_book_version
-        expect(response).to redirect_to admin_books_path
+        expect(response).to redirect_to admin_book_versions_path
       end
 
       it 'changes the status of the book to "approved"' do
@@ -58,7 +72,7 @@ RSpec.describe Admin::BookVersionsController, type: :controller do
     describe 'patch :reject' do
       it 'redirects to the book index page' do
         patch :reject, id: pending_book_version
-        expect(response).to redirect_to admin_books_path
+        expect(response).to redirect_to admin_book_versions_path
       end
 
       it 'changes the status of the book to "rejected"' do
@@ -78,6 +92,13 @@ RSpec.describe Admin::BookVersionsController, type: :controller do
   end
 
   context 'for an unauthenticated user' do
+    describe 'get :index' do
+      it 'redirects to the home page' do
+        get :index
+        expect(response).to redirect_to root_path
+      end
+    end
+
     describe 'patch :approve' do
       it 'redirects to the home page' do
         patch :approve, id: pending_book_version
