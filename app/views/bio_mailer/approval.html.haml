@@ -1,4 +1,5 @@
-%h1= class_name + "#" + @action
+%h1 Your bio has been approved!
 
-%p
-  = @greeting + ", find me in app/views/bios/approval.html.haml"
+%p The administrator at CrowdScribed.com has approved your bio.
+
+%p #{h link_to 'Click here', bio_url(@bio)} to see it online.

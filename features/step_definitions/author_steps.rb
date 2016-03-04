@@ -1,5 +1,5 @@
 When /^an administrator approves the account for (#{AUTHOR})$/ do |author|
-  author.status = Author.ACCEPTED
+  author.status = Author.APPROVED
   author.save!
   # Doing this here as it will be the controller that handles this
   # in production and this is easier than recreating the web steps
@@ -16,8 +16,8 @@ When /^an administrator rejects the account for (#{AUTHOR})$/ do |author|
   AuthorMailer.account_rejected_notification(author).deliver_now
 end
 
-Given /^there is an? (?:(rejected|accepted|pending) )?author with email "([^"]+)" and password "([^"]+)"$/ do |status, email, password|
-  status ||= Author.ACCEPTED
+Given /^there is an? (?:(rejected|accepted|pending) )?author with email (?:address )?"([^"]+)" and password "([^"]+)"$/ do |status, email, password|
+  status ||= Author.APPROVED
   FactoryGirl.create(:author, email: email,
                               password: password,
                               password_confirmation: password,
@@ -29,7 +29,7 @@ Given /^there is an? (?:(rejected|accepted|pending) )?author named "([^"]+)" wit
   expect(match).not_to be_nil
   first_name = match[1]
   last_name = match[2]
-  status ||= Author.ACCEPTED
+  status ||= Author.APPROVED
   FactoryGirl.create(:author, first_name: first_name,
                               last_name: last_name,
                               email: email,

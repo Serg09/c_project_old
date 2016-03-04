@@ -1,0 +1,11 @@
+Book submitted
+:plain
+
+#{h @book_version.book.author.full_name} has submitted a book, #{h @book_version.title}, which now needs to be reviewed.
+:plain
+
+There are currently #{h pluralize(BookVersion.pending.count, 'book')} waiting to be approved.
+:plain
+
+Follow the link below to review them
+=books_url

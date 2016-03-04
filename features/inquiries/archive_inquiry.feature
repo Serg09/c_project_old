@@ -18,9 +18,9 @@ Feature: Resolve an inquiry
 
     When I click "John Doe" within the inquiries table
     Then I should see "Inquiry" within the page title
-    And I should see "How much for the dog?" within the main content
+    And I should see "How much for the dog?" within the admin content
 
-    When I click "Archive" within the main content
+    When I click "Archive" within the admin content
     Then I should see "The inquiry has been archived successfully" within the notification area
     And I should see the following inquiries table
      | Name     | Email        |          Received |

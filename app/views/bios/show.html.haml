@@ -28,10 +28,7 @@
         %p=link_to 'Edit', edit_bio_path(@bio), class: 'btn btn-default'
     -if administrator_signed_in?
       .col-md-2.btn-stack
-        -unless @bio.approved?
-          =button_to 'Approve', approve_bio_path(@bio), method: :patch, class: 'btn btn-success btn-block', title: 'Click here to approve the bio.'
-        -unless @bio.rejected?
-          =button_to 'Reject', reject_bio_path(@bio), method: :patch, class: 'btn btn-danger btn-block', title: 'Click here to reject the bio.'
+        =render 'shared/approval_buttons', resource: @bio
   -if can? :index, Bio
     .row
       .col-md-6

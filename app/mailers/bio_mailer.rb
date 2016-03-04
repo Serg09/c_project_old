@@ -7,17 +7,15 @@ class BioMailer < ApplicationMailer
     mail to: "info@crowdscribed.com", subject: "New bio submission"
   end
 
-  def approval
+  def approval(bio)
     inline_images
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
+    @bio = bio
+    mail to: bio.author.email, subject: 'Bio approved!'
   end
 
-  def rejection
+  def rejection(bio)
     inline_images
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
+    @bio = bio
+    mail to: bio.author.email, subject: 'Bio rejected'
   end
 end

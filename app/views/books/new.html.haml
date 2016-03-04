@@ -1,0 +1,6 @@
+=content_for :page_title do
+  New book
+
+.container.container-default
+  =form_for([@author, @book_creator]) do |f|
+    =render 'book_versions/form_fields', f: f, book_resource: @book_creator

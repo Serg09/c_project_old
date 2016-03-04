@@ -12,12 +12,12 @@ class BioMailerPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/bios/approval
   def approval
-    BioMailer.approval
+    BioMailer.approval Bio.approved.first || FactoryGirl.create(:approved_bio)
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/bios/rejection
   def rejection
-    BioMailer.rejection
+    BioMailer.rejection Bio.rejected.first || FactoryGirl.create(:rejected_bio)
   end
 
 end

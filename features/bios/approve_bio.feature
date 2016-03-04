@@ -26,13 +26,13 @@ Feature: Approve a bio
     Then I should see "Bio" within the page title
 
   Scenario: An administrator approves a pending bio
-    When I click "Approve" within the main content
+    When I click "Approve" within the admin content
     Then I should see "The bio has been approved successfully." within the notification area
     And I should see the following bios table
       | Author   | Date submitted |
 
   Scenario: An administrator rejects a pending bio
-    When I click "Reject" within the main content
+    When I click "Reject" within the admin content
     Then I should see "The bio has been rejected successfully." within the notification area
     And I should see the following bios table
       | Author   | Date submitted |

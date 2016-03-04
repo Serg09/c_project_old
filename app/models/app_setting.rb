@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: app_settings
+#
+#  id         :integer          not null, primary key
+#  name       :string(20)       not null
+#  value      :string(256)      not null
+#  data_type  :string(20)       not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class AppSetting < ActiveRecord::Base
   def self.app_setting_value(name)
     name = name.to_s.chomp('?')

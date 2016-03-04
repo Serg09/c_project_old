@@ -12,9 +12,14 @@
 #
 
 class Image < ActiveRecord::Base
+  MAX_IMAGE_WIDTH = 1024
+  MAX_IMAGE_HEIGHT = 1024
+
   belongs_to :author
   belongs_to :image_binary
   has_many :bios, foreign_key: 'photo_id'
+  has_many :cover_of_book_versions, foreign_key: 'cover_image_id', class_name: 'BookVersion'
+  has_many :sample_of_book_versions, foreign_key: 'sample_id', class_name: 'BookVersion'
 
   validates_presence_of :author_id, :image_binary_id, :hash_id
   validates_length_of :hash_id, is: 40
@@ -22,5 +27,49 @@ class Image < ActiveRecord::Base
 
   def self.hash_id(data)
     Digest::SHA1.hexdigest(data)
+  end
+
+  def self.find_or_create_from_file(file, author)
+    # read and resize the image
+    magick = Magick::Image.from_blob(file.read).first
+    scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+    data = scaled_magick.to_blob
+
+    # see if the image is already present in the database
+    hash_id = hash_id(data)
+    image = find_by(hash_id: hash_id, author_id: author.id)
+
+    # create the image record if it doesn't exist
+    unless image
+      image_binary = ImageBinary.create!(data: data)
+      image = create!(author: author,
+                      image_binary: image_binary,
+                      hash_id: hash_id,
+                      mime_type: file.respond_to?(:content_type) ?
+                        file.content_type :
+                        'image/jpeg')
+
+    end
+
+    image
+  end
+
+  def can_be_viewed_by?(author)
+    return true if author_id == author.id && references.any?{|r| r.pending?}
+    references.any?{|r| r.approved?}
+  end
+
+  private
+
+  def reference_collections
+    [bios, cover_of_book_versions, sample_of_book_versions]
+  end
+
+  def references
+    Enumerator::Lazy.new(reference_collections) do |yielder, collection|
+      collection.each do |reference|
+        yielder << reference
+      end
+    end
   end
 end

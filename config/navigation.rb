@@ -12,11 +12,17 @@ SimpleNavigation::Configuration.run do |navigation|
       about.item :contact_us, 'Contact us', new_inquiry_path
       about.item :book_incubator, 'Book Incubator', pages_book_incubator_path
     end
-    primary.item :authors, 'Authors' do |authors|
-      authors.item :bio, 'Bio', bios_path, if: ->{author_signed_in?}
-      authors.item :author_sign_in, 'Log in', new_author_session_path, if: ->{!author_signed_in? && !AppSetting.sign_in_disabled?}
-      authors.item :author_sign_up, 'Signup', new_author_registration_path, if: ->{!author_signed_in? && !AppSetting.sign_in_disabled?}
-      authors.item :author_sign_out, 'Sign Out', destroy_author_session_path, method: :delete, if: ->{author_signed_in? && !AppSetting.sign_in_disabled?}
+    if !AppSetting.sign_in_disabled?
+      primary.item :authors, 'Authors' do |authors|
+        if author_signed_in?
+          authors.item :bio, 'Bio', bios_path
+          authors.item :my_books, 'My books', author_books_path(current_author)
+          authors.item :author_sign_out, 'Sign Out', destroy_author_session_path, method: :delete, if: ->{author_signed_in? && !AppSetting.sign_in_disabled?}
+        else
+          authors.item :author_sign_in, 'Log in', new_author_session_path
+          authors.item :author_sign_up, 'Signup', new_author_registration_path, if: ->{!author_signed_in? && !AppSetting.sign_in_disabled?}
+        end
+      end
     end
     primary.item :books, 'Books', pages_books_path
   end

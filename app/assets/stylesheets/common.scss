@@ -16,6 +16,9 @@
   margin-top: 120px;
 }
 
+#admin-content {
+}
+
 .nav.navbar-nav li a {
   text-transform: uppercase;
   font-family: 'Maven-Pro', arial, helvetica, sans-serif;
@@ -120,6 +123,15 @@ ul.footer-menu{
 
 .extra-bottom {
   margin-bottom: 1em;
+}
+
+.sample-container {
+  margin: 1em 0;
+  text-align: center;
+}
+.sample-link {
+  font-weight: bold;
+  font-size: 110%;
 }
 
 @font-face {

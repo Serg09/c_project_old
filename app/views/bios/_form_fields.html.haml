@@ -1,6 +1,6 @@
-.from-group{ :class => form_group_class(@bio, :text) }
+.form-group{ :class => form_group_class(@bio, :text) }
   =f.label :text, class: 'control-label'
-  =f.text_area :text, class: 'form-control extra-bottom', autofocus: true, rows: 5
+  =f.text_area :text, class: 'form-control', autofocus: true, rows: 5
   =help_blocks @bio, :text
 .form-group
   =f.label :photo_file, class: 'control-label'

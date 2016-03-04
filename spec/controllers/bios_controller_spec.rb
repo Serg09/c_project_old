@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BiosController, type: :controller do
   include Devise::TestHelpers
 
-  let (:author) { FactoryGirl.create(:author, status: Author.ACCEPTED) }
+  let (:author) { FactoryGirl.create(:approved_author) }
   let (:bio) { FactoryGirl.create(:bio, author: author) }
   let (:approved_bio) { FactoryGirl.create(:bio, author: author, status: Bio.APPROVED) }
   let (:attributes) do
@@ -118,52 +118,11 @@ RSpec.describe BiosController, type: :controller do
             end.to change(author.bios, :count).by(1)
           end
         end
-
-        describe 'patch :approve' do
-          it 'redirects to the author home page' do
-            patch :approve, id: approved_bio
-            expect(response).to redirect_to author_root_path
-          end
-
-          it 'does not update the bio' do
-            expect do
-              patch :approve, id: approved_bio
-              approved_bio.reload
-            end.not_to change(approved_bio, :status)
-          end
-        end
-        describe 'patch :reject' do
-          it 'redirects to the author home page' do
-            patch :reject, id: approved_bio
-            expect(response).to redirect_to author_root_path
-          end
-
-          it 'does not update the bio' do
-            expect do
-              patch :reject, id: approved_bio
-              approved_bio.reload
-            end.not_to change(approved_bio, :status)
-          end
-        end
       end
-      context 'for an unapproved bio' do
-        describe 'put :update' do
-          it 'redirects to the show bio page' do
-            patch :approve, id: bio
-            expect(response).to redirect_to author_root_path
-          end
 
-          it 'updates the bio' do
-            expect do
-              patch :approve, id: bio
-              approved_bio.reload
-            end.not_to change(approved_bio, :status)
-          end
-        end
-      end
     end
     context 'that does not own the bio' do
-      let (:other_author) { FactoryGirl.create(:author, status: Author.ACCEPTED) }
+      let (:other_author) { FactoryGirl.create(:approved_author) }
       before(:each) { sign_in other_author }
 
       describe "get :show" do
@@ -193,19 +152,6 @@ RSpec.describe BiosController, type: :controller do
           end.not_to change(bio, :text)
         end
       end
-      describe 'put :update' do
-        it 'redirects to the show bio page' do
-          patch :approve, id: bio
-          expect(response).to redirect_to author_root_path
-        end
-
-        it 'updates the bio' do
-          expect do
-            patch :approve, id: bio
-            bio.reload
-          end.not_to change(bio, :status)
-        end
-      end
     end
   end
 
@@ -214,9 +160,10 @@ RSpec.describe BiosController, type: :controller do
     before(:each) { sign_in admin }
 
     describe 'get :index' do
-      it 'is successful' do
+      it 'redirects to the admin bio index page' do
+        # may need to reconsider this later
         get :index, author_id: author.id
-        expect(response).to have_http_status :success
+        expect(response).to redirect_to admin_bios_path
       end
     end
 
@@ -251,48 +198,6 @@ RSpec.describe BiosController, type: :controller do
       it 'redirects to the administrator home page' do
         get :edit, id: bio
         expect(response).to redirect_to admin_root_path
-      end
-    end
-
-    context 'and an unapproved bio' do
-      describe 'put :update' do
-        it 'redirects to the administrator home page' do
-          put :update, id: bio, bio: attributes
-          expect(response).to redirect_to admin_root_path
-        end
-
-        it 'does not update the bio' do
-          expect do
-            put :update, id: bio, bio: attributes
-          end.not_to change(bio, :text)
-        end
-      end
-
-      describe 'patch :approve' do
-        it 'redirects to the bio index page' do
-          patch :approve, id: bio
-          expect(response).to redirect_to bios_path
-        end
-
-        it 'updates the bio' do
-          expect do
-            patch :approve, id: bio
-            bio.reload
-          end.to change(bio, :status).to Bio.APPROVED
-        end
-      end
-      describe 'patch :reject' do
-        it 'redirects to the bio index page' do
-          patch :reject, id: bio
-          expect(response).to redirect_to bios_path
-        end
-
-        it 'updates the bio' do
-          expect do
-            patch :reject, id: bio
-            bio.reload
-          end.to change(bio, :status).to Bio.REJECTED
-        end
       end
     end
   end
@@ -365,36 +270,6 @@ RSpec.describe BiosController, type: :controller do
       it 'redirects to the sign in page' do
         get :edit, id: bio
         expect(response).to redirect_to new_author_session_path
-      end
-    end
-
-    context 'and an unapproved bio' do
-      describe 'patch :approve' do
-        it 'redirects the sign in page' do
-          patch :approve, id: bio
-          expect(response).to redirect_to new_author_session_path
-        end
-
-        it 'does not update the bio' do
-          expect do
-            patch :approve, id: bio
-            bio.reload
-          end.not_to change(bio, :status)
-        end
-      end
-
-      describe 'patch :reject' do
-        it 'redirects to the sign in page' do
-          patch :reject, id: bio
-          expect(response).to redirect_to new_author_session_path
-        end
-
-        it 'does not update the bio' do
-          expect do
-            patch :reject, id: bio
-            bio.reload
-          end.not_to change(bio, :status)
-        end
       end
     end
   end

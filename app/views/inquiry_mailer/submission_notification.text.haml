@@ -1,9 +1,13 @@
 Inquiry
-=======
+:plain
 
 A new inquiry has been submitted at #{h @inquiry.created_at.strftime('%l:%M') } on #{h @inquiry.created_at.strftime('%m/%d/%Y (%Z)') }
+:plain
+
 From: #{h @inquiry.full_name}
 Message:
 =@inquiry.body
+:plain
+
 Follow the link below to manage inquiries.
 =new_administrator_session_url

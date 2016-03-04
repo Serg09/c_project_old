@@ -32,7 +32,10 @@
 #
 
 class Author < ActiveRecord::Base
+  include Approvable
+
   has_many :bios
+  has_many :books
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -40,29 +43,8 @@ class Author < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable
 
-  STATUSES = %w(pending accepted rejected)
-
   validates_presence_of :first_name, :last_name, :username
   validates_uniqueness_of :username
-  validates_inclusion_of :status, in: STATUSES
-
-  class << self
-    STATUSES.each do |s|
-      define_method s.upcase do
-        s
-      end
-    end
-  end
-
-  STATUSES.each do |s|
-    define_method "#{s}?" do
-      self.status == s
-    end
-  end
-
-  scope :pending, -> { where(status: Author.PENDING) }
-  scope :accepted, -> { where(status: Author.ACCEPTED) }
-  scope :rejected, -> { where(status: Author.REJECTED) }
 
   def full_name
     "#{first_name} #{last_name}"

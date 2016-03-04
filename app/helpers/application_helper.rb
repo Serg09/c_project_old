@@ -4,26 +4,36 @@ module ApplicationHelper
     'alert' => 'danger'
   }
 
+  def approve_path(resource)
+    "approve_admin_#{resource.class.name.underscore}_path"
+  end
+
+  def reject_path(resource)
+    "reject_admin_#{resource.class.name.underscore}_path"
+  end
+
   def author_path?(status)
-    return false unless request_uri.path.starts_with? '/author'
-    (request_query[:status] || Author.PENDING) == status
+    matches_path? '/admin/author', {status: status}, {status: Author.PENDING}
   end
 
   def author_nav_item_caption
-    pending_count = Author.pending.count
-    return 'Authors' if pending_count == 0
-    "Authors <span class=\"badge\">#{pending_count}</span>".html_safe
+    nav_item_caption 'Authors', Author.pending.count
   end
 
   def bio_path?(status)
-    return false unless request_uri.path.starts_with? '/bio'
-    (request_query[:status] || Bio.PENDING) == status
+    matches_path? '/admin/bio', {status: status}, {status: Author.PENDING}
   end
 
   def bio_nav_item_caption
-    pending_count = Bio.pending.count
-    return 'Bios' if pending_count == 0
-    "Bios <span class=\"badge\">#{pending_count}</span>".html_safe
+    nav_item_caption 'Bios', Bio.pending.count
+  end
+
+  def book_path?(status)
+    matches_path? '/admin/book', {status: status}, {status: BookVersion.PENDING}
+  end
+
+  def book_nav_item_caption
+    nav_item_caption 'Books', BookVersion.pending.count
   end
 
   def flash_key_to_alert_class(flash_key)
@@ -68,7 +78,7 @@ module ApplicationHelper
   end
 
   def inquiry_path?(archived)
-    return false unless request_uri.path.starts_with? '/inquiries'
+    return false unless request_uri.path.starts_with? '/admin/inquiries'
     archived == html_true?(request_query[:archived])
   end
 
@@ -98,5 +108,17 @@ module ApplicationHelper
 
   def request_uri
     @request_uri ||= URI.parse(request.original_url)
+  end
+
+  private
+
+  def matches_path?(path_root, query, defaults)
+    return false unless request_uri.path.starts_with? path_root
+    query.all?{|k,v| (request_query[k] || defaults[k]) == v}
+  end
+
+  def nav_item_caption(caption, pending_count)
+    return caption if pending_count == 0
+    "#{caption} <span class=\"badge\">#{pending_count}</span>".html_safe
   end
 end

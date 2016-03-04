@@ -95,9 +95,9 @@ RSpec.describe Author, type: :model do
     end
 
     context 'when set to "pending"' do
-      it 'can be set to "accepted"' do
+      it 'can be set to "approved"' do
         author = Author.create! attributes
-        author.status = Author.ACCEPTED
+        author.status = Author.APPROVED
         expect(author).to be_valid
       end
 
@@ -107,7 +107,7 @@ RSpec.describe Author, type: :model do
         expect(author).to be_valid
       end
 
-      it 'cannot be set to anything except "accepted" or "rejected"' do
+      it 'cannot be set to anything except "approved" or "rejected"' do
         author = Author.create! attributes
         author.status = 'notvalid'
         expect(author).to have_at_least(1).error_on :status
@@ -123,35 +123,35 @@ RSpec.describe Author, type: :model do
   end
 
   shared_context :multi_status do
-    let!(:p1) { FactoryGirl.create(:author, first_name: 'John', status: Author.PENDING) }
-    let!(:p2) { FactoryGirl.create(:author, first_name: 'Jake', status: Author.PENDING) }
-    let!(:a1) { FactoryGirl.create(:author, first_name: 'Mike', status: Author.ACCEPTED) }
-    let!(:a2) { FactoryGirl.create(:author, first_name: 'Mark', status: Author.ACCEPTED) }
-    let!(:r1) { FactoryGirl.create(:author, first_name: 'Fred', status: Author.REJECTED) }
-    let!(:r2) { FactoryGirl.create(:author, first_name: 'Ferb', status: Author.REJECTED) }
+    let!(:p1) { FactoryGirl.create(:pending_author, first_name: 'John') }
+    let!(:p2) { FactoryGirl.create(:pending_author, first_name: 'Jake') }
+    let!(:a1) { FactoryGirl.create(:approved_author, first_name: 'Mike') }
+    let!(:a2) { FactoryGirl.create(:approved_author, first_name: 'Mark') }
+    let!(:r1) { FactoryGirl.create(:rejected_author, first_name: 'Fred') }
+    let!(:r2) { FactoryGirl.create(:rejected_author, first_name: 'Ferb') }
   end
 
   describe '::pending' do
     include_context :multi_status
     it 'lists the authors in pending status' do
       authors = Author.pending.map(&:first_name)
-      expect(authors).to eq %w(John Jake)
+      expect(authors).to eq %w(Jake John)
     end
   end
 
-  describe '::accepted' do
+  describe '::approved' do
     include_context :multi_status
-    it 'lists the authors in accepted status' do
-      authors = Author.accepted.map(&:first_name)
-      expect(authors).to eq %w(Mike Mark)
+    it 'lists the authors in approved status' do
+      authors = Author.approved.map(&:first_name)
+      expect(authors).to eq %w(Mark Mike)
     end
   end
 
   describe '::rejected' do
     include_context :multi_status
     it 'lists the authors in rejected status' do
-      authors = Author.accepted.map(&:first_name)
-      expect(authors).to eq %w(Mike Mark)
+      authors = Author.rejected.map(&:first_name)
+      expect(authors).to eq %w(Ferb Fred)
     end
   end
 
@@ -243,5 +243,12 @@ RSpec.describe Author, type: :model do
     # An author should never have more than one pending bio, as updating 
     # a pending bio should update the one that already exists and updating
     # an approved bio creates a pending bio
+  end
+
+  describe '#books' do
+    it 'contains a list of the authors books' do
+      author = Author.new(attributes)
+      expect(author).to have(0).books
+    end
   end
 end

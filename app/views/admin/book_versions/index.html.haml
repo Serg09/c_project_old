@@ -1,0 +1,18 @@
+=content_for :page_title do
+  Books
+
+.container.container-default
+  .row
+    .col-md-6
+      =render_navigation context: :admin, level: 2
+      %table#books-table.table.table-striped
+        %tr
+          %th Title
+          %th Author
+          %th.text-right Date submitted
+        -@book_versions.each do |book_version|
+          %tr
+            %td= link_to book_version.title, admin_book_version_path(book_version)
+            %td= book_version.book.author.full_name
+            %td.text-right= format_date(book_version.created_at)
+      =will_paginate @book_versions, renderer: BootstrapPagination::Rails

@@ -10,12 +10,19 @@ When /^I select "([^"]+)" from "([^"]+)"$/ do |value, locator|
   select value, from: locator
 end
 
-When /^I check "([^"]+)"$/ do |locator|
-  check locator
+When /^I check "([^"]+)"(?: and "([^"]+)")?$/ do |locator1, locator2|
+  check locator1
+  check locator2 if locator2
 end
 
 When /^I click "([^"]+)"$/ do |locator|
   click_on locator
+end
+
+When /^I click the (.*) button$/ do |button_name|
+  locator = ".#{hyphenize(button_name)}-button"
+  node = page.find(locator)
+  node.click
 end
 
 Then /^(.*) within (.*)$/ do |step_content, context|

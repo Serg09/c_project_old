@@ -77,4 +77,18 @@ RSpec.describe Image, type: :model do
       expect(image).to have(0).bios
     end
   end
+
+  describe '#cover_of_book_versions' do
+    it 'lists the books using the image as the cover' do
+      image = Image.new attributes
+      expect(image).to have(0).cover_of_book_versions
+    end
+  end
+
+  describe '#sample_of_book_versions' do
+    it 'lists the books using the image (PDF) as a sample' do
+      image = Image.new attributes
+      expect(image).to have(0).sample_of_book_versions
+    end
+  end
 end

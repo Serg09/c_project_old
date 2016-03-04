@@ -8,25 +8,43 @@ Rails.application.routes.draw do
     confirmations: 'authors/confirmations'
   }
 
-  resources :inquiries, only: [:index, :new, :create, :show] do
-    member do
-      patch :archive
-    end
-  end
+  resources :inquiries, only: [:new, :create]
   resources :authors, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
-    member do
-      patch :accept
-      patch :reject
-    end
+    resources :books, only: [:new, :index, :create]
   end
-  resources :bios, only: [:show, :edit, :update, :index, :new, :create] do
-    member do
-      patch :approve
-      patch :reject
-    end
+  resources :bios, only: [:show, :edit, :update, :index, :create, :new]
+  resources :books, only: [:index, :show, :edit, :update] do
+    resources :book_versions, path: 'versions', only: [:new, :create, :index]
   end
+  resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
+
+  namespace :admin do
+    resources :inquiries, only: [:index, :show] do
+      member do
+        patch :archive
+      end
+    end
+    resources :authors, only: [:index, :show] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
+    resources :bios, only: [:index, :show] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
+    resources :book_versions, only: [:show, :index] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
+  end
 
   get 'pages/welcome'
   get 'pages/package_pricing'
@@ -46,6 +64,6 @@ Rails.application.routes.draw do
   get 'pages/account_pending'
 
   get 'authors', to: 'authors#show', as: :author_root
-  get 'admin', to: 'authors#index', as: :admin_root
+  get 'admin', to: 'admin/authors#index', as: :admin_root
   root to: 'pages#welcome'
 end

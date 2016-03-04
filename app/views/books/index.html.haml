@@ -1,0 +1,21 @@
+=content_for :page_title do
+  -if author_signed_in? && current_author.id == params[:author_id].to_i
+    My books
+  -else
+    Books
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#books-table.table.table-striped
+        %tr
+          %th Title
+          -if @books.any?{|b| can? :edit, b}
+            %th &nbsp;
+        -@books.each do |book|
+          %tr{ class: book_index_class(book) }
+            %td= link_to book.administrative_title, book_version_path(book.working_version)
+            -if can? :edit, book
+              %td= edit_book_link(book)
+      -if author_signed_in? && current_author.id == @author.id
+        =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'
