@@ -28,6 +28,7 @@ class BookVersion < ActiveRecord::Base
   validates :title, length: { maximum: 255 }
   validates :short_description, length: { maximum: 1000 }
   validate :sample_file, :must_be_pdf
+  validate :cover_image_file, :must_be_image
 
   attr_accessor :cover_image_file, :sample_file
   delegate :author, to: :book
@@ -72,6 +73,19 @@ class BookVersion < ActiveRecord::Base
   def must_be_pdf
     if sample_file.present? && !pdf?(sample_file)
       errors.add(:sample_file, "must be a PDF")
+    end
+  end
+
+  IMAGE_PATTERN = /\.(?:jpe?g|png|gif)$/
+
+  def image?(file)
+    (file.respond_to?(:content_type) && file.content_type.start_with?("image")) ||
+      (file.respond_to?(:extname) && !!(IMAGE_PATTERN =~ file.extname))
+  end
+
+  def must_be_image
+    if cover_image_file.present? && !image?(cover_image_file)
+      errors.add(:cover_image_file, "must be an image")
     end
   end
 

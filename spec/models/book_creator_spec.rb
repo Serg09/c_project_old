@@ -95,4 +95,12 @@ RSpec.describe BookCreator do
       expect(creator.errors[:sample_file]).to have_at_least(1).item
     end
   end
+
+  describe '#cover_image_file' do
+    it 'must be an image file' do
+      creator = BookCreator.new(author, attributes.merge(cover_image_file: sample_file))
+      expect(creator).not_to be_valid
+      expect(creator.errors[:cover_image_file]).to have_at_least(1).item
+    end
+  end
 end

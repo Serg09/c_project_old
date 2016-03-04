@@ -212,4 +212,11 @@ RSpec.describe BookVersion, type: :model do
       expect(version).to have_at_least(1).error_on(:sample_file)
     end
   end
+
+  describe '#cover_image_file' do
+    it 'must be an image file' do
+      version = BookVersion.new(attributes.merge(cover_image_file: sample_file))
+      expect(version).to have_at_least(1).error_on(:cover_image_file)
+    end
+  end
 end
