@@ -6,6 +6,8 @@ RSpec.describe BookCreator do
   let (:sample_file) { Rails.root.join('spec', 'fixtures', 'files', 'sample.pdf') }
   let (:genre1) { FactoryGirl.create(:genre) }
   let (:genre2) { FactoryGirl.create(:genre) }
+  let (:genre3) { FactoryGirl.create(:genre) }
+  let (:genre4) { FactoryGirl.create(:genre) }
   let (:attributes) do
     {
       title: 'My book', 
@@ -101,6 +103,14 @@ RSpec.describe BookCreator do
       creator = BookCreator.new(author, attributes.merge(cover_image_file: sample_file))
       expect(creator).not_to be_valid
       expect(creator.errors[:cover_image_file]).to have_at_least(1).item
+    end
+  end
+
+  describe '#genres' do
+    it 'cannot contain more than 3 genres' do
+      creator = BookCreator.new(author, attributes.merge(genres: [genre1, genre2, genre3, genre4].map(&:id)))
+      expect(creator).not_to be_valid
+      expect(creator.errors[:genres]).to have_at_least(1).item
     end
   end
 end

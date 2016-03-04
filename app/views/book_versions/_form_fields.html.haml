@@ -40,7 +40,7 @@
         =f.file_field :sample_file, class: 'form-control'
         =help_blocks book_resource, :sample_file
   .col-md-6
-    .form-group
+    .form-group{ :class => form_group_class(book_resource, :genres) }
       =f.label :genres, 'Genres', class: 'control-label'
       .row.genre-list
         -genre_groups(2).each do |genre_group|
@@ -50,6 +50,7 @@
                 =label_tag "genres_#{genre.id}" do
                   =check_box_tag "#{book_resource.model_name.to_s.underscore}[genres][]", genre.id, book_resource.genres.map(&:id).include?(genre.id), id: "genres_#{genre.id}"
                   =genre.name
+      =help_blocks book_resource, :genres
 .row
   .col-md-6
     .form-group

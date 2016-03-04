@@ -85,12 +85,20 @@ RSpec.describe BookVersion, type: :model do
   end
 
   describe '#genres' do
-    let!(:g1) { FactoryGirl.create(:genre) }
-    let!(:g2) { FactoryGirl.create(:genre) }
+    let (:g1) { FactoryGirl.create(:genre) }
+    let (:g2) { FactoryGirl.create(:genre) }
+    let (:g3) { FactoryGirl.create(:genre) }
+    let (:g4) { FactoryGirl.create(:genre) }
 
     it 'is a list of genres to which the book belongs' do
       book = BookVersion.new attributes
       expect(book).to have(0).genres
+    end
+
+    it 'does not accept more than 3 genres' do
+      book = BookVersion.new attributes
+      [g1, g2, g3, g4].each{|g| book.genres << g}
+      expect(book).to have_at_least(1).error_on(:genres)
     end
   end
 

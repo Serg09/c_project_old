@@ -58,3 +58,16 @@ Feature: Add a book
 
     Then I should see "New book" within the page title
     And I should see "Cover image file must be an image" within the main content
+
+  Scenario: An author tries to create a book with more than 3 genres
+    When I fill in "Title" with "Green Eggs and Ham"
+    And I fill in "Short description" with "Sam I Am does not like green eggs and ham."
+    And I fill in "Long description" with "Blah blah blah blah"
+    And I check "Children's" and "Poetry" within the genre list
+    And I check "Science Fiction" and "Drama" within the genre list
+    And I select file "book_cover.jpg" for "Cover image"
+    And I select file "sample.pdf" for "Sample"
+    And I click "Submit"
+
+    Then I should see "New book" within the page title
+    And I should see "Genres cannot have more than three selections" within the main content
