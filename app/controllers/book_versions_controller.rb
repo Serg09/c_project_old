@@ -29,7 +29,9 @@ class BookVersionsController < ApplicationController
 
     @book_version = @book.versions.new(book_version_params)
     authorize! :create, @book_version
-    genres_from_params.each{|g| @book_version.genres << g}
+    genres_from_params.each do |genre|
+      @book_version.genres << genre unless @book_version.genres.any?{|g| g.id = genre.id}
+    end
     if @book_version.save
       flash[:notice] = 'The book was updated successfully.'
       BookMailer.edit_submission(@book_version).deliver_now
