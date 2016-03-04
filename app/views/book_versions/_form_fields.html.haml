@@ -26,7 +26,7 @@
         =f.label :cover_image_file, class: 'control-label'
         =f.file_field :cover_image_file, class: 'form-control'
         =help_blocks book_resource, :cover_image_file
-    .form-group
+    .form-group{ :class => form_group_class(book_resource, :sample_file) }
       =f.label :sample_file, class: 'control-label'
       -if book_resource.sample_id
         .row
@@ -37,7 +37,6 @@
             =f.file_field :sample_file, class: 'form-control'
             =help_blocks book_resource, :sample_file
       -else
-        =f.label :sample_file, class: 'control-label'
         =f.file_field :sample_file, class: 'form-control'
         =help_blocks book_resource, :sample_file
   .col-md-6

@@ -27,6 +27,7 @@ class BookVersion < ActiveRecord::Base
   validates_presence_of :book, :title, :short_description
   validates :title, length: { maximum: 255 }
   validates :short_description, length: { maximum: 1000 }
+  validate :sample_file, :must_be_pdf
 
   attr_accessor :cover_image_file, :sample_file
   delegate :author, to: :book
@@ -62,6 +63,17 @@ class BookVersion < ActiveRecord::Base
   end
 
   private
+
+  def pdf?(file)
+    (file.respond_to?(:content_type) && file.content_type == "application/pdf") ||
+      (file.respond_to?(:extname) && file.extname == ".pdf")
+  end
+
+  def must_be_pdf
+    if sample_file.present? && !pdf?(sample_file)
+      errors.add(:sample_file, "must be a PDF")
+    end
+  end
 
   def process_cover_image_file
     return unless cover_image_file

@@ -87,4 +87,12 @@ RSpec.describe BookCreator do
       expect(creator.book_version).to be_a(BookVersion)
     end
   end
+
+  describe '#sample_file' do
+    it 'must be a PDF' do
+      creator = BookCreator.new(author, attributes.merge(sample_file: image_file))
+      expect(creator).not_to be_valid
+      expect(creator.errors[:sample_file]).to have_at_least(1).item
+    end
+  end
 end

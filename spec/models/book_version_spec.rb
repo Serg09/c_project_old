@@ -205,4 +205,11 @@ RSpec.describe BookVersion, type: :model do
       expect(version.reject!).to be true
     end
   end
+
+  describe '#sample_file' do
+    it 'must be a PDF' do
+      version = BookVersion.new(attributes.merge(sample_file: image_file))
+      expect(version).to have_at_least(1).error_on(:sample_file)
+    end
+  end
 end
