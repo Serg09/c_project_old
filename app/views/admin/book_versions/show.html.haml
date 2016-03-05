@@ -2,6 +2,12 @@
   =@book_version.title
 
 .container.container-default
+  -if @book_version.errors.any?
+    .row
+      .col-md-12
+        -@book_version.errors.full_messages.each do |e|
+          .alert.alert-danger
+            =e
   .row
     .col-md-10
       =render 'book_versions/details', book_version: @book_version
