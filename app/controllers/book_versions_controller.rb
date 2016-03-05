@@ -77,7 +77,7 @@ class BookVersionsController < ApplicationController
   def genres_from_params
     genre_ids = params.require(:book_version).permit(genres: [])[:genres]
     if genre_ids
-      genre_ids.map{|id| Genre.find(id)}
+      Genre.find(genre_ids)
     else
       []
     end
