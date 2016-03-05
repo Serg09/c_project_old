@@ -64,6 +64,10 @@ RSpec.describe BookVersionsController, type: :controller do
         end
 
         describe 'patch :update' do
+          let (:g1) { FactoryGirl.create(:genre) }
+          let (:g2) { FactoryGirl.create(:genre) }
+          let (:g3) { FactoryGirl.create(:genre) }
+
           it 'redirects to the book page' do
             patch :update, id: pending_version, book_version: attributes
             expect(response).to redirect_to book_path(book)
@@ -74,6 +78,13 @@ RSpec.describe BookVersionsController, type: :controller do
               patch :update, id: pending_version, book_version: attributes
               pending_version.reload
             end.to change(pending_version, :title).to('New title')
+          end
+
+          it 'handles the genres correctly' do
+            version = FactoryGirl.create(:pending_book_version, book: book, genres: [g1, g2])
+            patch :update, id: version, book_version: attributes.merge(genres: [g2.id, g3.id])
+            version.reload
+            expect(version.genres.map(&:id)).to eq [g2.id, g3.id]
           end
         end
       end

@@ -25,11 +25,11 @@ class BookVersion < ActiveRecord::Base
   before_save :process_cover_image_file, :process_sample_file
 
   validates_presence_of :book, :title, :short_description
-  validates_length_of :genres, maximum: 3, message: 'cannot have more than three selections'
   validates :title, length: { maximum: 255 }
   validates :short_description, length: { maximum: 1000 }
   validate :sample_file, :must_be_pdf
   validate :cover_image_file, :must_be_image
+  validate :genres, :cannot_have_more_than_3
 
   attr_accessor :cover_image_file, :sample_file
   delegate :author, to: :book
@@ -65,6 +65,10 @@ class BookVersion < ActiveRecord::Base
   end
 
   private
+
+  def cannot_have_more_than_3
+    errors.add(:genres, 'cannot have more than three selections') if genres.to_a.count > 3
+  end
 
   def pdf?(file)
     (file.respond_to?(:content_type) && file.content_type == "application/pdf") ||

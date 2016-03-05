@@ -51,8 +51,8 @@ class BookVersionsController < ApplicationController
   def update
     with_permission do
       authorize! :update, @book_version
-      genres_from_params.each{|g| @book_version.genres << g}
       @book_version.update_attributes book_version_params
+      update_genres
       flash[:notice] = "The book was updated successfully." if @book_version.save
       respond_with @book_version, location: book_path(@book_version.book)
     end
@@ -89,6 +89,19 @@ class BookVersionsController < ApplicationController
 
   def load_book_version
     @book_version = BookVersion.find(params[:id])
+  end
+
+  def set_diff(current, target)
+    to_add = target - current
+    to_remove = current - target
+    [to_add, to_remove]
+  end
+
+  def update_genres
+    to_add, to_remove = set_diff(@book_version.genres,
+                                 genres_from_params)
+    to_add.each{|g| @book_version.genres << g}
+    to_remove.each{|g| @book_version.genres.delete g}
   end
 
   def with_permission
