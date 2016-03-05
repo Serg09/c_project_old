@@ -100,6 +100,21 @@ RSpec.describe BookVersion, type: :model do
       [g1, g2, g3, g4].each{|g| book.genres << g}
       expect(book).to have_at_least(1).error_on(:genres)
     end
+
+    context 'when editing' do
+      it 'allows the genres to be changed' do
+        book_version = BookVersion.new attributes
+        book_version.genres << g1
+        book_version.genres << g2
+        book_version.save!
+
+        book_version.genres.delete g1
+        book_version.genres.delete g2
+        book_version.genres << g3
+        book_version.genres << g4
+        expect(book_version).to be_valid
+      end
+    end
   end
 
   describe '#sample_file' do
