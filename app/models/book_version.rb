@@ -20,8 +20,6 @@ class BookVersion < ActiveRecord::Base
   belongs_to :book
   has_and_belongs_to_many :genres
 
-  accepts_nested_attributes_for :genres
-
   before_save :process_cover_image_file, :process_sample_file
 
   validates_presence_of :book, :title, :short_description
