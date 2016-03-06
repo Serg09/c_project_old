@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
   resources :books, only: [:index, :show, :edit, :update] do
     resources :book_versions, path: 'versions', only: [:new, :create, :index]
+    collection do
+      get :browse
+    end
   end
   resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
@@ -53,7 +56,6 @@ Rails.application.routes.draw do
   get 'pages/about_us'
   get 'pages/book_incubator'
   get 'pages/why'
-  get 'pages/books'
   get 'pages/klososky'
   get 'pages/rewilding'
   get 'pages/discipling'

@@ -3,6 +3,10 @@ class BooksController < ApplicationController
   before_filter :load_author, only: [:new, :create]
   respond_to :html
 
+  def browse
+    @books = BookVersion.approved
+  end
+
   def index
     @author = Author.find(params[:author_id]) if params[:author_id].present?
     @books = @author.try(:books) || Book.all

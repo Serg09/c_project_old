@@ -1,0 +1,14 @@
+=content_for :page_title do
+  Books
+.container.container-default
+  .row
+    .col-md-10.col-md-offset-1
+      .grid
+        -@books.each do |book|
+          .grid-item.book{ class: @height ? "grid-item--height#{@height}" : nil }
+            .author.sr-only= book.book.author.full_name
+            .title.sr-only= book.title
+            =link_to book_version_path(book.id) do
+              =figure_tag image_path(book.id), alt: book.title do
+                =book.short_description
+
