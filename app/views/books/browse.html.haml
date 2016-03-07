@@ -9,6 +9,6 @@
             .author.sr-only= book.book.author.full_name
             .title.sr-only= book.title
             =link_to book_version_path(book.id) do
-              =figure_tag image_path(book.id), alt: book.title do
+              =figure_tag cover_image_path(book), alt: book.title do
                 =book.short_description
 
