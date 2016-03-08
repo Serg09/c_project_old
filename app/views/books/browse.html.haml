@@ -5,10 +5,9 @@
     .col-md-10.col-md-offset-1
       .grid
         -@books.each do |book|
-          .grid-item.book{ class: @height ? "grid-item--height#{@height}" : nil }
-            .author.sr-only= book.book.author.full_name
+          .grid-item.book
+            .author.sr-only= book.author.full_name
             .title.sr-only= book.title
             =link_to book_version_path(book.id) do
-              =figure_tag cover_image_path(book), alt: book.title do
+              =figure_tag cover_image_path(book), book.title do
                 =book.short_description
-
