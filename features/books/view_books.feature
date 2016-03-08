@@ -1,4 +1,3 @@
-@wip
 Feature: View books
   As a user
   In order to find books I might like to read
@@ -21,7 +20,7 @@ Feature: View books
     Then I should see "Books" within the page title
     And I should see the following books
       | Author          | Title                    |
-      | John Doe        | My Anonymous Life        |
-      | Jane Doe        | My Anonymous Husband     |
-      | Christian Piatt | Post Christian           |
       | Mona Lin        | Love and first Click     |
+      | Christian Piatt | Post Christian           |
+      | Jane Doe        | My Anonymous Husband     |
+      | John Doe        | My Anonymous Life        |

@@ -12,9 +12,7 @@ Given /^authors have submitted the following books$/ do |table|
     Hash[*keys.zip(attr).flatten]
   end.each do |book_attributes|
     author = find_or_create_author_by_full_name(book_attributes[:author])
-    book = FactoryGirl.create(:book, author: author)
-    book_version_attributes = book_attributes.reject{|k, v| k == :author}.merge(book: book)
-    bv = FactoryGirl.create(:approved_book_version, book_version_attributes)
+    book = FactoryGirl.create(:approved_book, book_attributes.merge(author: author))
   end
 end
 
