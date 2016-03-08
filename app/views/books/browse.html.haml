@@ -1,0 +1,18 @@
+=content_for :page_title do
+  Books
+.container.container-default
+  -@books.each_slice(4) do |books|
+    .row
+      -books.each do |book|
+        .col-md-3
+          -if book.cover_image_id
+            .book{ title: book.title }
+              .author.sr-only= book.author.full_name
+              .title.sr-only= book.title
+              =link_to book_version_path(book.id) do
+                %img.img-rounded.img-responsive{ src: image_path(book.cover_image_id, width: 256, height: 384), alt: book.title }
+          -else
+            =link_to book_version_path(book.id) do
+              .book.naked-book
+                .title= book.title
+                .author= book.author.full_name

@@ -9,3 +9,6 @@
           This book is under review. We will review it as soon as we can.
       %h1#book-title= @book_version.title
   =render 'details', book_version: @book_version
+  -if can? :update, @book_version.book
+    .row
+      =link_to 'Edit', dynamic_edit_path(@book_version), class: 'btn btn-default'

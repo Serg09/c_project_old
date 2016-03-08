@@ -5,6 +5,14 @@ module BooksHelper
     return ''
   end
 
+  def cover_image_path(book_version)
+    if book_version.cover_image_id
+      image_path book_version.cover_image_id, width: 215, height: 344
+    else
+      asset_path 'cover_image_not_available.png'
+    end
+  end
+
   def edit_book_link(book)
     path = if book.pending_version
              edit_book_version_path(book.pending_version)

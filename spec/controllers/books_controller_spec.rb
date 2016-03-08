@@ -23,6 +23,13 @@ RSpec.describe BooksController, type: :controller do
   context 'for an authenticated author' do
     before(:each) { sign_in author }
 
+    describe 'get :browse' do
+      it 'is successful' do
+        get :browse
+        expect(response).to have_http_status :success
+      end
+    end
+
     describe 'get :index' do
       it 'is successful' do
         get :index, author_id: author

@@ -31,7 +31,7 @@ describe InquiriesController do
 
       it 'redirects to the books page' do
         post :create, inquiry: attributes
-        expect(response).to redirect_to pages_books_path
+        expect(response).to redirect_to browse_books_path
       end
 
       it 'sends a notification email' do
@@ -63,7 +63,7 @@ describe InquiriesController do
 
       it 'redirects to the books page' do
         post :create, inquiry: attributes
-        expect(response).to redirect_to pages_books_path
+        expect(response).to redirect_to browse_books_path
       end
 
       it 'sends a notification email' do

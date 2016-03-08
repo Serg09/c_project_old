@@ -34,9 +34,8 @@ class BookVersion < ActiveRecord::Base
 
   def approve!
     BookVersion.transaction do
-      book.approved_version.status = BookVersion.SUPERSEDED if book.approved_version
       self.status = BookVersion.APPROVED
-      save
+      supersede_previous_approved_version && save
     end
   end
 
@@ -104,5 +103,14 @@ class BookVersion < ActiveRecord::Base
 
     image = Image.find_or_create_from_file(sample_file, author)
     self.sample_id = image.id
+  end
+
+  def supersede_previous_approved_version
+    return true unless book.approved_version
+
+    Rails.logger.debug "dbk superseceding the prior approved version"
+
+    book.approved_version.status = BookVersion.SUPERSEDED
+    book.approved_version.save
   end
 end

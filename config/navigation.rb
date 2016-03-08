@@ -24,6 +24,6 @@ SimpleNavigation::Configuration.run do |navigation|
         end
       end
     end
-    primary.item :books, 'Books', pages_books_path
+    primary.item :books, 'Books', browse_books_path
   end
 end
