@@ -108,8 +108,6 @@ class BookVersion < ActiveRecord::Base
   def supersede_previous_approved_version
     return true unless book.approved_version
 
-    Rails.logger.debug "dbk superseceding the prior approved version"
-
     book.approved_version.status = BookVersion.SUPERSEDED
     book.approved_version.save
   end
