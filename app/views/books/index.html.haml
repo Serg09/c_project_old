@@ -1,8 +1,5 @@
 =content_for :page_title do
-  -if author_signed_in? && current_author.id == params[:author_id].to_i
-    My books
-  -else
-    Books
+  My books
 
 .container.container-default
   .row
@@ -18,4 +15,4 @@
             -if can? :edit, book
               %td= edit_book_link(book)
       -if author_signed_in? && current_author.id == @author.id
-        =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'
+        =link_to 'Add', new_book_path, class: 'btn btn-primary', title: 'Click here to add a new book.'

@@ -16,7 +16,7 @@ SimpleNavigation::Configuration.run do |navigation|
       primary.item :authors, 'Authors' do |authors|
         if author_signed_in?
           authors.item :bio, 'Bio', bios_path
-          authors.item :my_books, 'My books', author_books_path(current_author)
+          authors.item :my_books, 'My books', books_path
           authors.item :author_sign_out, 'Sign Out', destroy_author_session_path, method: :delete, if: ->{author_signed_in? && !AppSetting.sign_in_disabled?}
         else
           authors.item :author_sign_in, 'Log in', new_author_session_path

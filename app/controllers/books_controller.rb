@@ -1,6 +1,7 @@
 class BooksController < ApplicationController
-  before_filter :load_book, only: [:show, :edit, :update, :approve, :reject]
-  before_filter :load_author, only: [:new, :create]
+  before_filter :authenticate_author!, only: [ :index, :edit, :update, :new, :create ]
+  before_filter :load_author, only: [:index, :new, :create]
+  before_filter :load_book, only: [:show, :edit, :update]
   respond_to :html
 
   def browse
@@ -8,7 +9,6 @@ class BooksController < ApplicationController
   end
 
   def index
-    @author = Author.find(params[:author_id]) if params[:author_id].present?
     @books = @author.try(:books) || Book.all
   end
 
@@ -83,7 +83,7 @@ class BooksController < ApplicationController
   end
 
   def load_author
-    @author = Author.find(params[:author_id])
+    @author = current_author
   end
 
   def load_book
