@@ -44,3 +44,7 @@ end
 When /^I select (?:the )?file "([^"]+)" for "([^"]+)"$/ do |file_name, locator|
   attach_file(locator, Rails.root.join('features', 'resources', file_name))
 end
+
+Given /^today is (#{DATE})$/ do |date|
+  Timecop.freeze(date)
+end
