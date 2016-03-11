@@ -12,7 +12,10 @@
         -@books.each do |book|
           %tr{ class: book_index_class(book) }
             %td= link_to book.administrative_title, book_version_path(book.working_version)
-            -if can? :edit, book
-              %td= edit_book_link(book)
+            %td
+              .btn-group
+                =edit_book_link(book)
+                =link_to book_campaigns_path(book), class: 'btn btn-xs btn-default campaigns-button', title: 'Click here to manage campaigns for this book.' do
+                  %span.glyphicon.glyphicon-usd{ 'aria-hidden' => true }
       -if author_signed_in? && current_author.id == @author.id
         =link_to 'Add', new_book_path, class: 'btn btn-primary', title: 'Click here to add a new book.'

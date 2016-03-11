@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
   resources :books, only: [:index, :show, :edit, :update, :new, :create] do
     resources :book_versions, path: 'versions', only: [:new, :create, :index]
+    resources :campaigns, only: [:index, :new, :create]
     collection do
       get :browse
     end
