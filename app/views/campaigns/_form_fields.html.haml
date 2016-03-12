@@ -1,0 +1,10 @@
+.form-group{ :class => form_group_class(@campaign, :target_amount) }
+  =f.label :target_amount, class: 'control-label'
+  =f.number_field :target_amount, class: 'form-control', autofocus: true, min: 100, step: 100
+  =help_blocks @campaign, :target_amount
+.form-group{ :class => form_group_class(@campaign, :target_date) }
+  =f.label :target_date, class: 'control-label'
+  =f.text_field :target_date, class: 'form-control date-field'
+  =help_blocks @campaign, :target_date
+.form-group
+  =f.submit 'Save', class: 'btn btn-primary', title: 'Click here to save the campaign.'

@@ -30,7 +30,7 @@ class BookVersion < ActiveRecord::Base
   validate :genres, :cannot_have_more_than_3
 
   attr_accessor :cover_image_file, :sample_file
-  delegate :author, to: :book
+  delegate :author, :active_campaign, to: :book
 
   def approve!
     BookVersion.transaction do

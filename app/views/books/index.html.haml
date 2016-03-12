@@ -1,10 +1,12 @@
 =content_for :page_title do
-  -if author_signed_in? && current_author.id == params[:author_id].to_i
-    My books
-  -else
-    Books
+  My books
 
 .container.container-default
+  -unless @author.active_bio.present?
+    .row
+      .col-md-12
+        .alert.alert-warning
+          You must have an approved bio before you can campaign for your books.
   .row
     .col-md-6
       %table#books-table.table.table-striped
@@ -15,7 +17,10 @@
         -@books.each do |book|
           %tr{ class: book_index_class(book) }
             %td= link_to book.administrative_title, book_version_path(book.working_version)
-            -if can? :edit, book
-              %td= edit_book_link(book)
+            %td
+              .btn-group
+                =edit_book_link(book)
+                =link_to book_campaigns_path(book), :class => 'btn btn-xs btn-success campaigns-button', :title => can_campaign?(book) ? 'Click here to manage campaigns for this book.' : 'You need an approved bio and the book must be approved in order to campaign for it.', :dislabled => !can_campaign?(book) do
+                  %span.glyphicon.glyphicon-usd{ 'arial-hidden' => true }
       -if author_signed_in? && current_author.id == @author.id
-        =link_to 'Add', new_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book.'
+        =link_to 'Add', new_book_path, class: 'btn btn-primary', title: 'Click here to add a new book.'

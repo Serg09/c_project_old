@@ -98,4 +98,38 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe '#campaigns' do
+    it 'is a list of campaigns associated with the book' do
+      book = Book.new(attributes)
+      expect(book).to have(0).campaigns
+    end
+  end
+
+  shared_context :campaigns do
+    let (:author) { FactoryGirl.create(:approved_author) }
+    let (:book) { FactoryGirl.create(:approved_book, author: author) }
+    let!(:campaign) { FactoryGirl.create(:campaign, book: book, paused: false) }
+  end
+
+  context 'for an author with an approved bio' do
+    include_context :campaigns
+    let!(:bio) { FactoryGirl.create(:approved_bio, author: book.author) }
+
+    describe '#active_campaign' do
+      it 'is the campaign that is currently active' do
+        expect(book.active_campaign.try(:id)).to eq campaign.id
+      end
+    end
+  end
+
+  context 'for an author without an approved bio' do
+    include_context :campaigns
+
+    describe '#active_campaign' do
+      it 'is nil' do
+        expect(book.active_campaign).to be_nil
+      end
+    end
+  end
 end

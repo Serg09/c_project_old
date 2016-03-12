@@ -11,17 +11,18 @@ Rails.application.routes.draw do
   resources :inquiries, only: [:new, :create]
   resources :authors, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
-    resources :books, only: [:new, :index, :create]
   end
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
-  resources :books, only: [:index, :show, :edit, :update] do
+  resources :books, only: [:index, :show, :edit, :update, :new, :create] do
     resources :book_versions, path: 'versions', only: [:new, :create, :index]
+    resources :campaigns, only: [:index, :new, :create]
     collection do
       get :browse
     end
   end
   resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
+  resources :campaigns, only: [:show, :edit, :update, :destroy]
 
   namespace :admin do
     resources :inquiries, only: [:index, :show] do

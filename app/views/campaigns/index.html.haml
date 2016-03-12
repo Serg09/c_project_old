@@ -1,0 +1,22 @@
+=content_for :page_title do
+  Campaigns for #{h @book.administrative_title}
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#campaigns-table.table.table-striped
+        %tr
+          %th Target date
+          %th Target amount
+          %th &nbsp;
+        -@campaigns.each do |campaign|
+          %tr{ :class => campaign_row_class(campaign) }
+            %td= format_date(campaign.target_date)
+            %td= number_to_currency campaign.target_amount, precision: 0
+            %th
+              .btn-group
+                =link_to edit_campaign_path(campaign), :class => 'btn btn-info btn-xs edit-button', :title => 'Click here to edit the campaign.' do
+                  %span.glyphicon.glyphicon-pencil{ 'arial-hidden' => true }
+                =link_to campaign_path(campaign), :method => :delete, 'data-confirm' => 'Are you sure you want to remove this campaign?', :class => 'btn btn-danger btn-xs delete-button', :title => 'Click here to remove the campaign.' do
+                  %span.glyphicon.glyphicon-remove{ 'arial-hidden' => true }
+      =link_to 'Add', new_book_campaign_path(@book), :class => 'btn btn-primary', :title => 'Click here to add a new campaign.'

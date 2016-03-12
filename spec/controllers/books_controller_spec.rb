@@ -264,23 +264,23 @@ RSpec.describe BooksController, type: :controller do
 
   context 'for an unauthenticated user' do
     describe "get #index" do
-      it "is successful" do
+      it "redirects to the home page" do
         get :index
-        expect(response).to have_http_status(:success)
+        expect(response).to redirect_to new_author_session_path
       end
     end
 
     describe "get #new" do
       it "redirects to the home page" do
         get :new, author_id: author
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to new_author_session_path
       end
     end
 
     describe "post #create" do
       it "redirects to the home page" do
         post :create, author_id: author, book: book_version_attributes
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to new_author_session_path
       end
 
       it 'does not create a book record' do
@@ -299,16 +299,16 @@ RSpec.describe BooksController, type: :controller do
       end
 
       describe "get #edit" do
-        it "redirects to the home page" do
+        it "redirects to the author sign in page" do
           get :edit, id: pending_book
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the home page" do
+        it "redirects to the author sign in page" do
           patch :update, id: pending_book, book: attributes
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
 
         it 'does not update the book' do
@@ -329,16 +329,16 @@ RSpec.describe BooksController, type: :controller do
       end
 
       describe "get #edit" do
-        it "redirects to the home page" do
+        it "redirects to the author sign in page" do
           get :edit, id: approved_book
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the home page" do
+        it "redirects to the author sign in page" do
           patch :update, id: approved_book, book: attributes
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
 
         it 'does not update the book' do
@@ -352,23 +352,23 @@ RSpec.describe BooksController, type: :controller do
 
     describe 'for a book that is rejected' do
       describe "get #show" do
-        it "redirects to the home page" do
+        it "redirects to the hom epage" do
           get :show, id: rejected_book
           expect(response).to redirect_to root_path
         end
       end
 
       describe "get #edit" do
-        it "redirects to the home page" do
+        it "redirects to the author sign in page" do
           get :edit, id: rejected_book
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the home page" do
+        it "redirects to the author sign in page" do
           patch :update, id: rejected_book, book: attributes
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to new_author_session_path
         end
 
         it 'does not update the book' do

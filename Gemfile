@@ -34,6 +34,7 @@ gem 'simple-navigation'
 gem 'will_paginate-bootstrap'
 gem 'rmagick'
 gem 'puma'
+gem 'chronic'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -50,6 +51,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'timecop'
 end
 
 group :development do

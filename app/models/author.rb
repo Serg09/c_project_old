@@ -36,6 +36,8 @@ class Author < ActiveRecord::Base
 
   has_many :bios
   has_many :books
+  has_many :book_versions, through: :books, source: :versions
+  has_many :campaigns, through: :books
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
