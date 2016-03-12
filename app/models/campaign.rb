@@ -7,8 +7,15 @@ class Campaign < ActiveRecord::Base
 
   before_validation :set_defaults
 
+  scope :current, ->{where('target_date > ?', Date.today)}
+
   def active?
+    return false unless author.active_bio.present?
     Date.today <= target_date && !paused?
+  end
+
+  def author
+    book.try(:author)
   end
 
   private
@@ -30,6 +37,6 @@ class Campaign < ActiveRecord::Base
   end
 
   def set_defaults
-    self.paused ||= true
+    self.paused = true if self.paused.nil?
   end
 end

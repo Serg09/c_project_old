@@ -5,6 +5,10 @@ module BooksHelper
     return ''
   end
 
+  def can_campaign?(book)
+    book.approved_version.present? && book.author.active_bio.present?
+  end
+
   def cover_image_path(book_version)
     if book_version.cover_image_id
       image_path book_version.cover_image_id, width: 215, height: 344
@@ -19,7 +23,7 @@ module BooksHelper
            else
              new_book_book_version_path(book)
            end
-    link_to path, class: 'btn btn-default btn-xs edit-button', title: 'Click here to edit this book.'  do
+    link_to path, class: 'btn btn-info btn-xs edit-button', title: 'Click here to edit this book.'  do
       content_tag :span, '', :class => 'glyphicon glyphicon-pencil', 'aria-hidden' => true
     end
   end

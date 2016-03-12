@@ -18,6 +18,10 @@ class Book < ActiveRecord::Base
   scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
   scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
 
+  def active_campaign
+    @active_campaign ||= campaigns.current.select{|c| c.active?}.first
+  end
+
   def approved?
     approved_version.present? && pending_version.blank?
   end
