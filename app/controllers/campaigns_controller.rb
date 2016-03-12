@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_filter :authenticate_author!
-  before_filter :load_campaign, only: [:show, :edit, :update, :destroy]
+  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :pause, :unpause]
   before_filter :load_book, only: [:index, :new, :create]
 
   respond_to :html
@@ -35,6 +35,20 @@ class CampaignsController < ApplicationController
     @campaign.update_attributes campaign_params
     flash[:notice] = "The campaign was updated successfully." if @campaign.save
     respond_with @campaign, location: book_campaigns_path(@campaign.book)
+  end
+
+  def pause
+    authorize! :update, @campaign
+    @campaign.paused = true
+    flash[:notice] = 'The campaign was paused successfully.' if @campaign.save
+    redirect_to books_path
+  end
+
+  def unpause
+    authorize! :update, @campaign
+    @campaign.paused = false
+    flash[:notice] = 'The campaign was unpaused successfully.' if @campaign.save
+    redirect_to books_path
   end
 
   def destroy

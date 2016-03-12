@@ -70,6 +70,38 @@ RSpec.describe CampaignsController, type: :controller do
         end
       end
 
+      context 'for an active campaign' do
+        let!(:campaign) { FactoryGirl.create(:campaign, book: book, paused: false) }
+
+        describe 'patch :pause' do
+          it 'redirects to the book index page' do
+            patch :pause, id: campaign
+            expect(response).to redirect_to books_path
+          end
+
+          it 'changes the paused value to true' do
+            expect do
+              patch :pause, id: campaign
+              campaign.reload
+            end.to change(campaign, :paused).from(false).to(true)
+          end
+        end
+      end
+
+      describe 'patch :unpause' do
+        it 'redirects to the book index page' do
+          patch :unpause, id: campaign
+          expect(response).to redirect_to books_path
+        end
+
+        it 'changes the paused value to false' do
+          expect do
+            patch :unpause, id: campaign
+            campaign.reload
+          end.to change(campaign, :paused).from(true).to(false)
+        end
+      end
+
       describe "delete :destroy" do
         it "redirects to the index page" do
           delete :destroy, id: campaign
@@ -156,6 +188,42 @@ RSpec.describe CampaignsController, type: :controller do
         end
       end
 
+      describe 'patch :pause' do
+        it 'redirects to the 404 error page' do
+          expect do
+            patch :pause, id: campaign
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it 'does not change the paused value' do
+          expect do
+            begin
+              patch :pause, id: campaign
+              campaign.reload
+            rescue ActiveRecord::RecordNotFound
+            end
+          end.not_to change(campaign, :paused)
+        end
+      end
+
+      describe 'patch :unpause' do
+        it 'redirects to the 404 error page' do
+          expect do
+            patch :unpause, id: campaign
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it 'does not change the paused value' do
+          expect do
+            begin
+              patch :unpause, id: campaign
+              campaign.reload
+            rescue ActiveRecord::RecordNotFound
+            end
+          end.not_to change(campaign, :paused)
+        end
+      end
+
       describe "delete :destroy" do
         it "redirects to the 404 error page" do
           expect do
@@ -229,6 +297,34 @@ RSpec.describe CampaignsController, type: :controller do
           patch :update, id: campaign, campaign: attributes
           campaign.reload
         end.not_to change(campaign, :target_amount)
+      end
+    end
+
+    describe 'patch :pause' do
+      it 'redirects to the sign in page' do
+        patch :pause, id: campaign
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the paused value' do
+        expect do
+          patch :pause, id: campaign
+          campaign.reload
+        end.not_to change(campaign, :paused)
+      end
+    end
+
+    describe 'patch :unpause' do
+      it 'redirects to the sign in page' do
+        patch :unpause, id: campaign
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the paused value' do
+        expect do
+          patch :unpause, id: campaign
+          campaign.reload
+        end.not_to change(campaign, :paused)
       end
     end
 
