@@ -1,2 +1,8 @@
-%h1 Campaigns#edit
-%p Find me in app/views/campaigns/edit.html.haml
+=content_for :page_title do
+  Campaign for #{h @campaign.book.administrative_title}
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for @campaign do |f|
+        =render 'form_fields', f: f

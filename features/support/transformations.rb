@@ -12,3 +12,7 @@ AUTHOR = Transform /author (.+@.+)/ do |email|
   expect(author).not_to be_nil, "Author with email \"#{email}\" not found"
   author
 end
+
+DOLLAR_AMOUNT = Transform /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/ do |amount|
+  BigDecimal.new(amount.gsub(/[\$,]/, ''))
+end

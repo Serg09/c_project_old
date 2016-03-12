@@ -33,7 +33,7 @@ class CampaignsController < ApplicationController
   def update
     authorize! :update, @campaign
     @campaign.update_attributes campaign_params
-    flash[:notcie] = "The campaign was updated successfully." if @campaign.save
+    flash[:notice] = "The campaign was updated successfully." if @campaign.save
     respond_with @campaign, location: book_campaigns_path(@campaign.book)
   end
 

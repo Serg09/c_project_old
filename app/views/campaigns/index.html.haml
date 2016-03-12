@@ -8,8 +8,12 @@
         %tr
           %th Target date
           %th Target amount
+          %th &nbsp;
         -@campaigns.each do |campaign|
           %tr{ class: campaign_row_class(campaign) }
             %td= format_date(campaign.target_date)
             %td= number_to_currency campaign.target_amount, precision: 0
+            %th
+              =link_to edit_campaign_path(campaign), class: 'btn btn-default btn-xs edit-button', title: 'Click here to edit the campaign.' do
+                %span.glyphicon.glyphicon-pencil{ 'arial-hidden' => true }
       =link_to 'Add', new_book_campaign_path(@book), class: 'btn btn-primary', title: 'Click here to add a new campaign.'
