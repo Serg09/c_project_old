@@ -2,6 +2,11 @@
   My books
 
 .container.container-default
+  -unless @author.active_bio.present?
+    .row
+      .col-md-12
+        .alert.alert-warning
+          You must have an approved bio before you can campaign for your books.
   .row
     .col-md-6
       %table#books-table.table.table-striped
