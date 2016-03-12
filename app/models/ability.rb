@@ -18,5 +18,8 @@ class Ability
     can :create, BookVersion do |book_version|
       book_version.book.author_id == author.id
     end
+    can :manage, Campaign do |campaign|
+      campaign.book.author_id == author.id
+    end
   end
 end

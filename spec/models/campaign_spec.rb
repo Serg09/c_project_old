@@ -30,7 +30,7 @@ RSpec.describe Campaign, type: :model do
   describe '#book' do
     it 'references the book to which the campaign belongs' do
       campaign = Campaign.new attributes
-      expect(campaign.book.try(:title)).to eq book.title
+      expect(campaign.book.try(:id)).to eq book.id
     end
   end
 

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   end
   resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
+  resources :campaigns, only: [:show, :edit, :update, :destroy]
 
   namespace :admin do
     resources :inquiries, only: [:index, :show] do

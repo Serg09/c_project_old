@@ -1,2 +1,15 @@
-%h1 Campaigns#index
-%p Find me in app/views/campaigns/index.html.haml
+=content_for :page_title do
+  Campaigns for #{h @book.administrative_title}
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#campaigns-table.table.table-striped
+        %tr
+          %th Target date
+          %th Target amount
+        -@campaigns.each do |campaign|
+          %tr
+            %td= campaign.target_date
+            %td= campaign.target_amount
+
