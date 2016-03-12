@@ -70,4 +70,23 @@ RSpec.describe Campaign, type: :model do
       expect(campaign).to be_paused
     end
   end
+
+  describe '#active?' do
+    it 'is true if the campaign is not paused and has not ended' do
+      campaign = Campaign.new attributes.merge(paused: false)
+      expect(campaign).to be_active
+    end
+
+    it 'is false if the campaign is paused' do
+      campaign = Campaign.new attributes
+      expect(campaign).not_to be_active
+    end
+
+    it 'is false if the campaign target date is in the past' do
+      campaign = Campaign.new attributes.merge(paused: false)
+      Timecop.freeze('2016-04-01') do
+        expect(campaign).not_to be_active
+      end
+    end
+  end
 end

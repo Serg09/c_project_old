@@ -7,6 +7,10 @@ class Campaign < ActiveRecord::Base
 
   before_validation :set_defaults
 
+  def active?
+    Date.today <= target_date && !paused?
+  end
+
   private
 
   def is_in_range

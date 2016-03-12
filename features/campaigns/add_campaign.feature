@@ -1,4 +1,3 @@
-@wip
 Feature: Add a campaign
   As an author
   In order to raise money for a book I want to write
@@ -35,4 +34,4 @@ Feature: Add a campaign
     Then I should see "Campaigns for Things I Know That You Don't" within the page title
     And I should see the following campaigns table
       | Target date | Target amount |
-      |   4/30/2016 |     $5,000.00 |
+      |   4/30/2016 |        $5,000 |
