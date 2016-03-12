@@ -10,8 +10,9 @@
 
 class Book < ActiveRecord::Base
   belongs_to :author
-  validates_presence_of :author_id
   has_many :versions, class_name: 'BookVersion', dependent: :destroy, autosave: true
+  has_many :campaigns
+  validates_presence_of :author_id
 
   scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
   scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }

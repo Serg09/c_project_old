@@ -98,4 +98,11 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe '#campaigns' do
+    it 'is a list of campaigns associated with the book' do
+      book = Book.new(attributes)
+      expect(book).to have(0).campaigns
+    end
+  end
 end
