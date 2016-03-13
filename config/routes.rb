@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       patch :unpause
     end
   end
+  resources :donations, only: [:show]
 
   namespace :admin do
     resources :inquiries, only: [:index, :show] do

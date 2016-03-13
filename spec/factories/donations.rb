@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :donation do
-    campaign_id 1
-amount "9.99"
-email "MyString"
+    campaign
+    amount 100
+    email { Faker::Internet.email }
   end
-
 end

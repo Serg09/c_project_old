@@ -11,6 +11,8 @@
 #
 
 class Donation < ActiveRecord::Base
+  belongs_to :campaign
+
   validates_presence_of :campaign_id, :email, :amount
   validates_numericality_of :amount, greater_than: 0
   validates_format_of :email, with: /\A^\w[\w_\.-]+@\w[\w_\.-]+\.[a-z]{2,}\z/i

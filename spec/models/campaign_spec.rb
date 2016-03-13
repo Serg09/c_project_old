@@ -103,4 +103,11 @@ RSpec.describe Campaign, type: :model do
       end
     end
   end
+
+  describe '#donations' do
+    it 'is a list of the donations that have been made to the campaign' do
+      campaign = Campaign.new attributes
+      expect(campaign).to have(0).donations
+    end
+  end
 end

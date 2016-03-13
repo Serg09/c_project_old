@@ -10,6 +10,8 @@ RSpec.describe DonationsController, type: :controller do
 
   context 'for an authenticated author' do
     context 'that owns the associated book' do
+      before(:each) { sign_in author }
+
       describe "get :index" do
         it "returns http success" do
           get :index, campaign_id: campaign
@@ -26,19 +28,20 @@ RSpec.describe DonationsController, type: :controller do
     end
 
     context 'that does not own the associated book' do
+      let (:other_author) { FactoryGirl.create(:author) }
+      before(:each) { sign_in other_author }
+
       describe "get :index" do
-        it "raises 'resource not found'" do
-          expect do
-            get :index, campaign_id: campaign
-          end.to raise_error ActiveRecord::RecordNotFound
+        it 'redirects to the author home page' do
+          get :index, campaign_id: campaign
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe "get :show" do
-        it "raises 'resource not found'" do
-          expect do
-            get :show, id: donation
-          end.to raise_error ActiveRecord::RecordNotFound
+        it 'redirects to the author home page' do
+          get :show, id: donation
+          expect(response).to redirect_to author_root_path
         end
       end
     end
@@ -69,7 +72,7 @@ RSpec.describe DonationsController, type: :controller do
     describe 'post :create' do
       it 'redirects to the donation show page' do
         post :create, campaign_id: campaign, donation: attributes
-        expect(response).to redirect_to donation_page(Donation.last)
+        expect(response).to redirect_to donation_path(Donation.last)
       end
 
       it 'creates a donation record' do

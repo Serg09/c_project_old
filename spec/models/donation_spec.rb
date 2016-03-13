@@ -22,6 +22,13 @@ RSpec.describe Donation, type: :model do
     end
   end
 
+  describe '#campaign' do
+    it 'is a reference to the campaign to which the donation belongs' do
+      donation = Donation.new attributes
+      expect(donation.campaign).not_to be_nil
+    end
+  end
+
   describe '#email' do
     it 'is required' do
       donation = Donation.new attributes.except(:email)

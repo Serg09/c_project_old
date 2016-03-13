@@ -21,5 +21,8 @@ class Ability
     can :manage, Campaign do |campaign|
       campaign.book.author_id == author.id
     end
+    can :show, Donation do |donation|
+      donation.campaign.book.author_id == author.id
+    end
   end
 end
