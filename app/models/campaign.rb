@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: campaigns
+#
+#  id            :integer          not null, primary key
+#  book_id       :integer
+#  target_amount :decimal(, )
+#  target_date   :date
+#  paused        :boolean
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 class Campaign < ActiveRecord::Base
   belongs_to :book
 
