@@ -37,7 +37,11 @@ Feature: Make a donation
     And I fill in "State" with "TX"
     And I fill in "Postal code" with "75123"
     And I fill in "Amount" with "50"
+    And I fill in "Email" with "sally.readerton@mymail.com"
     And I click "Submit"
     Then I should see "Thank you!" within the page header
     And I should see "Your payment has been saved successfully." within the notification area
     And I should see "Your donation is appreciated! Your card will not be charged until the campaign has reached its goal. If the campaign fails to reach its goal, you will not be charged." within the main content
+    And "sally.readerton@mymail.com" should receive an email with subject "Donation receipt"
+    And "john@doe.com" should receive an email with subject "Donation Received!"
+    And "info@crowdscribed.com" should receive an email with subject "Donation Received!"
