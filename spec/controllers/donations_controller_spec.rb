@@ -7,6 +7,22 @@ RSpec.describe DonationsController, type: :controller do
   let (:campaign) { FactoryGirl.create(:campaign, book: book) }
   let (:donation) { FactoryGirl.create(:donation, campaign: campaign) }
   let (:attributes) { FactoryGirl.attributes_for(:donation, campaign: campaign) }
+  let (:payment_attributes) do
+    {
+      credit_card: '4444111144441111',
+      credit_card_type: 'visa',
+      expiration_month: '5',
+      expiration_year: '2020',
+      cvv: '123',
+      first_name: 'John',
+      last_name: 'Doe',
+      address_1: '1234 Main Str',
+      address_2: 'Apt 227',
+      city: 'Dallas',
+      state: 'TX',
+      postal_code: '75200'
+    }
+  end
 
   context 'for an authenticated author' do
     context 'that owns the associated book' do
@@ -71,14 +87,20 @@ RSpec.describe DonationsController, type: :controller do
 
     describe 'post :create' do
       it 'redirects to the donation show page' do
-        post :create, campaign_id: campaign, donation: attributes
+        post :create, campaign_id: campaign, donation: attributes, payment: payment_attributes
         expect(response).to redirect_to donation_path(Donation.last)
       end
 
       it 'creates a donation record' do
         expect do
-          post :create, campaign_id: campaign, donation: attributes
+          post :create, campaign_id: campaign, donation: attributes, payment: payment_attributes
         end.to change(campaign.donations, :count).by(1)
+      end
+
+      it 'creates a payment record' do
+        expect do
+          post :create, campaign_id: campaign, donation: attributes, payment: payment_attributes
+        end.to change(Payment, :count).by(1)
       end
     end
   end

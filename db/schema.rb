@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313183200) do
+ActiveRecord::Schema.define(version: 20160313194332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,5 +179,17 @@ ActiveRecord::Schema.define(version: 20160313183200) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "donation_id", null: false
+    t.string   "external_id", null: false
+    t.string   "state",       null: false
+    t.text     "content",     null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "payments", ["donation_id"], name: "index_payments_on_donation_id", using: :btree
+  add_index "payments", ["external_id"], name: "index_payments_on_external_id", using: :btree
 
 end
