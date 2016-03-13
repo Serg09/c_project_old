@@ -12,4 +12,4 @@
   .col-md-8
     =mark_up book_version.long_or_short_description
     -if book_version.active_campaign.present?
-      =link_to 'Donate!', campaign_path(book_version.active_campaign), :class => 'btn btn-lg btn-success', :title => 'Click here to contribute to the campaign to make this book a reality!'
+      =link_to 'Donate!', new_campaign_donation_path(book_version.active_campaign), :class => 'btn btn-lg btn-success', :title => 'Click here to contribute to the campaign to make this book a reality!'
