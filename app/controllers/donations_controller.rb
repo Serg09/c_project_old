@@ -14,6 +14,7 @@ class DonationsController < ApplicationController
   end
 
   def new
+    @donation_creator = DonationCreator.new(campaign: @campaign)
   end
 
   def create

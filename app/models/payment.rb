@@ -12,5 +12,12 @@
 #
 
 class Payment < ActiveRecord::Base
+  CREDIT_CARD_TYPES = [
+    ['VISA', 'visa'],
+    ['Mastercard', 'mastercard'],
+    ['Discover', 'discover'],
+    ['American Express', 'amex']
+  ]
+
   validates_presence_of :donation_id, :external_id, :state, :content
 end

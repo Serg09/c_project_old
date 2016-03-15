@@ -25,14 +25,14 @@ Feature: Make a donation
     Then I should see "Make a donation!" within the page title
 
     When I fill in "Credit card" with "4444111144441111"
-    And I select "visa" from "Credit card type"
-    And I fill in "Expiration month" with "5"
-    And I fill in "Expiration year" with "2020"
+    And I select "VISA" from "Type"
+    And I select "5" from "Expiration month"
+    And I select "2020" from "Expiration year"
     And I fill in "CVV" with "123"
     And I fill in "First name" with "Sally"
     And I fill in "Last name" with "Readerton"
     And I fill in "Address" with "1234 Main St"
-    And I fill in "Address cont." with "Apt 227"
+    And I fill in "Line 2" with "Apt 227"
     And I fill in "City" with "Bookville"
     And I fill in "State" with "TX"
     And I fill in "Postal code" with "75123"
