@@ -34,6 +34,8 @@ class DonationCreator
                         :postal_code
 
   def create!
+    return false unless valid?
+
     Donation.transaction do
       begin
         if create_payment_with_provider
@@ -70,6 +72,10 @@ class DonationCreator
 
     options ||= {}
     @payment_provider = options.fetch(:payment_provider, PAYMENT_PROVIDER)
+  end
+
+  def to_model
+    @donation || (campaign.try(:donations) || Donation).new
   end
 
   private

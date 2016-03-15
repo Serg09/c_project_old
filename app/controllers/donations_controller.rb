@@ -17,16 +17,32 @@ class DonationsController < ApplicationController
   end
 
   def create
-    # TODO Need to create the payment first
-    @donation = @campaign.donations.new(donation_attributes)
-    flash[:notice] = 'Your donation was created successfully.' if @donation.save
-    respond_with @donation
+    @donation_creator = DonationCreator.new(donation_attributes)
+    flash[:notice] = 'Your donation was created successfully.' if @donation_creator.create!
+    respond_with @donation_creator, location: create_redirect_path
   end
 
   private
 
+  def create_redirect_path
+    @donation_creator.donation ? donation_path(@donation_creator.donation) : book_path(@campaign.book)
+  end
+
   def donation_attributes
-    params.require(:donation).permit(:amount, :email)
+    params.require(:donation).permit(:amount,
+                                     :email,
+                                     :credit_card,
+                                     :credit_card_type,
+                                     :expiration_month,
+                                     :expiration_year,
+                                     :cvv,
+                                     :first_name,
+                                     :last_name,
+                                     :address_1,
+                                     :address_2,
+                                     :city,
+                                     :state,
+                                     :postal_code).merge(campaign: @campaign)
   end
 
   def load_campaign
