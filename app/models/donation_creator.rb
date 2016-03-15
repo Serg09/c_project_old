@@ -35,10 +35,19 @@ class DonationCreator
 
   def create!
     Donation.transaction do
-      create_payment_with_provider
-      create_donation
-      create_payment
-      true
+      begin
+        if create_payment_with_provider
+          create_donation
+          create_payment
+          true
+        else
+          Rails.logger.warn "The attempt to create the payment for donation failed. #{@provider_response.inspect}"
+          false
+        end
+      rescue StandardError => e
+        Rails.logger.error "The call to the payment provider failed. #{e}"
+        false
+      end
     end
   end
 
@@ -67,6 +76,7 @@ class DonationCreator
 
   def create_payment_with_provider
     @provider_response = @payment_provider.create(provider_payment_attributes)
+    @provider_response[:state] == 'approved'
   end
 
   def create_payment

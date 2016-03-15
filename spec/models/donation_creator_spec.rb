@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 describe DonationCreator do
+  let (:payment_provider) do
+    provider = double('payment provider')
+    expect(provider).to receive(:create).and_return(payment_result)
+    provider
+  end
+  let (:creator) { DonationCreator.new(attributes, payment_provider: payment_provider) }
+
   let (:campaign) { FactoryGirl.create(:campaign) }
   let (:attributes) do
     {
@@ -126,27 +133,6 @@ describe DonationCreator do
       raw = File.read(path)
       JSON.parse(raw, symbolize_names: true)
     end
-    let (:payment_provider) do
-      provider = double('payment provider')
-      expect(provider).to receive(:create).
-        with(
-          amount: 100,
-          credit_card: '4444111144441111',
-          cvv: '123',
-          expiration_month: '5',
-          expiration_year: '2020',
-          first_name: 'John',
-          last_name: 'Doe',
-          address_1: '1234 Main St',
-          address_2: 'Apt 227',
-          city: 'Dallas',
-          state: 'TX',
-          postal_code: '75200'
-        ).
-        and_return(payment_result)
-      provider
-    end
-    let (:creator) { DonationCreator.new(attributes, payment_provider: payment_provider) }
 
     describe '#create!' do
       it 'returns true' do
@@ -180,10 +166,66 @@ describe DonationCreator do
   end
 
   context 'when the payment provider transaction fails' do
+    let (:payment_result) do
+      path = Rails.root.join('spec', 'fixtures', 'files', 'payment_failure.json')
+      raw = File.read(path)
+      JSON.parse(raw, symbolize_names: true)
+    end
     describe '#create!' do
-      it 'returns false'
-      it 'does not create a payment record'
-      it 'does not create a donation record'
+      it 'returns false' do
+        expect(creator.create!).to be false
+      end
+
+      it 'does not create a payment record' do
+        expect do
+          creator.create!
+        end.not_to change(Payment, :count)
+        expect(creator.payment).to be_nil
+      end
+
+      it 'does not create a donation record' do
+        expect do
+          creator.create!
+        end.not_to change(Donation, :count)
+        expect(creator.donation).to be_nil
+      end
+
+      it 'logs the error' do
+        expect(Rails.logger).to receive(:warn).with(/payment for donation failed/)
+        creator.create!
+      end
+    end
+  end
+
+  context 'when the payment provider transaction errors out' do
+    let (:payment_provider) do
+      provider = double('payment provider')
+      expect(provider).to receive(:create).and_raise(StandardError) # TODO Get a more specific error type here
+      provider
+    end
+    describe '#create!' do
+      it 'returns false' do
+        expect(creator.create!).to be false
+      end
+
+      it 'does not create a payment record' do
+        expect do
+          creator.create!
+        end.not_to change(Payment, :count)
+        expect(creator.payment).to be_nil
+      end
+
+      it 'does not create a donation record' do
+        expect do
+          creator.create!
+        end.not_to change(Donation, :count)
+        expect(creator.donation).to be_nil
+      end
+
+      it 'logs the error' do
+        expect(Rails.logger).to receive(:error).with(/call to the payment provider failed/)
+        creator.create!
+      end
     end
   end
 end
