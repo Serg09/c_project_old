@@ -1,1 +1,1 @@
-PAYMENT_PROVIDER = nil # NilPaymentProvider.new
+PAYMENT_PROVIDER = PaymentProvider::NilPaymentProvider.new

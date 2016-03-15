@@ -36,12 +36,13 @@ class DonationCreator
   def create!
     Donation.transaction do
       create_payment_with_provider
-      create_payment
       create_donation
+      create_payment
+      true
     end
   end
 
-  def initialize(attributes = {}, options = {})
+  def initialize(attributes, options = {})
     attributes ||= {}
     self.campaign = attributes[:campaign]
     self.amount = attributes[:amount]
@@ -65,13 +66,30 @@ class DonationCreator
   private
 
   def create_payment_with_provider
-    @provider_response = @payment_provider.create_payment(provider_payment_attributes)
+    @provider_response = @payment_provider.create(provider_payment_attributes)
   end
 
   def create_payment
+    @payment = @donation.payments.create!(payment_attributes)
   end
 
   def create_donation
+    @donation = campaign.donations.create!(donation_attributes)
+  end
+
+  def donation_attributes
+    {
+      amount: amount,
+      email: email
+    }
+  end
+
+  def payment_attributes
+    {
+      external_id: @provider_response[:id],
+      state: @provider_response[:state],
+      content: @provider_response
+    }
   end
 
   def provider_payment_attributes
@@ -79,10 +97,10 @@ class DonationCreator
       amount: amount,
       credit_card: credit_card,
       cvv: cvv,
-      expirection_month: expiration_month,
+      expiration_month: expiration_month,
       expiration_year: expiration_year,
       first_name: first_name,
-      last__name: last_name,
+      last_name: last_name,
       address_1: address_1,
       address_2: address_2,
       city: city,

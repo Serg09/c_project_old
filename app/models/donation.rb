@@ -12,6 +12,7 @@
 
 class Donation < ActiveRecord::Base
   belongs_to :campaign
+  has_many :payments
 
   validates_presence_of :campaign_id, :email, :amount
   validates_numericality_of :amount, greater_than: 0

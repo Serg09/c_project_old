@@ -14,7 +14,7 @@ describe DonationCreator do
       cvv: '123',
       first_name: 'John',
       last_name: 'Doe',
-      address_1: '1234 Main Str',
+      address_1: '1234 Main St',
       address_2: 'Apt 227',
       city: 'Dallas',
       state: 'TX',
@@ -121,28 +121,45 @@ describe DonationCreator do
   end
 
   context 'when the payment provider transaction succeeds' do
-    let (:payment_result) { File.read(Rails.root.join('spec', 'fixtures', 'files', 'payment.json')) }
+    let (:payment_result) do
+      path = Rails.root.join('spec', 'fixtures', 'files', 'payment.json')
+      raw = File.read(path)
+      JSON.parse(raw, symbolize_names: true)
+    end
     let (:payment_provider) do
       provider = double('payment provider')
-      expect(provider).to receive(:create).and_return(payment_result)
+      expect(provider).to receive(:create).
+        with(
+          amount: 100,
+          credit_card: '4444111144441111',
+          cvv: '123',
+          expiration_month: '5',
+          expiration_year: '2020',
+          first_name: 'John',
+          last_name: 'Doe',
+          address_1: '1234 Main St',
+          address_2: 'Apt 227',
+          city: 'Dallas',
+          state: 'TX',
+          postal_code: '75200'
+        ).
+        and_return(payment_result)
       provider
     end
+    let (:creator) { DonationCreator.new(attributes, payment_provider: payment_provider) }
 
     describe '#create!' do
       it 'returns true' do
-        creator = DonationCreator.new(attributes, payment_provider: payment_provider)
         expect(creator.create!).to be true
       end
 
       it 'sets #payment to the created payment record' do
-        creator = DonationCreator.new(attributes, payment_provider: payment_provider)
         creator.create!
         expect(creator.payment).not_to be_nil
         expect(creator.payment).to be_a Payment
       end
 
       it 'sets #donation to the created donation record' do
-        creator = DonationCreator.new(attributes, payment_provider: payment_provider)
         creator.create!
         expect(creator.donation).not_to be_nil
         expect(creator.donation).to be_a Donation
@@ -150,14 +167,12 @@ describe DonationCreator do
 
       it 'creates a payment record' do
         expect do
-          creator = DonationCreator.new(attributes)
-          payment = creator.create!
+          creator.create!
         end.to change(Payment, :count).by(1)
       end
 
       it 'creates a donation record' do
         expect do
-          creator = DonationCreator.new(attributes)
           payment = creator.create!
         end.to change(Donation, :count).by(1)
       end
