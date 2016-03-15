@@ -62,6 +62,18 @@ describe DonationCreator do
     end
   end
 
+  describe '#credit_card_type' do
+    it 'is required' do
+      creator = DonationCreator.new attributes.except(:credit_card_type)
+      expect(creator).to have_at_least(1).error_on :credit_card_type
+    end
+
+    it 'cannot be something other than the accepted types' do
+      creator = DonationCreator.new attributes.merge(credit_card_type: 'notatype')
+      expect(creator).to have_at_least(1).error_on :credit_card_type
+    end
+  end
+
   describe '#cvv' do
     it 'is required' do
       creator = DonationCreator.new attributes.except(:cvv)

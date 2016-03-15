@@ -5,6 +5,7 @@ class DonationCreator
                 :amount,
                 :email,
                 :credit_card,
+                :credit_card_type,
                 :cvv,
                 :expiration_month,
                 :expiration_year,
@@ -22,6 +23,7 @@ class DonationCreator
                         :amount,
                         :email,
                         :credit_card,
+                        :credit_card_type,
                         :cvv,
                         :expiration_month,
                         :expiration_year,
@@ -32,6 +34,7 @@ class DonationCreator
                         :city,
                         :state,
                         :postal_code
+  validates_inclusion_of :credit_card_type, in: Payment::CREDIT_CARD_TYPES.map{|t| t.second}
 
   def create!
     return false unless valid?
@@ -59,6 +62,7 @@ class DonationCreator
     self.amount = attributes[:amount]
     self.email = attributes[:email]
     self.credit_card = attributes[:credit_card]
+    self.credit_card_type = attributes[:credit_card_type]
     self.cvv = attributes[:cvv]
     self.expiration_month = attributes[:expiration_month]
     self.expiration_year = attributes[:expiration_year]
@@ -112,6 +116,7 @@ class DonationCreator
     {
       amount: amount,
       credit_card: credit_card,
+      credit_card_type: credit_card_type,
       cvv: cvv,
       expiration_month: expiration_month,
       expiration_year: expiration_year,
