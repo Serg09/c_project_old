@@ -79,6 +79,11 @@ describe DonationCreator do
       creator = DonationCreator.new attributes.except(:cvv)
       expect(creator).to have_at_least(1).error_on :cvv
     end
+
+    it 'cannot be more than 4 characters' do
+      creator = DonationCreator.new attributes.merge(cvv: '12345')
+      expect(creator).to have_at_least(1).error_on :cvv
+    end
   end
 
   describe '#expiration_month' do

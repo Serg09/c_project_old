@@ -35,6 +35,7 @@ class DonationCreator
                         :state,
                         :postal_code
   validates_inclusion_of :credit_card_type, in: Payment::CREDIT_CARD_TYPES.map{|t| t.second}
+  validates_length_of :cvv, maximum: 4
 
   def create!
     return false unless valid?
