@@ -1,4 +1,3 @@
-@wip
 Feature: Make a donation
   As a user
   In order to support a book project I want to see completed
