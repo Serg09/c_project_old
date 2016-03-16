@@ -22,12 +22,9 @@ class DonationsController < ApplicationController
     respond_with(@donation_creator, location: book_path(@campaign.book_id)) do |format|
       if @donation_creator.create!
         flash[:notice] = 'Your donation has been saved successfully. Expect to receive a confirmation email with all of the details.'
+        send_notification_emails @donation_creator.donation
       else
-        unless Rails.env.production?
-          flash.now[:error] = @donation_creator.exceptions.to_sentence
-        else
-          flash.now[:error] = 'We were unable to save your donation. Please try again later.'
-        end
+        set_error_flash
         format.html { render :new }
       end
     end
@@ -58,5 +55,19 @@ class DonationsController < ApplicationController
 
   def load_donation
     @donation = Donation.find(params[:id])
+  end
+
+  def send_notification_emails(donation)
+    DonationMailer.donation_receipt(donation).deliver_now
+    DonationMailer.donation_received_notify_author(donation).deliver_now
+    DonationMailer.donation_received_notify_administrator(donation).deliver_now
+  end
+
+  def set_error_flash
+    unless Rails.env.production?
+      flash.now[:error] = @donation_creator.exceptions.to_sentence
+    else
+      flash.now[:error] = 'We were unable to save your donation. Please try again later.'
+    end
   end
 end
