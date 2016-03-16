@@ -36,6 +36,7 @@ class DonationCreator
                         :postal_code
   validates_inclusion_of :credit_card_type, in: Payment::CREDIT_CARD_TYPES.map{|t| t.second}
   validates_length_of :cvv, maximum: 4
+  validates_format_of :postal_code, with: /\A\d{5}(?:-\d{4})?\z/
 
   def create!
     return false unless valid?
@@ -52,9 +53,14 @@ class DonationCreator
         end
       rescue StandardError => e
         Rails.logger.error "The call to the payment provider failed. #{e}"
+        exceptions << e.message
         false
       end
     end
+  end
+
+  def exceptions
+    @exceptions ||= []
   end
 
   def initialize(attributes, options = {})
@@ -95,7 +101,14 @@ class DonationCreator
   end
 
   def create_donation
-    @donation = campaign.donations.create!(donation_attributes)
+    @donation = campaign.donations.new(donation_attributes)
+    unless @donation.valid?
+      puts ""
+      puts "donation is not valid"
+      @donation.errors.full_messages.each{|m| puts m}
+      puts @donation.inspect
+    end
+    @donation.save!
   end
 
   def donation_attributes

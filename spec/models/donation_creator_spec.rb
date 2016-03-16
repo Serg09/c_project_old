@@ -142,6 +142,26 @@ describe DonationCreator do
       creator = DonationCreator.new attributes.except(:postal_code)
       expect(creator).to have_at_least(1).error_on :postal_code
     end
+
+    it 'cannot have 4 digits' do
+      creator = DonationCreator.new attributes.merge(postal_code: '1234')
+      expect(creator).to have_at_least(1).error_on :postal_code
+    end
+
+    it 'cannot have 6 digits' do
+      creator = DonationCreator.new attributes.merge(postal_code: '123456')
+      expect(creator).to have_at_least(1).error_on :postal_code
+    end
+
+    it 'can have 5 digits' do
+      creator = DonationCreator.new attributes.merge(postal_code: '12345')
+      expect(creator).to be_valid
+    end
+
+    it 'can have 5 digits followed by a dash and 4 more digits' do
+      creator = DonationCreator.new attributes.merge(postal_code: '12345-6789')
+      expect(creator).to be_valid
+    end
   end
 
   context 'when the payment provider transaction succeeds' do
@@ -242,6 +262,11 @@ describe DonationCreator do
       it 'logs the error' do
         expect(Rails.logger).to receive(:error).with(/call to the payment provider failed/)
         creator.create!
+      end
+
+      it 'adds a messages to #exceptions' do
+        creator.create!
+        expect(creator).to have(1).exception
       end
     end
   end
