@@ -19,15 +19,21 @@ class DonationsController < ApplicationController
 
   def create
     @donation_creator = DonationCreator.new(donation_attributes)
-    flash[:notice] = 'Your donation was created successfully.' if @donation_creator.create!
-    respond_with @donation_creator, location: create_redirect_path
+    respond_with(@donation_creator, location: book_path(@campaign.book_id)) do |format|
+      if @donation_creator.create!
+        flash[:notice] = 'Your donation has been saved successfully. Expect to receive a confirmation email with all of the details.'
+      else
+        unless Rails.env.production?
+          flash.now[:error] = @donation_creator.exceptions.to_sentence
+        else
+          flash.now[:error] = 'We were unable to save your donation. Please try again later.'
+        end
+        format.html { render :new }
+      end
+    end
   end
 
   private
-
-  def create_redirect_path
-    @donation_creator.donation ? donation_path(@donation_creator.donation) : book_path(@campaign.book)
-  end
 
   def donation_attributes
     params.require(:donation).permit(:amount,
