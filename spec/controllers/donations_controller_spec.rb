@@ -87,9 +87,9 @@ RSpec.describe DonationsController, type: :controller do
     end
 
     describe 'post :create' do
-      it 'redirects to the donation show page' do
+      it 'redirects to the book page' do
         post :create, campaign_id: campaign, donation: attributes
-        expect(response).to redirect_to donation_path(Donation.last)
+        expect(response).to redirect_to book_path(campaign.book_id)
       end
 
       it 'creates a donation record' do
