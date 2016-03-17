@@ -1,0 +1,9 @@
+Donation Received!
+:plain
+
+Your campaign for #{h @book.administrative_title} has received a
+donation in the amount of #{h number_to_currency(@donation.amount)}.
+:plain
+
+Follow this link to see the progress of the campaign
+=campaign_url(@donation.campaign_id)

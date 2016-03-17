@@ -1,5 +1,19 @@
+# == Schema Information
+#
+# Table name: campaigns
+#
+#  id            :integer          not null, primary key
+#  book_id       :integer
+#  target_amount :decimal(, )
+#  target_date   :date
+#  paused        :boolean
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 class Campaign < ActiveRecord::Base
   belongs_to :book
+  has_many :donations
 
   validates_presence_of :book_id, :target_date, :target_amount
   validates_numericality_of :target_amount, greater_than: 0

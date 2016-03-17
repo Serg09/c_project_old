@@ -14,3 +14,7 @@ Given /^(#{AUTHOR}) submitted the following bio on (#{DATE})$/ do |author, date,
                            created_at: date,
                            text: values[:text])
 end
+
+Given /^(#{AUTHOR}) has an approved bio$/ do |author|
+  FactoryGirl.create(:approved_bio, author: author)
+end
