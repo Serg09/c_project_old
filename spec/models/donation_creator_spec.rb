@@ -25,7 +25,9 @@ describe DonationCreator do
       address_2: 'Apt 227',
       city: 'Dallas',
       state: 'TX',
-      postal_code: '75200'
+      postal_code: '75200',
+      ip_address: '123.456.789.012',
+      user_agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'
     }
   end
 

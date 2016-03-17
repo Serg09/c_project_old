@@ -5,3 +5,7 @@ end
 After do |scenario|
   Timecop.return
 end
+
+Before do |scenario|
+  Capybara.current_session.driver.header('User-Agent', 'cucumber-test')
+end

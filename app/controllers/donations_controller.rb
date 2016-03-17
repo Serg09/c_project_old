@@ -46,7 +46,9 @@ class DonationsController < ApplicationController
                                      :address_2,
                                      :city,
                                      :state,
-                                     :postal_code).merge(campaign: @campaign)
+                                     :postal_code).merge(campaign: @campaign,
+                                                         ip_address: request.remote_ip,
+                                                         user_agent: request.headers['HTTP_USER_AGENT'])
   end
 
   def load_campaign

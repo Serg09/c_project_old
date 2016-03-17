@@ -17,7 +17,9 @@ class DonationCreator
                 :state,
                 :postal_code,
                 :payment,
-                :donation
+                :donation,
+                :ip_address,
+                :user_agent
 
   validates_presence_of :campaign,
                         :amount,
@@ -80,6 +82,8 @@ class DonationCreator
     self.city = attributes[:city]
     self.state = attributes[:state]
     self.postal_code = attributes[:postal_code]
+    self.ip_address = attributes[:ip_address]
+    self.user_agent = attributes[:user_agent]
 
     options ||= {}
     @payment_provider = options.fetch(:payment_provider, PAYMENT_PROVIDER)
@@ -101,20 +105,15 @@ class DonationCreator
   end
 
   def create_donation
-    @donation = campaign.donations.new(donation_attributes)
-    unless @donation.valid?
-      puts ""
-      puts "donation is not valid"
-      @donation.errors.full_messages.each{|m| puts m}
-      puts @donation.inspect
-    end
-    @donation.save!
+    @donation = campaign.donations.create!(donation_attributes)
   end
 
   def donation_attributes
     {
       amount: amount,
-      email: email
+      email: email,
+      ip_address: ip_address,
+      user_agent: user_agent
     }
   end
 

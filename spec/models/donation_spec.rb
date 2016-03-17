@@ -6,7 +6,9 @@ RSpec.describe Donation, type: :model do
     {
       email: 'john@doe.com',
       amount: 100.00,
-      campaign_id: campaign.id
+      campaign_id: campaign.id,
+      ip_address: '123.456.789.012',
+      user_agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'
     }
   end
 
@@ -50,6 +52,25 @@ RSpec.describe Donation, type: :model do
     it 'must be greater than zero' do
       donation = Donation.new attributes.merge(amount: 0)
       expect(donation).to have_at_least(1).error_on :amount
+    end
+  end
+
+  describe '#ip_address' do
+    it 'is required' do
+      donation = Donation.new attributes.except(:ip_address)
+      expect(donation).to have_at_least(1).error_on :ip_address
+    end
+
+    it 'must be a valid IP address' do
+      donation = Donation.new attributes.merge(ip_address: 'notavalidipaddress')
+      expect(donation).to have_at_least(1).error_on :ip_address
+    end
+  end
+
+  describe '#user_agent' do
+    it 'is required' do
+      donation = Donation.new attributes.except(:user_agent)
+      expect(donation).to have_at_least(1).error_on :user_agent
     end
   end
 end
