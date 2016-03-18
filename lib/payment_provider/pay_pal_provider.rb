@@ -35,7 +35,7 @@ module PaymentProvider
         Rails.logger.error "Unable to complete the payment with the payment provider. #{payment.error.inspect}"
         raise StandardError.new("Unable to complete the payment with the payment provider")
       end
-      Payment.find(payment.id).to_json
+      Payment.find(payment.id)
     end
 
     private
