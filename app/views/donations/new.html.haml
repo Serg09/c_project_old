@@ -2,6 +2,15 @@
   Make a donation!
 
 .container.container-default
+  .row
+    .col-md-12
+      %h1 Donate!
+      %h2
+        Support the book
+        %i= @campaign.book.approved_version.title
+        by
+        =@campaign.book.author.full_name
+        with a contribution.
   =form_for([@campaign, @donation_creator]) do |f|
     .row
       .col-md-6
