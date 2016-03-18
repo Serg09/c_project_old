@@ -35,6 +35,7 @@ gem 'will_paginate-bootstrap'
 gem 'rmagick'
 gem 'puma'
 gem 'chronic'
+gem 'paypal-sdk-rest'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

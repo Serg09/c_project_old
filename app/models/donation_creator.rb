@@ -1,5 +1,8 @@
 class DonationCreator
   include ActiveModel::Validations
+  include ActionView::Helpers::TextHelper
+
+  MAX_DESCRIPTION_LENGTH = 127 # This is imposed by PayPal and may not actually be applicable elsewhere
 
   attr_accessor :campaign,
                 :amount,
@@ -42,23 +45,12 @@ class DonationCreator
 
   def create!
     return false unless valid?
-
-    Donation.transaction do
-      begin
-        if create_payment_with_provider
-          create_donation
-          create_payment
-          true
-        else
-          Rails.logger.warn "The attempt to create the payment for donation failed. #{@provider_response.inspect}"
-          false
-        end
-      rescue StandardError => e
-        Rails.logger.error "The call to the payment provider failed. #{e}"
-        exceptions << e.message
-        false
-      end
-    end
+    transacted_create
+    true
+  rescue StandardError => e
+    Rails.logger.error "The call to the payment provider failed. #{e.class.name} #{e.message}\n#{e.backtrace.join("\n\t")}"
+    exceptions << e.message
+    false
   end
 
   def exceptions
@@ -89,6 +81,23 @@ class DonationCreator
     @payment_provider = options.fetch(:payment_provider, PAYMENT_PROVIDER)
   end
 
+  def payment_description
+    # This is really only public so that I can test it
+
+    # PayPal limits the field to 127 characters
+    template = "Donation for campaign %s for book \"%s\" by %s"
+    campaign_id = @campaign.id.to_s
+    author_name = @campaign.book.author.full_name
+    title = @campaign.book.approved_version.title
+    total_length = template.length + campaign_id.length + author_name.length + title.length - 6
+    if total_length > MAX_DESCRIPTION_LENGTH
+      reduction = total_length - MAX_DESCRIPTION_LENGTH
+      new_title_length = title.length - reduction
+      title = truncate(title, length: new_title_length)
+    end
+    template % [campaign_id, title, author_name]
+  end
+
   def to_model
     @donation || (campaign.try(:donations) || Donation).new
   end
@@ -97,7 +106,6 @@ class DonationCreator
 
   def create_payment_with_provider
     @provider_response = @payment_provider.create(provider_payment_attributes)
-    @provider_response[:state] == 'approved'
   end
 
   def create_payment
@@ -119,9 +127,9 @@ class DonationCreator
 
   def payment_attributes
     {
-      external_id: @provider_response[:id],
-      state: @provider_response[:state],
-      content: @provider_response
+      external_id: @provider_response.id,
+      state: @provider_response.state,
+      content: @provider_response.to_json
     }
   end
 
@@ -139,7 +147,16 @@ class DonationCreator
       address_2: address_2,
       city: city,
       state: state,
-      postal_code: postal_code
+      postal_code: postal_code,
+      description: payment_description
     }
+  end
+
+  def transacted_create
+    create_payment_with_provider
+    Donation.transaction do
+      create_donation
+      create_payment
+    end
   end
 end
