@@ -66,10 +66,10 @@ class DonationsController < ApplicationController
   end
 
   def set_error_flash
-    unless Rails.env.production?
-      flash.now[:error] = @donation_creator.exceptions.to_sentence
+    if Rails.env.production?
+      flash.now[:alert] = 'We were unable to save your donation. Please try again later.'
     else
-      flash.now[:error] = 'We were unable to save your donation. Please try again later.'
+      flash.now[:alert] = "We were unable to save your donation. #{@donation_creator.exceptions.to_sentence}"
     end
   end
 end
