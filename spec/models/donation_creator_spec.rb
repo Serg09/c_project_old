@@ -170,7 +170,8 @@ describe DonationCreator do
     let (:payment_result) do
       path = Rails.root.join('spec', 'fixtures', 'files', 'payment.json')
       raw = File.read(path)
-      JSON.parse(raw, symbolize_names: true)
+      json = JSON.parse(raw, symbolize_names: true)
+      OpenStruct.new(id: json[:id], state: json[:state], to_json: json)
     end
 
     describe '#create!' do
@@ -200,38 +201,6 @@ describe DonationCreator do
         expect do
           payment = creator.create!
         end.to change(Donation, :count).by(1)
-      end
-    end
-  end
-
-  context 'when the payment provider transaction fails' do
-    let (:payment_result) do
-      path = Rails.root.join('spec', 'fixtures', 'files', 'payment_failure.json')
-      raw = File.read(path)
-      JSON.parse(raw, symbolize_names: true)
-    end
-    describe '#create!' do
-      it 'returns false' do
-        expect(creator.create!).to be false
-      end
-
-      it 'does not create a payment record' do
-        expect do
-          creator.create!
-        end.not_to change(Payment, :count)
-        expect(creator.payment).to be_nil
-      end
-
-      it 'does not create a donation record' do
-        expect do
-          creator.create!
-        end.not_to change(Donation, :count)
-        expect(creator.donation).to be_nil
-      end
-
-      it 'logs the error' do
-        expect(Rails.logger).to receive(:warn).with(/payment for donation failed/)
-        creator.create!
       end
     end
   end
@@ -270,6 +239,30 @@ describe DonationCreator do
         creator.create!
         expect(creator).to have(1).exception
       end
+    end
+  end
+
+  describe '#payment_description' do
+    let (:payment_provider) { PaymentProvider::PayPalProvider.new }
+    let (:creator) { DonationCreator.new(attributes, payment_provider: payment_provider) }
+
+    it "contains the author's name" do
+      expect(creator.payment_description).to include(campaign.book.author.full_name)
+    end
+
+    it 'contains the book title' do
+      expect(creator.payment_description).to include(campaign.book.approved_version.title)
+    end
+
+    it 'contains the campaign ID' do
+      expect(creator.payment_description).to include(campaign.id.to_s)
+    end
+
+    it 'is not longer than 127 characters' do
+      # Donation for campaign #{@campaign.id} for book \"#{@campaign.book.approved_version.title}\" by #{@campaign.book.author.full_name}
+      # Donation for campaign  for book "" by .
+      campaign.book.approved_version.title = Faker::Lorem.sentence(40)
+      expect(creator.payment_description.length).to eq(127)
     end
   end
 end
