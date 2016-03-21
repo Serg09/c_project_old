@@ -46,5 +46,5 @@ When /^I select (?:the )?file "([^"]+)" for "([^"]+)"$/ do |file_name, locator|
 end
 
 Given /^today is (#{DATE})$/ do |date|
-  Timecop.freeze(date)
+  Timecop.freeze("#{date} 12:00:00 Central (US & Canada)")
 end
