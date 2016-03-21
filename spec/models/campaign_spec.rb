@@ -110,4 +110,72 @@ RSpec.describe Campaign, type: :model do
       expect(campaign).to have(0).donations
     end
   end
+
+  shared_context :donations do
+    let (:campaign) { FactoryGirl.create(:campaign, target_amount: 500, target_date: '2016-03-31') }
+    let!(:donation1) { FactoryGirl.create(:donation, campaign: campaign, amount: 25) }
+    let!(:donation2) { FactoryGirl.create(:donation, campaign: campaign, amount: 50) }
+  end
+
+  describe '#total_donated' do
+    include_context :donations
+    it 'returns the sum of the donations' do
+      expect(campaign.total_donated).to eq 75
+    end
+  end
+
+  context 'before the target amount is reached' do
+    include_context :donations
+
+    describe '#donation_amount_needed' do
+      it 'returns the difference between the target amount and the total donated' do
+        expect(campaign.donation_amount_needed).to eq 425
+      end
+    end
+
+    describe '#current_progress' do
+      it 'returns a fractional value representing the progress toward the goal, where 1 means 100%' do
+        expect(campaign.current_progress).to eq 0.15
+      end
+    end
+  end
+
+  context 'after the target amount is reached' do
+    include_context :donations
+    let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 426) }
+
+    describe '#donation_amount_needed' do
+      it 'returns zero' do
+        expect(campaign.donation_amount_needed).to eq 0
+      end
+    end
+
+    describe '#current_progress' do
+      it 'returns 1' do
+        expect(campaign.current_progress).to eq 1
+      end
+    end
+  end
+
+  describe '#days_remaining' do
+    include_context :donations
+
+    context 'before the target date' do
+      before(:each) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
+      after(:each) { Timecop.return }
+
+      it 'returns the number of days until the target date' do
+        expect(campaign.days_remaining).to eq 29
+      end
+    end
+
+    context 'on or after the target date' do
+      before(:each) { Timecop.freeze(DateTime.parse('2016-04-01 12:00:00 CST')) }
+      after(:each) { Timecop.return }
+
+      it 'returns zero' do
+        expect(campaign.days_remaining).to eq 0
+      end
+    end
+  end
 end

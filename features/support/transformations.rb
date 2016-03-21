@@ -8,7 +8,11 @@ DATE_TIME = Transform /(\d{1,2}):(\d{2}) (AM|PM) on (\d{1,2})\/(\d{1,2})\/(\d{4}
 end
 
 DOLLAR_AMOUNT = Transform /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/ do |amount|
-  BigDecimal.new(amount.gsub(/[\$,]/, ''))
+  if amount.is_a? String # this allows dollar signs in tables
+    BigDecimal.new(amount.gsub(/[\$,]/, ''))
+  else
+    amount
+  end
 end
 
 AUTHOR = Transform /author (.+@.+)/ do |email|
