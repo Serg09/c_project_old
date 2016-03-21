@@ -124,20 +124,35 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  describe '#donation_amount_needed' do
+  context 'before the target amount is reached' do
     include_context :donations
 
-    context 'before the target amount is reached' do
+    describe '#donation_amount_needed' do
       it 'returns the difference between the target amount and the total donated' do
         expect(campaign.donation_amount_needed).to eq 425
       end
     end
 
-    context 'after the target amount is reached' do
-      let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 426) }
+    describe '#current_progress' do
+      it 'returns a fractional value representing the progress toward the goal, where 1 means 100%' do
+        expect(campaign.current_progress).to eq 0.15
+      end
+    end
+  end
 
+  context 'after the target amount is reached' do
+    include_context :donations
+    let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 426) }
+
+    describe '#donation_amount_needed' do
       it 'returns zero' do
         expect(campaign.donation_amount_needed).to eq 0
+      end
+    end
+
+    describe '#current_progress' do
+      it 'returns 1' do
+        expect(campaign.current_progress).to eq 1
       end
     end
   end

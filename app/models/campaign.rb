@@ -37,8 +37,13 @@ class Campaign < ActiveRecord::Base
   end
 
   def donation_amount_needed
-    return 0 if total_donated >= target_amount
+    return 0 if target_amount_achieved?
     target_amount - total_donated
+  end
+
+  def current_progress
+    return 1 if target_amount_achieved?
+    total_donated / target_amount
   end
 
   def days_remaining
@@ -66,5 +71,9 @@ class Campaign < ActiveRecord::Base
 
   def set_defaults
     self.paused = true if self.paused.nil?
+  end
+
+  def target_amount_achieved?
+    total_donated >= target_amount
   end
 end
