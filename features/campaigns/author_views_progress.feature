@@ -1,4 +1,3 @@
-@wip
 Feature: View progress of a campaign as an author
   As an author
   In order to see how my campaign is performing
