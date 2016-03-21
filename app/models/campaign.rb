@@ -32,6 +32,20 @@ class Campaign < ActiveRecord::Base
     book.try(:author)
   end
 
+  def total_donated
+    donations.reduce(0){|sum, d| sum + d.amount}
+  end
+
+  def donation_amount_needed
+    return 0 if total_donated >= target_amount
+    target_amount - total_donated
+  end
+
+  def days_remaining
+    return 0 if Date.today >= target_date
+    (target_date - Date.today).to_i
+  end
+
   private
 
   def is_in_range
