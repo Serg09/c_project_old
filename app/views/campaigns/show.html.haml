@@ -23,3 +23,5 @@
         %tr
           %th Days remaining
           %td.text-right= @campaign.days_remaining
+    .col-md-6
+      =render_progress_meter @campaign.current_progress
