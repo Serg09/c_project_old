@@ -27,8 +27,8 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :campaigns, 'Campaigns', admin_campaigns_path, if: ->{administrator_signed_in?} do |campaigns|
       campaigns.auto_highlight = false
       campaigns.dom_class = 'nav nav-tabs'
-      campaigns.item :active, 'Active', admin_book_versions_path
-      campaigns.item :inactive, 'Inactive', admin_book_versions_path(status: :inactive)
+      campaigns.item :active, 'Current', admin_campaigns_path, highlights_on: ->{(params[:status] || 'current') == 'current'}
+      campaigns.item :inactive, 'Past', admin_campaigns_path(status: :past), highlights_on: ->{params[:status] == 'past' }
     end
     primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path, if: ->{administrator_signed_in?} do |inquiries|
       inquiries.auto_highlight = false
