@@ -55,7 +55,7 @@ Rails.application.routes.draw do
         patch :reject
       end
     end
-    resources :campaigns, only: [:show]
+    resources :campaigns, only: [:index, :show]
   end
 
   get 'pages/welcome'
