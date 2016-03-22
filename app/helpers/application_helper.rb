@@ -36,6 +36,10 @@ module ApplicationHelper
     nav_item_caption 'Books', BookVersion.pending.count
   end
 
+  def campaign_path?(status)
+    matches_path? '/admin/campaigns', {status: status}, {status: 'current'}
+  end
+
   def flash_key_to_alert_class(flash_key)
     "alert-#{FLASH_MAP[flash_key] || flash_key}"
   end
