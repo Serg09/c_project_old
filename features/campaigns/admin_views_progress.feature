@@ -1,4 +1,3 @@
-@wip
 Feature: Administrator views campaign progress
   As an administrator
   In order to monitor active campaigns
@@ -26,8 +25,7 @@ Feature: Administrator views campaign progress
       | John Doe | Some Words of Mine |   3/31/2016 |
 
     When I click the campaign progress button within the 1st campaign row
-    Then I should see "Campaign" within the page title
-    And I should see "Some Words of Mine" within the page subtitle
+    Then I should see "Campaign for Some Words of Mine" within the page title
     And I should see the following campaign progress table
       | Goal           | $1,000 |
       | Donations      |      2 |
