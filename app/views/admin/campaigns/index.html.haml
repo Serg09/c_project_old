@@ -1,0 +1,21 @@
+=content_for :page_title do
+  Campaigns
+
+.container.container-default
+  .row
+    .col-md-6
+      =render_navigation context: :admin, level: 2
+      %table#campaigns-table.table.table-striped
+        %tr
+          %th Author
+          %th Title
+          %th Target date
+          %th &nbsp;
+        -@campaigns.each do |campaign|
+          %tr
+            %td=campaign.book.author.full_name
+            %td=campaign.book.approved_version.title
+            %td=format_date(campaign.target_date)
+            %td
+              =link_to admin_campaign_path(campaign), class: 'btn btn-info btn-xs campaign-progress-button', title: 'Click here to see the progress of the campaign' do
+                %span.glyphicon.glyphicon-stats{ 'arial-hidden' => true }

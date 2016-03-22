@@ -21,7 +21,8 @@ class Campaign < ActiveRecord::Base
 
   before_validation :set_defaults
 
-  scope :current, ->{where('target_date > ?', Date.today)}
+  scope :current, ->{where('target_date >= ?', Date.today)}
+  scope :past, ->{where('target_date < ?', Date.today)}
 
   def active?
     return false unless author.active_bio.present?

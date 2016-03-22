@@ -24,6 +24,12 @@ SimpleNavigation::Configuration.run do |navigation|
       books.item :approved, 'Approved', admin_book_versions_path(status: :approved), highlights_on: -> { book_path?(BookVersion.APPROVED) }
       books.item :rejected, 'Rejected', admin_book_versions_path(status: :rejected), highlights_on: -> { book_path?(BookVersion.REJECTED) }
     end
+    primary.item :campaigns, 'Campaigns', admin_campaigns_path, if: ->{administrator_signed_in?} do |campaigns|
+      campaigns.auto_highlight = false
+      campaigns.dom_class = 'nav nav-tabs'
+      campaigns.item :active, 'Current', admin_campaigns_path, highlights_on: ->{(params[:status] || 'current') == 'current'}
+      campaigns.item :inactive, 'Past', admin_campaigns_path(status: :past), highlights_on: ->{params[:status] == 'past' }
+    end
     primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path, if: ->{administrator_signed_in?} do |inquiries|
       inquiries.auto_highlight = false
       inquiries.dom_class = 'nav nav-tabs'

@@ -93,13 +93,33 @@ RSpec.describe Campaign, type: :model do
   end
 
   describe '::current' do
-    before(:all) { Timecop.freeze(Date.parse('2016-03-02')) }
+    before(:all) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
     after(:all) { Timecop.return }
     let!(:campaign) { FactoryGirl.create(:campaign, book: book, target_date: '2016-03-31') }
-    it 'returns campaigns having target dates that are not in the past' do
+    it 'returns campaigns having target dates on or after today' do
       expect(Campaign.current.map(&:id)).to eq [campaign.id]
-      Timecop.freeze(Date.parse('2016-04-01')) do
+    end
+
+    it 'does not include campaigns that have target dates in the past' do
+      Timecop.freeze(DateTime.parse('2016-04-01 11:00:00 CST')) do
         expect(Campaign.current.map(&:id)).to eq []
+      end
+    end
+  end
+
+  describe '::past' do
+    let!(:campaign) do
+      Timecop.freeze(Date.parse('2016-01-01')) do
+        FactoryGirl.create(:campaign, book: book, target_date: '2016-02-27')
+      end
+    end
+    it 'returns campaigns having target dates that are in the past' do
+      expect(Campaign.past.map(&:id)).to eq [campaign.id]
+    end
+
+    it 'does not include campaigns with target dates on or after today' do
+      Timecop.freeze(Date.parse('2016-02-27 12:00:00 CST')) do
+        expect(Campaign.past).to be_empty
       end
     end
   end

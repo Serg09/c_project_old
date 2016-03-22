@@ -1,3 +1,7 @@
+Given /^there is an author named "(\S+) ([^"]+)" with email address "([^"]+)"$/ do |first_name, last_name, email|
+  FactoryGirl.create(:approved_author, first_name: first_name, last_name: last_name, email: email)
+end
+
 When /^an administrator approves the account for (#{AUTHOR})$/ do |author|
   author.status = Author.APPROVED
   author.save!
