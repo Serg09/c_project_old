@@ -14,16 +14,15 @@ Feature: Add a house-fulfilled reward
     When I click "Rewards" within the main menu
     Then I should see "Rewards" within the page title
     And I should see the following rewards table
-      | Description |
-      |             |
+      | Description | Address Req.? |
 
-    When I click "Add" within the main content
+    When I click "Add" within the admin content
     And I fill in "Description" with "Autographed 'thank you' letter from Christian"
     And I check "Physical address required"
     And I click "Save"
     Then I should see "The reward was saved successfully." within the notifications area
     And I should see the following rewards table
-      | Description                                   |
-      | Autographed 'thank you' letter from Christian |
+      | Description                                   | Address Req.? |
+      | Autographed 'thank you' letter from Christian |               |
 
 

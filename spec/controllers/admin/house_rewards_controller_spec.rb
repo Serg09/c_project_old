@@ -10,6 +10,9 @@ RSpec.describe Admin::HouseRewardsController, type: :controller do
   end
 
   context 'for an authenticated administrator' do
+    let (:admin) { FactoryGirl.create(:administrator) }
+    before(:each) { sign_in admin }
+
     describe "get :index" do
       it "returns http success" do
         get :index
@@ -47,13 +50,13 @@ RSpec.describe Admin::HouseRewardsController, type: :controller do
     describe "patch :update" do
       it 'updates the house reward record' do
         expect do
-          path :update, id: house_reward, house_reward: attributes
-          house_rewards.reload
+          patch :update, id: house_reward, house_reward: attributes
+          house_reward.reload
         end.to change(house_reward, :description).to attributes[:description]
       end
 
       it 'redirects to the house rewards index page' do
-        path :update, id: house_reward, house_reward: attributes
+        patch :update, id: house_reward, house_reward: attributes
         expect(response).to redirect_to admin_house_rewards_path
       end
     end
@@ -118,13 +121,13 @@ RSpec.describe Admin::HouseRewardsController, type: :controller do
     describe "patch :update" do
       it 'does not update the house reward record' do
         expect do
-          path :update, id: house_reward, house_reward: attributes
-          house_rewards.reload
+          patch :update, id: house_reward, house_reward: attributes
+          house_reward.reload
         end.not_to change(house_reward, :description)
       end
 
       it "redirects to the home page" do
-        path :update, id: house_reward, house_reward: attributes
+        patch :update, id: house_reward, house_reward: attributes
         expect(response).to redirect_to root_path
       end
     end

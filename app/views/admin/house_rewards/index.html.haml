@@ -1,2 +1,19 @@
-%h1 Admin::HouseRewards#index
-%p Find me in app/views/admin/house_rewards/index.html.haml
+=content_for :page_title do
+  Rewards
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#rewards-table.table.table-striped
+        %tr
+          %th Description
+          %th Address Req.?
+        -@house_rewards.each do |house_reward|
+          %tr
+            %td= @house_reward.description
+            %td
+              -if @house_reward.physical_address_required?
+                %span.glyphicon.glyphicon-check{ 'arial-hidden' => true }
+              -else
+                &nbsp;
+      =link_to 'Add', new_admin_house_reward_path, class: 'btn btn-primary', title: 'Click here to add a new reward.'
