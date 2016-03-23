@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       end
     end
     resources :campaigns, only: [:index, :show]
+    resources :house_rewards
   end
 
   get 'pages/welcome'
