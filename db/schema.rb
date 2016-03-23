@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317000721) do
+ActiveRecord::Schema.define(version: 20160323201816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,6 +153,13 @@ ActiveRecord::Schema.define(version: 20160317000721) do
   end
 
   add_index "genres", ["name"], name: "index_genres_on_name", unique: true, using: :btree
+
+  create_table "house_rewards", force: :cascade do |t|
+    t.string   "description",               limit: 255,                 null: false
+    t.boolean  "physical_address_required",             default: false, null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+  end
 
   create_table "image_binaries", force: :cascade do |t|
     t.binary   "data",       null: false
