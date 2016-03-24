@@ -1,4 +1,3 @@
-@wip
 Feature: Add a house-fulfilled reward
   As an administrator
   In order to make a house-fulfilled reward available for an author to select
@@ -20,7 +19,7 @@ Feature: Add a house-fulfilled reward
     And I fill in "Description" with "Autographed 'thank you' letter from Christian"
     And I check "Physical address required"
     And I click "Save"
-    Then I should see "The reward was saved successfully." within the notifications area
+    Then I should see "The reward was created successfully." within the notifications area
     And I should see the following rewards table
       | Description                                   | Address Req.? |
       | Autographed 'thank you' letter from Christian |               |

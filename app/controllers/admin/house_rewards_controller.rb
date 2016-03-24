@@ -11,10 +11,11 @@ class Admin::HouseRewardsController < ApplicationController
   end
 
   def new
+    @house_reward = HouseReward.new
   end
 
   def create
-    @house_reward = HouseReward.create house_reward_params
+    @house_reward = HouseReward.new house_reward_params
     flash[:notice] = 'The reward was created successfully.' if @house_reward.save
     respond_with @house_reward, location: admin_house_rewards_path
   end

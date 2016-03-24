@@ -7,13 +7,13 @@
       %table#rewards-table.table.table-striped
         %tr
           %th Description
-          %th Address Req.?
+          %th.text-center Address Req.?
         -@house_rewards.each do |house_reward|
           %tr
-            %td= @house_reward.description
-            %td
-              -if @house_reward.physical_address_required?
+            %td= house_reward.description
+            %td.text-center
+              -if house_reward.physical_address_required?
                 %span.glyphicon.glyphicon-check{ 'arial-hidden' => true }
               -else
-                &nbsp;
+                %span.glyphicon.glyphicon-unchecked{ 'arial-hidden' => true }
       =link_to 'Add', new_admin_house_reward_path, class: 'btn btn-primary', title: 'Click here to add a new reward.'
