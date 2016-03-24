@@ -1,2 +1,8 @@
-%h1 Admin::HouseRewards#edit
-%p Find me in app/views/admin/house_rewards/edit.html.haml
+=content_for :page_title do
+  Edit house reward
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for([:admin, @house_reward]) do |f|
+        =render 'form_fields', f: f
