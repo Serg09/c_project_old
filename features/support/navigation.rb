@@ -21,7 +21,7 @@ module Navigation
     when "the admin content" then "#admin-content"
     when "the page title" then "#page-title"
     when "the book title" then "#book-title"
-    when "the notification area" then "#notifications"
+    when /the notifications? area/ then "#notifications"
     when "the genre list" then '.genre-list'
     when /the (.*) table/ then  "##{description_to_id($1)}-table"
     when /the (\d(?:st|nd|rd|th)) (.+) row/ then "##{hyphenize($2).pluralize}-table tr:nth-child(#{$1.to_i + 1})"
