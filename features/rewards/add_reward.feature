@@ -1,4 +1,3 @@
-@wip
 Feature: Add a reward
   As an author,
   In order to provide incentive for people to support my book project
@@ -35,9 +34,9 @@ Feature: Add a reward
     Then I should see "New reward" within the page title
 
     When I fill in "Description" with "Signed copy of the book"
-    And I fill in "Minimum donation" with "50"
+    And I fill in "Minimum donation" with "50" within the author fulfilled section
     And I check "Physical address required"
-    And I click "Save"
+    And I click "Save" within the author fulfilled section
     Then I should see "The reward was created successfully." within the notification area
     And I should see the following rewards table
       | Description             | Minimum donation |

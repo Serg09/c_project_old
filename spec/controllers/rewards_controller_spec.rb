@@ -7,6 +7,7 @@ RSpec.describe RewardsController, type: :controller do
     {
       description: 'Endless gratitude',
       long_description: 'blah blah blah',
+      minimum_donation: 10,
       physical_address_required: true
     }
   end
