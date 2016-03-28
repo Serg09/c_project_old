@@ -14,6 +14,7 @@
 
 class Reward < ActiveRecord::Base
   belongs_to :house_reward
+  belongs_to :campaign
 
   validates_presence_of :campaign_id, :description, :minimum_donation
   validates_length_of :description, maximum: 100

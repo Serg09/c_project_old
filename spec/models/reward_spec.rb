@@ -25,6 +25,13 @@ RSpec.describe Reward, type: :model do
     end
   end
 
+  describe '#campaign' do
+    it 'is a reference to the campaign to which the reward belongs' do
+      reward = Reward.new attributes
+      expect(reward.campaign.id).to eq campaign.id
+    end
+  end
+
   describe '#description' do
     it 'is required' do
       reward = Reward.new attributes.except(:description)
