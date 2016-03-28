@@ -4,14 +4,18 @@
 .container.container-default
   .row
     .col-md-3
+      %h2 Campaign information
       =form_for @campaign do |f|
         =render 'form_fields', f: f
     .col-md-6
-      %table#rewards-table.table.table-striped
-        %tr
-          %th Description
-          %th Minimum donation
-        -@campaign.rewards.each do |reward|
+      #rewards
+        %h2 Rewards
+        %table#rewards-table.table.table-striped
           %tr
-            %td= reward.description
-            %td= number_to_currency(reward.minimum_donation, precision: 0)
+            %th Description
+            %th Minimum donation
+          -@campaign.rewards.each do |reward|
+            %tr
+              %td= reward.description
+              %td= number_to_currency(reward.minimum_donation, precision: 0)
+        =link_to 'Add', new_campaign_reward_path(@campaign), class: 'btn btn-primary', title: 'Click here to add a reward for the campaign.'

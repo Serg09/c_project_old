@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :images, only: :show
   resources :campaigns, only: [:show, :edit, :update, :destroy] do
     resources :donations, only: [:new, :create, :index]
+    resources :rewards, only: [:new, :create]
     member do
       patch :pause
       patch :unpause
