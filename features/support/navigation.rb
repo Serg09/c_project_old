@@ -9,6 +9,7 @@ module Navigation
     when "the administrator sign in page" then new_administrator_session_path
     when "the administration home page" then admin_root_path
     when "the administrator home page" then admin_root_path
+    when "my profile page" then author_root_path
     when "the author home page" then author_root_path
     else raise "Unrecognized path identifier \"#{identifier}\""
     end
