@@ -14,6 +14,7 @@
 class Campaign < ActiveRecord::Base
   belongs_to :book
   has_many :donations
+  has_many :rewards
 
   validates_presence_of :book_id, :target_date, :target_amount
   validates_numericality_of :target_amount, greater_than: 0

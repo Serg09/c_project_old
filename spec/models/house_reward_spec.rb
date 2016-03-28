@@ -31,4 +31,11 @@ RSpec.describe HouseReward, type: :model do
       expect(reward.physical_address_required?).to be false
     end
   end
+
+  describe '#rewards' do
+    it 'is a list of campaign rewards that reference this house reward' do
+      reward = HouseReward.new attributes
+      expect(reward).to have(0).rewards
+    end
+  end
 end

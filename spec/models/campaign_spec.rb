@@ -198,4 +198,11 @@ RSpec.describe Campaign, type: :model do
       end
     end
   end
+
+  describe '#rewards' do
+    it 'is a list of donation rewards defined for the campaign' do
+      campaign = Campaign.new attributes
+      expect(campaign).to have(0).rewards
+    end
+  end
 end
