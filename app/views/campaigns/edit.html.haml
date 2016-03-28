@@ -3,6 +3,15 @@
 
 .container.container-default
   .row
-    .col-md-6
+    .col-md-3
       =form_for @campaign do |f|
         =render 'form_fields', f: f
+    .col-md-6
+      %table#rewards-table.table.table-striped
+        %tr
+          %th Description
+          %th Minimum donation
+        -@campaign.rewards.each do |reward|
+          %tr
+            %td= reward.description
+            %td= number_to_currency(reward.minimum_donation, precision: 0)
