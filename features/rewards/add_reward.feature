@@ -4,7 +4,7 @@ Feature: Add a reward
   In order to provide incentive for people to support my book project
   I want to be able to offer a gift in return for a donation of a minimum amount
 
-  Scenario: An author adds a reward to a campaign
+  Scenario: An author adds an author-fulfilled reward to a campaign
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
     And author john@doe.com has a book titled "How To Raise Money"
