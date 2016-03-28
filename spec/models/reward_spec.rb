@@ -80,14 +80,20 @@ RSpec.describe Reward, type: :model do
 
     describe '#working_description' do
       it 'is the description of the house reward' do
-        reward = Reward.new attributes.merge(house_reward_id: house_reward.id)
+        reward = Reward.new attributes.
+          except(:description, :physical_address_required).
+          merge(house_reward_id: house_reward.id)
+        expect(reward).to be_valid
         expect(reward.working_description).to eq house_reward.description
       end
     end
 
     describe '#working_physical_address_required' do
       it 'is the value from the house reward' do
-        reward = Reward.new attributes.merge(house_reward_id: house_reward.id)
+        reward = Reward.new attributes.
+          except(:description, :physical_address_required).
+          merge(house_reward_id: house_reward.id)
+        expect(reward).to be_valid
         expect(reward.working_physical_address_required).to be false
       end
     end
