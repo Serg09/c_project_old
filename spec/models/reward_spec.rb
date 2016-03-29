@@ -114,4 +114,13 @@ RSpec.describe Reward, type: :model do
       end
     end
   end
+
+  describe '::by_minimum_donation' do
+    let!(:r1) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 10) }
+    let!(:r2) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 5) }
+
+    it 'returns the rewards sorted by minimum donation' do
+      expect(campaign.rewards.by_minimum_donation.map(&:id)).to eq [r2.id, r1.id]
+    end
+  end
 end

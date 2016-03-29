@@ -21,6 +21,8 @@ class Reward < ActiveRecord::Base
   validates_uniqueness_of :description, scope: :campaign_id
   validates_numericality_of :minimum_donation, greater_than: 0
 
+  scope :by_minimum_donation, ->{order(:minimum_donation)}
+
   def initialize(attributes = {})
     super
     apply_house_reward_attributes

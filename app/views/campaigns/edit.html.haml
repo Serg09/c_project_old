@@ -14,8 +14,12 @@
           %tr
             %th Description
             %th Minimum donation
-          -@campaign.rewards.each do |reward|
+            %th &nbsp;
+          -@campaign.rewards.by_minimum_donation.each do |reward|
             %tr
               %td= reward.description
               %td= number_to_currency(reward.minimum_donation, precision: 0)
+              %td
+                =link_to reward_path(reward), method: :delete, class: 'btn btn-xs btn-danger delete-button', title: 'Click here to remove this reward.' do
+                  %span.glyphicon.glyphicon-remove{ 'arial-hidden' => true }
         =link_to 'Add', new_campaign_reward_path(@campaign), class: 'btn btn-primary', title: 'Click here to add a reward for the campaign.'
