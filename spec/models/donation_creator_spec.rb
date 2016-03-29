@@ -9,6 +9,7 @@ describe DonationCreator do
   let (:creator) { DonationCreator.new(attributes, payment_provider: payment_provider) }
 
   let (:campaign) { FactoryGirl.create(:campaign) }
+  let (:reward) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 200) }
   let (:attributes) do
     {
       campaign: campaign,
@@ -47,6 +48,20 @@ describe DonationCreator do
     it 'is required' do
       creator = DonationCreator.new attributes.except(:amount)
       expect(creator).to have_at_least(1).error_on :amount
+    end
+
+     it 'must be equal to or greater than the minimum donation of the specified reward, if present' do
+       creator = DonationCreator.new attributes.merge(reward_id: reward.id)
+       expect(creator).not_to be_valid
+       expect(creator).to have_at_least(1).error_on :amount
+     end
+  end
+
+  describe '#reward_id' do
+    it 'allows the amount to be set without explicitly specifying one' do
+      creator = DonationCreator.new attributes.except(:amount).merge(reward_id: reward.id)
+      expect(creator).to be_valid
+      expect(creator.amount).to eq 200
     end
   end
 
