@@ -26,3 +26,9 @@ BOOK = Transform /book "([^"]+)"/ do |title|
   expect(book_version).not_to be_nil
   book_version.book
 end
+
+CAMPAIGN = Transform /campaign for book "([^"]+)"/ do |title|
+  book_version = BookVersion.find_by(title: title)
+  expect(book_version).not_to be_nil
+  book_version.book.campaigns.first
+end

@@ -10,5 +10,7 @@
 #
 
 class HouseReward < ActiveRecord::Base
+  has_many :rewards
+
   validates :description, presence: true, length: { maximum: 255 }
 end

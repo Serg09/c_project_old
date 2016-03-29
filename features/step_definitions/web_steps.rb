@@ -48,3 +48,11 @@ end
 Given /^today is (#{DATE})$/ do |date|
   Timecop.freeze("#{date} 12:00:00 Central (US & Canada)")
 end
+
+Then /^print the contents of the (.*) table$/ do |table_identifier|
+  table_name = table_identifier.parameterize.pluralize
+  rows = ActiveRecord::Base.connection.execute("select * from #{table_name}")
+  rows.each do |row|
+    puts row.inspect
+  end
+end

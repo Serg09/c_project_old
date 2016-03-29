@@ -1,0 +1,15 @@
+=content_for :page_title do
+  New reward
+
+.container.container-default
+  .row
+    .col-md-6
+      #house-fulfilled
+        %h2 Fulfilled by CrowdScribed
+        =form_for([@campaign, @reward]) do |f|
+          =render 'house_reward_form_fields', f: f
+    .col-md-6
+      #author-fulfilled
+        %h2 Fulfilled by you
+        =form_for([@campaign, @reward]) do |f|
+          =render 'form_fields', f: f

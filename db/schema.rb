@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323201816) do
+ActiveRecord::Schema.define(version: 20160328145129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,5 +200,19 @@ ActiveRecord::Schema.define(version: 20160323201816) do
 
   add_index "payments", ["donation_id"], name: "index_payments_on_donation_id", using: :btree
   add_index "payments", ["external_id"], name: "index_payments_on_external_id", using: :btree
+
+  create_table "rewards", force: :cascade do |t|
+    t.integer  "campaign_id",                                           null: false
+    t.string   "description",               limit: 100,                 null: false
+    t.text     "long_description"
+    t.decimal  "minimum_donation",                                      null: false
+    t.boolean  "physical_address_required",             default: false, null: false
+    t.integer  "house_reward_id"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+  end
+
+  add_index "rewards", ["campaign_id", "description"], name: "index_rewards_on_campaign_id_and_description", unique: true, using: :btree
+  add_index "rewards", ["house_reward_id"], name: "index_rewards_on_house_reward_id", using: :btree
 
 end
