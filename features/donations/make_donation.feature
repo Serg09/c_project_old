@@ -49,7 +49,6 @@ Feature: Make a donation
     And "john@doe.com" should receive an email with subject "Donation Received!"
     And "info@crowdscribed.com" should receive an email with subject "Donation Received!"
 
-  @wip
   Scenario: A user donates using a predefined amount + reward option
     When I select the "Signed copy" option
     And I fill in "Credit card" with "4444111144441111"

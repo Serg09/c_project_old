@@ -83,6 +83,8 @@ class DonationCreator
     if reward_id.present?
       @reward = Reward.find(reward_id)
       self.amount ||= @reward.minimum_donation
+    else
+      self.reward_id = nil
     end
 
     options ||= {}
@@ -138,7 +140,8 @@ class DonationCreator
       amount: amount,
       email: email,
       ip_address: ip_address,
-      user_agent: user_agent
+      user_agent: user_agent,
+      reward_id: reward_id
     }
   end
 

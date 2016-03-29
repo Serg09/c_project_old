@@ -123,4 +123,14 @@ RSpec.describe Reward, type: :model do
       expect(campaign.rewards.by_minimum_donation.map(&:id)).to eq [r2.id, r1.id]
     end
   end
+
+  describe '#donations' do
+    let (:reward) { FactoryGirl.create(:reward, campaign: campaign) }
+    let!(:d1) { FactoryGirl.create(:donation, campaign: campaign, reward: reward) }
+    let!(:d2) { FactoryGirl.create(:donation, campaign: campaign, reward: reward) }
+
+    it 'is a list of donations which selected the reward' do
+      expect(reward).to have(2).donations
+    end
+  end
 end
