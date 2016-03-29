@@ -10,6 +10,10 @@ When /^I select "([^"]+)" from "([^"]+)"$/ do |value, locator|
   select value, from: locator
 end
 
+When /^I select the "([^"]+)" option$/ do |locator|
+  page.choose(locator)
+end
+
 When /^I check "([^"]+)"(?: and "([^"]+)")?$/ do |locator1, locator2|
   check locator1
   check locator2 if locator2

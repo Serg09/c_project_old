@@ -62,7 +62,7 @@ class DonationCreator
   def initialize(attributes, options = {})
     attributes ||= {}
     self.campaign = attributes[:campaign]
-    self.amount = attributes[:amount]
+    self.amount = parse_big_decimal(attributes[:amount])
     self.email = attributes[:email]
     self.credit_card = attributes[:credit_card]
     self.credit_card_type = attributes[:credit_card_type]
@@ -79,7 +79,8 @@ class DonationCreator
     self.ip_address = attributes[:ip_address]
     self.user_agent = attributes[:user_agent]
     self.reward_id = attributes[:reward_id]
-    if reward_id
+
+    if reward_id.present?
       @reward = Reward.find(reward_id)
       self.amount ||= @reward.minimum_donation
     end
@@ -145,6 +146,11 @@ class DonationCreator
     self.amount ||= @reward.minimum_donation if @reward
   end
 
+  def parse_big_decimal(value)
+    return nil unless value.present?
+    BigDecimal.new(value)
+  end
+
   def payment_attributes
     {
       external_id: @provider_response.id,
@@ -155,7 +161,7 @@ class DonationCreator
 
   def provider_payment_attributes
     {
-      amount: amount,
+      amount: "%.2f" % amount,
       credit_card: credit_card,
       credit_card_type: credit_card_type,
       cvv: cvv,
