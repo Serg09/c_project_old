@@ -1,2 +1,8 @@
-%h1 Rewards#edit
-%p Find me in app/views/rewards/edit.html.haml
+=content_for :page_title do
+  Edit reward
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for(@reward) do |f|
+        =render 'form_fields', f: f
