@@ -5,6 +5,5 @@ FactoryGirl.define do
     long_description { Faker::Hipster.sentences(3) }
     physical_address_required false
     minimum_donation 10
-    house_reward
   end
 end
