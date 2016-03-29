@@ -17,7 +17,7 @@
             %th &nbsp;
           -@campaign.rewards.by_minimum_donation.each do |reward|
             %tr
-              %td= reward.description
+              %td= reward.working_description
               %td= number_to_currency(reward.minimum_donation, precision: 0)
               %td
                 .btn-group

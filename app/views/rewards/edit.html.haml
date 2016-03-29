@@ -5,4 +5,7 @@
   .row
     .col-md-6
       =form_for(@reward) do |f|
-        =render 'form_fields', f: f
+        -if @reward.house_reward_id
+          =render 'house_reward_form_fields', f: f
+        -else
+          =render 'form_fields', f: f
