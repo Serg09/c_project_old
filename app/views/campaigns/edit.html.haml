@@ -20,9 +20,12 @@
               %td= reward.working_description
               %td= number_to_currency(reward.minimum_donation, precision: 0)
               %td
-                .btn-group
-                  =link_to edit_reward_path(reward), class: 'btn btn-xs btn-info edit-button', title: 'Click here to edit this reward.' do
-                    %span.glyphicon.glyphicon-pencil{ 'arial-hidden' => true }
-                  =link_to reward_path(reward), method: :delete, class: 'btn btn-xs btn-danger delete-button', title: 'Click here to remove this reward.' do
-                    %span.glyphicon.glyphicon-remove{ 'arial-hidden' => true }
+                -if reward.donations.any?
+                  &nbsp;
+                -else
+                  .btn-group
+                    =link_to edit_reward_path(reward), class: 'btn btn-xs btn-info edit-button', title: 'Click here to edit this reward.' do
+                      %span.glyphicon.glyphicon-pencil{ 'arial-hidden' => true }
+                    =link_to reward_path(reward), method: :delete, class: 'btn btn-xs btn-danger delete-button', title: 'Click here to remove this reward.' do
+                      %span.glyphicon.glyphicon-remove{ 'arial-hidden' => true }
         =link_to 'Add', new_campaign_reward_path(@campaign), class: 'btn btn-primary', title: 'Click here to add a reward for the campaign.'
