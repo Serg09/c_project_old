@@ -93,3 +93,36 @@ Feature: Edit a reward
       | Description        | Minimum donation |
       | Token of gratitude |              $11 |
       | Signed copy        |              $20 |
+
+  Scenario: An author attempts to edit a reward that has already been promised
+    Given the campaign for book "Giving It Away" has the following rewards
+      | Description   | Minimum donation |
+      | Signed copy   |               20 |
+      | Blank copy    |               10 |
+    And the campaign for the book "Giving It Away" has received the following donations
+      | Amount | Reward      |
+      |    100 | Signed copy |
+
+    When I am on the author home page
+    Then I should see "My books" within the main menu
+
+    When I click "My books" within the main menu
+    Then I should see "My books" within the page title
+    And I should see the following books table
+      | Title          |
+      | Giving It Away |
+
+    When I click the campaigns button within the 1st book row
+    Then I should see "Campaigns for Giving It Away" within the page title
+    And I should see the following campaigns table
+      | Target date | Target amount |
+      |   4/30/2016 |        $1,000 |
+
+    When I click the edit button within the 1st campaign row
+    Then I should see "Campaign for Giving It Away" within the page title
+    And I should see the following rewards table
+      | Description   | Minimum donation |
+      | Blank copy    |              $10 |
+      | Signed copy   |              $20 |
+    And I should see a delete button within the 1st reward row
+    And I should not see a delete button within the 2nd reward row
