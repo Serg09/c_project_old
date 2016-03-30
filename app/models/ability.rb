@@ -27,5 +27,8 @@ class Ability
     can :manage, Reward do |reward|
       reward.campaign.book.author_id == author.id
     end
+    cannot :update, Reward do |reward|
+      reward.donations.any?
+    end
   end
 end

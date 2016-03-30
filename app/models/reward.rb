@@ -16,7 +16,7 @@
 class Reward < ActiveRecord::Base
   belongs_to :house_reward
   belongs_to :campaign
-  has_many :donations
+  has_many :donations, dependent: :restrict_with_error
 
   validates_presence_of :campaign_id, :description, :minimum_donation
   validates_length_of :description, maximum: 100
