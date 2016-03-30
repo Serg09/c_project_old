@@ -34,6 +34,7 @@ class DonationsController < ApplicationController
 
   def donation_attributes
     params.require(:donation).permit(:amount,
+                                     :reward_id,
                                      :email,
                                      :credit_card,
                                      :credit_card_type,

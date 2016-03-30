@@ -10,6 +10,10 @@ When /^I select "([^"]+)" from "([^"]+)"$/ do |value, locator|
   select value, from: locator
 end
 
+When /^I select the "([^"]+)" option$/ do |locator|
+  page.choose(locator)
+end
+
 When /^I check "([^"]+)"(?: and "([^"]+)")?$/ do |locator1, locator2|
   check locator1
   check locator2 if locator2
@@ -32,6 +36,16 @@ end
 
 Then /^I should see "([^"]+)"$/ do |content|
   expect(page).to have_content(content)
+end
+
+Then /^I should see a (.*) button$/ do |button_name|
+  locator = ".#{hyphenize(button_name)}-button"
+  page.assert_selector(locator)
+end
+
+Then /^I should not see a (.*) button$/ do |button_name|
+  locator = ".#{hyphenize(button_name)}-button"
+  page.assert_no_selector(locator)
 end
 
 Then /^I should see the following (.*) table$/ do |description, expected_table|

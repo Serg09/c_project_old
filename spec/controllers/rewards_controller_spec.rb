@@ -36,38 +36,79 @@ RSpec.describe RewardsController, type: :controller do
         end
       end
 
-      describe "GET #edit" do
-        it "returns http success" do
-          get :edit, id: reward
-          expect(response).to have_http_status(:success)
-        end
-      end
-
-      describe "patch #update" do
-        it "redirects to the campaign edit page" do
-          patch :update, id: reward, reward: attributes
-          expect(response).to redirect_to edit_campaign_path(campaign)
+      context 'for a reward that is not associated with any donations' do
+        describe "GET #edit" do
+          it "returns http success" do
+            get :edit, id: reward
+            expect(response).to have_http_status(:success)
+          end
         end
 
-        it 'updates the reward' do
-          expect do
+        describe "patch #update" do
+          it "redirects to the campaign edit page" do
             patch :update, id: reward, reward: attributes
-            reward.reload
-          end.to change(reward, :description).to 'Endless gratitude'
+            expect(response).to redirect_to edit_campaign_path(campaign)
+          end
+
+          it 'updates the reward' do
+            expect do
+              patch :update, id: reward, reward: attributes
+              reward.reload
+            end.to change(reward, :description).to 'Endless gratitude'
+          end
+        end
+
+        describe "DELETE #destroy" do
+          it "redirects to the campaign edit page" do
+            get :destroy, id: reward
+            expect(response).to redirect_to edit_campaign_path(campaign)
+          end
+
+          it 'removes the reward record' do
+            reward # force create
+            expect do
+              get :destroy, id: reward
+            end.to change(campaign.rewards, :count).by(-1)
+          end
         end
       end
 
-      describe "DELETE #destroy" do
-        it "redirects to the campaign edit page" do
-          get :destroy, id: reward
-          expect(response).to redirect_to edit_campaign_path(campaign)
+      context 'for a reward that is associated at least one donation' do
+        let!(:donation) { FactoryGirl.create(:donation, campaign: campaign,
+                                                        reward: reward) }
+        describe "GET #edit" do
+          it "redirects to the author home page" do
+            get :edit, id: reward
+            expect(response).to redirect_to author_root_path #handled as a CanCan access exception
+          end
         end
 
-        it 'removes the reward record' do
-          reward # force create
-          expect do
+        describe "patch #update" do
+          it "redirects to the author home page" do
+            patch :update, id: reward, reward: attributes
+            expect(response).to redirect_to author_root_path #handled as a CanCan access exception
+          end
+
+          it 'does not update the reward' do
+            expect do
+              patch :update, id: reward, reward: attributes
+              reward.reload
+            end.not_to change(reward, :description)
+          end
+        end
+
+        describe "DELETE #destroy" do
+          it "redirects to the campaign edit page" do
             get :destroy, id: reward
-          end.to change(campaign.rewards, :count).by(-1)
+            expect(response).to redirect_to edit_campaign_path(campaign)
+          end
+
+          it 'does not remove the reward record' do
+            reward # force create
+            expect do
+              get :destroy, id: reward
+            end.not_to change(Reward, :count)
+          end
         end
       end
     end

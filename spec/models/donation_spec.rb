@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Donation, type: :model do
   let (:campaign) { FactoryGirl.create(:campaign) }
+  let (:reward) { FactoryGirl.create(:reward, campaign: campaign) }
   let (:attributes) do
     {
       email: 'john@doe.com',
@@ -71,6 +72,20 @@ RSpec.describe Donation, type: :model do
     it 'is required' do
       donation = Donation.new attributes.except(:user_agent)
       expect(donation).to have_at_least(1).error_on :user_agent
+    end
+  end
+
+  describe '#reward' do
+    let (:other_reward) { FactoryGirl.create(:reward) }
+
+    it 'is a reference to the reward selected for the donation' do
+      donation = Donation.new attributes.merge(reward_id: reward.id)
+      expect(donation.reward.id).to eq reward.id
+    end
+
+    it 'must reference the same campaign as the donation' do
+      donation = Donation.new attributes.merge(reward_id: other_reward.id)
+      expect(donation).to have_at_least(1).error_on :reward_id
     end
   end
 end

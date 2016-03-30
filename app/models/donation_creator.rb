@@ -22,7 +22,8 @@ class DonationCreator
                 :payment,
                 :donation,
                 :ip_address,
-                :user_agent
+                :user_agent,
+                :reward_id
 
   validates_presence_of :campaign,
                         :amount,
@@ -42,6 +43,7 @@ class DonationCreator
   validates_inclusion_of :credit_card_type, in: Payment::CREDIT_CARD_TYPES.map{|t| t.second}
   validates_length_of :cvv, maximum: 4
   validates_format_of :postal_code, with: /\A\d{5}(?:-\d{4})?\z/
+  validate :amount_meets_minimum_requirement
 
   def create!
     return false unless valid?
@@ -60,7 +62,7 @@ class DonationCreator
   def initialize(attributes, options = {})
     attributes ||= {}
     self.campaign = attributes[:campaign]
-    self.amount = attributes[:amount]
+    self.amount = parse_big_decimal(attributes[:amount])
     self.email = attributes[:email]
     self.credit_card = attributes[:credit_card]
     self.credit_card_type = attributes[:credit_card_type]
@@ -76,6 +78,14 @@ class DonationCreator
     self.postal_code = attributes[:postal_code]
     self.ip_address = attributes[:ip_address]
     self.user_agent = attributes[:user_agent]
+    self.reward_id = attributes[:reward_id]
+
+    if reward_id.present?
+      @reward = Reward.find(reward_id)
+      self.amount ||= @reward.minimum_donation
+    else
+      self.reward_id = nil
+    end
 
     options ||= {}
     @payment_provider = options.fetch(:payment_provider, PAYMENT_PROVIDER)
@@ -104,6 +114,15 @@ class DonationCreator
 
   private
 
+  def amount_meets_minimum_requirement
+    return unless @reward
+
+    if amount < @reward.minimum_donation
+      errors.add :amount,
+                 "must be greater than $#{@reward.minimum_donation}"
+    end
+  end
+
   def create_payment_with_provider
     @provider_response = @payment_provider.create(provider_payment_attributes)
   end
@@ -121,8 +140,18 @@ class DonationCreator
       amount: amount,
       email: email,
       ip_address: ip_address,
-      user_agent: user_agent
+      user_agent: user_agent,
+      reward_id: reward_id
     }
+  end
+
+  def ensure_amount
+    self.amount ||= @reward.minimum_donation if @reward
+  end
+
+  def parse_big_decimal(value)
+    return nil unless value.present?
+    BigDecimal.new(value)
   end
 
   def payment_attributes
@@ -135,7 +164,7 @@ class DonationCreator
 
   def provider_payment_attributes
     {
-      amount: amount,
+      amount: "%.2f" % amount,
       credit_card: credit_card,
       credit_card_type: credit_card_type,
       cvv: cvv,

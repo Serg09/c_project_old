@@ -6,6 +6,7 @@
 #  campaign_id               :integer          not null
 #  description               :string(100)      not null
 #  long_description          :text
+#  minimum_donation          :decimal(, )      not null
 #  physical_address_required :boolean          default(FALSE), not null
 #  house_reward_id           :integer
 #  created_at                :datetime         not null
@@ -15,6 +16,7 @@
 class Reward < ActiveRecord::Base
   belongs_to :house_reward
   belongs_to :campaign
+  has_many :donations, dependent: :restrict_with_error
 
   validates_presence_of :campaign_id, :description, :minimum_donation
   validates_length_of :description, maximum: 100
