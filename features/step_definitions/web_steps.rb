@@ -60,7 +60,9 @@ When /^I select (?:the )?file "([^"]+)" for "([^"]+)"$/ do |file_name, locator|
 end
 
 Given /^today is (#{DATE})$/ do |date|
-  Timecop.freeze("#{date} 12:00:00 Central (US & Canada)")
+  date_time_string = "#{date} 12:00:00 Central (US & Canada)"
+  date_time = Chronic.parse(date_time_string)
+  Timecop.freeze(date_time)
 end
 
 Then /^print the contents of the (.*) table$/ do |table_identifier|
