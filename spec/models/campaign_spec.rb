@@ -7,13 +7,12 @@ RSpec.describe Campaign, type: :model do
     {
       book_id: book.id,
       target_date: Date.new(2016, 3, 31),
-      target_amount: 5_000,
-      paused: true
+      target_amount: 5_000
     }
   end
 
-  before(:all) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
-  after(:all) { Timecop.return }
+  before(:each) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
+  after(:each) { Timecop.return }
 
   it 'can be created from valid attributes' do
     campaign = Campaign.new attributes
@@ -63,32 +62,11 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  describe '#paused' do
+  describe '#paused?' do
     it 'defaults to true' do
-      campaign = Campaign.new attributes.except(:paused)
+      campaign = Campaign.new attributes
       expect(campaign).to be_valid
       expect(campaign).to be_paused
-    end
-  end
-
-  describe '#active?' do
-    let!(:bio) { FactoryGirl.create(:approved_bio, author: book.author) }
-
-    it 'is true if the campaign is not paused, the target date has not passed, the book is approved, and the author bio is approved' do
-      campaign = Campaign.new attributes.merge(paused: false)
-      expect(campaign).to be_active
-    end
-
-    it 'is false if the campaign is paused' do
-      campaign = Campaign.new attributes
-      expect(campaign).not_to be_active
-    end
-
-    it 'is false if the campaign target date is in the past' do
-      campaign = Campaign.new attributes.merge(paused: false)
-      Timecop.freeze('2016-04-01') do
-        expect(campaign).not_to be_active
-      end
     end
   end
 
@@ -147,6 +125,12 @@ RSpec.describe Campaign, type: :model do
   context 'before the target amount is reached' do
     include_context :donations
 
+    describe '#expired?' do
+      it 'is false' do
+        expect(campaign).not_to be_expired
+      end
+    end
+
     describe '#donation_amount_needed' do
       it 'returns the difference between the target amount and the total donated' do
         expect(campaign.donation_amount_needed).to eq 425
@@ -163,6 +147,12 @@ RSpec.describe Campaign, type: :model do
   context 'after the target amount is reached' do
     include_context :donations
     let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 426) }
+
+    describe '#expired?' do
+      it 'is true' do
+        expect(campaign).to be_expired
+      end
+    end
 
     describe '#donation_amount_needed' do
       it 'returns zero' do
@@ -203,6 +193,119 @@ RSpec.describe Campaign, type: :model do
     it 'is a list of donation rewards defined for the campaign' do
       campaign = Campaign.new attributes
       expect(campaign).to have(0).rewards
+    end
+  end
+
+  context 'for an active campaign' do
+    let (:campaign) { FactoryGirl.create(:active_campaign) }
+
+    describe '#collectable?' do
+      it 'returns true' do
+        expect(campaign).to be_collectable
+      end
+    end
+
+    describe '#collect' do
+      it 'changes the state to "collecting"' do
+        expect do
+          campaign.collect
+        end.to change(campaign, :state).from('active').to('collecting')
+      end
+
+      it 'queues a job to execute the donation payments' do
+        expect(Resque).to receive(:enqueue).with(DonationCollector, campaign.id)
+        campaign.collect
+      end
+    end
+
+    describe '#cancel' do
+      it 'changes the state to "cancelled"' do
+        expect do
+          campaign.cancel
+        end.to change(campaign, :state).from('active').to('cancelled')
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.cancel
+      end
+    end
+  end
+
+  context 'for a paused campaign' do
+    let (:campaign) { FactoryGirl.create(:paused_campaign) }
+
+    describe '#collectable?' do
+      it 'returns true' do
+        expect(campaign).to be_collectable
+      end
+    end
+
+    describe '#collect' do
+      it 'changes the state to "collecting"' do
+        expect do
+          campaign.collect
+        end.to change(campaign, :state).from('paused').to('collecting')
+      end
+    end
+
+    describe '#cancel' do
+      it 'changes the state to "cancelled"' do
+        expect do
+          campaign.cancel
+        end.to change(campaign, :state).from('paused').to('cancelled')
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.cancel
+      end
+    end
+  end
+
+  context 'for a collected campaign' do
+    let (:campaign) { FactoryGirl.create(:collected_campaign) }
+
+    describe '#collectable?' do
+      it 'return false' do
+        expect(campaign).not_to be_collectable
+      end
+    end
+  end
+
+  context 'for a cancelled campaign' do
+    let (:campaign) { FactoryGirl.create(:cancelled_campaign) }
+
+    describe '#collectable?' do
+      it 'returns false' do
+        expect(campaign).not_to be_collectable
+      end
+    end
+
+    describe '#collect' do
+      it 'does not change the state' do
+        expect do
+          campaign.collect
+        end.not_to change(campaign, :state)
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.collect
+      end
+    end
+
+    describe '#cancel' do
+      it 'does not change the state' do
+        expect do
+          campaign.cancel
+        end.not_to change(campaign, :state)
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.cancel
+      end
     end
   end
 end

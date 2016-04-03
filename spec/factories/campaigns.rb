@@ -1,8 +1,17 @@
 FactoryGirl.define do
-  factory :campaign do
+  factory :campaign, aliases: [:active_campaign] do
     book
     target_amount 1_234
     target_date { Date.today + 30 }
-    paused true
+    state 'active'
+    factory :collected_campaign do
+      state 'collected'
+    end
+    factory :cancelled_campaign do
+      state 'cancelled'
+    end
+    factory :paused_campaign do
+      state 'paused'
+    end
   end
 end
