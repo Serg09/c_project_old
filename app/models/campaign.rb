@@ -20,18 +20,26 @@ class Campaign < ActiveRecord::Base
   validates_numericality_of :target_amount, greater_than: 0
   validate :target_date, :is_in_range
 
-  before_validation :set_defaults
-
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
 
-  def active?
-    return false unless author.active_bio.present?
-    Date.today <= target_date && !paused?
+  state_machine :initial => :paused do
+    before_transition [:paused, :active] => :collecting, :do => :queue_collection
+    event :collect do
+      transition [:paused, :active] => :collecting
+    end
+    event :cancel do
+      transition [:paused, :active] => :cancelled
+    end
+    state :paused, :active, :collecting, :collected, :cancelled
   end
 
   def author
     book.try(:author)
+  end
+
+  def collectable?
+    paused? || active?
   end
 
   def total_donated
@@ -71,8 +79,8 @@ class Campaign < ActiveRecord::Base
     Date.today + 60
   end
 
-  def set_defaults
-    self.paused = true if self.paused.nil?
+  def queue_collection
+    Resque.enqueue(DonationCollector, id)
   end
 
   def target_amount_achieved?

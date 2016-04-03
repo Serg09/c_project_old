@@ -125,12 +125,6 @@ RSpec.describe Campaign, type: :model do
   context 'before the target amount is reached' do
     include_context :donations
 
-    describe '#expired?' do
-      it 'is false' do
-        expect(campaign).not_to be_expired
-      end
-    end
-
     describe '#donation_amount_needed' do
       it 'returns the difference between the target amount and the total donated' do
         expect(campaign.donation_amount_needed).to eq 425
@@ -147,12 +141,6 @@ RSpec.describe Campaign, type: :model do
   context 'after the target amount is reached' do
     include_context :donations
     let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 426) }
-
-    describe '#expired?' do
-      it 'is true' do
-        expect(campaign).to be_expired
-      end
-    end
 
     describe '#donation_amount_needed' do
       it 'returns zero' do
