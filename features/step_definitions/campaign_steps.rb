@@ -4,7 +4,7 @@ Given /^(#{AUTHOR}) has a campaign for "([^"]+)" targeting (#{DOLLAR_AMOUNT}) by
   book_version.book.campaigns.create!(target_amount: target_amount, target_date: target_date)
 end
 
-Given /^(#{BOOK}) has a campaign targeting (#{DOLLAR_AMOUNT}) by (#{DATE})$/ do |book, target_amount, target_date|
+Given /^(?:the )?(#{BOOK}) has a campaign targeting (#{DOLLAR_AMOUNT}) by (#{DATE})$/ do |book, target_amount, target_date|
   book.campaigns.create!(target_amount: target_amount, target_date: target_date)
 end
 

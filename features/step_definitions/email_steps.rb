@@ -63,13 +63,13 @@ Then /^(?:I|they|"([^"]*?)") should have (an|no|\d+) emails?$/ do |address, amou
   expect(emails.size).to eq parse_email_count(amount)
 end
 
-Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with subject "([^"]*?)"$/ do |address, amount, subject|
+Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with (?:the )?subject "([^"]*?)"$/ do |address, amount, subject|
   regexp = Regexp.new(Regexp.escape(subject))
   emails = unread_emails_for(address).select { |m| m.subject =~ regexp }
   expect(emails.size).to eq parse_email_count(amount)
 end
 
-Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with subject \/([^"]*?)\/$/ do |address, amount, subject|
+Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with (?:the )?subject \/([^"]*?)\/$/ do |address, amount, subject|
   regex = Regexp.new(subject)
   emails = unread_emails_for(address).select { |m| regex =~ m.subject }
   expect(emails.size).to eq parse_email_count(amount)
