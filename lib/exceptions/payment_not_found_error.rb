@@ -1,2 +1,2 @@
-class PaymentNotFoundError < StandardError
+class Exceptions::PaymentNotFoundError < StandardError
 end

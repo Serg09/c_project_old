@@ -26,11 +26,15 @@ class Donation < ActiveRecord::Base
 
   def collect
     payment = payments.approved.first
-    raise PaymentNotFoundError unless payment
+    raise Exceptions::PaymentNotFoundError.new("No approved payment found for donation #{id}") unless payment
 
     result = PAYMENT_PROVIDER.capture(payment.external_id, amount)
-    payment.update_content result
-    update_attribute :paid, true
+    payment.content = result.to_json
+    payment.state = result.state
+    update_attribute :paid, true if payment.paid?
+  rescue => e
+    Rails.logger.error "Unable to capture the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at #{e.backtrace.join("\n  ")}"
+    false
   end
 
   private

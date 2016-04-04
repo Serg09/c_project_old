@@ -97,9 +97,13 @@ RSpec.describe Donation, type: :model do
       FactoryGirl.create(:payment, donation: donation,
                                    external_id: external_id)
     end
+    let (:response_file) do
+      Rails.root.join('spec', 'fixtures', 'files', 'payment_capture.json')
+    end
     let (:response) do
-      path = Rails.root.join('spec', 'fixtures', 'files', 'payment_capture.json')
-      File.read(path)
+      json = File.read(response_file)
+      hash = JSON.parse(json, symbolize_names: true)
+      OpenStruct.new(id: hash[:id], state: hash[:state], to_json: json)
     end
 
     it 'captures the payment with the payment provider' do
@@ -120,6 +124,9 @@ RSpec.describe Donation, type: :model do
     end
 
     context 'on failure' do
+      let (:response_file) do
+        Rails.root.join('spec', 'fixtures', 'files', 'payment_capture_failure.json')
+      end
       it 'does not mark the donation as paid' do
         expect(PAYMENT_PROVIDER).to receive(:capture).
           with(external_id, amount).
