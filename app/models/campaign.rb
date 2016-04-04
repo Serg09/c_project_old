@@ -18,7 +18,7 @@ class Campaign < ActiveRecord::Base
 
   validates_presence_of :book_id, :target_date, :target_amount
   validates_numericality_of :target_amount, greater_than: 0
-  validate :target_date, :is_in_range
+  validate :target_date, :is_in_range, on: :create
 
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
