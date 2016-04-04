@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_filter :authenticate_author!
-  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :pause, :unpause]
+  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :pause, :unpause, :collect, :cancel]
   before_filter :load_book, only: [:index, :new, :create]
 
   respond_to :html
@@ -49,6 +49,18 @@ class CampaignsController < ApplicationController
     redirect_to books_path
   end
 
+  def collect
+    authorize! :update, @campaign
+    flash[:notice] = 'The campaign collection process was started successfully.' if @campaign.collect
+    redirect_to campaign_path(@campaign)
+  end
+
+  def cancel
+    authorize! :update, @campaign
+    flash[:notice] = 'The campaign collection process was started successfully.' if @campaign.cancel
+    redirect_to campaign_path(@campaign)
+  end
+
   def destroy
     authorize! :destroy, @campaign
     flash[:notice] = "The campaign was removed successfully." if @campaign.destroy
@@ -66,10 +78,10 @@ class CampaignsController < ApplicationController
   end
 
   def load_book
-    @book = current_author.books.find(params[:book_id])
+    @book = Book.find(params[:book_id])
   end
 
   def load_campaign
-    @campaign = current_author.campaigns.find(params[:id])
+    @campaign = Campaign.find(params[:id])
   end
 end
