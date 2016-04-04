@@ -9,5 +9,5 @@ Given /^(?:the )?(#{BOOK}) has a campaign targeting (#{DOLLAR_AMOUNT}) by (#{DAT
 end
 
 Given /^(#{BOOK}) has an active campaign$/ do |book|
-  FactoryGirl.create(:campaign, book: book, paused: false)
+  FactoryGirl.create(:campaign, book: book)
 end
