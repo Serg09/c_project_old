@@ -24,6 +24,12 @@ class Donation < ActiveRecord::Base
   validates_format_of :ip_address, with: /\A\d{1,3}(\.\d{1,3}){3}\z/
   validate :reward_is_from_same_campaign
 
+  def collect
+    payments.approved.
+      map{|p| PAYMENT_PROVIDER.execute(p.external_id)}.
+      all?
+  end
+
   private
 
   def reward_is_from_same_campaign

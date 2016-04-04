@@ -42,11 +42,19 @@ class Campaign < ActiveRecord::Base
     event :cancel do
       transition [:paused, :active] => :cancelled
     end
+    event :finalize_collection do
+      transition :collecting => :collected
+    end
     state :paused, :active, :collecting, :collected, :cancelled
   end
 
   def author
     book.try(:author)
+  end
+
+  def collect_donations
+    donations.each{|d| d.collect}
+    finalize_collection
   end
 
   def collectable?

@@ -394,4 +394,23 @@ RSpec.describe Campaign, type: :model do
       end
     end
   end
+
+  describe '#collect_donations' do
+    let (:campaign) { FactoryGirl.create(:campaign) }
+    let!(:donation1) { FactoryGirl.create(:donation, campaign: campaign, amount: 100) }
+    let!(:donation2) { FactoryGirl.create(:donation, campaign: campaign, amount: 125) }
+    let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 75) }
+
+    it 'expects the campaign to be in the "collecting" state' do
+      campaign.collect_donations
+      expect(campaign).to be_collected?
+    end
+
+    it 'executes payment on each donation' do
+      expect(donation1).to receive(:collect).and_return(true)
+      expect(donation2).to receive(:collect).and_return(true)
+      expect(donation3).to receive(:collect).and_return(true)
+      campaign.collect_donations
+    end
+  end
 end

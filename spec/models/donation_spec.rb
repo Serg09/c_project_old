@@ -88,4 +88,37 @@ RSpec.describe Donation, type: :model do
       expect(donation).to have_at_least(1).error_on :reward_id
     end
   end
+
+  describe '#collect' do
+    let (:donation) { FactoryGirl.create(:donation, amount: 123) }
+    let!(:payment) { FactoryGirl.create(:payment, donation: donation) }
+
+    it 'executes the payment against the payment provider' do
+      expect(PAYMENT_PROVIDER).to receive(:execute).and_return(true)
+      donation.collect
+    end
+
+    context 'on success' do
+      it 'marks the donation as paid' do
+        donation.collect
+        expect(donation).to be_paid
+      end
+    end
+
+    context 'on failure' do
+      it 'does not mark the donation as paid' do
+        expect(PAYMENT_PROVIDER).to receive(:execute).and_return(false)
+        donation.collect
+        expect(donation).not_to be_paid
+      end
+    end
+
+    context 'on error' do
+      it 'does not mark the donation as paid' do
+        expect(PAYMENT_PROVIDER).to receive(:execute).and_raise('Something bad happened')
+        donation.collect
+        expect(donation).not_to be_paid
+      end
+    end
+  end
 end
