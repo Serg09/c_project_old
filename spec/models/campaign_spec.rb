@@ -193,6 +193,12 @@ RSpec.describe Campaign, type: :model do
       end
     end
 
+    describe '#cancellable?' do
+      it 'returns true' do
+        expect(campaign).to be_cancellable
+      end
+    end
+
     describe '#collect' do
       it 'changes the state to "collecting"' do
         expect do
@@ -229,6 +235,12 @@ RSpec.describe Campaign, type: :model do
       end
     end
 
+    describe '#cancellable?' do
+      it 'returns true' do
+        expect(campaign).to be_cancellable
+      end
+    end
+
     describe '#collect' do
       it 'changes the state to "collecting"' do
         expect do
@@ -259,6 +271,38 @@ RSpec.describe Campaign, type: :model do
         expect(campaign).not_to be_collectable
       end
     end
+
+    describe '#cancellable?' do
+      it 'returns false' do
+        expect(campaign).not_to be_cancellable
+      end
+    end
+
+    describe '#collect' do
+      it 'does not change the state' do
+        expect do
+          campaign.collect
+        end.not_to change(campaign, :state)
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.collect
+      end
+    end
+
+    describe '#cancel' do
+      it 'does not change the state' do
+        expect do
+          campaign.cancel
+        end.not_to change(campaign, :state)
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.cancel
+      end
+    end
   end
 
   context 'for a cancelled campaign' do
@@ -267,6 +311,12 @@ RSpec.describe Campaign, type: :model do
     describe '#collectable?' do
       it 'returns false' do
         expect(campaign).not_to be_collectable
+      end
+    end
+
+    describe '#cancellable?' do
+      it 'returns false' do
+        expect(campaign).not_to be_cancellable
       end
     end
 

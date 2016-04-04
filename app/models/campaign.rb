@@ -47,6 +47,7 @@ class Campaign < ActiveRecord::Base
   def collectable?
     paused? || active?
   end
+  alias :cancellable? :collectable?
 
   def total_donated
     donations.reduce(0){|sum, d| sum + d.amount}
