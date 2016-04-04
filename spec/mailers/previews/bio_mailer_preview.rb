@@ -2,10 +2,6 @@
 class BioMailerPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/bios/submission
-  def sample_bio
-    Bio.pending.first || FactoryGirl.create(:bio)
-  end
-
   def submission
     BioMailer.submission sample_bio
   end
@@ -20,4 +16,9 @@ class BioMailerPreview < ActionMailer::Preview
     BioMailer.rejection Bio.rejected.first || FactoryGirl.create(:rejected_bio)
   end
 
+  private
+
+  def sample_bio
+    Bio.pending.first || FactoryGirl.create(:bio)
+  end
 end
