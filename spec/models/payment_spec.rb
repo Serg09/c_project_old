@@ -23,10 +23,23 @@ RSpec.describe Payment, type: :model do
     end
   end
 
+  describe '#donation' do
+    it 'is a reference to the donation to which the payment belongs' do
+      payment = Payment.new attributes
+      expect(payment.donation.id).to be donation.id
+    end
+  end
+
   describe '#external_id' do
     it 'is required' do
       payment = Payment.new attributes.except(:external_id)
       expect(payment).to have_at_least(1).error_on :external_id
+    end
+
+    it 'is unique' do
+      p1 = Payment.create! attributes
+      p2 = Payment.new attributes
+      expect(p2).to have_at_least(1).error_on :external_id
     end
   end
 
@@ -41,6 +54,49 @@ RSpec.describe Payment, type: :model do
     it 'is required' do
       payment = Payment.new attributes.except(:content)
       expect(payment).to have_at_least(1).error_on :content
+    end
+  end
+
+  shared_context :stateful_payments do
+    let!(:approved1) { FactoryGirl.create(:approved_payment) }
+    let!(:approved2) { FactoryGirl.create(:approved_payment) }
+    let!(:failed1) { FactoryGirl.create(:failed_payment) }
+    let!(:failed2) { FactoryGirl.create(:failed_payment) }
+  end
+
+  context 'for a payment that has been captured successfully' do
+    let (:payment) { FactoryGirl.create(:completed_payment) }
+
+    describe '#paid?' do
+      it 'is true' do
+        expect(payment).to be_paid
+      end
+    end
+  end
+
+  context 'for a payment that has not been captured successfully' do
+    let (:payment) { FactoryGirl.create(:payment) }
+
+    describe '#paid?' do
+      it 'is false' do
+        expect(payment).not_to be_paid
+      end
+    end
+  end
+
+  describe '::approved' do
+    include_context :stateful_payments
+
+    it 'returns all payments where the state is "approved"' do
+      expect(Payment.approved.map(&:id)).to eq [approved1.id, approved2.id]
+    end
+  end
+
+  describe '::failed' do
+    include_context :stateful_payments
+
+    it 'returns all payments where the state is "failed"' do
+      expect(Payment.failed.map(&:id)).to eq [failed1.id, failed2.id]
     end
   end
 end
