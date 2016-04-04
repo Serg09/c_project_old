@@ -53,8 +53,8 @@ class Campaign < ActiveRecord::Base
   end
 
   def collect_donations
-    donations.each{|d| d.collect}
-    finalize_collection
+    result = donations.map(&:collect).all?
+    finalize_collection if result
   end
 
   def collectable?
