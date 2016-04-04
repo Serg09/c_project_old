@@ -102,6 +102,54 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
+  shared_context :stateful_campaigns do
+    let!(:active1) { FactoryGirl.create(:active_campaign) }
+    let!(:active2) { FactoryGirl.create(:active_campaign) }
+    let!(:paused1) { FactoryGirl.create(:paused_campaign) }
+    let!(:paused2) { FactoryGirl.create(:paused_campaign) }
+    let!(:collecting1) { FactoryGirl.create(:collecting_campaign) }
+    let!(:collecting2) { FactoryGirl.create(:collecting_campaign) }
+    let!(:collected1) { FactoryGirl.create(:collected_campaign) }
+    let!(:collected2) { FactoryGirl.create(:collected_campaign) }
+    let!(:cancelled1) { FactoryGirl.create(:cancelled_campaign) }
+    let!(:cancelled2) { FactoryGirl.create(:cancelled_campaign) }
+  end
+
+  describe '::active' do
+    include_context :stateful_campaigns
+    it 'returns the campaigns that are currently active' do
+      expect(Campaign.active.map(&:id)).to eq [active1.id, active2.id]
+    end
+  end
+
+  describe '::paused' do
+    include_context :stateful_campaigns
+    it 'returns the campaigns that are currently paused' do
+      expect(Campaign.paused.map(&:id)).to eq [paused1.id, paused2.id]
+    end
+  end
+
+  describe '::collecting' do
+    include_context :stateful_campaigns
+    it 'returns the campaigns that are currently being collected' do
+      expect(Campaign.collecting.map(&:id)).to eq [collecting1.id, collecting2.id]
+    end
+  end
+
+  describe '::collected' do
+    include_context :stateful_campaigns
+    it 'returns the campaigns that have finished being collected' do
+      expect(Campaign.collected.map(&:id)).to eq [collected1.id, collected2.id]
+    end
+  end
+
+  describe '::cancelled' do
+    include_context :stateful_campaigns
+    it 'returns the campaigns that have been cancelled' do
+      expect(Campaign.cancelled.map(&:id)).to eq [cancelled1.id, cancelled2.id]
+    end
+  end
+
   describe '#donations' do
     it 'is a list of the donations that have been made to the campaign' do
       campaign = Campaign.new attributes

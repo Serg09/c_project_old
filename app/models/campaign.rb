@@ -22,6 +22,11 @@ class Campaign < ActiveRecord::Base
 
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
+  scope :active, ->{where(state: 'active')}
+  scope :paused, ->{where(state: 'paused')}
+  scope :collecting, ->{where(state: 'collecting')}
+  scope :collected, ->{where(state: 'collected')}
+  scope :cancelled, ->{where(state: 'cancelled')}
 
   state_machine :initial => :paused do
     before_transition [:paused, :active] => :collecting, :do => :queue_collection
