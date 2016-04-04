@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     member do
       patch :pause
       patch :unpause
+      patch :collect
+      patch :cancel
     end
   end
   resources :donations, only: [:show]
