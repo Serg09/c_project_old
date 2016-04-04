@@ -2,6 +2,18 @@
   Campaign progress
 
 .container.container-default
+  -if @campaign.paused?
+    .alert.alert-warning
+      This campaign is paused.
+  -if @campaign.collecting?
+    .alert.alert-info
+      This campaign is closed and the funds are being collected. You will be notified when the collection process is complete.
+  -if @campaign.collected?
+    .alert.alert-info
+      This campaign is closed.
+  -if @campaign.cancelled?
+    .alert.alert-warning
+      This campaign has been cancelled.
   .row
     .col-md-12
       %h2= @campaign.book.approved_version.title

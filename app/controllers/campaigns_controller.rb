@@ -51,13 +51,13 @@ class CampaignsController < ApplicationController
 
   def collect
     authorize! :update, @campaign
-    flash[:notice] = 'The campaign collection process was started successfully.' if @campaign.collect
+    flash[:notice] = 'The campaign was closed successfully.' if @campaign.collect
     redirect_to campaign_path(@campaign)
   end
 
   def cancel
     authorize! :update, @campaign
-    flash[:notice] = 'The campaign collection process was started successfully.' if @campaign.cancel
+    flash[:notice] = 'The campaign was closed successfully.' if @campaign.cancel
     redirect_to campaign_path(@campaign)
   end
 
