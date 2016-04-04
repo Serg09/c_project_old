@@ -11,6 +11,9 @@ RSpec.describe CampaignsController, type: :controller do
     }
   end
 
+  before(:each) { Timecop.freeze(Chronic.parse('2016-03-02 12:00:00 CST')) }
+  after(:each) { Timecop.return }
+
   context 'for an authenticated author' do
     context 'that owns the book' do
       before(:each) { sign_in author  }
