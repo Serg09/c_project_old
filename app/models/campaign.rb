@@ -6,9 +6,9 @@
 #  book_id       :integer
 #  target_amount :decimal(, )
 #  target_date   :date
-#  paused        :boolean
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  state         :string           default("paused"), not null
 #
 
 class Campaign < ActiveRecord::Base
