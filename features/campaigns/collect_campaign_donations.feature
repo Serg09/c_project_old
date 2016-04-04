@@ -42,7 +42,7 @@ Feature: Collect campaign donations
 
   @wip
   Scenario: An author collects donations on a campaign
-    When I click the "Collect" button
+    When I click "Collect"
     Then I should see "The campaign has been closed successfully." within the notifications area
     And I should see "This campaign is closed and the funds are being collected. You will be notified when the collection process is complete." within the main content
     And "john@doe.com" should receive an email with the subject "Campaign closed"
