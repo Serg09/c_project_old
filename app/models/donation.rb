@@ -25,9 +25,12 @@ class Donation < ActiveRecord::Base
   validate :reward_is_from_same_campaign
 
   def collect
-    payments.approved.
-      map{|p| PAYMENT_PROVIDER.execute(p.external_id)}.
-      all?
+    payment = payments.approved.first
+    raise PaymentNotFoundError unless payment
+
+    result = PAYMENT_PROVIDER.capture(payment.external_id, amount)
+    payment.update_content result
+    update_attribute :paid, true
   end
 
   private

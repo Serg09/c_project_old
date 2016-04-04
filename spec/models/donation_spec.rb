@@ -90,16 +90,30 @@ RSpec.describe Donation, type: :model do
   end
 
   describe '#collect' do
-    let (:donation) { FactoryGirl.create(:donation, amount: 123) }
-    let!(:payment) { FactoryGirl.create(:payment, donation: donation) }
+    let (:external_id) { "ABC123" }
+    let (:amount) { 123 }
+    let (:donation) { FactoryGirl.create(:donation, amount: amount) }
+    let!(:payment) do
+      FactoryGirl.create(:payment, donation: donation,
+                                   external_id: external_id)
+    end
+    let (:response) do
+      path = Rails.root.join('spec', 'fixtures', 'files', 'payment_capture.json')
+      File.read(path)
+    end
 
-    it 'executes the payment against the payment provider' do
-      expect(PAYMENT_PROVIDER).to receive(:execute).and_return(true)
+    it 'captures the payment with the payment provider' do
+      expect(PAYMENT_PROVIDER).to receive(:capture).
+        with(external_id, amount).
+        and_return(response)
       donation.collect
     end
 
     context 'on success' do
       it 'marks the donation as paid' do
+        expect(PAYMENT_PROVIDER).to receive(:capture).
+          with(external_id, amount).
+          and_return(response)
         donation.collect
         expect(donation).to be_paid
       end
@@ -107,7 +121,9 @@ RSpec.describe Donation, type: :model do
 
     context 'on failure' do
       it 'does not mark the donation as paid' do
-        expect(PAYMENT_PROVIDER).to receive(:execute).and_return(false)
+        expect(PAYMENT_PROVIDER).to receive(:capture).
+          with(external_id, amount).
+          and_return(response)
         donation.collect
         expect(donation).not_to be_paid
       end
@@ -115,7 +131,9 @@ RSpec.describe Donation, type: :model do
 
     context 'on error' do
       it 'does not mark the donation as paid' do
-        expect(PAYMENT_PROVIDER).to receive(:execute).and_raise('Something bad happened')
+        expect(PAYMENT_PROVIDER).to receive(:capture).
+          with(external_id, amount).
+          and_raise('Something bad happened')
         donation.collect
         expect(donation).not_to be_paid
       end
