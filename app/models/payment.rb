@@ -30,15 +30,4 @@ class Payment < ActiveRecord::Base
   def paid?
     state == 'completed'
   end
-
-  # Updates the content attribute and extracts values for
-  # updating state and any other values that need to be
-  # recorded in that table in a manner that can be queried.
-  # This method saves the record using #save and returns the result
-  def update_content(new_content)
-    json = JSON.parse(new_content)
-    self.content = new_content
-    self.state = json['state']
-    save
-  end
 end

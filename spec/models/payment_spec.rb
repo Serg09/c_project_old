@@ -84,29 +84,6 @@ RSpec.describe Payment, type: :model do
     end
   end
 
-  describe '#update_content' do
-    let!(:payment) { FactoryGirl.create(:payment) }
-    let!(:new_content) do
-      hash = JSON.parse(payment.content)
-      hash['state'] = 'completed'
-      hash.to_json
-    end
-
-    it 'updates the content attribute with the specified value' do
-      expect do
-        payment.update_content new_content
-        payment.reload
-      end.to change(payment, :content).to new_content
-    end
-
-    it 'updates the state  with the appropriate value for the content' do
-      expect do
-        payment.update_content new_content
-        payment.reload
-      end.to change(payment, :state).from('approved').to('completed')
-    end
-  end
-
   describe '::approved' do
     include_context :stateful_payments
 
