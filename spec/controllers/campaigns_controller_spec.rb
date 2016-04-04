@@ -74,7 +74,7 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       context 'for an active campaign' do
-        let!(:campaign) { FactoryGirl.create(:campaign, book: book, paused: false) }
+        let!(:campaign) { FactoryGirl.create(:active_campaign, book: book) }
 
         describe 'patch :pause' do
           it 'redirects to the book index page' do
@@ -86,12 +86,14 @@ RSpec.describe CampaignsController, type: :controller do
             expect do
               patch :pause, id: campaign
               campaign.reload
-            end.to change(campaign, :paused).from(false).to(true)
+            end.to change(campaign, :paused?).from(false).to(true)
           end
         end
       end
 
       describe 'patch :unpause' do
+        let!(:campaign) { FactoryGirl.create(:paused_campaign, book: book) }
+
         it 'redirects to the book index page' do
           patch :unpause, id: campaign
           expect(response).to redirect_to books_path
@@ -101,7 +103,7 @@ RSpec.describe CampaignsController, type: :controller do
           expect do
             patch :unpause, id: campaign
             campaign.reload
-          end.to change(campaign, :paused).from(true).to(false)
+          end.to change(campaign, :paused?).from(true).to(false)
         end
       end
 
@@ -205,7 +207,7 @@ RSpec.describe CampaignsController, type: :controller do
               campaign.reload
             rescue ActiveRecord::RecordNotFound
             end
-          end.not_to change(campaign, :paused)
+          end.not_to change(campaign, :paused?)
         end
       end
 
@@ -223,7 +225,7 @@ RSpec.describe CampaignsController, type: :controller do
               campaign.reload
             rescue ActiveRecord::RecordNotFound
             end
-          end.not_to change(campaign, :paused)
+          end.not_to change(campaign, :paused?)
         end
       end
 
@@ -313,7 +315,7 @@ RSpec.describe CampaignsController, type: :controller do
         expect do
           patch :pause, id: campaign
           campaign.reload
-        end.not_to change(campaign, :paused)
+        end.not_to change(campaign, :paused?)
       end
     end
 
@@ -327,7 +329,7 @@ RSpec.describe CampaignsController, type: :controller do
         expect do
           patch :unpause, id: campaign
           campaign.reload
-        end.not_to change(campaign, :paused)
+        end.not_to change(campaign, :paused?)
       end
     end
 

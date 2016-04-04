@@ -25,6 +25,12 @@ class Campaign < ActiveRecord::Base
 
   state_machine :initial => :paused do
     before_transition [:paused, :active] => :collecting, :do => :queue_collection
+    event :pause do
+      transition :active => :paused
+    end
+    event :unpause do
+      transition :paused => :active
+    end
     event :collect do
       transition [:paused, :active] => :collecting
     end

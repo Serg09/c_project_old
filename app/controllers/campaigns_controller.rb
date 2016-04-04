@@ -39,15 +39,13 @@ class CampaignsController < ApplicationController
 
   def pause
     authorize! :update, @campaign
-    @campaign.paused = true
-    flash[:notice] = 'The campaign was paused successfully.' if @campaign.save
+    flash[:notice] = 'The campaign was paused successfully.' if @campaign.pause
     redirect_to books_path
   end
 
   def unpause
     authorize! :update, @campaign
-    @campaign.paused = false
-    flash[:notice] = 'The campaign was unpaused successfully.' if @campaign.save
+    flash[:notice] = 'The campaign was unpaused successfully.' if @campaign.unpause
     redirect_to books_path
   end
 
@@ -61,7 +59,7 @@ class CampaignsController < ApplicationController
 
   def campaign_params
     params.require(:campaign).
-      permit(:target_date, :target_amount, :paused).
+      permit(:target_date, :target_amount).
       tap do |params|
         params['target_date'] = Chronic.parse(params['target_date'])
     end
