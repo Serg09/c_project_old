@@ -46,11 +46,9 @@ Feature: Collect campaign donations
     Then I should see "The campaign was closed successfully." within the notifications area
     And I should see "This campaign is closed and the funds are being collected. You will be notified when the collection process is complete." within the main content
     And "john@doe.com" should receive an email with the subject "Campaign closed"
-    And "info@crowdscribed.com" should receive an email with the subject "Campaign closed"
 
-    When campaign collection has finished for "Show Me the Money"
+    When donation collection has finished for the book "Show Me the Money"
     Then "john@doe.com" should receive an email with the subject "Campaign donation collection complete"
-    And "info@crowdscribed.com" should receive an email with the subject "Campaign donation colleciton complete"
 
     When I am on the campaign page for "Show Me the Money"
     Then I should see the following donations table
