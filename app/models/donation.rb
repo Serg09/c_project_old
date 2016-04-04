@@ -11,6 +11,7 @@
 #  ip_address  :string(15)       not null
 #  user_agent  :string           not null
 #  reward_id   :integer
+#  paid        :boolean          default(FALSE), not null
 #
 
 class Donation < ActiveRecord::Base
