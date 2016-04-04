@@ -19,6 +19,7 @@ class Book < ActiveRecord::Base
   scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
 
   def active_campaign
+    return nil unless author.active_bio
     @active_campaign ||= campaigns.current.select{|c| c.active?}.first
   end
 
