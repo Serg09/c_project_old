@@ -3,7 +3,12 @@ FactoryGirl.define do
     donation
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
     state "approved"
-    content { {id: external_id}.to_json }
+    content do
+      {
+        id: external_id,
+        state: state
+      }.to_json
+    end
 
     factory :failed_payment do
       state 'failed'
