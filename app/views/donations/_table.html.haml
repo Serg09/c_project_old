@@ -1,0 +1,14 @@
+%table#donations-table.table.table-striped
+  %tr
+    %th Date
+    %th Amount
+    %th Collected
+  -donations.each do |donation|
+    %tr
+      %td= format_date(donation.created_at)
+      %td= number_to_currency(donation.amount, precision: 0)
+      %td.text-center
+        -if donation.paid?
+          %span.glyphicon.glyphicon-checked{ 'arial-hidden' => true }
+        -else
+          &nbsp;

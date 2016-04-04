@@ -11,6 +11,7 @@ module Navigation
     when "the administrator home page" then admin_root_path
     when "my profile page" then author_root_path
     when "the author home page" then author_root_path
+    when /the campaign page for "([^"]+)/ then campaign_path(first_campaign_for_book_with_title($1))
     else raise "Unrecognized path identifier \"#{identifier}\""
     end
   end
@@ -33,6 +34,14 @@ module Navigation
 
   def hyphenize(words)
     words.gsub(/\s/, "-")
+  end
+
+  private
+
+  def first_campaign_for_book_with_title(title)
+    book_version = BookVersion.find_by(title: title)
+    expect(book_version).not_to be_nil
+    book_version.book.campaigns.first
   end
 end
 World(Navigation)
