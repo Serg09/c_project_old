@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
   resources :campaigns, only: [:show, :edit, :update, :destroy] do
-    resources :donations, only: [:new, :create, :index]
+    resources :donations, only: [:new, :create]
     resources :rewards, only: [:new, :create]
     member do
       patch :pause

@@ -29,13 +29,6 @@ RSpec.describe DonationsController, type: :controller do
     context 'that owns the associated book' do
       before(:each) { sign_in author }
 
-      describe "get :index" do
-        it "returns http success" do
-          get :index, campaign_id: campaign
-          expect(response).to have_http_status(:success)
-        end
-      end
-
       describe "get :show" do
         it "returns http success" do
           get :show, id: donation
@@ -48,13 +41,6 @@ RSpec.describe DonationsController, type: :controller do
       let (:other_author) { FactoryGirl.create(:author) }
       before(:each) { sign_in other_author }
 
-      describe "get :index" do
-        it 'redirects to the author home page' do
-          get :index, campaign_id: campaign
-          expect(response).to redirect_to author_root_path
-        end
-      end
-
       describe "get :show" do
         it 'redirects to the author home page' do
           get :show, id: donation
@@ -65,13 +51,6 @@ RSpec.describe DonationsController, type: :controller do
   end
 
   context 'for an unauthenticated user' do
-    describe "get :index" do
-      it "redirects to the author sign in page" do
-        get :index, campaign_id: campaign
-        expect(response).to redirect_to new_author_session_path
-      end
-    end
-
     describe "get :show" do
       it "redirects to the author sign in page" do
         get :show, id: donation
