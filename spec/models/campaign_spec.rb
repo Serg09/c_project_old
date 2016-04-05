@@ -411,13 +411,13 @@ RSpec.describe Campaign, type: :model do
         end
         campaign.collect_donations
       end
-
-      it 'returns true' do
-        allow_any_instance_of(Donation).to receive(:collect).and_return(true)
-        expect(campaign.collect_donations).to be true
-      end
-
       context 'when all donations are collected successfully' do
+        before(:each) { allow_any_instance_of(Donation).to receive(:collect).and_return(true) }
+
+        it 'returns true' do
+          expect(campaign.collect_donations).to be true
+        end
+
         it 'changes the campaign state to "collected"' do
           expect do
             campaign.collect_donations
@@ -426,23 +426,16 @@ RSpec.describe Campaign, type: :model do
       end
 
       context 'when a donation collection fails' do
-        let (:success_response) do
-          path = Rails.root.join('spec', 'fixtures', 'files', 'payment_capture.json')
-          raw_response = File.read(path)
-          hash = JSON.parse(raw_response, symbolize_names: true)
-          OpenStruct.new(id: hash[:id], state: hash[:state], to_json: raw_response)
-        end
-        let (:failure_response) do
-          path = Rails.root.join('spec', 'fixtures', 'files', 'payment_capture_failure.json')
-          raw_response = File.read(path)
-          hash = JSON.parse(raw_response, symbolize_names: true)
-          OpenStruct.new(id: hash[:id], state: hash[:state], to_json: raw_response)
-        end
-        it 'does not change the state of the campaign' do
+        let (:success_response) { payment_capture_response }
+        let (:failure_response) { payment_capture_response(state: :failed) }
+        before(:each) do
           allow(PAYMENT_PROVIDER).to receive(:capture).and_return(success_response)
           expect(PAYMENT_PROVIDER).to receive(:capture).
             with(payment2.external_id, donation2.amount).
             and_return(failure_response)
+        end
+
+        it 'does not change the state of the campaign' do
           expect do
             campaign.collect_donations
           end.not_to change(campaign, :state)

@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'action_mailer'
 require 'email_spec'
+require 'helpers'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -60,6 +61,7 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include Devise::TestHelpers, type: :view
+  config.include Helpers
 
   # Redis
 
