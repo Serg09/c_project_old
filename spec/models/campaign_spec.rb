@@ -440,11 +440,6 @@ RSpec.describe Campaign, type: :model do
             campaign.collect_donations
           end.not_to change(campaign, :state)
         end
-
-        it 'enqueues a job to try again later' do
-          expect(Resque).to receive(:enqueue_in).with(2.hours, campaign.id, 2)
-          campaign.collect_donations
-        end
       end
     end
 
