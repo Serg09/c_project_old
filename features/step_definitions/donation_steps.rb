@@ -15,6 +15,7 @@ Given /^the campaign for the (#{BOOK}) has received the following donations$/ do
     if created_at.present?
       values[:created_at] = Chronic.parse(created_at)
     end
-    FactoryGirl.create(:donation, values.merge(campaign: campaign))
+    donation = FactoryGirl.create(:donation, values.merge(campaign: campaign))
+    FactoryGirl.create(:payment, donation: donation)
   end
 end
