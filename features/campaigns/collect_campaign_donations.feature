@@ -40,7 +40,6 @@ Feature: Collect campaign donations
       | Still need     |    $50 |
       | Days remaining |      0 |
 
-  @wip
   Scenario: An author collects donations on a campaign
     When I click "Collect"
     Then I should see "The campaign was closed successfully." within the notifications area
@@ -56,6 +55,6 @@ Feature: Collect campaign donations
       | 3/1/2016 |    $350 |      $350 |
       | 3/2/2016 |    $400 |      $400 |
       | 3/9/2016 |    $200 |      $200 |
-      |          |    $900 |      $900 |
+      |          |    $950 |      $950 |
 
   Scenario: An author cancels a campaign for which there is not adequate support
