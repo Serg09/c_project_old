@@ -26,6 +26,8 @@ class Donation < ActiveRecord::Base
   validate :reward_is_from_same_campaign
 
   def collect
+    return true if paid?
+
     payment = payments.approved.first
     raise Exceptions::PaymentNotFoundError.new("No approved payment found for donation #{id}") unless payment
 

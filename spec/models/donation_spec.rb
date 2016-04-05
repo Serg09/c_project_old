@@ -123,6 +123,25 @@ RSpec.describe Donation, type: :model do
       end
     end
 
+    context 'on subsequent calls after succeeding' do
+      it 'returns true' do
+        allow(PAYMENT_PROVIDER).to receive(:capture).
+          with(external_id, amount).
+          and_return(response)
+        donation.collect #first call
+        expect(donation.collect).to be true
+      end
+
+      it 'does not call the payment provider' do
+        expect(PAYMENT_PROVIDER).to receive(:capture).
+          with(external_id, amount).
+          once.
+          and_return(response)
+        donation.collect #first call
+        donation.collect #second call
+      end
+    end
+
     context 'on failure' do
       let (:response_file) do
         Rails.root.join('spec', 'fixtures', 'files', 'payment_capture_failure.json')
