@@ -24,6 +24,9 @@ class CampaignsController < ApplicationController
 
   def show
     authorize! :show, @campaign
+    @donations = @campaign.donations.paginate(page: params[:donations_page], per_page: 8)
+    @total_pledged = @campaign.donations.sum(:amount)
+    @total_collected = @campaign.donations.where(paid: true).sum(:amount)
   end
 
   def edit

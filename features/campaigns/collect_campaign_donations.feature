@@ -52,10 +52,10 @@ Feature: Collect campaign donations
 
     When I am on the campaign page for "Show Me the Money"
     Then I should see the following donations table
-      |     Date | Amount | Collected |
-      | 3/1/2016 |   $350 |     X     |
-      | 3/2/2016 |   $400 |     X     |
-      | 3/9/2016 |   $200 |     X     |
-      |          |   $900 |           |
+      |     Date | Pledged | Collected |
+      | 3/1/2016 |    $350 |      $350 |
+      | 3/2/2016 |    $400 |      $400 |
+      | 3/9/2016 |    $200 |      $200 |
+      |          |    $900 |      $900 |
 
   Scenario: An author cancels a campaign for which there is not adequate support

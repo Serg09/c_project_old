@@ -1,14 +1,18 @@
 %table#donations-table.table.table-striped
   %tr
-    %th Date
-    %th Amount
-    %th Collected
+    %th.text-right Date
+    %th.text-right Pledged
+    %th.text-right Collected
   -donations.each do |donation|
     %tr
-      %td= format_date(donation.created_at)
-      %td= number_to_currency(donation.amount, precision: 0)
-      %td.text-center
+      %td.text-right= format_date(donation.created_at)
+      %td.text-right= number_to_currency(donation.amount, precision: 0)
+      %td.text-right
         -if donation.paid?
-          %span.glyphicon.glyphicon-checked{ 'arial-hidden' => true }
+          =number_to_currency(donation.amount, precision: 0)
         -else
-          &nbsp;
+          $0
+  %tr.summary-row
+    %td &nbsp;
+    %td.text-right= number_to_currency(total_pledged, precision: 0)
+    %td.text-right= number_to_currency(total_collected, precision: 0)

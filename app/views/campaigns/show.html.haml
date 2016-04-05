@@ -21,7 +21,8 @@
     .col-md-3
       =render 'progress_table'
     .col-md-5
-      =render 'donations/table', donations: @campaign.donations
+      =render 'donations/table', donations: @donations, total_pledged: @total_pledged, total_collected: @total_collected
+      =will_paginate @donations, renderer: BootstrapPagination::Rails, param_name: :donations_page
     .col-md-2.text-center
       =render_progress_meter @campaign.current_progress
     .col-md-2
@@ -33,3 +34,5 @@
           -if @campaign.paused?
             =link_to 'Activate', unpause_campaign_path(@campaign), method: :patch, class: 'btn btn-info', title: 'Click here to activate this campaign.'
           =link_to 'Cancel', cancel_campaign_path(@campaign), method: :patch, class: 'btn btn-danger', title: 'Click here to cancel this campaign.', 'data-confirm' => 'Are you sure you want to cancel this campaign?'
+  .row
+    =link_to 'Back', book_campaigns_path(@campaign.book_id), class: 'btn btn-info', title: 'Click here to return to the list of campaigns.'
