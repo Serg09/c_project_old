@@ -404,17 +404,65 @@ RSpec.describe Campaign, type: :model do
     let!(:payment2) { FactoryGirl.create(:payment, donation: donation2) }
     let!(:payment3) { FactoryGirl.create(:payment, donation: donation3) }
 
-    it 'executes payment on each donation' do
-      campaign.donations.each do |donation|
-        expect(donation).to receive(:collect).and_return(true)
+    context 'for a campaign in the "collecting" state' do
+      it 'executes payment on each donation' do
+        campaign.donations.each do |donation|
+          expect(donation).to receive(:collect).and_return(true)
+        end
+        campaign.collect_donations
       end
-      campaign.collect_donations
+
+      it 'returns true' do
+        allow_any_instance_of(Donation).to receive(:collect).and_return(true)
+        expect(campaign.collect_donations).to be true
+      end
+
+      context 'when all donations are collected successfully' do
+        it 'changes the campaign state to "collected"' do
+          expect do
+            campaign.collect_donations
+          end.to change(campaign, :state).from('collecting').to('collected')
+        end
+      end
+
+      context 'when a donation collection fails' do
+        let (:success_response) do
+          path = Rails.root.join('spec', 'fixtures', 'files', 'payment_capture.json')
+          raw_response = File.read(path)
+          hash = JSON.parse(raw_response, symbolize_names: true)
+          OpenStruct.new(id: hash[:id], state: hash[:state], to_json: raw_response)
+        end
+        let (:failure_response) do
+          path = Rails.root.join('spec', 'fixtures', 'files', 'payment_capture_failure.json')
+          raw_response = File.read(path)
+          hash = JSON.parse(raw_response, symbolize_names: true)
+          OpenStruct.new(id: hash[:id], state: hash[:state], to_json: raw_response)
+        end
+        it 'does not change the state of the campaign' do
+          allow(PAYMENT_PROVIDER).to receive(:capture).and_return(success_response)
+          expect(PAYMENT_PROVIDER).to receive(:capture).
+            with(payment2.external_id, donation2.amount).
+            and_return(failure_response)
+          expect do
+            campaign.collect_donations
+          end.not_to change(campaign, :state)
+        end
+      end
     end
 
-    it 'changes the campaign state to "collected"' do
-      expect do
+    context 'for a campaign not in the "collecting" state' do
+      let (:campaign) { FactoryGirl.create(:active_campaign) }
+
+      it 'does not execute payment on any donation' do
+        campaign.donations.each do |donation|
+          expect(donation).not_to receive(:collect)
+        end
         campaign.collect_donations
-      end.to change(campaign, :state).from('collecting').to('collected')
+      end
+
+      it 'returns false' do
+        expect(campaign.collect_donations).to be false
+      end
     end
   end
 end

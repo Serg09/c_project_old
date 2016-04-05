@@ -52,9 +52,22 @@ class Campaign < ActiveRecord::Base
     book.try(:author)
   end
 
+  # Iterates through the donations and attemps
+  # to collect payment on each.
+  #
+  # Returns true if success in collecting from all
+  # donations, otherwise false.
+  #
+  # The campaign must be in the 'collecting' state.
+  # If not, the method exists and returns false
   def collect_donations
-    result = donations.map(&:collect).all?
-    finalize_collection if result
+    if collecting?
+      result = donations.map(&:collect).all?
+      finalize_collection if result
+    else
+      Rails.logger.warn "Campaign#collect_donations called on id=#{id} which is currently in state #{state}. This call has been ignored."
+      false
+    end
   end
 
   def collectable?
