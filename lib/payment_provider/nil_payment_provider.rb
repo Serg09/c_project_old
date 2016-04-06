@@ -5,7 +5,7 @@ module PaymentProvider
     end
 
     def capture(payment_id, amount)
-      return_from_file('payment_capture.json')
+      return_from_file('payment_capture_completed.json')
     end
 
     private
