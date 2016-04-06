@@ -271,6 +271,8 @@ RSpec.describe Campaign, type: :model do
         expect(Resque).not_to receive(:enqueue)
         campaign.cancel
       end
+
+      it 'calls #void on each donation'
     end
   end
 
