@@ -58,3 +58,7 @@ Feature: Collect campaign donations
       |          |    $950 |      $950 |
 
   Scenario: An author cancels a campaign for which there is not adequate support
+    When I click "Cancel"
+    Then I should see "The campaign was cancelled successfully." within the notifications area
+    And I should see "This campaign was cancelled and the funds were not collected." within the main content
+    And "john@doe.com" should receive an email with the subject "Campaign cancelled"
