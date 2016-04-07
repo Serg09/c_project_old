@@ -7,7 +7,6 @@ RSpec.describe Payment, type: :model do
       donation_id: donation.id,
       external_id: 'PAY-17S8410768582940NKEE66EQ',
       state: 'approved',
-      content: File.read(Rails.root.join('spec', 'fixtures', 'files', 'payment.json'))
     }
   end
 
@@ -50,10 +49,10 @@ RSpec.describe Payment, type: :model do
     end
   end
 
-  describe '#content' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:content)
-      expect(payment).to have_at_least(1).error_on :content
+  describe '#transactions' do
+    let (:payment) { FactoryGirl.create(:payment) }
+    it 'contains a list of transactions with the payment provider' do
+      expect(payment.transactions.count).to be 1
     end
   end
 
