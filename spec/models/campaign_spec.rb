@@ -261,10 +261,10 @@ RSpec.describe Campaign, type: :model do
     end
 
     describe '#cancel' do
-      it 'changes the state to "cancelled"' do
+      it 'changes the state to "cancelling"' do
         expect do
           campaign.cancel
-        end.to change(campaign, :state).from('active').to('cancelled')
+        end.to change(campaign, :state).from('active').to('cancelling')
       end
 
       it 'does not queue a job to execute the donation payments' do
@@ -306,7 +306,7 @@ RSpec.describe Campaign, type: :model do
       it 'changes the state to "cancelled"' do
         expect do
           campaign.cancel
-        end.to change(campaign, :state).from('paused').to('cancelled')
+        end.to change(campaign, :state).from('paused').to('cancelling')
       end
 
       it 'does not queue a job to execute the donation payments' do

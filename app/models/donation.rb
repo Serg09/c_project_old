@@ -40,6 +40,9 @@ class Donation < ActiveRecord::Base
     false
   end
 
+  def void
+  end
+
   private
 
   def reward_is_from_same_campaign

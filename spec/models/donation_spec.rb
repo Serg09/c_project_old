@@ -156,4 +156,47 @@ RSpec.describe Donation, type: :model do
       end
     end
   end
+
+  describe '#void' do
+    let (:authorization_id) { '6CR34526N64144512' }
+    let (:amount) { 123 }
+    let (:donation) { FactoryGirl.create(:donation, amount: amount) }
+    let!(:payment) do
+      FactoryGirl.create(:payment, donation: donation,
+                                   authorization_id: authorization_id)
+    end
+
+    it 'calls the payment provider to void the authorization' do
+      expect(PAYMENT_PROVIER).to receive(:void).with(authorization_id)
+      donation.void
+    end
+
+    context 'on success' do
+      before(:each) do
+        expect(PAYMENT_PROVIDER).to receive(:void).
+          with(authorization_id).
+          and_return(authroziation_void_response)
+      end
+
+      it 'updates the donation state to "cancelled"' do
+        expect do
+          donation.void
+        end.to change(donation, :state).from('authorized').to('voided')
+      end
+    end
+
+    context 'on failure' do
+      before(:each) do
+        expect(PAYMENT_PROVIDER).to receive(:void).
+          with(authorization_id).
+          and_return(authroziation_void_response(state: :exception))
+      end
+
+      it 'does not update the donation state' do
+        expect do
+          donation.void
+        end.not_to change(donation, :state)
+      end
+    end
+  end
 end

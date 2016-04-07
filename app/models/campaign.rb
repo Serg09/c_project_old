@@ -30,7 +30,7 @@ class Campaign < ActiveRecord::Base
 
   state_machine :initial => :paused do
     before_transition [:paused, :active] => :collecting, :do => :queue_collection
-    after_transition [:paused, :active] => :cancelled, :do => :void_donations
+    after_transition [:paused, :active] => :cancelling, :do => :void_donations
     event :pause do
       transition :active => :paused
     end
@@ -41,12 +41,15 @@ class Campaign < ActiveRecord::Base
       transition [:paused, :active] => :collecting
     end
     event :cancel do
-      transition [:paused, :active] => :cancelled
+      transition [:paused, :active] => :cancelling
     end
     event :finalize_collection do
       transition :collecting => :collected
     end
-    state :paused, :active, :collecting, :collected, :cancelled
+    event :finalize_cancellation do
+      transition :cancelling => :cancelled
+    end
+    state :paused, :active, :collecting, :collected, :cancelling, :cancelled
   end
 
   def author
