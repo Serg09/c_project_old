@@ -268,11 +268,14 @@ RSpec.describe Campaign, type: :model do
       end
 
       it 'does not queue a job to execute the donation payments' do
-        expect(Resque).not_to receive(:enqueue)
+        expect(Resque).not_to receive(:enqueue).with(DonationCollector, anything)
         campaign.cancel
       end
 
-      it 'calls #void on each donation'
+      it 'enqueues a job to void the payments' do
+        expect(Resque).to receive(:enqueue).with(DonationCanceller, campaign.id)
+        campaign.cancel
+      end
     end
   end
 
@@ -307,7 +310,7 @@ RSpec.describe Campaign, type: :model do
       end
 
       it 'does not queue a job to execute the donation payments' do
-        expect(Resque).not_to receive(:enqueue)
+        expect(Resque).not_to receive(:enqueue).with(DonationCollector, anything)
         campaign.cancel
       end
     end

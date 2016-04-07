@@ -30,6 +30,7 @@ class Campaign < ActiveRecord::Base
 
   state_machine :initial => :paused do
     before_transition [:paused, :active] => :collecting, :do => :queue_collection
+    after_transition [:paused, :active] => :cancelled, :do => :void_donations
     event :pause do
       transition :active => :paused
     end
@@ -118,5 +119,9 @@ class Campaign < ActiveRecord::Base
 
   def target_amount_achieved?
     total_donated >= target_amount
+  end
+
+  def void_donations
+    Resque.enqueue(DonationCanceller, id)
   end
 end
