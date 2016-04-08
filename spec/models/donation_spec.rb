@@ -157,30 +157,47 @@ RSpec.describe Donation, type: :model do
     end
   end
 
-  describe '#void' do
+  describe '#cancel' do
     let (:authorization_id) { '6CR34526N64144512' }
     let (:amount) { 123 }
     let (:donation) { FactoryGirl.create(:donation, amount: amount) }
-    let!(:payment) do
-      FactoryGirl.create(:payment, donation: donation,
-                                   authorization_id: authorization_id)
+    let (:payment) do
+      FactoryGirl.create(:authorized_payment, donation: donation)
+    end
+    let!(:payment_transaction) do
+      response = {
+        transactions: [
+          {
+            amount: {
+              total: amount.to_s,
+              currency: 'USD'
+            },
+            related_resources: [
+              authorization: {
+                id: authorization_id
+              }
+            ]
+          }
+        ]
+      }.to_json
+      FactoryGirl.create(:payment_transaction, response: response)
     end
 
     it 'calls the payment provider to void the authorization' do
-      expect(PAYMENT_PROVIER).to receive(:void).with(authorization_id)
-      donation.void
+      expect(PAYMENT_PROVIDER).to receive(:void).with(authorization_id)
+      donation.cancel
     end
 
     context 'on success' do
       before(:each) do
         expect(PAYMENT_PROVIDER).to receive(:void).
           with(authorization_id).
-          and_return(authroziation_void_response)
+          and_return(authorization_void_response)
       end
 
       it 'updates the donation state to "cancelled"' do
         expect do
-          donation.void
+          donation.cancel
         end.to change(donation, :state).from('authorized').to('voided')
       end
     end
@@ -189,12 +206,12 @@ RSpec.describe Donation, type: :model do
       before(:each) do
         expect(PAYMENT_PROVIDER).to receive(:void).
           with(authorization_id).
-          and_return(authroziation_void_response(state: :exception))
+          and_return(authorization_void_response(state: :exception))
       end
 
       it 'does not update the donation state' do
         expect do
-          donation.void
+          donation.cancel
         end.not_to change(donation, :state)
       end
     end
