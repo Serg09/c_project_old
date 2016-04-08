@@ -2,12 +2,10 @@ FactoryGirl.define do
   factory :payment, aliases: [:approved_payment] do
     donation
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
-    state "approved"
-    content do
-      {
-        id: external_id,
-        state: state
-      }.to_json
+    state PaymentTransaction.APPROVED
+
+    after(:create) do |payment, evaluator|
+      payment.transactions << FactoryGirl.create(:payment_transaction, payment: payment)
     end
 
     factory :failed_payment do

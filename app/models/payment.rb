@@ -6,12 +6,14 @@
 #  donation_id :integer          not null
 #  external_id :string           not null
 #  state       :string           not null
-#  content     :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 
 class Payment < ActiveRecord::Base
+
+  has_many :transactions, class_name: 'PaymentTransaction'
+
   CREDIT_CARD_TYPES = [
     ['VISA', 'visa'],
     ['Mastercard', 'mastercard'],
@@ -21,7 +23,7 @@ class Payment < ActiveRecord::Base
 
   belongs_to :donation
 
-  validates_presence_of :donation_id, :external_id, :state, :content
+  validates_presence_of :donation_id, :external_id, :state
   validates_uniqueness_of :external_id
 
   scope :approved, ->{where(state: 'approved')}
