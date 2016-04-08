@@ -4,8 +4,12 @@ module PaymentProvider
       return_from_file('payment.json')
     end
 
-    def capture(payment_id, amount)
+    def capture(authorization_id, amount)
       return_from_file('payment_capture_completed.json')
+    end
+
+    def void(authorization_id)
+      return_form_file('authorization_void_voided.json')
     end
 
     private

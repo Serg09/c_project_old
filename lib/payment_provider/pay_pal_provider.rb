@@ -38,6 +38,14 @@ module PaymentProvider
       Payment.find(payment.id)
     end
 
+    def capture(authorization_id, amount)
+      raise 'not implemented'
+    end
+
+    def void(authorization_id)
+      raise 'not implemented'
+    end
+
     private
 
     def payment_attributes(attributes)
