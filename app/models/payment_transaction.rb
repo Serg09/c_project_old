@@ -14,7 +14,13 @@
 class PaymentTransaction < ActiveRecord::Base
   belongs_to :payment
 
-  INTENTS = %w(sale authorize order)
+  # void is not an intent you can set on a payment
+  # but here it is used to reflect our intent to
+  # void the authorization
+  #
+  # Maybe we should use a cleaner separation of the
+  # PayPal terminology and our own here
+  INTENTS = %w(sale authorize order void capture)
   class << self
     INTENTS.each do |intent|
       define_method intent.upcase do
