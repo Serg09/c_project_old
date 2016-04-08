@@ -63,26 +63,6 @@ RSpec.describe Payment, type: :model do
     let!(:failed2) { FactoryGirl.create(:failed_payment) }
   end
 
-  context 'for a payment that has been captured successfully' do
-    let (:payment) { FactoryGirl.create(:completed_payment) }
-
-    describe '#paid?' do
-      it 'is true' do
-        expect(payment).to be_paid
-      end
-    end
-  end
-
-  context 'for a payment that has not been captured successfully' do
-    let (:payment) { FactoryGirl.create(:payment) }
-
-    describe '#paid?' do
-      it 'is false' do
-        expect(payment).not_to be_paid
-      end
-    end
-  end
-
   describe '::approved' do
     include_context :stateful_payments
 

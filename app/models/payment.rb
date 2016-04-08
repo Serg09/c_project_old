@@ -28,8 +28,4 @@ class Payment < ActiveRecord::Base
 
   scope :approved, ->{where(state: 'approved')}
   scope :failed, ->{where(state: 'failed')}
-
-  def paid?
-    state == 'completed'
-  end
 end
