@@ -40,4 +40,8 @@ class PaymentTransaction < ActiveRecord::Base
 
   validates_presence_of :payment_id, :intent, :state, :response
   validates_inclusion_of :intent, in: INTENTS
+
+  scope :approved, ->{where(state: 'approved')}
+  scope :captured, ->{where(state: 'captured')}
+  scope :voided, ->{where(state: 'voided')}
 end

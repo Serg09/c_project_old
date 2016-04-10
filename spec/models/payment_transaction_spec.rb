@@ -74,4 +74,34 @@ RSpec.describe PaymentTransaction, type: :model do
       expect(tx).to have_at_least(1).error_on :response
     end
   end
+
+  shared_context :various_states do
+    let!(:approved1) { FactoryGirl.create(:approved_payment_transaction) }
+    let!(:approved2) { FactoryGirl.create(:approved_payment_transaction) }
+    let!(:captured1) { FactoryGirl.create(:captured_payment_transaction) }
+    let!(:captured2) { FactoryGirl.create(:captured_payment_transaction) }
+    let!(:voided1) { FactoryGirl.create(:voided_payment_transaction) }
+    let!(:voided2) { FactoryGirl.create(:voided_payment_transaction) }
+  end
+
+  describe '::approved' do
+    include_context :various_states
+    it 'returns the transaction with a state of "approved"' do
+      expect(PaymentTransaction.approved.map(&:id)).to eq [approved1.id, approved2.id]
+    end
+  end
+
+  describe '::voided' do
+    include_context :various_states
+    it 'returns the transaction with a state of "voided"' do
+      expect(PaymentTransaction.voided.map(&:id)).to eq [voided1.id, voided2.id]
+    end
+  end
+
+  describe '::captured' do
+    include_context :various_states
+    it 'returns the transaction with a state of "captured"' do
+      expect(PaymentTransaction.captured.map(&:id)).to eq [captured1.id, captured2.id]
+    end
+  end
 end
