@@ -89,6 +89,36 @@ RSpec.describe Donation, type: :model do
     end
   end
 
+  shared_context :various_states do
+    let!(:pledged1) { FactoryGirl.create(:pledged_donation) }
+    let!(:pledged2) { FactoryGirl.create(:pledged_donation) }
+    let!(:collected1) { FactoryGirl.create(:collected_donation) }
+    let!(:collected2) { FactoryGirl.create(:collected_donation) }
+    let!(:cancelled1) { FactoryGirl.create(:cancelled_donation) }
+    let!(:cancelled2) { FactoryGirl.create(:cancelled_donation) }
+  end
+
+  describe '::pledged' do
+    include_context :various_states
+    it 'returns the donations that have a state of "pledged"' do
+      expect(Donation.pledged.map(&:id)).to eq [pledged1.id, pledged2.id]
+    end
+  end
+
+  describe '::collected' do
+    include_context :various_states
+    it 'returns the donations that have a state of "collected"' do
+      expect(Donation.collected.map(&:id)).to eq [collected1.id, collected2.id]
+    end
+  end
+
+  describe '::cancelled' do
+    include_context :various_states
+    it 'returns the donations that have a state of "cancelled"' do
+      expect(Donation.cancelled.map(&:id)).to eq [cancelled1.id, cancelled2.id]
+    end
+  end
+
   context 'for a pledged donation' do
     let (:authorization_id) { '6CR34526N64144512' }
     let (:amount) { 123 }

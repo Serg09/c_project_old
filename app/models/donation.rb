@@ -25,6 +25,10 @@ class Donation < ActiveRecord::Base
   validates_format_of :ip_address, with: /\A\d{1,3}(\.\d{1,3}){3}\z/
   validate :reward_is_from_same_campaign
 
+  scope :pledged, ->{where(state: 'pledged')}
+  scope :collected, ->{where(state: 'collected')}
+  scope :cancelled, ->{where(state: 'cancelled')}
+
   state_machine :initial => :pledged do
     before_transition :pledged => :collected, do: :capture_payment
     before_transition :pledged => :cancelled, do: :void_payment
