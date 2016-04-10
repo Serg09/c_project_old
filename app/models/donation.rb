@@ -11,7 +11,7 @@
 #  ip_address  :string(15)       not null
 #  user_agent  :string           not null
 #  reward_id   :integer
-#  paid        :boolean          default(FALSE), not null
+#  state       :string           default("pledged"), not null
 #
 
 class Donation < ActiveRecord::Base
@@ -25,31 +25,44 @@ class Donation < ActiveRecord::Base
   validates_format_of :ip_address, with: /\A\d{1,3}(\.\d{1,3}){3}\z/
   validate :reward_is_from_same_campaign
 
-  def collect
-    return true if paid?
+  state_machine :initial => :pledged do
+    before_transition :pledged => :collected, do: :capture_payment
+    before_transition :pledged => :cancelled, do: :void_payment
+    event :collect do
+      transition :pledged => :collected
+    end
+    event :cancel do
+      transition :pledged => :cancelled
+    end
+    state :pledged, :collected, :cancelled
+  end
 
+  def capture_payment
     payment = first_approved_payment
-    result = PAYMENT_PROVIDER.capture(payment.external_id, amount)
+
+    #TODO Does this belong in the payment object?
+    result = PAYMENT_PROVIDER.capture(payment.authorization_id, amount)
     tx = payment.transactions.create!(intent: PaymentTransaction.CAPTURE,
                                       state: result.state,
                                       response: result.to_json)
     payment.state = result.state
-    capture if payment.state == PaymentTransaction.COMPLETED
+    payment.state == 'completed'
   rescue => e
     Rails.logger.error "Unable to capture the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at #{e.backtrace.join("\n  ")}"
     false
   end
 
-  def cancel
-    return true if voided?
-
+  def void_payment
     payment = first_approved_payment
-    result = PAYMENT_PROVIDER.void(payment.first_available_authorization_id)
+    result = PAYMENT_PROVIDER.void(payment.authorization_id)
     tx = payment.transactions.create!(intent: PaymentTransaction.VOID,
                                       state: result.state,
                                       response: result.to_json)
     payment.state = result.state
-    void if payment.state == PaymentTransaction.VOIDED
+    payment.state == 'voided'
+  rescue => e
+    Rails.logger.error "Unable to void the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at #{e.backtrace.join("\n  ")}"
+    false
   end
 
   private
