@@ -436,7 +436,7 @@ RSpec.describe Campaign, type: :model do
         before(:each) do
           allow(PAYMENT_PROVIDER).to receive(:capture).and_return(success_response)
           expect(PAYMENT_PROVIDER).to receive(:capture).
-            with(payment2.external_id, donation2.amount).
+            with(payment2.authorization_id, donation2.amount).
             and_return(failure_response)
         end
 

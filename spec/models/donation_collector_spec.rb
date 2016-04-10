@@ -25,7 +25,7 @@ describe DonationCollector do
     context 'when one or more donations are not collected successfully' do
       before(:each) do
         expect(PAYMENT_PROVIDER).to receive(:capture).
-          with(payment2.external_id, anything).
+          with(payment2.authorization_id, anything).
           and_return(failure_response)
       end
 
