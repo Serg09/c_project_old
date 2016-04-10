@@ -50,9 +50,17 @@ RSpec.describe Payment, type: :model do
   end
 
   describe '#transactions' do
-    let (:payment) { FactoryGirl.create(:payment) }
+    let (:payment) { FactoryGirl.create(:approved_payment) }
     it 'contains a list of transactions with the payment provider' do
       expect(payment.transactions.count).to be 1
+    end
+  end
+
+  describe '#authorization_id' do
+    let (:authorization_id) { 'ABC123' }
+    let (:payment) { FactoryGirl.create(:approved_payment, authorization_id: authorization_id) }
+    it 'returns the first authorization_id from the transactions' do
+      expect(payment.authorization_id).to eq authorization_id
     end
   end
 
