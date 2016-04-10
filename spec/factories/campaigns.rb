@@ -10,6 +10,9 @@ FactoryGirl.define do
     factory :collecting_campaign do
       state 'collecting'
     end
+    factory :cancelling_campaign do
+      state 'cancelling'
+    end
     factory :cancelled_campaign do
       state 'cancelled'
     end
