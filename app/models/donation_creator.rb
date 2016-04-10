@@ -129,6 +129,7 @@ class DonationCreator
 
   def create_payment
     @payment = @donation.payments.create!(payment_attributes)
+    @payment_transaction = @payment.transactions.create!(transaction_attributes)
   end
 
   def create_donation
@@ -157,8 +158,7 @@ class DonationCreator
   def payment_attributes
     {
       external_id: @provider_response.id,
-      state: @provider_response.state,
-      content: @provider_response.to_json
+      state: @provider_response.state
     }
   end
 
@@ -178,6 +178,14 @@ class DonationCreator
       state: state,
       postal_code: postal_code,
       description: payment_description
+    }
+  end
+
+  def transaction_attributes
+    {
+      intent: 'capture',
+      state: @provider_response.state,
+      response: @provider_response.to_json
     }
   end
 

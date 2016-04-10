@@ -182,12 +182,7 @@ describe DonationCreator do
   end
 
   context 'when the payment provider transaction succeeds' do
-    let (:payment_result) do
-      path = Rails.root.join('spec', 'fixtures', 'files', 'payment.json')
-      raw = File.read(path)
-      json = JSON.parse(raw, symbolize_names: true)
-      OpenStruct.new(id: json[:id], state: json[:state], to_json: json)
-    end
+    let (:payment_result) { payment_capture_response }
 
     describe '#create!' do
       it 'returns true' do
