@@ -110,11 +110,11 @@ RSpec.describe CampaignsController, type: :controller do
             expect(response).to redirect_to campaign_path(campaign)
           end
 
-          it 'changes the campaign state to "cancelled"' do
+          it 'changes the campaign state to "cancelling"' do
             expect do
               patch :cancel, id: campaign
               campaign.reload
-            end.to change(campaign, :state).from('active').to('cancelled')
+            end.to change(campaign, :state).from('active').to('cancelling')
           end
         end
       end
