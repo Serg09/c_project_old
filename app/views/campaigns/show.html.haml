@@ -3,17 +3,17 @@
 
 .container.container-default
   -if @campaign.paused?
-    .alert.alert-warning
+    .alert.alert-warning{ role: 'alert' }
       This campaign is paused.
   -if @campaign.collecting?
-    .alert.alert-info
+    .alert.alert-info{ role: 'alert' }
       This campaign is closed and the funds are being collected. You will be notified when the collection process is complete.
   -if @campaign.collected?
-    .alert.alert-info
-      This campaign is closed.
-  -if @campaign.cancelled?
-    .alert.alert-warning
-      This campaign was cancelled and the funds were not collected."
+    .alert.alert-info{ role: 'alert' }
+      This campaign is closed and the funds have been collected.
+  -if @campaign.cancelled? || @campaign.cancelling?
+    .alert.alert-danger{ role: 'alert' }
+      This campaign was cancelled and the funds were not collected.
   .row
     .col-md-12
       %h2= @campaign.book.approved_version.title

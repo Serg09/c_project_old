@@ -8,7 +8,7 @@
       %td.text-right= format_date(donation.created_at)
       %td.text-right= number_to_currency(donation.amount, precision: 0)
       %td.text-right
-        -if donation.paid?
+        -if donation.collected?
           =number_to_currency(donation.amount, precision: 0)
         -else
           $0
