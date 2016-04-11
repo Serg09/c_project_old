@@ -8,6 +8,7 @@ describe DonationCollector do
   let!(:payment2) { FactoryGirl.create(:payment, donation: donation2) }
   let (:success_response) { payment_capture_response }
   let (:failure_response) { payment_capture_response(state: :failed) }
+  let (:expired_response) { payment_capture_response(state: :expired) }
 
   before(:each) do
     allow(PAYMENT_PROVIDER).to receive(:capture).
@@ -15,9 +16,28 @@ describe DonationCollector do
   end
 
   describe '::perform' do
+    it 'writes an INFO entry to the log indicating the start of the process'
+
     context 'when all donations are collected successfull' do
       it 'sends a notification email to the author' do
         expect(CampaignMailer).to receive(:collection_complete).with(campaign)
+        DonationCollector.perform(campaign.id)
+      end
+
+      it 'writes an INFO entry to the log indicating completion of the process'
+    end
+
+    context 'when a payment authorization has expired' do
+      before(:each) do
+        expect(PAYMENT_PROVIDER).to receive(:capture).
+          with(payment2.authorization_id, anything).
+          and_return(expired_response).twice
+      end
+
+      it 're-authorizes the payment, then re-captures it' do
+        expect(PAYMENT_PROVIDER).to receive(:reauthorize).
+          with(payment2.authorization_id).
+          and_return(true)
         DonationCollector.perform(campaign.id)
       end
     end
@@ -46,6 +66,8 @@ describe DonationCollector do
           expect(CampaignMailer).not_to receive(:collection_complete)
           DonationCollector.perform(campaign.id)
         end
+
+        it 'writes a WARNING entry to the log indicating the inability to complete'
       end
 
       context 'after reaching 3 attempts' do
@@ -65,6 +87,8 @@ describe DonationCollector do
           expect(CampaignMailer).to receive(:collection_complete).with(campaign)
           DonationCollector.perform(campaign.id, 3)
         end
+
+        it 'writes a WARNING entry to the log, indicating completion with partial success'
       end
     end
   end
