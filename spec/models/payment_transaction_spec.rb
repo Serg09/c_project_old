@@ -2,14 +2,11 @@ require 'rails_helper'
 
 RSpec.describe PaymentTransaction, type: :model do
   let (:payment) { FactoryGirl.create(:payment) }
-  let (:response) do
-    path = Rails.root.join('spec', 'fixtures', 'files', 'payment.json')
-    File.read(path)
-  end
+  let (:response) { payment_create_response }
   let (:attributes) do
     {
       payment_id: payment.id,
-      intent: 'authorize',
+      intent: 'sale',
       state: 'approved',
       response: response
     }
@@ -71,32 +68,32 @@ RSpec.describe PaymentTransaction, type: :model do
   end
 
   shared_context :various_states do
-    let!(:approved1) { FactoryGirl.create(:approved_payment_transaction) }
-    let!(:approved2) { FactoryGirl.create(:approved_payment_transaction) }
-    let!(:captured1) { FactoryGirl.create(:captured_payment_transaction) }
-    let!(:captured2) { FactoryGirl.create(:captured_payment_transaction) }
-    let!(:voided1) { FactoryGirl.create(:voided_payment_transaction) }
-    let!(:voided2) { FactoryGirl.create(:voided_payment_transaction) }
+    let!(:pending1) { FactoryGirl.create(:pending_payment_transaction) }
+    let!(:pending2) { FactoryGirl.create(:pending_payment_transaction) }
+    let!(:completed1) { FactoryGirl.create(:completed_payment_transaction) }
+    let!(:completed2) { FactoryGirl.create(:completed_payment_transaction) }
+    let!(:failed1) { FactoryGirl.create(:failed_payment_transaction) }
+    let!(:failed2) { FactoryGirl.create(:failed_payment_transaction) }
   end
 
-  describe '::approved' do
+  describe '::pending' do
     include_context :various_states
-    it 'returns the transaction with a state of "approved"' do
-      expect(PaymentTransaction.approved.map(&:id)).to eq [approved1.id, approved2.id]
+    it 'returns the transaction with a state of "pending"' do
+      expect(PaymentTransaction.pending.map(&:id)).to eq [pending1.id, pending2.id]
     end
   end
 
-  describe '::voided' do
+  describe '::completed' do
     include_context :various_states
-    it 'returns the transaction with a state of "voided"' do
-      expect(PaymentTransaction.voided.map(&:id)).to eq [voided1.id, voided2.id]
+    it 'returns the transaction with a state of "completed"' do
+      expect(PaymentTransaction.completed.map(&:id)).to eq [completed1.id, completed2.id]
     end
   end
 
-  describe '::captured' do
+  describe '::failed' do
     include_context :various_states
-    it 'returns the transaction with a state of "captured"' do
-      expect(PaymentTransaction.captured.map(&:id)).to eq [captured1.id, captured2.id]
+    it 'returns the transaction with a state of "failed"' do
+      expect(PaymentTransaction.failed.map(&:id)).to eq [failed1.id, failed2.id]
     end
   end
 end

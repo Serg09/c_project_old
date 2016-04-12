@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :payment do
     donation
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
-    state PaymentTransaction.APPROVED
+    state PaymentTransaction.COMPLETED
 
     factory :approved_payment do
       transient do

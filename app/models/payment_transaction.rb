@@ -29,7 +29,7 @@ class PaymentTransaction < ActiveRecord::Base
     end
   end
 
-  STATES = %w(created approved failed canceled expired pending)
+  STATES = %w(completed pending failed)
   class << self
     STATES.each do |state|
       define_method state.upcase do
