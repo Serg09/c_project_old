@@ -2,17 +2,18 @@ require 'rails_helper'
 
 describe DonationCanceller do
   let (:campaign) { FactoryGirl.create(:cancelling_campaign) }
-  let (:donation1) { FactoryGirl.create(:donation, campaign: campaign) }
-  let (:donation2) { FactoryGirl.create(:donation, campaign: campaign) }
+  let (:donation1) { FactoryGirl.create(:collected_donation, campaign: campaign) }
+  let (:donation2) { FactoryGirl.create(:collected_donation, campaign: campaign) }
   let!(:payment1) { FactoryGirl.create(:payment, donation: donation1) }
   let!(:payment2) { FactoryGirl.create(:payment, donation: donation2) }
-  let (:success_response) { payment_capture_response }
-  let (:failure_response) { payment_capture_response(state: :failed) }
+  let (:success_response) { payment_create_response }
+  let (:failure_response) { payment_create_response(state: :failed) }
 
   describe '::perform' do
     context 'when all donations are cancelled successfully' do
       before(:each) do
-        allow(PAYMENT_PROVIDER).to receive(:void).and_return(authorization_void_response)
+        allow(PAYMENT_PROVIDER).to receive(:refund)
+          .and_return(payment_refund_response)
       end
 
       it 'updates the campaign state to "cancelled"' do
@@ -25,9 +26,10 @@ describe DonationCanceller do
 
     context 'when any donation cannot be cancelled' do
       before(:each) do
-        allow(PAYMENT_PROVIDER).to receive(:void).and_return(authorization_void_response)
-        expect(PAYMENT_PROVIDER).to receive(:void).
-          with(payment2.authorization_id).
+        allow(PAYMENT_PROVIDER).to receive(:refund).
+          and_return(payment_refund_response)
+        expect(PAYMENT_PROVIDER).to receive(:refund).
+          with(payment2.external_id).
           and_raise('Induced error')
       end
       context 'before the maximum attempt count has been reached' do
