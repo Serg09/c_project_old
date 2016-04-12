@@ -1,7 +1,7 @@
 module PaymentProvider
   class NilPaymentProvider
     def create(attributes)
-      return_from_file('payment.json')
+      return_from_file('payment_create_approved).json')
     end
 
     def capture(authorization_id, amount)

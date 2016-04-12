@@ -142,7 +142,8 @@ class DonationCreator
       email: email,
       ip_address: ip_address,
       user_agent: user_agent,
-      reward_id: reward_id
+      reward_id: reward_id,
+      state: 'collected'
     }
   end
 

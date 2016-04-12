@@ -38,11 +38,7 @@ module PaymentProvider
       Payment.find(payment.id)
     end
 
-    def capture(authorization_id, amount)
-      raise 'not implemented'
-    end
-
-    def void(authorization_id)
+    def refund(payment_id)
       raise 'not implemented'
     end
 
@@ -50,7 +46,7 @@ module PaymentProvider
 
     def payment_attributes(attributes)
       {
-        intent: PayPalProvider.AUTHORIZE,
+        intent: PayPalProvider.SALE,
         payer: payer_attributes(attributes),
         transactions: transactions_attributes(attributes)
       }

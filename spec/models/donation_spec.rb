@@ -119,130 +119,135 @@ RSpec.describe Donation, type: :model do
     end
   end
 
-  context 'for a pledged donation' do
-    let (:authorization_id) { '6CR34526N64144512' }
-    let (:amount) { 123 }
-    let (:donation) { FactoryGirl.create(:donation, amount: amount) }
-    let!(:payment) do
-      FactoryGirl.create(:approved_payment, donation: donation,
-                                            authorization_id: authorization_id)
-    end
+  #context 'for a pledged donation' do
+  #  let (:payment_id) { '6CR34526N64144512' }
+  #  let (:amount) { 123 }
+  #  let (:donation) { FactoryGirl.create(:donation, amount: amount) }
+  #  let!(:payment) do
+  #    FactoryGirl.create(:approved_payment, donation: donation,
+  #                                          payment_id: payment_id)
+  #  end
 
-    describe '#collect' do
-      let (:response) { payment_capture_response }
+  #  describe '#collect' do
+  #    let (:response) { payment_capture_response }
 
-      it 'calls the payment provider to capture the payment' do
-        expect(PAYMENT_PROVIDER).to receive(:capture).
-          with(authorization_id, amount).
-          and_return(response)
-        donation.collect
-      end
+  #    it 'calls the payment provider to process the payment' do
+  #      expect(PAYMENT_PROVIDER).to receive(:create).
+  #        with(payment_id, amount).
+  #        and_return(response)
+  #      donation.collect
+  #    end
 
-      context 'on success' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:capture).
-            with(authorization_id, amount).
-            and_return(response)
-        end
-        it 'updates the state to "collected"' do
-          expect do
-            donation.collect
-          end.to change(donation, :state).from('pledged').to('collected')
-        end
-      end
+  #    context 'on success' do
+  #      before(:each) do
+  #        expect(PAYMENT_PROVIDER).to receive(:create).
+  #          with(authorization_id, amount).
+  #          and_return(response)
+  #      end
+  #      it 'updates the state to "collected"' do
+  #        expect do
+  #          donation.collect
+  #        end.to change(donation, :state).from('pledged').to('collected')
+  #      end
+  #    end
 
-      context 'on failure' do
-        let (:response) { payment_capture_response(state: :failed) }
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:capture).
-            with(authorization_id, amount).
-            and_return(response)
-        end
+  #    context 'on failure' do
+  #      let (:response) { payment_capture_response(state: :failed) }
+  #      before(:each) do
+  #        expect(PAYMENT_PROVIDER).to receive(:capture).
+  #          with(authorization_id, amount).
+  #          and_return(response)
+  #      end
 
-        it 'does not change the state of the donation' do
-          expect do
-            donation.collect
-          end.not_to change(donation, :state)
-        end
-      end
+  #      it 'does not change the state of the donation' do
+  #        expect do
+  #          donation.collect
+  #        end.not_to change(donation, :state)
+  #      end
+  #    end
 
-      context 'on error' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:capture).
-            with(authorization_id, amount).
-            and_raise('Something bad happened')
-        end
-        it 'does not change the state of the donation' do
-          expect do
-            donation.collect
-          end.not_to change(donation, :state)
-        end
-        it 'writes an error to the log' do
-          expect(Rails.logger).to receive(:error).with(/Unable to capture the payment/)
-          donation.collect
-        end
-      end
-    end
+  #    context 'on error' do
+  #      before(:each) do
+  #        expect(PAYMENT_PROVIDER).to receive(:capture).
+  #          with(authorization_id, amount).
+  #          and_raise('Something bad happened')
+  #      end
+  #      it 'does not change the state of the donation' do
+  #        expect do
+  #          donation.collect
+  #        end.not_to change(donation, :state)
+  #      end
+  #      it 'writes an error to the log' do
+  #        expect(Rails.logger).to receive(:error).with(/Unable to capture the payment/)
+  #        donation.collect
+  #      end
+  #    end
+  #  end
 
-    describe '#cancel' do
-      it 'calls the payment provider to void the authorization' do
-        expect(PAYMENT_PROVIDER).to receive(:void).
-          with(authorization_id).
-          and_return(authorization_void_response)
-        donation.cancel
-      end
+  #  describe '#cancel' do
+  #    it 'calls the payment provider to refund the payment' do
+  #      expect(PAYMENT_PROVIDER).to receive(:refund).
+  #        with(authorization_id).
+  #        and_return(authorization_void_response)
+  #      donation.cancel
+  #    end
 
-      context 'on success' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:void).
-            with(authorization_id).
-            and_return(authorization_void_response)
-        end
+  #    context 'on success' do
+  #      before(:each) do
+  #        expect(PAYMENT_PROVIDER).to receive(:void).
+  #          with(authorization_id).
+  #          and_return(authorization_void_response)
+  #      end
 
-        it 'updates the donation state to "cancelled"' do
-          expect do
-            donation.cancel
-          end.to change(donation, :state).from('pledged').to('cancelled')
-        end
-      end
+  #      it 'updates the donation state to "cancelled"' do
+  #        expect do
+  #          donation.cancel
+  #        end.to change(donation, :state).from('pledged').to('cancelled')
+  #      end
+  #    end
 
-      context 'on failure' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:void).
-            with(authorization_id).
-            and_return(authorization_void_response(state: :expired))
-        end
+  #    context 'on failure' do
+  #      before(:each) do
+  #        expect(PAYMENT_PROVIDER).to receive(:void).
+  #          with(authorization_id).
+  #          and_return(authorization_void_response(state: :expired))
+  #      end
 
-        it 'does not update the donation state' do
-          expect do
-            donation.cancel
-          end.not_to change(donation, :state)
-        end
-      end
+  #      it 'does not update the donation state' do
+  #        expect do
+  #          donation.cancel
+  #        end.not_to change(donation, :state)
+  #      end
+  #    end
 
-      context 'on error' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:void).
-            with(authorization_id).
-            and_raise('Something bad happened')
-        end
+  #    context 'on error' do
+  #      before(:each) do
+  #        expect(PAYMENT_PROVIDER).to receive(:void).
+  #          with(authorization_id).
+  #          and_raise('Something bad happened')
+  #      end
 
-        it 'does not change the state of the donation' do
-          expect do
-            donation.cancel
-          end.not_to change(donation, :state)
-        end
+  #      it 'does not change the state of the donation' do
+  #        expect do
+  #          donation.cancel
+  #        end.not_to change(donation, :state)
+  #      end
 
-        it 'writes an error to the log' do
-          expect(Rails.logger).to receive(:error).with(/Unable to void the payment/)
-          donation.cancel
-        end
-      end
-    end
-  end
+  #      it 'writes an error to the log' do
+  #        expect(Rails.logger).to receive(:error).with(/Unable to void the payment/)
+  #        donation.cancel
+  #      end
+  #    end
+  #  end
+  #end
 
   context 'for a collected donation' do
+    let (:payment_id) { Faker::Number.hexadecimal(20) }
     let (:donation) { FactoryGirl.create(:collected_donation) }
+    let (:payment) do
+      FactoryGirl.create(:approved_payment, donation: donation,
+                                            payment_id: payment_id)
+    end
 
     describe '#collect' do
       it 'returns false' do
@@ -250,7 +255,7 @@ RSpec.describe Donation, type: :model do
       end
 
       it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:capture)
+        expect(PAYMENT_PROVIDER).not_to receive(:create)
         donation.collect
       end
 
@@ -262,19 +267,58 @@ RSpec.describe Donation, type: :model do
     end
 
     describe '#cancel' do
-      it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:void)
+      it 'calls the payment provider to refund the payment' do
+        expect(PAYMENT_PROVIDER).to receive(:refund).
+          with(payment_id).
+          and_return(payment_refund_response)
         donation.collect
       end
 
-      it 'returns false' do
-        expect(donation.cancel).to be false
+      context 'on success' do
+        before(:each) do
+          expect(PAYMENT_PROVIDER).to receive(:refund).
+            with(payment_id).
+            and_return(payment_refund_response)
+        end
+
+        it 'returns true' do
+          expect(donation.cancel).to be true
+        end
+
+        it 'changes the state of the donation to cancelled' do
+          expect do
+            donation.cancel
+          end.to change(donation, :state).form('collected').to('cancelled')
+        end
       end
 
-      it 'does not change the state of the donation' do
-        expect do
-          donation.cancel
-        end.not_to change(donation, :state)
+      context 'on failure' do
+        before(:each) do
+          expect(PAYMENT_PROVIDER).to receive(:refund).
+            with(payment_id).
+            and_return(payment_refund_response(state: 'failed'))
+        end
+
+        it 'returns false' do
+          expect(donation.cancel).to be false
+        end
+
+        it 'does not change the state of the donation' do
+          expect do
+            donation.cancel
+          end.not_to change(donation, :state)
+        end
+      end
+
+      context 'on error' do
+        before(:each) do
+          expect(PAYMENT_PROVIDER).to receive(:refund).
+            with(payment_id).
+            and_raise('Induced error')
+        end
+
+        it 'returns false'
+        it 'does not change the state of the donation'
       end
     end
   end
@@ -288,7 +332,7 @@ RSpec.describe Donation, type: :model do
       end
 
       it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:capture)
+        expect(PAYMENT_PROVIDER).not_to receive(:create)
         donation.collect
       end
 
@@ -305,7 +349,7 @@ RSpec.describe Donation, type: :model do
       end
 
       it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:void)
+        expect(PAYMENT_PROVIDER).not_to receive(:refund)
         donation.cancel
       end
 

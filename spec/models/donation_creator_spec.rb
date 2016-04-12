@@ -182,7 +182,7 @@ describe DonationCreator do
   end
 
   context 'when the payment provider transaction succeeds' do
-    let (:payment_result) { payment_capture_response }
+    let (:payment_result) { payment_create_response }
 
     describe '#create!' do
       it 'returns true' do
@@ -211,6 +211,11 @@ describe DonationCreator do
         expect do
           payment = creator.create!
         end.to change(Donation, :count).by(1)
+      end
+
+      it 'sets the donation status to "collected"' do
+        creator.create!
+        expect(creator.donation.state).to eq 'collected'
       end
     end
   end
