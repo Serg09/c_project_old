@@ -4,6 +4,8 @@ class DonationCollector
   @queue = :donation_collection
 
   def self.perform(campaign_id, attempt_number = 1)
+    Rails.logger.info "Collecting donations for campaign #{campaign_id}"
+
     campaign = Campaign.find(campaign_id)
     unless campaign.collect_donations
       if attempt_number < maximum_attempt_count
@@ -13,6 +15,8 @@ class DonationCollector
       end
     end
     CampaignMailer.collection_complete(campaign).deliver_now if campaign.collected?
+
+    Rails.logger.info "Completed donation collection for campaign #{campaign_id}"
   rescue => e
     Rails.logger.error "Unable to complete the collection for campaign_id=#{campaign_id}, #{e.message}, #{e.backtrace.join("\n  ")}"
   end
