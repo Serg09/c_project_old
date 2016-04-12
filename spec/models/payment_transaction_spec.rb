@@ -45,13 +45,8 @@ RSpec.describe PaymentTransaction, type: :model do
       expect(tx).to be_valid
     end
 
-    it 'can be "authorize"' do
-      tx = PaymentTransaction.new attributes.merge(intent: PaymentTransaction.AUTHORIZE)
-      expect(tx).to be_valid
-    end
-
-    it 'can be "order"' do
-      tx = PaymentTransaction.new attributes.merge(intent: PaymentTransaction.ORDER)
+    it 'can be "refund"' do
+      tx = PaymentTransaction.new attributes.merge(intent: PaymentTransaction.REFUND)
       expect(tx).to be_valid
     end
 

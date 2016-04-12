@@ -4,7 +4,7 @@ FactoryGirl.define do
       authorization_id { Faker::Number.hexadecimal(17) }
     end
     payment
-    intent PaymentTransaction.AUTHORIZE
+    intent PaymentTransaction.SALE
     state 'approved'
     response do
       {

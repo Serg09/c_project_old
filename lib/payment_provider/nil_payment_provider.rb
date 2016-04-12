@@ -4,12 +4,8 @@ module PaymentProvider
       return_from_file('payment_create_approved).json')
     end
 
-    def capture(authorization_id, amount)
-      return_from_file('payment_capture_completed.json')
-    end
-
-    def void(authorization_id)
-      return_form_file('authorization_void_voided.json')
+    def refund(payment_id)
+      return_from_file('payment_refund_completed.json')
     end
 
     private

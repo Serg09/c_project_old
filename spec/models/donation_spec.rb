@@ -242,12 +242,8 @@ RSpec.describe Donation, type: :model do
   #end
 
   context 'for a collected donation' do
-    let (:payment_id) { Faker::Number.hexadecimal(20) }
     let (:donation) { FactoryGirl.create(:collected_donation) }
-    let (:payment) do
-      FactoryGirl.create(:approved_payment, donation: donation,
-                                            payment_id: payment_id)
-    end
+    let (:payment) { donation.payments.first }
 
     describe '#collect' do
       it 'returns false' do
@@ -269,15 +265,15 @@ RSpec.describe Donation, type: :model do
     describe '#cancel' do
       it 'calls the payment provider to refund the payment' do
         expect(PAYMENT_PROVIDER).to receive(:refund).
-          with(payment_id).
+          with(payment.external_id).
           and_return(payment_refund_response)
-        donation.collect
+        donation.cancel
       end
 
       context 'on success' do
         before(:each) do
           expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment_id).
+            with(payment.external_id).
             and_return(payment_refund_response)
         end
 
@@ -288,14 +284,14 @@ RSpec.describe Donation, type: :model do
         it 'changes the state of the donation to cancelled' do
           expect do
             donation.cancel
-          end.to change(donation, :state).form('collected').to('cancelled')
+          end.to change(donation, :state).from('collected').to('cancelled')
         end
       end
 
       context 'on failure' do
         before(:each) do
           expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment_id).
+            with(payment.external_id).
             and_return(payment_refund_response(state: 'failed'))
         end
 
@@ -313,12 +309,19 @@ RSpec.describe Donation, type: :model do
       context 'on error' do
         before(:each) do
           expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment_id).
+            with(payment.external_id).
             and_raise('Induced error')
         end
 
-        it 'returns false'
-        it 'does not change the state of the donation'
+        it 'returns false' do
+          expect(donation.cancel).to be false
+        end
+
+        it 'does not change the state of the donation' do
+          expect do
+            donation.cancel
+          end.not_to change(donation, :state)
+        end
       end
     end
   end

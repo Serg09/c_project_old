@@ -1,18 +1,10 @@
 module Helpers
-  def authorization_void_response(options = {})
-    raise StandardError.new('Induced error') if options[:state] == :exception
-
-    response_from_file "authorization_void_#{options[:state] || :voided}.json"
-  end
-
   def payment_create_response(options = {})
     response_from_file "payment_create_#{options[:state] || :approved}.json"
   end
 
-  def payment_capture_response(options = {})
-    raise StandardError.new('Induced error') if options[:state] == :exception
-
-    response_from_file "payment_capture_#{options[:state] || :completed}.json"
+  def payment_refund_response(options = {})
+    response_from_file "payment_refund_#{options[:state] || :completed}.json"
   end
 
   private

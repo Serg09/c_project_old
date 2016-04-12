@@ -2,7 +2,7 @@ class RemoveContentFromPayments < ActiveRecord::Migration
   def up
     Payment.all.each do |payment|
       PaymentTransaction.create! payment_id: payment.id,
-                                 intent: PaymentTransaction.AUTHORIZE,
+                                 intent: 'sale',
                                  state: payment.state,
                                  response: payment.content
     end

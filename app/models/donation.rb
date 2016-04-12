@@ -30,42 +30,31 @@ class Donation < ActiveRecord::Base
   scope :cancelled, ->{where(state: 'cancelled')}
 
   state_machine :initial => :pledged do
-    before_transition :pledged => :collected, do: :capture_payment
-    before_transition :pledged => :cancelled, do: :void_payment
+    before_transition :pledged => :collected, do: :create_payment
+    before_transition :collected => :cancelled, do: :refund_payment
     event :collect do
       transition :pledged => :collected
     end
     event :cancel do
-      transition :pledged => :cancelled
+      transition [:pledged, :collected] => :cancelled
     end
     state :pledged, :collected, :cancelled
   end
 
-  def capture_payment
-    payment = first_approved_payment
+  def create_payment
+    raise 'not implemented'
+  end
 
-    #TODO Does this belong in the payment object?
-    result = PAYMENT_PROVIDER.capture(payment.authorization_id, amount)
-    tx = payment.transactions.create!(intent: PaymentTransaction.CAPTURE,
+  def refund_payment
+    payment = first_approved_payment
+    result = PAYMENT_PROVIDER.refund(payment.external_id)
+    tx = payment.transactions.create!(intent: PaymentTransaction.REFUND,
                                       state: result.state,
                                       response: result.to_json)
     payment.state = result.state
     payment.state == 'completed'
   rescue => e
-    Rails.logger.error "Unable to capture the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at #{e.backtrace.join("\n  ")}"
-    false
-  end
-
-  def void_payment
-    payment = first_approved_payment
-    result = PAYMENT_PROVIDER.void(payment.authorization_id)
-    tx = payment.transactions.create!(intent: PaymentTransaction.VOID,
-                                      state: result.state,
-                                      response: result.to_json)
-    payment.state = result.state
-    payment.state == 'voided'
-  rescue => e
-    Rails.logger.error "Unable to void the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at #{e.backtrace.join("\n  ")}"
+    Rails.logger.error "Unable to refund the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at #{e.backtrace.join("\n  ")}"
     false
   end
 

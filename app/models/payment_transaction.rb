@@ -20,7 +20,7 @@ class PaymentTransaction < ActiveRecord::Base
   #
   # Maybe we should use a cleaner separation of the
   # PayPal terminology and our own here
-  INTENTS = %w(sale authorize order void capture)
+  INTENTS = %w(sale refund)
   class << self
     INTENTS.each do |intent|
       define_method intent.upcase do
@@ -41,7 +41,7 @@ class PaymentTransaction < ActiveRecord::Base
   validates_presence_of :payment_id, :intent, :state, :response
   validates_inclusion_of :intent, in: INTENTS
 
-  scope :approved, ->{where(state: 'approved')}
-  scope :captured, ->{where(state: 'captured')}
-  scope :voided, ->{where(state: 'voided')}
+  STATES.each do |state|
+    scope state.to_sym, ->{where(state: state)}
+  end
 end
