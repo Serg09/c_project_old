@@ -1,18 +1,12 @@
 FactoryGirl.define do
   factory :payment_transaction, aliases: [:completed_payment_transaction] do
-    transient do
-      authorization_id { Faker::Number.hexadecimal(17) }
-    end
     payment
     intent PaymentTransaction.SALE
     state 'completed'
     response do
       {
+        id: Faker::Number.hexadecimal(20),
         state: state,
-        transactions: [{
-          related_resources: [{
-            authorization: {id: authorization_id}
-          }]}]
       }.to_json
     end
 

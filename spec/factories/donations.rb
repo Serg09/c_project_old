@@ -10,7 +10,7 @@ FactoryGirl.define do
     factory :collected_donation do
       state 'collected'
       after(:create) do |donation|
-        FactoryGirl.create(:approved_payment, donation: donation)
+        FactoryGirl.create(:completed_payment, donation: donation)
       end
     end
 

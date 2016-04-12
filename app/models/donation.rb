@@ -42,11 +42,10 @@ class Donation < ActiveRecord::Base
   end
 
   def create_payment
-    raise 'not implemented'
   end
 
   def refund_payment
-    payment = first_approved_payment
+    payment = first_completed_payment
     result = PAYMENT_PROVIDER.refund(payment.external_id)
     tx = payment.transactions.create!(intent: PaymentTransaction.REFUND,
                                       state: result.state,
@@ -60,9 +59,9 @@ class Donation < ActiveRecord::Base
 
   private
 
-  def first_approved_payment
-    payment = payments.approved.first
-    raise Exceptions::PaymentNotFoundError.new("No approved payment found for donation #{id}") unless payment
+  def first_completed_payment
+    payment = payments.completed.first
+    raise Exceptions::PaymentNotFoundError.new("No completed payment found for donation #{id}") unless payment
     payment
   end
 

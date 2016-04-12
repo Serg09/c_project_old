@@ -184,7 +184,7 @@ class DonationCreator
 
   def transaction_attributes
     {
-      intent: 'capture',
+      intent: PaymentTransaction.SALE,
       state: @provider_response.state,
       response: @provider_response.to_json
     }

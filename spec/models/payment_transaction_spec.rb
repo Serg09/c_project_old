@@ -86,7 +86,9 @@ RSpec.describe PaymentTransaction, type: :model do
   describe '::completed' do
     include_context :various_states
     it 'returns the transaction with a state of "completed"' do
-      expect(PaymentTransaction.completed.map(&:id)).to eq [completed1.id, completed2.id]
+      grouped = PaymentTransaction.completed.group_by(&:state)
+      expect(grouped).to have(1).item
+      expect(grouped).to have_key('completed')
     end
   end
 

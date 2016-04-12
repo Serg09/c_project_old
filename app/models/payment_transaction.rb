@@ -29,7 +29,9 @@ class PaymentTransaction < ActiveRecord::Base
     end
   end
 
-  STATES = %w(completed pending failed)
+  CREATE_STATES = %w(created approved failed canceled expired pending)
+  REFUND_STATES = %w(completed pending failed)
+  STATES = (CREATE_STATES + REFUND_STATES).uniq
   class << self
     STATES.each do |state|
       define_method state.upcase do
@@ -42,6 +44,6 @@ class PaymentTransaction < ActiveRecord::Base
   validates_inclusion_of :intent, in: INTENTS
 
   STATES.each do |state|
-    scope state.to_sym, ->{where(state: state)}
+    scope state, ->{where(state: state)}
   end
 end
