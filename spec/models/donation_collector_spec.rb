@@ -34,20 +34,20 @@ describe DonationCollector do
       end
     end
 
-    context 'when one or more donations are not collected successfully' do
-      context 'before reaching 3 attempts' do
-        it 'enqueues a job to try again later'
-        it 'does not change the state of the campaign'
-        it 'does not send a notification email to the author'
-        it 'writes a WARNING entry to the log indicating the inability to complete'
-      end
+    #context 'when one or more donations are not collected successfully' do
+    #  context 'before reaching 3 attempts' do
+    #    it 'enqueues a job to try again later'
+    #    it 'does not change the state of the campaign'
+    #    it 'does not send a notification email to the author'
+    #    it 'writes a WARNING entry to the log indicating the inability to complete'
+    #  end
 
-      context 'after reaching 3 attempts' do
-        it 'does not re-enqueue the job another time'
-        it 'changes the campaign state to "collected"'
-        it 'sends a notification email to the author'
-        it 'writes a WARNING entry to the log, indicating completion with partial success'
-      end
-    end
+    #  context 'after reaching 3 attempts' do
+    #    it 'does not re-enqueue the job another time'
+    #    it 'changes the campaign state to "collected"'
+    #    it 'sends a notification email to the author'
+    #    it 'writes a WARNING entry to the log, indicating completion with partial success'
+    #  end
+    #end
   end
 end

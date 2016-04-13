@@ -480,7 +480,7 @@ RSpec.describe Campaign, type: :model do
       context 'when a donation collection fails' do
 
         # This won't be implemented until we have readers that can save the credit cards with us
-        it 'does not change the state of the campaign'
+        #it 'does not change the state of the campaign'
       end
     end
   end
@@ -489,7 +489,7 @@ RSpec.describe Campaign, type: :model do
 
     context 'for a campaign in the "collecting" state' do
       # This won't be implemented until we have readers than can save credit cards with us
-      it 'executes payment on each donation in the "pledged" state'
+      #it 'executes payment on each donation in the "pledged" state'
     end
 
     context 'for a campaign not in the "collecting" state' do
