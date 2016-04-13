@@ -70,8 +70,8 @@ RSpec.describe PaymentTransaction, type: :model do
   shared_context :various_states do
     let!(:pending1) { FactoryGirl.create(:pending_payment_transaction) }
     let!(:pending2) { FactoryGirl.create(:pending_payment_transaction) }
-    let!(:completed1) { FactoryGirl.create(:completed_payment_transaction) }
-    let!(:completed2) { FactoryGirl.create(:completed_payment_transaction) }
+    let!(:completed1) { FactoryGirl.create(:approved_payment_transaction) }
+    let!(:completed2) { FactoryGirl.create(:approved_payment_transaction) }
     let!(:failed1) { FactoryGirl.create(:failed_payment_transaction) }
     let!(:failed2) { FactoryGirl.create(:failed_payment_transaction) }
   end

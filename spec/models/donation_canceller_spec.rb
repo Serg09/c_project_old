@@ -29,7 +29,7 @@ describe DonationCanceller do
         allow(PAYMENT_PROVIDER).to receive(:refund).
           and_return(payment_refund_response)
         expect(PAYMENT_PROVIDER).to receive(:refund).
-          with(payment2.external_id).
+          with(payment2.sale_id).
           and_raise('Induced error')
       end
       context 'before the maximum attempt count has been reached' do

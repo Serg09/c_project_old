@@ -1,80 +1,69 @@
 {
-  "id":"PAY-0R831151JU007784NKGSU2SA",
-  "create_time":"2013-05-29T00:35:20Z",
-  "update_time":"2013-05-29T00:35:24Z",
-  "state":"approved",
-  "intent":"authorize",
-  "payer":{
-    "payment_method":"credit_card",
-    "funding_instruments":[
+  "id": "PAY-17S8410768582940NKEE66EQ",
+  "create_time": "2013-01-31T04:12:02Z",
+  "update_time": "2013-01-31T04:12:04Z",
+  "state": "approved",
+  "intent": "sale",
+  "payer": {
+    "payment_method": "credit_card",
+    "funding_instruments": [
       {
-        "credit_card":{
-          "type":"mastercard",
-          "number":"xxxxxxxxxxxx2972",
-          "expire_month":"12",
-          "expire_year":"2018",
-          "first_name":"Betsy",
-          "last_name":"Buyer",
-          "billing_address":{
-            "line1":"111 First Street",
-            "city":"Saratoga",
-            "state":"CA",
-            "postal_code":"95070",
-            "country_code":"US"
+        "credit_card": {
+          "type": "visa",
+          "number": "xxxxxxxxxxxx0331",
+          "expire_month": "11",
+          "expire_year": "2018",
+          "first_name": "Betsy",
+          "last_name": "Buyer",
+          "billing_address": {
+            "line1": "111 First Street",
+            "city": "Saratoga",
+            "state": "CA",
+            "postal_code": "95070",
+            "country_code": "US"
           }
         }
       }
     ]
   },
-  "transactions":[
+  "transactions": [
     {
-      "amount":{
-        "total":"7.47",
-        "currency":"USD",
-        "details":{
-          "subtotal":"7.37",
-          "tax":"0.04",
-          "shipping":"0.06"
+      "amount": {
+        "total": "7.47",
+        "currency": "USD",
+        "details": {
+          "tax": "0.03",
+          "shipping": "0.03"
         }
       },
-      "related_resources":[
+      "description": "This is the payment transaction description.",
+      "related_resources": [
         {
-          "authorization":{
-            "id":"9T287484DP554682S",
-            "create_time":"2013-05-29T00:35:20Z",
-            "update_time":"2013-05-29T00:35:24Z",
-            "state":"authorized",
-            "amount":{
-              "total":"7.47",
-              "currency":"USD",
-              "details":{
-                "subtotal":"7.37",
-                "tax":"0.04",
-                "shipping":"0.06"
-              }
+          "sale": {
+            "id": "4RR959492F879224U",
+            "create_time": "2013-01-31T04:12:02Z",
+            "update_time": "2013-01-31T04:12:04Z",
+            "state": "completed",
+            "amount": {
+              "total": "7.47",
+              "currency": "USD"
             },
-            "parent_payment":"PAY-0R831151JU007784NKGSU2SA",
-            "valid_until":"2013-06-27T00:35:20Z",
-            "links":[
+            "parent_payment": "PAY-17S8410768582940NKEE66EQ",
+            "links": [
               {
-                "href":"https://api.sandbox.paypal.com/v1/payments/authorization/9T287484DP554682S",
-                "rel":"self",
-                "method":"GET"
+                "href": "https://api.sandbox.paypal.com/v1/payments/sale/4RR959492F879224U",
+                "rel": "self",
+                "method": "GET"
               },
               {
-                "href":"https://api.sandbox.paypal.com/v1/payments/authorization/9T287484DP554682S/capture",
-                "rel":"capture",
-                "method":"POST"
+                "href": "https://api.sandbox.paypal.com/v1/payments/sale/4RR959492F879224U/refund",
+                "rel": "refund",
+                "method": "POST"
               },
               {
-                "href":"https://api.sandbox.paypal.com/v1/payments/authorization/9T287484DP554682S/void",
-                "rel":"void",
-                "method":"POST"
-              },
-              {
-                "href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-0R831151JU007784NKGSU2SA",
-                "rel":"parent_payment",
-                "method":"GET"
+                "href": "https://api.sandbox.paypal.com/v1/payments/payment/PAY-17S8410768582940NKEE66EQ",
+                "rel": "parent_payment",
+                "method": "GET"
               }
             ]
           }
@@ -82,11 +71,11 @@
       ]
     }
   ],
-  "links":[
+  "links": [
     {
-      "href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-0R831151JU007784NKGSU2SA",
-      "rel":"self",
-      "method":"GET"
+      "href": "https://api.sandbox.paypal.com/v1/payments/payment/PAY-17S8410768582940NKEE66EQ",
+      "rel": "self",
+      "method": "GET"
     }
   ]
 }

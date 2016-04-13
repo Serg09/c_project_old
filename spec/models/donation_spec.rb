@@ -265,7 +265,7 @@ RSpec.describe Donation, type: :model do
     describe '#cancel' do
       it 'calls the payment provider to refund the payment' do
         expect(PAYMENT_PROVIDER).to receive(:refund).
-          with(payment.external_id).
+          with(payment.sale_id).
           and_return(payment_refund_response)
         donation.cancel
       end
@@ -273,7 +273,7 @@ RSpec.describe Donation, type: :model do
       context 'on success' do
         before(:each) do
           expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment.external_id).
+            with(payment.sale_id).
             and_return(payment_refund_response)
         end
 
@@ -291,7 +291,7 @@ RSpec.describe Donation, type: :model do
       context 'on failure' do
         before(:each) do
           expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment.external_id).
+            with(payment.sale_id).
             and_return(payment_refund_response(state: 'failed'))
         end
 
@@ -309,7 +309,7 @@ RSpec.describe Donation, type: :model do
       context 'on error' do
         before(:each) do
           expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment.external_id).
+            with(payment.sale_id).
             and_raise('Induced error')
         end
 

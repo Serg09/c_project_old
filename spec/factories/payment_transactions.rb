@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :payment_transaction, aliases: [:completed_payment_transaction] do
+  factory :payment_transaction, aliases: [:approved_payment_transaction] do
     payment
     intent PaymentTransaction.SALE
     state 'completed'

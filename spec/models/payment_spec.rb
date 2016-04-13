@@ -50,24 +50,31 @@ RSpec.describe Payment, type: :model do
   end
 
   describe '#transactions' do
-    let (:payment) { FactoryGirl.create(:completed_payment) }
+    let (:payment) { FactoryGirl.create(:approved_payment) }
     it 'contains a list of transactions with the payment provider' do
       expect(payment.transactions.count).to eq 1
     end
   end
 
+  describe '#sale_id' do
+    let (:payment) { FactoryGirl.create(:approved_payment, sale_id: 'ABC123') }
+    it 'returns the first sale ID found  in the transaction content' do
+      expect(payment.sale_id).to eq 'ABC123'
+    end
+  end
+
   shared_context :stateful_payments do
-    let!(:completed1) { FactoryGirl.create(:completed_payment) }
-    let!(:completed2) { FactoryGirl.create(:completed_payment) }
+    let!(:approved1) { FactoryGirl.create(:approved_payment) }
+    let!(:approved2) { FactoryGirl.create(:approved_payment) }
     let!(:failed1) { FactoryGirl.create(:failed_payment) }
     let!(:failed2) { FactoryGirl.create(:failed_payment) }
   end
 
-  describe '::completed' do
+  describe '::approved' do
     include_context :stateful_payments
 
-    it 'returns all payments where the state is "completed"' do
-      expect(Payment.completed.map(&:id)).to eq [completed1.id, completed2.id]
+    it 'returns all payments where the state is "approved"' do
+      expect(Payment.approved.map(&:id)).to eq [approved1.id, approved2.id]
     end
   end
 

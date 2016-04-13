@@ -29,4 +29,21 @@ class Payment < ActiveRecord::Base
   PaymentTransaction::STATES.each do |state|
     scope state.to_sym, ->{where(state: state)}
   end
+
+  def sale_id
+    transactions.lazy.
+      map{|t| extract_sale_id(t.response)}.
+      select{|id| id}.
+      first
+  end
+
+  private
+
+  def extract_sale_id(content)
+    data = JSON.parse(content, symbolize_names: true)
+    transaction = data[:transactions].first
+    related_resource = transaction[:related_resources].first
+    sale = related_resource[:sale]
+    sale[:id]
+  end
 end
