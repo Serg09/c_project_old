@@ -181,10 +181,10 @@ describe DonationCreator do
     end
   end
 
-  context 'when the payment provider transaction succeeds' do
-    let (:payment_result) { payment_create_response }
+  describe '#create!' do
+    context 'on success' do
+      let (:payment_result) { payment_create_response }
 
-    describe '#create!' do
       it 'returns true' do
         expect(creator.create!).to be true
       end
@@ -215,18 +215,54 @@ describe DonationCreator do
 
       it 'sets the donation status to "collected"' do
         creator.create!
-        expect(creator.donation.state).to eq 'collected'
+        expect(creator.donation).to be_collected
       end
     end
-  end
 
-  context 'when the payment provider transaction errors out' do
-    let (:payment_provider) do
-      provider = double('payment provider')
-      expect(provider).to receive(:create).and_raise(StandardError) # TODO Get a more specific error type here
-      provider
+    context 'on failure' do
+      let (:payment_result) { payment_create_response(state: :failed) }
+
+      it 'returns false' do
+        expect(creator.create!).to be false
+      end
+
+      it 'creates a payment record' do
+        expect do
+          creator.create!
+        end.to change(Payment, :count).by(1)
+      end
+
+      it 'creates a donation record' do
+        expect do
+          creator.create!
+        end.to change(Donation, :count).by(1)
+      end
+
+      it 'sets the donation status to "cancelled"' do # TODO Or maybe failed?
+        creator.create!
+        expect(creator.donation).to be_cancelled
+      end
+
+      it 'sets the #payment on the created payment' do
+        creator.create!
+        expect(creator.payment).not_to be_nil
+        expect(creator.payment).to be_a Payment
+      end
+
+      it 'sets the #donation on the created donation record' do
+        creator.create!
+        expect(creator.donation).not_to be_nil
+        expect(creator.donation).to be_a Donation
+      end
     end
-    describe '#create!' do
+
+    context 'on error' do
+      let (:payment_provider) do
+        provider = double('payment provider')
+        expect(provider).to receive(:create).and_raise(StandardError) # TODO Get a more specific error type here
+        provider
+      end
+
       it 'returns false' do
         expect(creator.create!).to be false
       end
