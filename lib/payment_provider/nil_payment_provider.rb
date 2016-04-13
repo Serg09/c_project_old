@@ -1,7 +1,7 @@
 module PaymentProvider
   class NilPaymentProvider
     def create(attributes)
-      return_from_file('payment_create_approved).json')
+      return_from_file('payment_create_approved.json')
     end
 
     def refund(payment_id)
