@@ -22,26 +22,23 @@ class Campaign < ActiveRecord::Base
 
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
+  scope :unstarted, ->{where(state: 'unstarted')}
   scope :active, ->{where(state: 'active')}
-  scope :paused, ->{where(state: 'paused')}
   scope :collecting, ->{where(state: 'collecting')}
   scope :collected, ->{where(state: 'collected')}
   scope :cancelled, ->{where(state: 'cancelled')}
 
-  state_machine :initial => :paused do
-    before_transition [:paused, :active] => :collecting, :do => :queue_collection
-    after_transition [:paused, :active] => :cancelling, :do => :void_donations
-    event :pause do
-      transition :active => :paused
-    end
-    event :unpause do
-      transition :paused => :active
+  state_machine :initial => :unstarted do
+    before_transition :active => :collecting, :do => :queue_collection
+    after_transition :active => :cancelling, :do => :void_donations
+    event :start do
+      transition :unstarted => :active
     end
     event :collect do
-      transition [:paused, :active] => :collecting
+      transition :active => :collecting
     end
     event :cancel do
-      transition [:paused, :active] => :cancelling
+      transition :active => :cancelling
     end
     event :finalize_collection do
       transition :collecting => :collected
@@ -49,7 +46,7 @@ class Campaign < ActiveRecord::Base
     event :finalize_cancellation do
       transition :cancelling => :cancelled
     end
-    state :paused, :active, :collecting, :collected, :cancelling, :cancelled
+    state :unstarted, :active, :collecting, :collected, :cancelling, :cancelled
   end
 
   def author
@@ -73,11 +70,6 @@ class Campaign < ActiveRecord::Base
       false
     end
   end
-
-  def collectable?
-    paused? || active?
-  end
-  alias :cancellable? :collectable?
 
   def total_donated
     donations.reduce(0){|sum, d| sum + d.amount}

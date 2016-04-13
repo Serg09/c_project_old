@@ -22,12 +22,5 @@
                 =edit_book_link(book)
                 =link_to book_campaigns_path(book), :class => 'btn btn-xs btn-success campaigns-button', :title => can_campaign?(book) ? 'Click here to manage campaigns for this book.' : 'You need an approved bio and the book must be approved in order to campaign for it.', :dislabled => !can_campaign?(book) do
                   %span.glyphicon.glyphicon-usd{ 'arial-hidden' => true }
-                -if book.campaigns.current.any?
-                  -if book.active_campaign.present?
-                    =link_to pause_campaign_path(book.active_campaign), :method => :patch, :class => 'btn btn-warning btn-xs pause-button', :title => 'Click here to pause the campaign.' do
-                      %span.glyphicon.glyphicon-pause{ 'arial-hidden' => true }
-                  -else
-                    =link_to unpause_campaign_path(book.campaigns.current.first), :method => :patch, :class => 'btn btn-primary btn-xs unpause-button', :title => 'Click here to activate the campaign.' do
-                      %span.glyphicon.glyphicon-play{ 'arial-hidden' => true }
       -if author_signed_in? && current_author.id == @author.id
         =link_to 'Add', new_book_path, class: 'btn btn-primary', title: 'Click here to add a new book.'

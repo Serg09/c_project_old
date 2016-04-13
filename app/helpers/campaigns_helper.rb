@@ -2,10 +2,8 @@ module CampaignsHelper
   def campaign_row_class(campaign)
     if campaign.active?
       'success'
-    elsif campaign.paused?
+    elsif campaign.unstarted?
       'warning'
-    else
-      'danger'
     end
   end
 end

@@ -26,8 +26,7 @@ Rails.application.routes.draw do
     resources :donations, only: [:new, :create]
     resources :rewards, only: [:new, :create]
     member do
-      patch :pause
-      patch :unpause
+      patch :start
       patch :collect
       patch :cancel
     end

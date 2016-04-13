@@ -4,6 +4,9 @@ FactoryGirl.define do
     target_amount 1_234
     target_date { Date.today + 30 }
     state 'active'
+    factory :unstarted_campaign do
+      state 'unstarted'
+    end
     factory :collected_campaign do
       state 'collected'
     end
@@ -15,9 +18,6 @@ FactoryGirl.define do
     end
     factory :cancelled_campaign do
       state 'cancelled'
-    end
-    factory :paused_campaign do
-      state 'paused'
     end
   end
 end

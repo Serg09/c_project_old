@@ -62,14 +62,6 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  describe '#paused?' do
-    it 'defaults to true' do
-      campaign = Campaign.new attributes
-      expect(campaign).to be_valid
-      expect(campaign).to be_paused
-    end
-  end
-
   describe '::current' do
     before(:all) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
     after(:all) { Timecop.return }
@@ -103,10 +95,10 @@ RSpec.describe Campaign, type: :model do
   end
 
   shared_context :stateful_campaigns do
+    let!(:unstarted1) { FactoryGirl.create(:unstarted_campaign) }
+    let!(:unstarted2) { FactoryGirl.create(:unstarted_campaign) }
     let!(:active1) { FactoryGirl.create(:active_campaign) }
     let!(:active2) { FactoryGirl.create(:active_campaign) }
-    let!(:paused1) { FactoryGirl.create(:paused_campaign) }
-    let!(:paused2) { FactoryGirl.create(:paused_campaign) }
     let!(:collecting1) { FactoryGirl.create(:collecting_campaign) }
     let!(:collecting2) { FactoryGirl.create(:collecting_campaign) }
     let!(:collected1) { FactoryGirl.create(:collected_campaign) }
@@ -122,10 +114,10 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  describe '::paused' do
+  describe '::unstarted' do
     include_context :stateful_campaigns
-    it 'returns the campaigns that are currently paused' do
-      expect(Campaign.paused.map(&:id)).to eq [paused1.id, paused2.id]
+    it 'returns the campaigns that are currently unstarted' do
+      expect(Campaign.unstarted.map(&:id)).to eq [unstarted1.id, unstarted2.id]
     end
   end
 
@@ -232,20 +224,59 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
+  context 'for an unstarted campaign' do
+    let (:campaign) { FactoryGirl.create(:unstarted_campaign) }
+
+    describe '#start' do
+      it 'changes the state to "active"' do
+        expect do
+          campaign.start
+        end.to change(campaign, :state).from('unstarted').to('active')
+      end
+    end
+
+    describe '#collect' do
+      it 'does not change the state' do
+        expect do
+          campaign.collect
+        end.not_to change(campaign, :state)
+      end
+
+      it 'does not queue a job to execute the donation payments' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.collect
+      end
+    end
+
+    describe '#cancel' do
+      it 'does not change the state' do
+        expect do
+          campaign.cancel
+        end.not_to change(campaign, :state)
+      end
+
+      it 'does not queue any background jobs' do
+        expect(Resque).not_to receive(:enqueue)
+        campaign.cancel
+      end
+    end
+
+    describe '#collect_donations' do
+      it 'does not execute payment on any donation' do
+        campaign.donations.each do |donation|
+          expect(donation).not_to receive(:collect)
+        end
+        campaign.collect_donations
+      end
+
+      it 'returns false' do
+        expect(campaign.collect_donations).to be false
+      end
+    end
+  end
+
   context 'for an active campaign' do
     let (:campaign) { FactoryGirl.create(:active_campaign) }
-
-    describe '#collectable?' do
-      it 'returns true' do
-        expect(campaign).to be_collectable
-      end
-    end
-
-    describe '#cancellable?' do
-      it 'returns true' do
-        expect(campaign).to be_cancellable
-      end
-    end
 
     describe '#collect' do
       it 'changes the state to "collecting"' do
@@ -292,68 +323,14 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  context 'for a paused campaign' do
-    let (:campaign) { FactoryGirl.create(:paused_campaign) }
-
-    describe '#collectable?' do
-      it 'returns true' do
-        expect(campaign).to be_collectable
-      end
-    end
-
-    describe '#cancellable?' do
-      it 'returns true' do
-        expect(campaign).to be_cancellable
-      end
-    end
-
-    describe '#collect' do
-      it 'changes the state to "collecting"' do
-        expect do
-          campaign.collect
-        end.to change(campaign, :state).from('paused').to('collecting')
-      end
-    end
-
-    describe '#cancel' do
-      it 'changes the state to "cancelled"' do
-        expect do
-          campaign.cancel
-        end.to change(campaign, :state).from('paused').to('cancelling')
-      end
-
-      it 'does not queue a job to execute the donation payments' do
-        expect(Resque).not_to receive(:enqueue).with(DonationCollector, anything)
-        campaign.cancel
-      end
-    end
-
-    describe '#collect_donations' do
-      it 'does not execute payment on any donation' do
-        campaign.donations.each do |donation|
-          expect(donation).not_to receive(:collect)
-        end
-        campaign.collect_donations
-      end
-
-      it 'returns false' do
-        expect(campaign.collect_donations).to be false
-      end
-    end
-  end
-
   context 'for a collected campaign' do
     let (:campaign) { FactoryGirl.create(:collected_campaign) }
 
-    describe '#collectable?' do
-      it 'return false' do
-        expect(campaign).not_to be_collectable
-      end
-    end
-
-    describe '#cancellable?' do
-      it 'returns false' do
-        expect(campaign).not_to be_cancellable
+    describe '#start' do
+      it 'does not change the state' do
+        expect do
+          campaign.start
+        end.not_to change(campaign, :state)
       end
     end
 
@@ -399,18 +376,6 @@ RSpec.describe Campaign, type: :model do
 
   context 'for a cancelled campaign' do
     let (:campaign) { FactoryGirl.create(:cancelled_campaign) }
-
-    describe '#collectable?' do
-      it 'returns false' do
-        expect(campaign).not_to be_collectable
-      end
-    end
-
-    describe '#cancellable?' do
-      it 'returns false' do
-        expect(campaign).not_to be_cancellable
-      end
-    end
 
     describe '#collect' do
       it 'does not change the state' do
@@ -486,7 +451,6 @@ RSpec.describe Campaign, type: :model do
   end
 
   describe '#collect_donations' do
-
     context 'for a campaign in the "collecting" state' do
       # This won't be implemented until we have readers than can save credit cards with us
       #it 'executes payment on each donation in the "pledged" state'

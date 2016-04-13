@@ -73,22 +73,15 @@ RSpec.describe CampaignsController, type: :controller do
         end
       end
 
+      context 'for an unstarted campaign' do
+        describe 'patch :start' do
+          it 'redirects to the book index page'
+          it 'changes the state to active'
+        end
+      end
+
       context 'for an active campaign' do
         let!(:campaign) { FactoryGirl.create(:active_campaign, book: book) }
-
-        describe 'patch :pause' do
-          it 'redirects to the book index page' do
-            patch :pause, id: campaign
-            expect(response).to redirect_to books_path
-          end
-
-          it 'changes the state to "paused"' do
-            expect do
-              patch :pause, id: campaign
-              campaign.reload
-            end.to change(campaign, :state).from('active').to('paused')
-          end
-        end
 
         describe 'patch :collect' do
           it 'redirects to the campaign progress page' do
@@ -115,24 +108,6 @@ RSpec.describe CampaignsController, type: :controller do
               patch :cancel, id: campaign
               campaign.reload
             end.to change(campaign, :state).from('active').to('cancelling')
-          end
-        end
-      end
-
-      context 'for a paused campaign' do
-        describe 'patch :unpause' do
-          let!(:campaign) { FactoryGirl.create(:paused_campaign, book: book) }
-
-          it 'redirects to the book index page' do
-            patch :unpause, id: campaign
-            expect(response).to redirect_to books_path
-          end
-
-          it 'changes the paused value to false' do
-            expect do
-              patch :unpause, id: campaign
-              campaign.reload
-            end.to change(campaign, :paused?).from(true).to(false)
           end
         end
       end
@@ -217,38 +192,9 @@ RSpec.describe CampaignsController, type: :controller do
         end
       end
 
-      describe 'patch :pause' do
-        it 'redirects to the author root page' do
-          patch :pause, id: campaign
-          expect(response).to redirect_to author_root_path
-        end
-
-        it 'does not change the paused value' do
-          expect do
-            begin
-              patch :pause, id: campaign
-              campaign.reload
-            rescue ActiveRecord::RecordNotFound
-            end
-          end.not_to change(campaign, :paused?)
-        end
-      end
-
-      describe 'patch :unpause' do
-        it 'redirects to the author home page' do
-          patch :unpause, id: campaign
-          expect(response).to redirect_to author_root_path
-        end
-
-        it 'does not change the paused value' do
-          expect do
-            begin
-              patch :unpause, id: campaign
-              campaign.reload
-            rescue ActiveRecord::RecordNotFound
-            end
-          end.not_to change(campaign, :paused?)
-        end
+      describe 'patch :start' do
+        it 'redirects to the author home page'
+        it 'does not change the state of the campaign'
       end
 
       describe 'patch :collect' do
@@ -353,32 +299,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
     end
 
-    describe 'patch :pause' do
-      it 'redirects to the sign in page' do
-        patch :pause, id: campaign
-        expect(response).to redirect_to new_author_session_path
-      end
-
-      it 'does not change the paused value' do
-        expect do
-          patch :pause, id: campaign
-          campaign.reload
-        end.not_to change(campaign, :paused?)
-      end
-    end
-
-    describe 'patch :unpause' do
-      it 'redirects to the sign in page' do
-        patch :unpause, id: campaign
-        expect(response).to redirect_to new_author_session_path
-      end
-
-      it 'does not change the paused value' do
-        expect do
-          patch :unpause, id: campaign
-          campaign.reload
-        end.not_to change(campaign, :paused?)
-      end
+    describe 'patch :start' do
+      it 'redirects to the author sign in page'
+      it 'does not change the state of the campaign'
     end
 
     describe 'patch :collect' do

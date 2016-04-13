@@ -2,9 +2,9 @@
   Campaign progress
 
 .container.container-default
-  -if @campaign.paused?
+  -if @campaign.unstarted?
     .alert.alert-warning{ role: 'alert' }
-      This campaign is paused.
+      This campaign is has not been started yet. Click the start button to make it active.
   -if @campaign.collecting?
     .alert.alert-info{ role: 'alert' }
       This campaign is closed and the funds are being collected. You will be notified when the collection process is complete.
@@ -21,18 +21,17 @@
     .col-md-3
       =render 'progress_table'
     .col-md-5
-      =render 'donations/table', donations: @donations, total_pledged: @total_pledged, total_collected: @total_collected
+      =render 'donations/table', campaign: @campaign, donations: @donations, total_pledged: @total_pledged, total_collected: @total_collected
       =will_paginate @donations, renderer: BootstrapPagination::Rails, param_name: :donations_page
     .col-md-2.text-center
       =render_progress_meter @campaign.current_progress
     .col-md-2
-      -unless @campaign.collected?
+      -if @campaign.unstarted?
+        .btn-group-vertical
+          =link_to 'Start', start_campaign_path(@campaign), method: :patch, class: 'btn btn-primary', title: 'Click here to start this campaign.'
+      -if @campaign.active?
         .btn-group-vertical
           =link_to 'Collect', collect_campaign_path(@campaign), method: :patch, class: 'btn btn-success', title: 'Click here to collect the donations for this campaign.'
-          -if @campaign.active?
-            =link_to 'Pause', pause_campaign_path(@campaign), method: :patch, class: 'btn btn-warning', title: 'Click here to pause this campaign.'
-          -if @campaign.paused?
-            =link_to 'Activate', unpause_campaign_path(@campaign), method: :patch, class: 'btn btn-info', title: 'Click here to activate this campaign.'
           =link_to 'Cancel', cancel_campaign_path(@campaign), method: :patch, class: 'btn btn-danger', title: 'Click here to cancel this campaign.', 'data-confirm' => 'Are you sure you want to cancel this campaign?'
   .row
     =link_to 'Back', book_campaigns_path(@campaign.book_id), class: 'btn btn-info', title: 'Click here to return to the list of campaigns.'

@@ -20,7 +20,7 @@ class Book < ActiveRecord::Base
 
   def active_campaign
     return nil unless author.active_bio
-    @active_campaign ||= campaigns.current.select{|c| c.active?}.first
+    @active_campaign ||= campaigns.current.active.first
   end
 
   def approved?
