@@ -4,8 +4,8 @@ describe DonationCanceller do
   let (:campaign) { FactoryGirl.create(:cancelling_campaign) }
   let (:donation1) { FactoryGirl.create(:collected_donation, campaign: campaign) }
   let (:donation2) { FactoryGirl.create(:collected_donation, campaign: campaign) }
-  let!(:payment1) { FactoryGirl.create(:payment, donation: donation1) }
-  let!(:payment2) { FactoryGirl.create(:payment, donation: donation2) }
+  let (:payment1) { donation1.payments.first }
+  let (:payment2) { donation2.payments.first }
   let (:success_response) { payment_create_response }
   let (:failure_response) { payment_create_response(state: :failed) }
 
