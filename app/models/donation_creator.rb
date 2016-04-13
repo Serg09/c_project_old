@@ -48,7 +48,7 @@ class DonationCreator
   def create!
     return false unless valid?
     transacted_create
-    true
+    @payment.state == PaymentTransaction.APPROVED
   rescue StandardError => e
     Rails.logger.error "The call to the payment provider failed. #{e.class.name} #{e.message}\n#{e.backtrace.join("\n\t")}"
     exceptions << e.message
@@ -136,6 +136,12 @@ class DonationCreator
     @donation = campaign.donations.create!(donation_attributes)
   end
 
+  def donation_state
+    @provider_response.state == PaymentTransaction.APPROVED ?
+      'collected' :
+      'cancelled'
+  end
+
   def donation_attributes
     {
       amount: amount,
@@ -143,7 +149,7 @@ class DonationCreator
       ip_address: ip_address,
       user_agent: user_agent,
       reward_id: reward_id,
-      state: 'collected'
+      state: donation_state
     }
   end
 
