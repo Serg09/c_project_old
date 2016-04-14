@@ -1,9 +1,7 @@
 module CampaignsHelper
   def campaign_row_class(campaign)
-    if campaign.active?
+    if campaign.active? && !campaign.expired?
       'success'
-    elsif campaign.unstarted?
-      'warning'
     end
   end
 end

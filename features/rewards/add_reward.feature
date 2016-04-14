@@ -12,7 +12,7 @@ Feature: Add a reward
 
     And there is an author with email address "john@doe.com" and password "please01"
     And author john@doe.com has a book titled "How To Raise Money"
-    And book "How To Raise Money" has a campaign targeting $1,000 by 4/30/2016
+    And book "How To Raise Money" has an unstarted campaign targeting $1,000 by 4/30/2016
     And I am signed in as an author with "john@doe.com/please01"
 
     When I am on my profile page

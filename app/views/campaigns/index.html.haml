@@ -20,7 +20,10 @@
                     %span.glyphicon.glyphicon-pencil{ 'arial-hidden' => true }
                   =link_to campaign_path(campaign), :method => :delete, 'data-confirm' => 'Are you sure you want to remove this campaign?', :class => 'btn btn-danger btn-xs delete-button', :title => 'Click here to remove the campaign.' do
                     %span.glyphicon.glyphicon-remove{ 'arial-hidden' => true }
-                =link_to campaign_path(campaign), :class => 'btn btn-info btn-xs progress-button', :title => 'Click here to view campaign progress' do
-                  %span.glyphicon.glyphicon-stats{ 'arial-hidden' => true }
+                  =link_to start_campaign_path(campaign), :method => :patch, 'data-confirm' => 'Are you sure you want to start this campaign?', :class => 'btn btn-success btn-xs start-button', :title => 'Click here to start the campaign.' do
+                    %span.glyphicon.glyphicon-play{ 'arial-hidden' => true }
+                -else
+                  =link_to campaign_path(campaign), :class => 'btn btn-info btn-xs progress-button', :title => 'Click here to view campaign progress' do
+                    %span.glyphicon.glyphicon-stats{ 'arial-hidden' => true }
       =link_to 'Add', new_book_campaign_path(@book), :class => 'btn btn-primary', :title => 'Click here to add a new campaign.'
-      =link_to 'Back', books_path, :class => 'btn btn-info', :title => 'Click here to return to the list of books.'
+      =link_to 'Back', books_path, :class => 'btn btn-default', :title => 'Click here to return to the list of books.'

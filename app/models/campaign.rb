@@ -86,8 +86,12 @@ class Campaign < ActiveRecord::Base
   end
 
   def days_remaining
-    return 0 if Date.today >= target_date
+    return 0 if expired?
     (target_date - Date.today).to_i
+  end
+
+  def expired?
+    Date.today >= target_date
   end
 
   private
