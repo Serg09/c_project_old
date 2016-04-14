@@ -43,7 +43,7 @@ class CampaignsController < ApplicationController
   def start
     authorize! :update, @campaign
     flash[:notice] = 'The campaign was started successfully.' if @campaign.start
-    redirect_to books_path
+    redirect_to campaign_path(@campaign)
   end
 
   def collect

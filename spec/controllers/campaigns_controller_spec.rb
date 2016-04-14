@@ -74,9 +74,20 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       context 'for an unstarted campaign' do
+        let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
+
         describe 'patch :start' do
-          it 'redirects to the book index page'
-          it 'changes the state to active'
+          it 'redirects to the campaign progress page' do
+            patch :start, id: campaign
+            expect(response).to redirect_to campaign_path(campaign)
+          end
+
+          it 'changes the state to active' do
+            expect do
+              patch :start, id: campaign
+              campaign.reload
+            end.to change(campaign, :state).from('unstarted').to('active')
+          end
         end
       end
 
@@ -193,8 +204,16 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe 'patch :start' do
-        it 'redirects to the author home page'
-        it 'does not change the state of the campaign'
+        it 'redirects to the author home page' do
+          patch :start, id: campaign
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the state of the campaign' do
+          expect do
+            patch :start, id: campaign
+          end.not_to change(campaign, :state)
+        end
       end
 
       describe 'patch :collect' do
@@ -300,8 +319,16 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe 'patch :start' do
-      it 'redirects to the author sign in page'
-      it 'does not change the state of the campaign'
+      it 'redirects to the author sign in page' do
+        patch :start, id: campaign
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the state of the campaign' do
+        expect do
+          patch :start, id: campaign
+        end.not_to change(campaign, :state)
+      end
     end
 
     describe 'patch :collect' do
