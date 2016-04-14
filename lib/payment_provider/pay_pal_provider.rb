@@ -38,8 +38,14 @@ module PaymentProvider
       Payment.find(payment.id)
     end
 
-    def refund(payment_id)
-      raise 'not implemented'
+    def refund(sale_id, amount)
+      sale = Sale.find(sale_id)
+      sale.refund({
+        amount: {
+          currency: PayPalProvider.USD,
+          total: amount
+        }
+      })
     end
 
     private

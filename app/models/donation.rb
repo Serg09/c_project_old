@@ -46,7 +46,7 @@ class Donation < ActiveRecord::Base
 
   def refund_payment
     payment = first_approved_payment
-    result = PAYMENT_PROVIDER.refund(payment.sale_id)
+    result = PAYMENT_PROVIDER.refund(payment.sale_id, amount)
     tx = payment.transactions.create!(intent: PaymentTransaction.REFUND,
                                       state: result.state,
                                       response: result.to_json)
