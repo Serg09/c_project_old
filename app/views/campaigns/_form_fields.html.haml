@@ -8,3 +8,4 @@
   =help_blocks @campaign, :target_date
 .form-group
   =f.submit 'Save', class: 'btn btn-primary', title: 'Click here to save the campaign.'
+  =link_to 'Back', book_campaigns_path(@campaign.book), class: 'btn btn-default', title: 'Click here to return to the campaign list.'
