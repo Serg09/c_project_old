@@ -26,6 +26,7 @@ class Campaign < ActiveRecord::Base
   scope :active, ->{where(state: 'active')}
   scope :collecting, ->{where(state: 'collecting')}
   scope :collected, ->{where(state: 'collected')}
+  scope :cancelling, ->{where(state: 'cancelling')}
   scope :cancelled, ->{where(state: 'cancelled')}
 
   state_machine :initial => :unstarted do
