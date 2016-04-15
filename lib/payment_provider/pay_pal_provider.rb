@@ -40,12 +40,14 @@ module PaymentProvider
 
     def refund(sale_id, amount)
       sale = Sale.find(sale_id)
-      sale.refund({
+      refund = sale.refund({
         amount: {
           currency: PayPalProvider.USD,
-          total: amount
+          total: "%.2f" % amount
         }
       })
+      Rails.logger.error "Unable to refund sale #{sale_id}. #{refund.error.inspect}"
+      refund.success?
     end
 
     private
