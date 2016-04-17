@@ -427,7 +427,6 @@ RSpec.describe Campaign, type: :model do
     let!(:payment3) { FactoryGirl.create(:payment, donation: donation3) }
 
     describe '#collect_donations' do
-
       context 'when all donations are collected successfully' do
         before(:each) { allow_any_instance_of(Donation).to receive(:collect).and_return(true) }
 
@@ -447,17 +446,6 @@ RSpec.describe Campaign, type: :model do
         # This won't be implemented until we have readers that can save the credit cards with us
         #it 'does not change the state of the campaign'
       end
-    end
-  end
-
-  describe '#collect_donations' do
-    context 'for a campaign in the "collecting" state' do
-      # This won't be implemented until we have readers than can save credit cards with us
-      #it 'executes payment on each donation in the "pledged" state'
-    end
-
-    context 'for a campaign not in the "collecting" state' do
-      let (:campaign) { FactoryGirl.create(:active_campaign) }
     end
   end
 end
