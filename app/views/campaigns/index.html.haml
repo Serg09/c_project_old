@@ -8,11 +8,13 @@
         %tr
           %th Target date
           %th Target amount
+          %th State
           %th &nbsp;
         -@campaigns.each do |campaign|
           %tr{ :class => campaign_row_class(campaign) }
             %td= format_date(campaign.target_date)
             %td= number_to_currency campaign.target_amount, precision: 0
+            %td= campaign.state
             %th
               .btn-group
                 -if campaign.unstarted?
