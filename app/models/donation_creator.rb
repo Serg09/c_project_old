@@ -36,7 +36,6 @@ class DonationCreator
                         :first_name,
                         :last_name,
                         :address_1,
-                        :address_2,
                         :city,
                         :state,
                         :postal_code
