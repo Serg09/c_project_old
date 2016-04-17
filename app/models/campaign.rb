@@ -64,7 +64,7 @@ class Campaign < ActiveRecord::Base
   # If not, the method exists and returns false
   def collect_donations
     if collecting?
-      result = donations.map(&:collect).all?
+      result = donations.pledged.map(&:collect).all?
       finalize_collection if result
     else
       Rails.logger.warn "Campaign#collect_donations called on id=#{id} which is currently in state #{state}. This call has been ignored."
