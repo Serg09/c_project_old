@@ -46,19 +46,17 @@ class Donation < ActiveRecord::Base
 
   def refund_payment
     payment = first_approved_payment
-    if PAYMENT_PROVIDER.refund(payment.sale_id, amount)
+    refund = PAYMENT_PROVIDER.refund(payment.sale_id, amount)
+    if refund
       tx = payment.transactions.create!(intent: PaymentTransaction.REFUND,
-                                        state: result.state,
-                                        response: result.to_json)
-      #TODO Need to retrieve the whole payment status and save it as a transaction
-      payment.state = 'completed'
-      payment.save
-      true
+                                        state: refund.state,
+                                        response: refund.to_json)
+      refund.state == 'completed'
     else
       false
     end
   rescue => e
-    Rails.logger.error "Unable to refund the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.message} at\n  #{e.backtrace.join("\n  ")}\n  #{result.to_json}"
+    Rails.logger.error "Unable to refund the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.class.name}: #{e.message} at\n  #{e.backtrace.join("\n  ")}\n  refund=#{refund.try(:to_json)}"
     false
   end
 
