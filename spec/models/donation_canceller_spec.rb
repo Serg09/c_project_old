@@ -62,9 +62,11 @@ describe DonationCanceller do
     end
 
     context 'for a campaign that is not in the cancelling state' do
+      let (:campaign) { FactoryGirl.create(:active_campaign) }
+
       it 'writes a warning to the log' do
         allow(Rails.logger).to receive(:warn)
-        expect(Rails.logger).to receive(:warn).with(/Campaign#cancel_donations .* ignored/)
+        expect(Rails.logger).to receive(:warn).with(/donations will not be cancelled/)
         DonationCanceller.perform(campaign.id)
       end
 

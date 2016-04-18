@@ -55,7 +55,7 @@ describe DonationCollector do
 
       it 'writes a warning to the log' do
         allow(Rails.logger).to receive(:warn)
-        expect(Rails.logger).to receive(:warn).with(/Campaign#collect_donations .* ignored/)
+        expect(Rails.logger).to receive(:warn).with(/donations will not be collected/)
         DonationCollector.perform(campaign.id)
       end
 

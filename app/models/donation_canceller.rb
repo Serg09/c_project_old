@@ -15,6 +15,8 @@ class DonationCanceller
       end
     end
     Rails.logger.info "Completed donation cancellation for campaign #{campaign_id}."
+  rescue Exceptions::InvalidCampaignStateError
+    Rails.logger.warn "Campaign #{campaign_id} is currently in the state #{campaign.state}, so donations will not be cancelled."
   rescue => e
     Rails.logger.error "Unable to complete the cancellation for campaign #{campaign_id}, #{e.message}, #{e.backtrace.join("\n  ")}"
   end

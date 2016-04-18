@@ -19,6 +19,8 @@ class DonationCollector
     CampaignMailer.collection_complete(campaign).deliver_now if campaign.collected?
 
     Rails.logger.info "Completed donation collection for campaign #{campaign_id}"
+  rescue Exceptions::InvalidCampaignStateError
+    Rails.logger.warn "Campaign #{campaign_id} is in state '#{campaign.state}' so donations will not be collected."
   rescue => e
     Rails.logger.error "Unable to complete the collection for campaign_id=#{campaign_id}, #{e.message}, #{e.backtrace.join("\n  ")}"
   end

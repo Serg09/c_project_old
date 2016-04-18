@@ -63,13 +63,9 @@ class Campaign < ActiveRecord::Base
   # The campaign must be in the 'cancelling' state.
   # If not, the method exists and returns false
   def cancel_donations
-    if cancelling?
+    raise Exceptions::InvalidCampaignStateError unless cancelling?
       result = donations.map(&:cancel).all?
       finalize_cancellation if result
-    else
-      Rails.logger.warn "Campaign#cancel_donations called on id=#{id}, which is currently in the state #{state}. This call has been ignored."
-      false
-    end
   end
 
   # Iterates through the donations and attempts
@@ -81,13 +77,9 @@ class Campaign < ActiveRecord::Base
   # The campaign must be in the 'collecting' state.
   # If not, the method exists and returns false
   def collect_donations
-    if collecting?
-      result = donations.pledged.map(&:collect).all?
-      finalize_collection if result
-    else
-      Rails.logger.warn "Campaign#collect_donations called on id=#{id}, which is currently in the state '#{state}'. This call has been ignored."
-      false
-    end
+    raise Exceptions::InvalidCampaignStateError unless collecting?
+    result = donations.pledged.map(&:collect).all?
+    finalize_collection if result
   end
 
   def total_donated
