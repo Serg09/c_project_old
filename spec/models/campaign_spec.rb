@@ -278,6 +278,36 @@ RSpec.describe Campaign, type: :model do
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
+
+    describe '#cancel_donations' do
+      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+
+      it 'does not cancel any donations' do
+        campaign.donations.each do |d|
+          expect(d).not_to receive(:cancel)
+        end
+        begin
+          campaign.cancel_donations
+        rescue
+        end
+      end
+
+      it 'raises InvalidCampaignStateError' do
+        expect do
+          campaign.cancel_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
+      end
+
+      it 'does not change the state' do
+        expect do
+          begin
+            campaign.cancel_donations
+          rescue
+          end
+        end.not_to change(campaign, :state)
+      end
+    end
   end
 
   context 'for an active campaign' do
@@ -329,6 +359,36 @@ RSpec.describe Campaign, type: :model do
         expect do
           campaign.collect_donations
         end.to raise_error Exceptions::InvalidCampaignStateError
+      end
+    end
+
+    describe '#cancel_donations' do
+      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+
+      it 'does not cancel any donations' do
+        campaign.donations.each do |d|
+          expect(d).not_to receive(:cancel)
+        end
+        begin
+          campaign.cancel_donations
+        rescue
+        end
+      end
+
+      it 'raises InvalidCampaignStateError' do
+        expect do
+          campaign.cancel_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
+      end
+
+      it 'does not change the state' do
+        expect do
+          begin
+            campaign.cancel_donations
+          rescue
+          end
+        end.not_to change(campaign, :state)
       end
     end
   end
@@ -387,6 +447,36 @@ RSpec.describe Campaign, type: :model do
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
+
+    describe '#cancel_donations' do
+      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+
+      it 'does not cancel any donations' do
+        campaign.donations.each do |d|
+          expect(d).not_to receive(:cancel)
+        end
+        begin
+          campaign.cancel_donations
+        rescue
+        end
+      end
+
+      it 'raises InvalidCampaignStateError' do
+        expect do
+          campaign.cancel_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
+      end
+
+      it 'does not change the state' do
+        expect do
+          begin
+            campaign.cancel_donations
+          rescue
+          end
+        end.not_to change(campaign, :state)
+      end
+    end
   end
 
   context 'for a cancelled campaign' do
@@ -435,6 +525,61 @@ RSpec.describe Campaign, type: :model do
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
+
+    describe '#cancel_donations' do
+      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+
+      it 'does not cancel any donations' do
+        campaign.donations.each do |d|
+          expect(d).not_to receive(:cancel)
+        end
+        begin
+          campaign.cancel_donations
+        rescue
+        end
+      end
+
+      it 'raises InvalidCampaignStateError' do
+        expect do
+          campaign.cancel_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
+      end
+
+      it 'does not change the state' do
+        expect do
+          begin
+            campaign.cancel_donations
+          rescue
+          end
+        end.not_to change(campaign, :state)
+      end
+    end
+  end
+
+  context 'for a cancelling campaign' do
+    let (:campaign) { FactoryGirl.create(:cancelling_campaign) }
+    let!(:donation1) { FactoryGirl.create(:collected_donation, campaign: campaign) }
+    let!(:donation2) { FactoryGirl.create(:collected_donation, campaign: campaign) }
+
+    describe '#cancel_donations' do
+      it 'returns true' do
+        expect(campaign.cancel_donations).to be true
+      end
+
+      it 'cancels each donation' do
+        campaign.donations.each do |d|
+          expect(d).to receive(:cancel).and_return true
+        end
+        campaign.cancel_donations
+      end
+
+      it 'changes the state to "cancelled"' do
+        expect do
+          campaign.cancel_donations
+        end.to change(campaign, :state).from('cancelling').to('cancelled')
+      end
+    end
   end
 
   context 'for a collecting campaign' do
@@ -465,6 +610,33 @@ RSpec.describe Campaign, type: :model do
 
         # This won't be implemented until we have readers that can save the credit cards with us
         #it 'does not change the state of the campaign'
+      end
+    end
+
+    describe '#cancel_donations' do
+      it 'does not cancel any donations' do
+        campaign.donations.each do |d|
+          expect(d).not_to receive(:cancel)
+        end
+        begin
+          campaign.cancel_donations
+        rescue
+        end
+      end
+
+      it 'raises InvalidCampaignStateError' do
+        expect do
+          campaign.cancel_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
+      end
+
+      it 'does not change the state' do
+        expect do
+          begin
+            campaign.cancel_donations
+          rescue
+          end
+        end.not_to change(campaign, :state)
       end
     end
   end

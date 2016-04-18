@@ -64,8 +64,7 @@ class Campaign < ActiveRecord::Base
   # If not, the method exists and returns false
   def cancel_donations
     raise Exceptions::InvalidCampaignStateError unless cancelling?
-      result = donations.map(&:cancel).all?
-      finalize_cancellation if result
+    finalize_cancellation if donations.map(&:cancel).all?
   end
 
   # Iterates through the donations and attempts
@@ -78,8 +77,7 @@ class Campaign < ActiveRecord::Base
   # If not, the method exists and returns false
   def collect_donations
     raise Exceptions::InvalidCampaignStateError unless collecting?
-    result = donations.pledged.map(&:collect).all?
-    finalize_collection if result
+    finalize_collection if donations.pledged.map(&:collect).all?
   end
 
   def total_donated
