@@ -85,7 +85,7 @@ class Campaign < ActiveRecord::Base
       result = donations.pledged.map(&:collect).all?
       finalize_collection if result
     else
-      Rails.logger.warn "Campaign#collect_donations called on id=#{id} which is currently in state #{state}. This call has been ignored."
+      Rails.logger.warn "Campaign#collect_donations called on id=#{id}, which is currently in the state '#{state}'. This call has been ignored."
       false
     end
   end
