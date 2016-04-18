@@ -1,0 +1,25 @@
+{
+  "id":"9D221860Y7916343V",
+  "amount": {
+    "currency":"USD",
+    "total":"12.34"
+  },
+  "state":"failed",
+  "sale_id":"8WH11713Y20128235",
+  "parent_payment":"PAY-2KC20852W9650701FK4J3RFY",
+  "create_time":"2016-04-17T16:24:22Z",
+  "update_time":"2016-04-17T16:24:22Z",
+  "links": [{
+    "href":"https://api.sandbox.paypal.com/v1/payments/refund/9D221860Y7916343V",
+    "rel":"self",
+    "method":"GET"
+  },{
+    "href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-2KC20852W9650701FK4J3RFY",
+    "rel":"parent_payment",
+    "method":"GET"
+  },{
+    "href":"https://api.sandbox.paypal.com/v1/payments/sale/8WH11713Y20128235",
+    "rel":"sale",
+    "method":"GET"
+  }]
+}

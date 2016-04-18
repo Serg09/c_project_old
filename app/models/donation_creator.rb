@@ -36,7 +36,6 @@ class DonationCreator
                         :first_name,
                         :last_name,
                         :address_1,
-                        :address_2,
                         :city,
                         :state,
                         :postal_code
@@ -48,7 +47,7 @@ class DonationCreator
   def create!
     return false unless valid?
     transacted_create
-    true
+    @payment.state == PaymentTransaction.APPROVED
   rescue StandardError => e
     Rails.logger.error "The call to the payment provider failed. #{e.class.name} #{e.message}\n#{e.backtrace.join("\n\t")}"
     exceptions << e.message
@@ -129,10 +128,17 @@ class DonationCreator
 
   def create_payment
     @payment = @donation.payments.create!(payment_attributes)
+    @payment_transaction = @payment.transactions.create!(transaction_attributes)
   end
 
   def create_donation
     @donation = campaign.donations.create!(donation_attributes)
+  end
+
+  def donation_state
+    @provider_response.state == PaymentTransaction.APPROVED ?
+      'collected' :
+      'cancelled'
   end
 
   def donation_attributes
@@ -141,7 +147,8 @@ class DonationCreator
       email: email,
       ip_address: ip_address,
       user_agent: user_agent,
-      reward_id: reward_id
+      reward_id: reward_id,
+      state: donation_state
     }
   end
 
@@ -157,8 +164,7 @@ class DonationCreator
   def payment_attributes
     {
       external_id: @provider_response.id,
-      state: @provider_response.state,
-      content: @provider_response.to_json
+      state: @provider_response.state
     }
   end
 
@@ -178,6 +184,14 @@ class DonationCreator
       state: state,
       postal_code: postal_code,
       description: payment_description
+    }
+  end
+
+  def transaction_attributes
+    {
+      intent: PaymentTransaction.SALE,
+      state: @provider_response.state,
+      response: @provider_response.to_json
     }
   end
 

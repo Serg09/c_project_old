@@ -2,11 +2,33 @@
   Campaign progress
 
 .container.container-default
+  -if @campaign.unstarted?
+    .alert.alert-warning{ role: 'alert' }
+      This campaign is has not been started yet. Click the start button to make it active.
+  -if @campaign.collecting?
+    .alert.alert-info{ role: 'alert' }
+      This campaign is closed and the funds are being collected. You will be notified when the collection process is complete.
+  -if @campaign.collected?
+    .alert.alert-info{ role: 'alert' }
+      This campaign is closed and the funds have been collected.
+  -if @campaign.cancelled? || @campaign.cancelling?
+    .alert.alert-danger{ role: 'alert' }
+      This campaign was cancelled and the funds were not collected.
   .row
     .col-md-12
       %h2= @campaign.book.approved_version.title
   .row
-    .col-md-6
+    .col-md-3
       =render 'progress_table'
-    .col-md-6
+    .col-md-5
+      =render 'donations/table', campaign: @campaign, donations: @donations, total_pledged: @total_pledged, total_collected: @total_collected
+      =will_paginate @donations, renderer: BootstrapPagination::Rails, param_name: :donations_page
+    .col-md-2.text-center
       =render_progress_meter @campaign.current_progress
+    .col-md-2
+      -if @campaign.active?
+        .btn-group-vertical
+          =link_to 'Collect', collect_campaign_path(@campaign), method: :patch, class: 'btn btn-success', title: 'Click here to collect the donations for this campaign.'
+          =link_to 'Cancel', cancel_campaign_path(@campaign), method: :patch, class: 'btn btn-danger', title: 'Click here to cancel this campaign.', 'data-confirm' => 'Are you sure you want to cancel this campaign?'
+  .row
+    =link_to 'Back', book_campaigns_path(@campaign.book_id), class: 'btn btn-default', title: 'Click here to return to the list of campaigns.'

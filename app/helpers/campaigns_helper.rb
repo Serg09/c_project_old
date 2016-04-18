@@ -1,11 +1,11 @@
 module CampaignsHelper
   def campaign_row_class(campaign)
-    if campaign.active?
+    if campaign.collected?
       'success'
-    elsif campaign.paused?
-      'warning'
-    else
+    elsif campaign.cancelled?
       'danger'
+    elsif campaign.cancelling? || campaign.collecting?
+      'warning'
     end
   end
 end

@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_filter :authenticate_author!
-  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :pause, :unpause]
+  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :start, :collect, :cancel]
   before_filter :load_book, only: [:index, :new, :create]
 
   respond_to :html
@@ -24,6 +24,9 @@ class CampaignsController < ApplicationController
 
   def show
     authorize! :show, @campaign
+    @donations = @campaign.donations.paginate(page: params[:donations_page], per_page: 8)
+    @total_pledged = @campaign.donations.sum(:amount)
+    @total_collected = @campaign.donations.collected.sum(:amount)
   end
 
   def edit
@@ -37,18 +40,28 @@ class CampaignsController < ApplicationController
     respond_with @campaign, location: book_campaigns_path(@campaign.book)
   end
 
-  def pause
+  def start
     authorize! :update, @campaign
-    @campaign.paused = true
-    flash[:notice] = 'The campaign was paused successfully.' if @campaign.save
-    redirect_to books_path
+    flash[:notice] = 'The campaign was started successfully.' if @campaign.start
+    redirect_to campaign_path(@campaign)
   end
 
-  def unpause
+  def collect
     authorize! :update, @campaign
-    @campaign.paused = false
-    flash[:notice] = 'The campaign was unpaused successfully.' if @campaign.save
-    redirect_to books_path
+    if @campaign.collect
+      flash[:notice] = 'The campaign was closed successfully.'
+      CampaignMailer.collecting(@campaign).deliver_now
+    end
+    redirect_to campaign_path(@campaign)
+  end
+
+  def cancel
+    authorize! :update, @campaign
+    if @campaign.cancel
+      flash[:notice] = 'The campaign was cancelled successfully.'
+      CampaignMailer.cancelled(@campaign).deliver_now
+    end
+    redirect_to campaign_path(@campaign)
   end
 
   def destroy
@@ -61,17 +74,17 @@ class CampaignsController < ApplicationController
 
   def campaign_params
     params.require(:campaign).
-      permit(:target_date, :target_amount, :paused).
+      permit(:target_date, :target_amount).
       tap do |params|
         params['target_date'] = Chronic.parse(params['target_date'])
     end
   end
 
   def load_book
-    @book = current_author.books.find(params[:book_id])
+    @book = Book.find(params[:book_id])
   end
 
   def load_campaign
-    @campaign = current_author.campaigns.find(params[:id])
+    @campaign = Campaign.find(params[:id])
   end
 end

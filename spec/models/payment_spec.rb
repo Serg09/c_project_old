@@ -7,7 +7,6 @@ RSpec.describe Payment, type: :model do
       donation_id: donation.id,
       external_id: 'PAY-17S8410768582940NKEE66EQ',
       state: 'approved',
-      content: File.read(Rails.root.join('spec', 'fixtures', 'files', 'payment.json'))
     }
   end
 
@@ -23,10 +22,23 @@ RSpec.describe Payment, type: :model do
     end
   end
 
+  describe '#donation' do
+    it 'is a reference to the donation to which the payment belongs' do
+      payment = Payment.new attributes
+      expect(payment.donation.id).to be donation.id
+    end
+  end
+
   describe '#external_id' do
     it 'is required' do
       payment = Payment.new attributes.except(:external_id)
       expect(payment).to have_at_least(1).error_on :external_id
+    end
+
+    it 'is unique' do
+      p1 = Payment.create! attributes
+      p2 = Payment.new attributes
+      expect(p2).to have_at_least(1).error_on :external_id
     end
   end
 
@@ -37,10 +49,40 @@ RSpec.describe Payment, type: :model do
     end
   end
 
-  describe '#content' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:content)
-      expect(payment).to have_at_least(1).error_on :content
+  describe '#transactions' do
+    let (:payment) { FactoryGirl.create(:approved_payment) }
+    it 'contains a list of transactions with the payment provider' do
+      expect(payment.transactions.count).to eq 1
+    end
+  end
+
+  describe '#sale_id' do
+    let (:payment) { FactoryGirl.create(:approved_payment, sale_id: 'ABC123') }
+    it 'returns the first sale ID found  in the transaction content' do
+      expect(payment.sale_id).to eq 'ABC123'
+    end
+  end
+
+  shared_context :stateful_payments do
+    let!(:approved1) { FactoryGirl.create(:approved_payment) }
+    let!(:approved2) { FactoryGirl.create(:approved_payment) }
+    let!(:failed1) { FactoryGirl.create(:failed_payment) }
+    let!(:failed2) { FactoryGirl.create(:failed_payment) }
+  end
+
+  describe '::approved' do
+    include_context :stateful_payments
+
+    it 'returns all payments where the state is "approved"' do
+      expect(Payment.approved.map(&:id)).to eq [approved1.id, approved2.id]
+    end
+  end
+
+  describe '::failed' do
+    include_context :stateful_payments
+
+    it 'returns all payments where the state is "failed"' do
+      expect(Payment.failed.map(&:id)).to eq [failed1.id, failed2.id]
     end
   end
 end

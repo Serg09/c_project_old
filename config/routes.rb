@@ -1,4 +1,9 @@
+require 'resque_web'
+
 Rails.application.routes.draw do
+
+  mount ResqueWeb::Engine => '/resque_web'
+
   devise_for :administrators, path: 'admin', controllers: {
     sessions: 'admin/sessions'
   }
@@ -23,11 +28,12 @@ Rails.application.routes.draw do
   resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
   resources :campaigns, only: [:show, :edit, :update, :destroy] do
-    resources :donations, only: [:new, :create, :index]
+    resources :donations, only: [:new, :create]
     resources :rewards, only: [:new, :create]
     member do
-      patch :pause
-      patch :unpause
+      patch :start
+      patch :collect
+      patch :cancel
     end
   end
   resources :donations, only: [:show]

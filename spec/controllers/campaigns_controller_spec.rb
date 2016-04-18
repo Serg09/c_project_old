@@ -11,6 +11,9 @@ RSpec.describe CampaignsController, type: :controller do
     }
   end
 
+  before(:each) { Timecop.freeze(Chronic.parse('2016-03-02 12:00:00 CST')) }
+  after(:each) { Timecop.return }
+
   context 'for an authenticated author' do
     context 'that owns the book' do
       before(:each) { sign_in author  }
@@ -70,35 +73,53 @@ RSpec.describe CampaignsController, type: :controller do
         end
       end
 
-      context 'for an active campaign' do
-        let!(:campaign) { FactoryGirl.create(:campaign, book: book, paused: false) }
+      context 'for an unstarted campaign' do
+        let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
 
-        describe 'patch :pause' do
-          it 'redirects to the book index page' do
-            patch :pause, id: campaign
-            expect(response).to redirect_to books_path
+        describe 'patch :start' do
+          it 'redirects to the campaign progress page' do
+            patch :start, id: campaign
+            expect(response).to redirect_to campaign_path(campaign)
           end
 
-          it 'changes the paused value to true' do
+          it 'changes the state to active' do
             expect do
-              patch :pause, id: campaign
+              patch :start, id: campaign
               campaign.reload
-            end.to change(campaign, :paused).from(false).to(true)
+            end.to change(campaign, :state).from('unstarted').to('active')
           end
         end
       end
 
-      describe 'patch :unpause' do
-        it 'redirects to the book index page' do
-          patch :unpause, id: campaign
-          expect(response).to redirect_to books_path
+      context 'for an active campaign' do
+        let!(:campaign) { FactoryGirl.create(:active_campaign, book: book) }
+
+        describe 'patch :collect' do
+          it 'redirects to the campaign progress page' do
+            patch :collect, id: campaign
+            expect(response).to redirect_to campaign_path(campaign)
+          end
+
+          it 'changes the state to "collecting"' do
+            expect do
+              patch :collect, id: campaign
+              campaign.reload
+            end.to change(campaign, :state).from('active').to('collecting')
+          end
         end
 
-        it 'changes the paused value to false' do
-          expect do
-            patch :unpause, id: campaign
-            campaign.reload
-          end.to change(campaign, :paused).from(true).to(false)
+        describe 'patch :cancel' do
+          it 'redirects to the campaign progress page' do
+            patch :cancel, id: campaign
+            expect(response).to redirect_to campaign_path(campaign)
+          end
+
+          it 'changes the campaign state to "cancelling"' do
+            expect do
+              patch :cancel, id: campaign
+              campaign.reload
+            end.to change(campaign, :state).from('active').to('cancelling')
+          end
         end
       end
 
@@ -122,26 +143,23 @@ RSpec.describe CampaignsController, type: :controller do
       before(:each) { sign_in other_author  }
 
       describe "get :index" do
-        it "redirects to the 404 error page" do
-          expect do
-            get :index, book_id: book
-          end.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the author root page" do
+          get :index, book_id: book
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe "get :new" do
-        it "redirects to the 404 error page" do
-          expect do
-            get :new, book_id: book
-          end.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the author root page" do
+          get :new, book_id: book
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe "post :create" do
-        it "redirects to the 404 error page" do
-          expect do
-            post :create, book_id: book, campaign: attributes
-          end.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the author root page" do
+          post :create, book_id: book, campaign: attributes
+          expect(response).to redirect_to author_root_path
         end
 
         it 'does not create a new campain record' do
@@ -155,26 +173,23 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe "get :show" do
-        it "redirects to the 404 error page" do
-          expect do
-            get :show, id: campaign
-          end.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the author root page" do
+          get :show, id: campaign
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe "get :edit" do
-        it "redirects to the 404 error page" do
-          expect do
+        it "redirects to the author root page" do
             get :edit, id: campaign
-          end.to raise_error ActiveRecord::RecordNotFound
+          expect(response).to redirect_to author_root_path
         end
       end
 
       describe "patch :update" do
-        it "redirects to the 404 error page" do
-          expect do
-            patch :update, id: campaign, campaign: attributes
-          end.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the author root page" do
+          patch :update, id: campaign, campaign: attributes
+          expect(response).to redirect_to author_root_path
         end
 
         it 'does not update the campaign' do
@@ -188,47 +203,50 @@ RSpec.describe CampaignsController, type: :controller do
         end
       end
 
-      describe 'patch :pause' do
-        it 'redirects to the 404 error page' do
-          expect do
-            patch :pause, id: campaign
-          end.to raise_error ActiveRecord::RecordNotFound
+      describe 'patch :start' do
+        it 'redirects to the author home page' do
+          patch :start, id: campaign
+          expect(response).to redirect_to author_root_path
         end
 
-        it 'does not change the paused value' do
+        it 'does not change the state of the campaign' do
           expect do
-            begin
-              patch :pause, id: campaign
-              campaign.reload
-            rescue ActiveRecord::RecordNotFound
-            end
-          end.not_to change(campaign, :paused)
+            patch :start, id: campaign
+          end.not_to change(campaign, :state)
         end
       end
 
-      describe 'patch :unpause' do
-        it 'redirects to the 404 error page' do
-          expect do
-            patch :unpause, id: campaign
-          end.to raise_error ActiveRecord::RecordNotFound
+      describe 'patch :collect' do
+        it 'redirects to the author root page' do
+          patch :collect, id: campaign
+          expect(response).to redirect_to author_root_path
         end
 
-        it 'does not change the paused value' do
+        it 'does not change the state of the campaign' do
           expect do
-            begin
-              patch :unpause, id: campaign
-              campaign.reload
-            rescue ActiveRecord::RecordNotFound
-            end
-          end.not_to change(campaign, :paused)
+            patch :collect, id: campaign
+          end.not_to change(campaign, :state)
+        end
+      end
+
+      describe 'patch :cancel' do
+        it 'redirects to the author root page' do
+          patch :cancel, id: campaign
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the campaign state' do
+          expect do
+            patch :cancel, id: campaign
+            campaign.reload
+          end.not_to change(campaign, :state)
         end
       end
 
       describe "delete :destroy" do
-        it "redirects to the 404 error page" do
-          expect do
-            delete :destroy, id: campaign
-          end.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the author root page" do
+          delete :destroy, id: campaign
+          expect(response).to redirect_to author_root_path
         end
 
         it 'does not remove the campaign record' do
@@ -260,7 +278,7 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe "post :create" do
-      it "redirects to the index page" do
+      it "redirects to the author sign in page" do
         post :create, book_id: book
         expect(response).to redirect_to new_author_session_path
       end
@@ -300,31 +318,43 @@ RSpec.describe CampaignsController, type: :controller do
       end
     end
 
-    describe 'patch :pause' do
-      it 'redirects to the sign in page' do
-        patch :pause, id: campaign
+    describe 'patch :start' do
+      it 'redirects to the author sign in page' do
+        patch :start, id: campaign
         expect(response).to redirect_to new_author_session_path
       end
 
-      it 'does not change the paused value' do
+      it 'does not change the state of the campaign' do
         expect do
-          patch :pause, id: campaign
-          campaign.reload
-        end.not_to change(campaign, :paused)
+          patch :start, id: campaign
+        end.not_to change(campaign, :state)
       end
     end
 
-    describe 'patch :unpause' do
-      it 'redirects to the sign in page' do
-        patch :unpause, id: campaign
+    describe 'patch :collect' do
+      it 'redirects to the author sign in page' do
+        patch :collect, id: campaign
         expect(response).to redirect_to new_author_session_path
       end
 
-      it 'does not change the paused value' do
+      it 'does not change the state of the campaign' do
         expect do
-          patch :unpause, id: campaign
+          patch :collect, id: campaign
+        end.not_to change(campaign, :state)
+      end
+    end
+
+    describe 'patch :cancel' do
+      it 'redirects to the author sign in page' do
+        patch :cancel, id: campaign
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the campaign state' do
+        expect do
+          patch :cancel, id: campaign
           campaign.reload
-        end.not_to change(campaign, :paused)
+        end.not_to change(campaign, :state)
       end
     end
 

@@ -59,7 +59,7 @@ When /^I select (?:the )?file "([^"]+)" for "([^"]+)"$/ do |file_name, locator|
   attach_file(locator, Rails.root.join('features', 'resources', file_name))
 end
 
-Given /^today is (#{DATE})$/ do |date|
+Given /^(?:today|it) is (#{DATE})$/ do |date|
   date_time_string = "#{date} 12:00:00 Central (US & Canada)"
   date_time = Chronic.parse(date_time_string)
   Timecop.freeze(date_time)

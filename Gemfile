@@ -36,6 +36,10 @@ gem 'rmagick'
 gem 'puma'
 gem 'chronic'
 gem 'paypal-sdk-rest'
+gem 'state_machine'
+gem 'resque'
+gem 'resque-scheduler'
+gem 'resque-web', require: 'resque_web'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -62,6 +66,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'annotate'
+  gem 'rails-erd'
+  gem 'foreman'
 end
 
 group :test do

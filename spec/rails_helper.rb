@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'action_mailer'
 require 'email_spec'
+require 'helpers'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -60,4 +61,35 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include Devise::TestHelpers, type: :view
+  config.include Helpers
+
+  # Redis
+
+  REDIS_PID = Rails.root.join('tmp', 'pids', 'redis-test.pid')
+  REDIS_CACHE_PATH = Rails.root.join('tmp', 'cache')
+
+  config.before(:suite) do
+    redis_options = {
+      "daemonize"     => 'yes',
+      "pidfile"       => REDIS_PID,
+      "port"          => 9736,
+      "timeout"       => 300,
+      "save 900"      => 1,
+      "save 300"      => 1,
+      "save 60"       => 10000,
+      "dbfilename"    => "dump.rdb",
+      "dir"           => REDIS_CACHE_PATH,
+      "loglevel"      => "debug",
+      "logfile"       => "stdout",
+      "databases"     => 16
+    }.map{|k,v| "#{k} \"#{v}\""}.join("\n")
+    `echo '#{redis_options}' | redis-server -`
+  end
+
+  config.after(:suite) do
+    %x{
+      cat "#{REDIS_PID}" | xargs kill -QUIT
+      rm -f "#{REDIS_CACHE_PATH}/dump.rdb"
+    }
+  end
 end

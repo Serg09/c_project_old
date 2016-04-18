@@ -12,3 +12,6 @@
 
 # Ignore edit shadow copies
 *~
+
+# ignore redis files?
+*.rdb

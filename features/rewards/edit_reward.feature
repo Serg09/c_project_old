@@ -7,7 +7,7 @@ Feature: Edit a reward
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
     And author john@doe.com has a book titled "Giving It Away"
-    And book "Giving It Away" has a campaign targeting $1,000 by 4/30/2016
+    And book "Giving It Away" has an unstarted campaign targeting $1,000 by 4/30/2016
     And I am signed in as an author with "john@doe.com/please01"
 
   Scenario: An author edits an existing author-fulfilled reward

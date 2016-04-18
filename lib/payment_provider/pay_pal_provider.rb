@@ -38,11 +38,51 @@ module PaymentProvider
       Payment.find(payment.id)
     end
 
+    # Sample refund response
+    #{
+    #  "id":"9D221860Y7916343V",
+    #  "amount": {
+    #    "currency":"USD",
+    #    "total":"12.34"
+    #  },
+    #  "state":"completed",
+    #  "sale_id":"8WH11713Y20128235",
+    #  "parent_payment":"PAY-2KC20852W9650701FK4J3RFY",
+    #  "create_time":"2016-04-17T16:24:22Z",
+    #  "update_time":"2016-04-17T16:24:22Z",
+    #  "links": [{
+    #    "href":"https://api.sandbox.paypal.com/v1/payments/refund/9D221860Y7916343V",
+    #    "rel":"self",
+    #    "method":"GET"
+    #  },{
+    #    "href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-2KC20852W9650701FK4J3RFY",
+    #    "rel":"parent_payment",
+    #    "method":"GET"
+    #  },{
+    #    "href":"https://api.sandbox.paypal.com/v1/payments/sale/8WH11713Y20128235",
+    #    "rel":"sale",
+    #    "method":"GET"
+    #  }]
+    #}
+
+    def refund(sale_id, amount)
+      sale = Sale.find(sale_id)
+      sale.refund({
+        amount: {
+          currency: PayPalProvider.USD,
+          total: "%.2f" % amount #TODO subtract an amount to cover payment provider fees?
+        }
+      })
+    rescue => e
+      Rails.logger.error "Unable to complete the refund of sale #{sale_id}. #{e.class.name}: #{e.message}"
+      nil
+    end
+
     private
 
     def payment_attributes(attributes)
       {
-        intent: PayPalProvider.AUTHORIZE,
+        intent: PayPalProvider.SALE,
         payer: payer_attributes(attributes),
         transactions: transactions_attributes(attributes)
       }
