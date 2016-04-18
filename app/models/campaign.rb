@@ -54,7 +54,25 @@ class Campaign < ActiveRecord::Base
     book.try(:author)
   end
 
-  # Iterates through the donations and attemps
+  # Iterates through the donations and attempts
+  # to cancel each
+  #
+  # Returns true if successful in cancelling all
+  # donations. Otherwise returns false.
+  #
+  # The campaign must be in the 'cancelling' state.
+  # If not, the method exists and returns false
+  def cancel_donations
+    if cancelling?
+      result = donations.map(&:cancel).all?
+      finalize_cancellation if result
+    else
+      Rails.logger.warn "Campaign#cancel_donations called on id=#{id}, which is currently in the state #{state}. This call has been ignored."
+      false
+    end
+  end
+
+  # Iterates through the donations and attempts
   # to collect payment on each.
   #
   # Returns true if success in collecting from all
