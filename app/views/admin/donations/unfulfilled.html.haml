@@ -1,0 +1,31 @@
+=content_for :page_title do
+  Reward fulfillment
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#rewards-table.table.table-striped
+        %tr
+          %th Book
+          %th Reward
+          %th Delivery
+          %th &nbsp;
+        -@donations.each do |donation|
+          %tr
+            %td= donation.campaign.book.administrative_title
+            %td= donation.reward.description
+            %td
+              -if donation.reward.house_reward.physical_address_required?
+                =donation.address.recipient
+                %br
+                =donation.address.line1
+                -if donation.address.line2
+                  %br
+                  =donation.address.line2
+                %br
+                #{h donation.address.city}, #{h donation.address.state}  #{h donation.address.postal_code}
+              -else
+                =donation.email
+            %td
+              =link_to fulfill_admin_donation_path(donation), class: 'btn btn-xs btn-success', title: 'Click here to mark this reward has having been fulfilled.' do
+                %span.glyphicon.glyphicon-ok{ 'aria-hidden' => true }

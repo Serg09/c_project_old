@@ -18,6 +18,7 @@ class Donation < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :reward
   has_many :payments
+  has_many :transactions, through: :payments
 
   validates_presence_of :campaign_id, :email, :amount, :ip_address, :user_agent
   validates_numericality_of :amount, greater_than: 0
@@ -39,6 +40,19 @@ class Donation < ActiveRecord::Base
       transition [:pledged, :collected] => :cancelled
     end
     state :pledged, :collected, :cancelled
+  end
+
+  def address
+    # Making an assumption that the billing address is the
+    # same as the shipping address. Should really make that
+    # explicit
+    @address ||= transactions.lazy.map do |tx|
+      data = JSON.parse(tx.response, symbolize_names: true)
+      payer = data[:payer]
+      credit_card = payer[:funding_instruments].first[:credit_card]
+      address = OpenStruct.new(credit_card[:billing_address].
+                               merge(recipient: "#{credit_card[:first_name]} #{credit_card[:last_name]}"))
+    end.first
   end
 
   def create_payment

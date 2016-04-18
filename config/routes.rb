@@ -69,6 +69,9 @@ Rails.application.routes.draw do
       collection do
         get :unfulfilled
       end
+      member do
+        patch :fulfill
+      end
     end
   end
 
