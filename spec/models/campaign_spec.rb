@@ -266,11 +266,16 @@ RSpec.describe Campaign, type: :model do
         campaign.donations.each do |donation|
           expect(donation).not_to receive(:collect)
         end
-        campaign.collect_donations
+        begin
+          campaign.collect_donations
+        rescue
+        end
       end
 
-      it 'returns false' do
-        expect(campaign.collect_donations).to be false
+      it 'raises InvalidCampaignStateError' do
+        expect do
+          campaign.collect_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
   end
@@ -314,11 +319,16 @@ RSpec.describe Campaign, type: :model do
         campaign.donations.each do |donation|
           expect(donation).not_to receive(:collect)
         end
-        campaign.collect_donations
+        begin
+          campaign.collect_donations
+        rescue
+        end
       end
 
       it 'returns false' do
-        expect(campaign.collect_donations).to be false
+        expect do
+          campaign.collect_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
   end
@@ -365,11 +375,16 @@ RSpec.describe Campaign, type: :model do
         campaign.donations.each do |donation|
           expect(donation).not_to receive(:collect)
         end
-        campaign.collect_donations
+        begin
+          campaign.collect_donations
+        rescue
+        end
       end
 
       it 'returns false' do
-        expect(campaign.collect_donations).to be false
+        expect do
+          campaign.collect_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
   end
@@ -408,11 +423,16 @@ RSpec.describe Campaign, type: :model do
         campaign.donations.each do |donation|
           expect(donation).not_to receive(:collect)
         end
-        campaign.collect_donations
+        begin
+          campaign.collect_donations
+        rescue
+        end
       end
 
       it 'returns false' do
-        expect(campaign.collect_donations).to be false
+        expect do
+          campaign.collect_donations
+        end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
   end
