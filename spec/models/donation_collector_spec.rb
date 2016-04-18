@@ -49,5 +49,20 @@ describe DonationCollector do
     #    it 'writes a WARNING entry to the log, indicating completion with partial success'
     #  end
     #end
+
+    context 'for a campaign that is not in the collecting state' do
+      let (:campaign) { FactoryGirl.create(:collected_campaign) }
+
+      it 'writes a warning to the log' do
+        allow(Rails.logger).to receive(:warn)
+        expect(Rails.logger).to receive(:warn).with(/Campaign#collect_donations .* ignored/)
+        DonationCollector.perform(campaign.id)
+      end
+
+      it 'does not re-enqueue the job for reprocessing' do
+        expect(Resque).not_to receive(:enqueue_in)
+        DonationCollector.perform(campaign.id)
+      end
+    end
   end
 end

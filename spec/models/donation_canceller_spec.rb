@@ -60,5 +60,18 @@ describe DonationCanceller do
         end
       end
     end
+
+    context 'for a campaign that is not in the cancelling state' do
+      it 'writes a warning to the log' do
+        allow(Rails.logger).to receive(:warn)
+        expect(Rails.logger).to receive(:warn).with(/Campaign#cancel_donations .* ignored/)
+        DonationCanceller.perform(campaign.id)
+      end
+
+      it 'does not re-enqueue the job for reprocessing' do
+        expect(Resque).not_to receive(:enqueue_in)
+        DonationCanceller.perform(campaign.id)
+      end
+    end
   end
 end
