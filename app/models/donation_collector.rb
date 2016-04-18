@@ -9,8 +9,10 @@ class DonationCollector
     campaign = Campaign.find(campaign_id)
     unless campaign.collect_donations
       if attempt_number < maximum_attempt_count
+        Rails.logger.warn "At least one donation could not be collected for #{campaign_id}. Trying again at #{2.hours.from_now}"
         Resque.enqueue_in(2.hours, DonationCollector, campaign_id, attempt_number + 1)
       else
+        Rails.logger.warn "At least one donation could not be collected for #{campaign_id}. The maximum number of retries has been reaching. Finalizing the collection now."
         campaign.finalize_collection
       end
     end
