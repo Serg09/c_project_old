@@ -1,4 +1,9 @@
+require 'resque_web'
+
 Rails.application.routes.draw do
+
+  mount ResqueWeb::Engine => '/resque_web'
+
   devise_for :administrators, path: 'admin', controllers: {
     sessions: 'admin/sessions'
   }

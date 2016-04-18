@@ -39,6 +39,7 @@ gem 'paypal-sdk-rest'
 gem 'state_machine'
 gem 'resque'
 gem 'resque-scheduler'
+gem 'resque-web', require: 'resque_web'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
