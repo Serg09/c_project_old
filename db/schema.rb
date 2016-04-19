@@ -162,7 +162,7 @@ ActiveRecord::Schema.define(version: 20160419144512) do
     t.datetime "updated_at",                               null: false
   end
 
-  add_index "fulfillments", ["donation_id"], name: "index_fulfillments_on_donation_id", using: :btree
+  add_index "fulfillments", ["donation_id"], name: "index_fulfillments_on_donation_id", unique: true, using: :btree
   add_index "fulfillments", ["reward_id"], name: "index_fulfillments_on_reward_id", using: :btree
 
   create_table "genres", force: :cascade do |t|

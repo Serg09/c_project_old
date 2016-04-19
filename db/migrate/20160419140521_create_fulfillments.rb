@@ -14,7 +14,7 @@ class CreateFulfillments < ActiveRecord::Migration
       t.boolean :delivered, null: false, default: false
 
       t.timestamps null: false
-      t.index :donation_id
+      t.index :donation_id, unique: true
       t.index :reward_id
     end
   end
