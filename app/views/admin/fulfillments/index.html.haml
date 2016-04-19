@@ -16,7 +16,8 @@
             %td= fulfillment.reward.description
             %td
               -if fulfillment.is_a? PhysicalFulfillment
-                -#=fulfillment.recipient
+                =fulfillment.first_name
+                =fulfillment.last_name
                 %br
                 =fulfillment.address1
                 -if fulfillment.address2

@@ -21,7 +21,9 @@
 class Fulfillment < ActiveRecord::Base
   belongs_to :donation
   belongs_to :reward
-  validates_presence_of :donation_id, :reward_id
+  validates_presence_of :donation_id, :reward_id, :first_name, :last_name
+  validates_length_of :first_name, maximum: 100
+  validates_length_of :last_name, maximum: 100
 
   scope :delivered, ->{where(delivered: true)}
   scope :undelivered, ->{where(delivered: false)}

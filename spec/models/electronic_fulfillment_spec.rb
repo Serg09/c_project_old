@@ -7,7 +7,9 @@ RSpec.describe ElectronicFulfillment, type: :model do
     {
       donation_id: donation.id, 
       reward_id: reward.id,
-      email: 'john@doe.com'
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe'
     }
   end
 
@@ -41,6 +43,30 @@ RSpec.describe ElectronicFulfillment, type: :model do
     it 'is a reference to the reward the donor earned with the donation' do
       fulfillment = ElectronicFulfillment.new attributes
       expect(fulfillment.reward).to eq reward
+    end
+  end
+
+  describe '#first_name' do
+    it 'is required' do
+      fulfillment = ElectronicFulfillment.new attributes.except(:first_name)
+      expect(fulfillment).to have_at_least(1).error_on :first_name
+    end
+
+    it 'cannot be more than 100 characters' do
+      fulfillment = ElectronicFulfillment.new attributes.merge(first_name: 'a' * 101)
+      expect(fulfillment).to have_at_least(1).error_on :first_name
+    end
+  end
+
+  describe '#last_name' do
+    it 'is required' do
+      fulfillment = ElectronicFulfillment.new attributes.except(:last_name)
+      expect(fulfillment).to have_at_least(1).error_on :last_name
+    end
+
+    it 'cannot be more than 100 characters' do
+      fulfillment = ElectronicFulfillment.new attributes.merge(last_name: 'a' * 101)
+      expect(fulfillment).to have_at_least(1).error_on :last_name
     end
   end
 

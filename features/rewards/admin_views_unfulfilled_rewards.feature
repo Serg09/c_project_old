@@ -17,9 +17,9 @@ Feature: View unfulfilled rewards
       | Printed copy of the book    | Printed copy of the book    |
       | Electronic copy of the book | Electronic copy of the book |
     And the campaign for the book "How To Raise Money" has received the following donations
-      | Email               | Amount | Reward                      | Address                                 |
-      | sally@readerton.com |    100 | Printed copy of the book    | 1234 Main St, Apt 27, Dallas, TX  75200 |
-      | billy@bookwork.com  |    150 | Electronic copy of the book | 4321 Elm St, Dallas, TX 75201           |
+      | Email               | Amount | Reward                      | Address                                 | Name            |
+      | sally@readerton.com |    100 | Printed copy of the book    | 1234 Main St, Apt 27, Dallas, TX  75200 | Sally Readerton |
+      | billy@bookwork.com  |    150 | Electronic copy of the book | 4321 Elm St, Dallas, TX 75201           | Billy Bookworm  |
     And the campaign for the book "How To Raise Money" is collected
 
     And there is a book titled "How To Spend Money"
@@ -29,9 +29,9 @@ Feature: View unfulfilled rewards
       | Printed copy of the book | Printed copy of the book    |
       | Signed T-Shirt           |                             |
     And the campaign for the book "How To Spend Money" has received the following donations
-      | Email               | Amount | Reward                      | Address                                 |
-      | sally@readerton.com |    75  | Signed T-Shirt              | 1234 Main St, Apt 27, Dallas, TX  75200 |
-      | billy@bookwork.com  |    200 | Printed copy of the book    | 4321 Elm St, Dallas, TX 75201           |
+      | Email               | Amount | Reward                      | Address                                 | Name            |
+      | sally@readerton.com |    75  | Signed T-Shirt              | 1234 Main St, Apt 27, Dallas, TX  75200 | Sally Readerton |
+      | billy@bookwork.com  |    200 | Printed copy of the book    | 4321 Elm St, Dallas, TX 75201           | Billy Bookworm  |
     And the campaign for the book "How To Spend Money" is collected
 
     And there is a book titled "Money Stuff"
@@ -40,8 +40,8 @@ Feature: View unfulfilled rewards
       | Description                 | 
       | Printed copy of the book    |
     And the campaign for the book "Money Stuff" has received the following donations
-      | Email               | Amount | Reward                      | Address                       |
-      | billy@bookwork.com  |     50 | Printed copy of the book    | 4321 Elm St, Dallas, TX 75201 |
+      | Email               | Amount | Reward                      | Address                       | Name           |
+      | billy@bookwork.com  |     50 | Printed copy of the book    | 4321 Elm St, Dallas, TX 75201 | Billy Bookworm |
     And the campaign for the book "Money Stuff" is collected
     And the campaign for the book "Money Stuff" is active
 

@@ -162,7 +162,9 @@ class DonationCreator
     {
       donation_id: @donation.id,
       reward_id: @reward.id,
-      email: email
+      email: email,
+      first_name: first_name,
+      last_name: last_name
     }
   end
 
@@ -186,6 +188,8 @@ class DonationCreator
     {
       donation_id: @donation.id,
       reward_id: @reward.id,
+      first_name: first_name,
+      last_name: last_name,
       address1: address_1,
       address2: address_2,
       city: city,

@@ -9,8 +9,12 @@ Given /^the (#{CAMPAIGN}) has received the following donations$/ do |campaign, t
     end
     reward_description = values.delete(:reward)
     address_string = values.delete(:address)
+    name_string = values.delete(:name)
+    email = values.delete(:email)
+
     donation = FactoryGirl.create(:donation, values.merge(campaign: campaign))
-    address = address_string.present? ? parse_address(address_string) : nil
+
+    address = address_string.present? ? parse_address(address_string) : {}
     if address
       FactoryGirl.create(:payment, donation: donation,
                                    address_1: address[:line1],
@@ -25,20 +29,26 @@ Given /^the (#{CAMPAIGN}) has received the following donations$/ do |campaign, t
     if reward_description.present?
       reward = campaign.rewards.find_by(description: reward_description)
       expect(reward).not_to be_nil
+      name = name_string.present? ? /\A(?<first_name>\S+) (?<last_name>.*)\z/.match(name_string) : {}
+      
+      puts reward.inspect
+
       if reward.physical_address_required?
-        if address
-          FactoryGirl.create(:physical_fulfillment, donation: donation,
-                                                    reward: reward,
-                                                    address1: address[:line1],
-                                                    address2: address[:line2],
-                                                    city: address[:city],
-                                                    state: address[:state],
-                                                    postal_code: address[:postal_code])
-        else
-          FactoryGirl.create(:physical_fulfillment, donation: donation, reward: reward)
-        end
+        FactoryGirl.create(:physical_fulfillment, donation: donation,
+                                                  reward: reward,
+                                                  first_name: name[:first_name],
+                                                  last_name: name[:last_name],
+                                                  address1: address[:line1],
+                                                  address2: address[:line2],
+                                                  city: address[:city],
+                                                  state: address[:state],
+                                                  postal_code: address[:postal_code])
       else
-        FactoryGirl.create(:electronic_fulfillment, donation: donation, reward: reward)
+        FactoryGirl.create(:electronic_fulfillment, donation: donation,
+                                                    reward: reward,
+                                                    email: email,
+                                                    first_name: name[:first_name],
+                                                    last_name: name[:last_name])
       end
     end
   end
