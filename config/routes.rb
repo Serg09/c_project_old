@@ -65,10 +65,7 @@ Rails.application.routes.draw do
     end
     resources :campaigns, only: [:index, :show]
     resources :house_rewards
-    resources :donations, only: [] do
-      collection do
-        get :unfulfilled
-      end
+    resources :fulfillments, only: [:index] do
       member do
         patch :fulfill
       end

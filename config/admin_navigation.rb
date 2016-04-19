@@ -37,7 +37,7 @@ SimpleNavigation::Configuration.run do |navigation|
       inquiries.item :archived, 'Archived', admin_inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
     end
     primary.item :rewards, 'Rewards', admin_house_rewards_path
-    primary.item :reward_fulfillment, 'Reward fulfillment', unfulfilled_admin_donations_path
+    primary.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path
     primary.item :administrators, 'Administrators', '/', if: ->{administrator_signed_in?}
     primary.item :sign_out, 'Sign out', destroy_administrator_session_path, if: -> { administrator_signed_in? }, method: :delete
   end

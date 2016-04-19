@@ -22,4 +22,7 @@ class Fulfillment < ActiveRecord::Base
   belongs_to :donation
   belongs_to :reward
   validates_presence_of :donation_id, :reward_id
+
+  scope :delivered, ->{where(delivered: true)}
+  scope :undelivered, ->{where(delivered: false)}
 end
