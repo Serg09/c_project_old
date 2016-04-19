@@ -18,26 +18,21 @@ class ExtractFulfillments < ActiveRecord::Migration
       end
     end
 
-    remove_column :donations, :email
     remove_column :donations, :reward_id
   end
 
   def down
     change_table :donations do |t|
-      t.string :email
       t.integer :reward_id
     end
 
     ElectronicFulfillment.all.each do |f|
       f.donation.reward_id = f.reward_id
-      f.donation.email = f.email
       f.donation.save!
     end
     PhysicalFulfillment.all.each do |f|
       f.donation.reward_id = f.reward_id
-      f.donation.email = f.email
       f.donation.save!
     end
-    change_column :donations, :email, :string, limit: 100
   end
 end

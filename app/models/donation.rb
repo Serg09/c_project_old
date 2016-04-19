@@ -19,6 +19,7 @@ class Donation < ActiveRecord::Base
   belongs_to :reward
   has_many :payments
   has_many :transactions, through: :payments
+  has_one :fulfillment
 
   validates_presence_of :campaign_id, :email, :amount, :ip_address, :user_agent
   validates_numericality_of :amount, greater_than: 0

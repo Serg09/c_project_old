@@ -74,8 +74,12 @@ RSpec.describe RewardsController, type: :controller do
       end
 
       context 'for a reward that is associated at least one donation' do
-        let!(:donation) { FactoryGirl.create(:donation, campaign: campaign,
-                                                        reward: reward) }
+        let (:donation) { FactoryGirl.create(:donation, campaign: campaign) }
+        let!(:fulfillment) do
+          FactoryGirl.create(:electronic_fulfillment, donation: donation,
+                                                      reward: reward)
+        end
+
         describe "GET #edit" do
           it "redirects to the author home page" do
             get :edit, id: reward

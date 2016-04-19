@@ -134,13 +134,14 @@ ActiveRecord::Schema.define(version: 20160419144512) do
   add_index "campaigns", ["book_id"], name: "index_campaigns_on_book_id", using: :btree
 
   create_table "donations", force: :cascade do |t|
-    t.integer  "campaign_id",                                null: false
-    t.decimal  "amount",                                     null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.string   "ip_address",  limit: 15,                     null: false
-    t.string   "user_agent",                                 null: false
-    t.string   "state",                  default: "pledged", null: false
+    t.integer  "campaign_id",                                 null: false
+    t.decimal  "amount",                                      null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.string   "ip_address",  limit: 15,                      null: false
+    t.string   "user_agent",                                  null: false
+    t.string   "state",                   default: "pledged", null: false
+    t.string   "email",       limit: 100
   end
 
   add_index "donations", ["campaign_id"], name: "index_donations_on_campaign_id", using: :btree

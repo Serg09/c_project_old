@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ElectronicFulfillment, type: :model do
   let (:reward) { FactoryGirl.create(:reward, physical_address_required: false) }
-  let (:donation) { FactoryGirl.create(:donation, campaign: reward.campaign, reward: reward) }
+  let (:donation) { FactoryGirl.create(:donation, campaign: reward.campaign) }
   let (:attributes) do
     {
       donation_id: donation.id, 

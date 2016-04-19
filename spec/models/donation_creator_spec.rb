@@ -9,7 +9,8 @@ describe DonationCreator do
   let (:creator) { DonationCreator.new(attributes, payment_provider: payment_provider) }
 
   let (:campaign) { FactoryGirl.create(:campaign) }
-  let (:reward) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 200) }
+  let (:electronic_reward) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 200) }
+  let (:physical_reward) { FactoryGirl.create(:reward, campaign: campaign, physical_address_required: true) }
   let (:attributes) do
     {
       campaign: campaign,
@@ -51,7 +52,7 @@ describe DonationCreator do
     end
 
      it 'must be equal to or greater than the minimum donation of the specified reward, if present' do
-       creator = DonationCreator.new attributes.merge(reward_id: reward.id)
+       creator = DonationCreator.new attributes.merge(reward_id: electronic_reward.id)
        expect(creator).not_to be_valid
        expect(creator).to have_at_least(1).error_on :amount
      end
@@ -59,7 +60,7 @@ describe DonationCreator do
 
   describe '#reward_id' do
     it 'allows the amount to be set without explicitly specifying one' do
-      creator = DonationCreator.new attributes.except(:amount).merge(reward_id: reward.id)
+      creator = DonationCreator.new attributes.except(:amount).merge(reward_id: electronic_reward.id)
       expect(creator).to be_valid
       expect(creator.amount).to eq 200
     end
@@ -216,6 +217,54 @@ describe DonationCreator do
       it 'sets the donation status to "collected"' do
         creator.create!
         expect(creator.donation).to be_collected
+      end
+
+      context 'when a physical reward is specified' do
+        let (:physical_attributes) do
+          attributes.
+            except(:amount).
+            merge(reward_id: physical_reward.id)
+        end
+        let (:creator) do
+          DonationCreator.new(
+            physical_attributes,
+            payment_provider: payment_provider
+          )
+        end
+
+        it 'creates a physical fulfillment' do
+          expect do
+            creator.create!
+          end.to change(PhysicalFulfillment, :count).by(1)
+        end
+      end
+
+      context 'when no reward is specified' do
+        it 'does not create a fulfillment record' do
+          expect do
+            creator.create!
+          end.not_to change(Fulfillment, :count)
+        end
+      end
+
+      context 'when an electronic reward is specified' do
+        let (:electronic_attributes) do
+          attributes.
+            except(:amount).
+            merge(reward_id: electronic_reward.id)
+        end
+        let (:creator) do
+          DonationCreator.new(
+            electronic_attributes,
+            payment_provider: payment_provider
+          )
+        end
+
+        it 'creates an electronic fulfillment' do
+          expect do
+            creator.create!
+          end.to change(ElectronicFulfillment, :count).by(1)
+        end
       end
     end
 
