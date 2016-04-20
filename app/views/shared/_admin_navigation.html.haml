@@ -1,12 +1,12 @@
 %nav#main-menu.navbar.navbar-default
-  .container
+  .container-fluid
     .navbar-header
       %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
         %span.sr-only
           Toggle navigation
-          %span.icon-bar
-          %span.icon-bar
-          %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
       =link_to image_tag(asset_path('crowdscribed_logo.png')), root_path
     #navbar.navbar-collapse.collapse
       =render_navigation context: :admin, level: 1

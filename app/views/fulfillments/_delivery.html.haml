@@ -1,0 +1,12 @@
+-if fulfillment.is_a? PhysicalFulfillment
+  =fulfillment.first_name
+  =fulfillment.last_name
+  %br
+  =fulfillment.address1
+  -if fulfillment.address2
+    %br
+    =fulfillment.address2
+  %br
+  #{h fulfillment.city}, #{h fulfillment.state}  #{h fulfillment.postal_code}
+-else
+  =fulfillment.email

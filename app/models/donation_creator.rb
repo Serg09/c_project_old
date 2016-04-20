@@ -135,6 +135,13 @@ class DonationCreator
     @donation = campaign.donations.create!(donation_attributes)
   end
 
+  def create_fulfillment
+    return unless @reward
+    @fulfillment = @reward.physical_address_required ? 
+      PhysicalFulfillment.create!(physical_fulfillment_attributes) :
+      ElectronicFulfillment.create!(electronic_fulfillment_attributes)
+  end
+
   def donation_state
     @provider_response.state == PaymentTransaction.APPROVED ?
       'collected' :
@@ -147,8 +154,17 @@ class DonationCreator
       email: email,
       ip_address: ip_address,
       user_agent: user_agent,
-      reward_id: reward_id,
       state: donation_state
+    }
+  end
+
+  def electronic_fulfillment_attributes
+    {
+      donation_id: @donation.id,
+      reward_id: @reward.id,
+      email: email,
+      first_name: first_name,
+      last_name: last_name
     }
   end
 
@@ -165,6 +181,21 @@ class DonationCreator
     {
       external_id: @provider_response.id,
       state: @provider_response.state
+    }
+  end
+
+  def physical_fulfillment_attributes
+    {
+      donation_id: @donation.id,
+      reward_id: @reward.id,
+      first_name: first_name,
+      last_name: last_name,
+      address1: address_1,
+      address2: address_2,
+      city: city,
+      state: state,
+      postal_code: postal_code,
+      country_code: 'US'
     }
   end
 
@@ -200,6 +231,7 @@ class DonationCreator
     Donation.transaction do
       create_donation
       create_payment
+      create_fulfillment
     end
   end
 end

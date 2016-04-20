@@ -38,6 +38,11 @@ Rails.application.routes.draw do
   end
   resources :donations, only: [:show]
   resources :rewards, only: [:edit, :update, :destroy]
+  resources :fulfillments, only: [:index] do
+    member do
+      patch :fulfill
+    end
+  end
 
   namespace :admin do
     resources :inquiries, only: [:index, :show] do
@@ -65,6 +70,11 @@ Rails.application.routes.draw do
     end
     resources :campaigns, only: [:index, :show]
     resources :house_rewards
+    resources :fulfillments, only: [:index] do
+      member do
+        patch :fulfill
+      end
+    end
   end
 
   get 'pages/welcome'

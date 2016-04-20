@@ -8,7 +8,7 @@
 #  target_date   :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  state         :string           default("paused"), not null
+#  state         :string(20)       default("unstarted"), not null
 #
 
 class Campaign < ActiveRecord::Base

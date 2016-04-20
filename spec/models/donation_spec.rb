@@ -75,17 +75,12 @@ RSpec.describe Donation, type: :model do
     end
   end
 
-  describe '#reward' do
-    let (:other_reward) { FactoryGirl.create(:reward) }
+  describe '#fulfillment' do
+    let (:donation) { FactoryGirl.create(:donation, campaign: reward.campaign) }
+    let!(:fulfillment) { FactoryGirl.create(:electronic_fulfillment, donation: donation, reward: reward) }
 
-    it 'is a reference to the reward selected for the donation' do
-      donation = Donation.new attributes.merge(reward_id: reward.id)
-      expect(donation.reward.id).to eq reward.id
-    end
-
-    it 'must reference the same campaign as the donation' do
-      donation = Donation.new attributes.merge(reward_id: other_reward.id)
-      expect(donation).to have_at_least(1).error_on :reward_id
+    it 'contains information about the selected reward' do
+      expect(donation.fulfillment).to eq fulfillment
     end
   end
 

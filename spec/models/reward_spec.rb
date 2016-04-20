@@ -124,13 +124,27 @@ RSpec.describe Reward, type: :model do
     end
   end
 
+  shared_context :fulfillments do
+    let (:reward) { FactoryGirl.create(:reward, campaign: campaign, physical_address_required: false) }
+    let (:d1) { FactoryGirl.create(:donation, campaign: campaign) }
+    let!(:f1) { FactoryGirl.create(:electronic_fulfillment, donation: d1, reward: reward) }
+    let (:d2) { FactoryGirl.create(:donation, campaign: campaign) }
+    let!(:f2) { FactoryGirl.create(:electronic_fulfillment, donation: d2, reward: reward) }
+  end
+
   describe '#donations' do
-    let (:reward) { FactoryGirl.create(:reward, campaign: campaign) }
-    let!(:d1) { FactoryGirl.create(:donation, campaign: campaign, reward: reward) }
-    let!(:d2) { FactoryGirl.create(:donation, campaign: campaign, reward: reward) }
+    include_context :fulfillments
 
     it 'is a list of donations which selected the reward' do
       expect(reward).to have(2).donations
+    end
+  end
+
+  describe '#fulfillments' do
+    include_context :fulfillments
+
+    it 'is a list of fulfillments for the reward' do
+      expect(reward).to have(2).fulfillments
     end
   end
 end

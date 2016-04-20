@@ -3,10 +3,12 @@ Given /^the (#{CAMPAIGN}) has the following rewards$/ do |campaign, table|
   table.raw.drop(1).each do |row|
     values = Hash[keys.zip(row)]
     house_reward = values.delete(:house_reward)
+
     if house_reward.present?
       record = HouseReward.find_by(description: house_reward)
       expect(record).not_to be_nil
       values[:house_reward_id] = record.id
+      values[:physical_address_required] = record.physical_address_required
     end
     FactoryGirl.create(:reward, values.merge(campaign: campaign))
   end

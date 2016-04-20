@@ -1,0 +1,20 @@
+=content_for :page_title do
+  Reward fulfillment
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#rewards-table.table.table-striped
+        %tr
+          %th Book
+          %th Reward
+          %th Delivery
+          %th &nbsp;
+        -@fulfillments.each do |fulfillment|
+          %tr
+            %td= fulfillment.donation.campaign.book.administrative_title
+            %td= fulfillment.reward.description
+            %td= render 'delivery', fulfillment: fulfillment
+            %td
+              =link_to fulfill_fulfillment_path(fulfillment), class: 'btn btn-xs btn-success fulfill-button', method: :patch, title: 'Click here to indicate this reward has been fulfilled.' do
+                %span.glyphicon.glyphicon-ok{ 'arial-hidden' => true }
