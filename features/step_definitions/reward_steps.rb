@@ -7,9 +7,6 @@ Given /^the (#{CAMPAIGN}) has the following rewards$/ do |campaign, table|
     if house_reward.present?
       record = HouseReward.find_by(description: house_reward)
       expect(record).not_to be_nil
-
-      puts record.inspect
-
       values[:house_reward_id] = record.id
       values[:physical_address_required] = record.physical_address_required
     end
