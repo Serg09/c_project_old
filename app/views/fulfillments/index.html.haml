@@ -1,0 +1,16 @@
+=content_for :page_title do
+  Reward fulfillment
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#rewards-table.table.table-striped
+        %tr
+          %th Book
+          %th Reward
+          %th Delivery
+        -@fulfillments.each do |fulfillment|
+          %tr
+            %td= fulfillment.donation.campaign.book.administrative_title
+            %td= fulfillment.reward.description
+            %td= render 'delivery', fulfillment: fulfillment

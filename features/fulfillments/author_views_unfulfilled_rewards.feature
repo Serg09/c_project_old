@@ -1,4 +1,3 @@
-@wip
 Feature: Author view unfulfilled rewards
   As an author
   In order to thank donors to my project
@@ -14,9 +13,9 @@ Feature: Author view unfulfilled rewards
     And author john@doe.com has a book titled "How To Raise Money"
     And the book "How To Raise Money" has a campaign
     And the campaign for book "How To Raise Money" has the following rewards
-      | Description                 | House reward                |
-      | Signed copy of the book     |                             |
-      | Electronic copy of the book | Electronic copy of the book |
+      | Description                 | House reward                | Physical address required |
+      | Signed copy of the book     |                             | true                      |
+      | Electronic copy of the book | Electronic copy of the book |                           |
     And the campaign for the book "How To Raise Money" has received the following donations
       | Email               | Amount | Reward                      | Address                                  | Name            | State     |
       | sally@readerton.com |    100 | Signed copy of the book     | 1234 Main St, Apt 227, Dallas, TX  75200 | Sally Readerton | collected |

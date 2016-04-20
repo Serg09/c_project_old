@@ -14,19 +14,7 @@
           %tr
             %td= fulfillment.donation.campaign.book.administrative_title
             %td= fulfillment.reward.description
-            %td
-              -if fulfillment.is_a? PhysicalFulfillment
-                =fulfillment.first_name
-                =fulfillment.last_name
-                %br
-                =fulfillment.address1
-                -if fulfillment.address2
-                  %br
-                  =fulfillment.address2
-                %br
-                #{h fulfillment.city}, #{h fulfillment.state}  #{h fulfillment.postal_code}
-              -else
-                =fulfillment.email
+            %td= render 'fulfillments/delivery', fulfillment: fulfillment
             %td
               =link_to fulfill_admin_fulfillment_path(fulfillment), class: 'btn btn-xs btn-success fulfill-button', method: :patch, title: 'Click here to mark this reward has having been fulfilled.' do
                 %span.glyphicon.glyphicon-ok{ 'aria-hidden' => true }
