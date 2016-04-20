@@ -5,6 +5,6 @@ class Admin::FulfillmentsController < ApplicationController
   respond_to :html
 
   def index
-    @fulfillments = Fulfillment.undelivered.house
+    @fulfillments = Fulfillment.undelivered.house.ready
   end
 end
