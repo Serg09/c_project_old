@@ -29,4 +29,5 @@ class Fulfillment < ActiveRecord::Base
   scope :undelivered, ->{where(delivered: false)}
   scope :house, ->{joins(:reward).where('house_reward_id is not null')}
   scope :author, ->{joins(:reward).where('house_reward_id is null')}
+  scope :ready, ->{joins(donation: :campaign).where('campaigns.state=?', 'collected')}
 end
