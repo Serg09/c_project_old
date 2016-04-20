@@ -30,5 +30,6 @@ class Ability
     cannot :update, Reward do |reward|
       reward.donations.any?
     end
+    can :fulfill, Fulfillment, reward: {campaign: {book: {author_id: author.id}}}
   end
 end
