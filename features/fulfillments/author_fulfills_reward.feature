@@ -1,4 +1,3 @@
-@wip
 Feature: Author fulfills reward
   As an author
   In order to keep track of which rewards have been fulfilled
