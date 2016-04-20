@@ -18,7 +18,7 @@ Feature: View unfulfilled rewards
     And the campaign for the book "How To Raise Money" has received the following donations
       | Email               | Amount | Reward                      | Address                                  | Name            | State     |
       | sally@readerton.com |    100 | Printed copy of the book    | 1234 Main St, Apt 227, Dallas, TX  75200 | Sally Readerton | collected |
-      | billy@bookwork.com  |    150 | Electronic copy of the book | 4321 Elm St, Dallas, TX 75201            | Billy Bookworm  | collected |
+      | billy@bookworm.com  |    150 | Electronic copy of the book | 4321 Elm St, Dallas, TX 75201            | Billy Bookworm  | collected |
     And the campaign for the book "How To Raise Money" is collected
 
     And there is a book titled "How To Spend Money"
@@ -63,7 +63,7 @@ Feature: View unfulfilled rewards
     And I should see the following rewards table
       | Book               | Reward                      | Delivery                                              |
       | How To Raise Money | Printed copy of the book    | Sally Readerton 1234 Main St Apt 227 Dallas, TX 75200 |
-      | How To Raise Money | Electronic copy of the book | billy@bookwork.com                                    |
+      | How To Raise Money | Electronic copy of the book | billy@bookworm.com                                    |
       | How To Spend Money | Printed copy of the book    | Billy Bookworm 4321 Elm St Dallas, TX 75201           |
     
 
