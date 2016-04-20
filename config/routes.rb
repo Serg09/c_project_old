@@ -38,7 +38,11 @@ Rails.application.routes.draw do
   end
   resources :donations, only: [:show]
   resources :rewards, only: [:edit, :update, :destroy]
-  resources :fulfillments, only: [:index]
+  resources :fulfillments, only: [:index] do
+    member do
+      patch :fulfill
+    end
+  end
 
   namespace :admin do
     resources :inquiries, only: [:index, :show] do
