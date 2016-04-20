@@ -5,6 +5,11 @@ class Admin::FulfillmentsController < ApplicationController
   respond_to :html
 
   def index
-    @fulfillments = Fulfillment.undelivered.house.ready
+    @fulfillments = Fulfillment.
+      undelivered.
+      house.
+      ready.
+      paginate(page: params[:page])
+    respond_with @fulfillments
   end
 end
