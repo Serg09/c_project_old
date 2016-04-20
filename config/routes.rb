@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   end
   resources :donations, only: [:show]
   resources :rewards, only: [:edit, :update, :destroy]
+  resources :fulfillments, only: [:index]
 
   namespace :admin do
     resources :inquiries, only: [:index, :show] do
