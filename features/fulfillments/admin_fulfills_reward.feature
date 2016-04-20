@@ -1,4 +1,3 @@
-@wip
 Feature: Admin fulfills reward
   As an administrator
   In order to keep track of what rewards have been fulfiled
@@ -35,7 +34,7 @@ Feature: Admin fulfills reward
       | How To Raise Money | Electronic copy of the book | billy@bookworm.com                                    |
 
     When I click the fulfill button within the 2nd reward row
-    Then I should see "The reward has been updated successfully." within the notifications area
+    Then I should see "The reward was updated successfully." within the notifications area
     And I should see the following rewards table
       | Book               | Reward                      | Delivery                                              |
       | How To Raise Money | Printed copy of the book    | Sally Readerton 1234 Main St Apt 227 Dallas, TX 75200 |
