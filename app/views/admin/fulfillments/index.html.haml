@@ -28,6 +28,6 @@
               -else
                 =fulfillment.email
             %td
-              =link_to fulfill_admin_fulfillment_path(fulfillment), class: 'btn btn-xs btn-success', title: 'Click here to mark this reward has having been fulfilled.' do
+              =link_to fulfill_admin_fulfillment_path(fulfillment), class: 'btn btn-xs btn-success fulfill-button', method: :patch, title: 'Click here to mark this reward has having been fulfilled.' do
                 %span.glyphicon.glyphicon-ok{ 'aria-hidden' => true }
       =will_paginate @fulfillments, renderer: BootstrapPagination::Rails
