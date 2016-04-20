@@ -14,17 +14,17 @@ RSpec.describe Fulfillment, type: :model do
   let (:d4) { FactoryGirl.create(:collected_donation, campaign: active_campaign) }
   let (:d5) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
   let (:d6) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
-  let (:d7) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
+  let (:d7) { FactoryGirl.create(:cancelled_donation, campaign: collected_campaign) }
   let (:d8) { FactoryGirl.create(:collected_donation, campaign: active_campaign) }
 
   let!(:f1) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: hr, donation: d1) }
-  let!(:f2) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: ar1) }
-  let!(:f3) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: hr) }
-  let!(:f4) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: ar2) }
-  let!(:f5) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: hr) }
-  let!(:f6) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: ar1) }
-  let!(:f7) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: hr) }
-  let!(:f8) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: ar2) }
+  let!(:f2) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: ar1, donation: d2) }
+  let!(:f3) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: hr, donation: d3) }
+  let!(:f4) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: ar2, donation: d4) }
+  let!(:f5) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: hr, donation: d5) }
+  let!(:f6) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: ar1, donation: d6) }
+  let!(:f7) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: hr, donation: d7) }
+  let!(:f8) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: ar2, donation: d8) }
 
   describe '::undelivered' do
     it 'returns a list of fulfillments that have not been delivered' do
@@ -52,7 +52,7 @@ RSpec.describe Fulfillment, type: :model do
 
   describe '::ready' do
     it 'returns a list of fulfillments that are ready to be fulfilled (i.e., the campaign has been closed and the payment collected)' do
-      expect(Fulfillment.ready.map(&:id)).to contain_exactly *[f1, f2, f3, f5, f6, f7].map(&:id)
+      expect(Fulfillment.ready.map(&:id)).to contain_exactly *[f1, f2, f3, f5, f6].map(&:id)
     end
   end
 end
