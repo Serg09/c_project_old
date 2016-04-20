@@ -45,8 +45,9 @@ RSpec.describe Fulfillment, type: :model do
   end
 
   describe '::author' do
+    let (:author) { collected_campaign.book.author }
     it 'returns a list of fulfillments that are to be fulfilled by the author' do
-      expect(Fulfillment.author.map(&:id)).to contain_exactly *[f2, f4, f6, f8].map(&:id)
+      expect(Fulfillment.author(author).map(&:id)).to contain_exactly *[f2, f6].map(&:id)
     end
   end
 

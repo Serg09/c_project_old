@@ -27,7 +27,14 @@ class Fulfillment < ActiveRecord::Base
 
   scope :delivered, ->{where(delivered: true)}
   scope :undelivered, ->{where(delivered: false)}
-  scope :house, ->{joins(:reward).where('house_reward_id is not null')}
-  scope :author, ->{joins(:reward).where('house_reward_id is null')}
-  scope :ready, ->{joins(donation: :campaign).where('campaigns.state=? and donations.state=?', 'collected', 'collected')}
+  scope :house, ->{joins(reward: :house_reward)}
+  scope :ready, ->{joins(donation: :campaign).where(campaigns: {state: 'collected'}, donations: {state: 'collected'})}
+
+  def self.author(author_or_id)
+    id = author_or_id.respond_to?(:id) ?
+      author_or_id.id :
+      author_or_id
+    joins(:reward, donation: [campaign: :book]).
+      where('house_reward_id is null and books.author_id = ?', id)
+  end
 end
