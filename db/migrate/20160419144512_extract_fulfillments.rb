@@ -1,21 +1,19 @@
 class ExtractFulfillments < ActiveRecord::Migration
   def up
-    Donation.where('reward_id is not null').each do |donation|
-      if donation.reward.physical_address_required
-        PhysicalFulfillment.create! donation_id: donation.id,
-                                    reward_id: donation.reward_id,
-                                    address1: donation.address.line1,
-                                    address2: donation.address.line2,
-                                    city: donation.address.city,
-                                    state: donation.address.state,
-                                    postal_code: donation.address.postal_code,
-                                    country_code: donation.address.country_code,
-                                    email: donation.email
-      else
-        ElectronicFulfillment.create! donation_id: donation.id,
-                                      reward_id: donation.reward_id,
-                                      email: donation.email
-      end
+    donations = Donation.connection.execute('select * from donations where reward_id is not null;')
+    donations.each do |donation|
+      get_reward_sql = "select * from rewards where id = #{donation['reward_id']};"
+      reward = Donation.connection.execute(get_reward_sql).first
+      insert_sql = if reward['pysical_address_required']
+                     sql = "SELECT pt.response from payment_transactions pt inner join payments p on p.id = pt.payment_id where p.donation_id = #{donation['id']} limit 1;"
+                     record = Donation.connection.execute(sql).first
+                     payment = JSON.parse(record['response'], symbolize_names: true)
+                     address = payment[:payer][:funding_instruments][0][:credit_card][:billing_address]
+                     "insert into fulfillments(type, donation_id, reward_id, address1, address2, city, state, postal_code, country_code, email, created_at, updated_at) values ('PhysicalFulfillment', #{donation['id']}, #{donation['reward_id']}, '#{address[:line1]}', #{address[:line2] ? ("'" + address[:line2] = "'") : "null"}, '#{address[:city]}', '#{address[:state]}', '#{address[:postal_code]}', '#{address[:country_code]}', '#{donation['email']}', '#{DateTime.now.to_formatted_s}', '#{DateTime.now.to_formatted_s}');"
+                   else
+                     "insert into fulfillments(type, donation_id, reward_id, email, created_at, updated_at) values ('ElectronicFulfillment', #{donation['id']}, #{donation['reward_id']}, '#{donation['email']}', '#{DateTime.now.to_formatted_s}', '#{DateTime.now.to_formatted_s}');"
+                   end
+      Donation.connection.execute(insert_sql)
     end
 
     remove_column :donations, :reward_id
