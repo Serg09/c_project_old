@@ -1,7 +1,7 @@
 class Admin::HouseRewardsController < ApplicationController
   layout 'admin'
 
-  before_filter :safe_authenticate_administrator!
+  before_filter :authenticate_administrator!
   before_filter :load_house_reward, only: [:edit, :update, :destroy, :show]
 
   respond_to :html

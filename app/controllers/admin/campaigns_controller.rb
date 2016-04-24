@@ -1,6 +1,6 @@
 class Admin::CampaignsController < ApplicationController
   layout 'admin'
-  before_filter :safe_authenticate_administrator!
+  before_filter :authenticate_administrator!
   before_filter :load_campaign, only: [:show]
 
   def index

@@ -1,5 +1,5 @@
 class Admin::BookVersionsController < ApplicationController
-  before_filter :safe_authenticate_administrator!
+  before_filter :authenticate_administrator!
   before_filter :load_book_version, only: [:show, :approve, :reject]
   respond_to :html
   layout 'admin'

@@ -1,5 +1,5 @@
 class Admin::AuthorsController < ApplicationController
-  before_filter :safe_authenticate_administrator!
+  before_filter :authenticate_administrator!
   before_filter :load_author, only: [:show, :approve, :reject]
   layout 'admin'
   respond_to :html

@@ -1,5 +1,5 @@
 class Admin::FulfillmentsController < ApplicationController
-  before_filter :safe_authenticate_administrator!
+  before_filter :authenticate_administrator!
   before_filter :load_fulfillment, only: :fulfill
 
   layout 'admin'
