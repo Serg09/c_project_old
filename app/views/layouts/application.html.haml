@@ -7,10 +7,6 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
-    :javascript
-      $(function() {
-        $('.date-field').datepicker();
-      });
   %body
     =render 'shared/navigation'
     #main_content
@@ -31,3 +27,10 @@
               %li=link_to 'Contact us', new_inquiry_path
               %li Crowdscribed 2014
               %li All Rights Reserved
+    :javascript
+      $(function() {
+        $('.date-field').each(function(index, elem) {
+          e = $(elem);
+          e.datepicker(e.data());
+        });
+      });
