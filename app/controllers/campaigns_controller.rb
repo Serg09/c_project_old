@@ -42,8 +42,12 @@ class CampaignsController < ApplicationController
 
   def start
     authorize! :update, @campaign
-    flash[:notice] = 'The campaign was started successfully.' if @campaign.start
-    redirect_to campaign_path(@campaign)
+    if @campaign.target_date_in_range?
+      flash[:notice] = 'The campaign was started successfully.' if @campaign.start
+      redirect_to campaign_path(@campaign)
+    else
+      redirect_to book_campaigns_path(@book), alert: 'The target date must be at least 30 days in the future.'
+    end
   end
 
   def collect
@@ -86,5 +90,6 @@ class CampaignsController < ApplicationController
 
   def load_campaign
     @campaign = Campaign.find(params[:id])
+    @book = @campaign.book
   end
 end

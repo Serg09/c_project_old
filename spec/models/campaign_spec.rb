@@ -6,7 +6,7 @@ RSpec.describe Campaign, type: :model do
   let (:attributes) do
     {
       book_id: book.id,
-      target_date: Date.new(2016, 3, 31),
+      target_date: Date.new(2016, 4, 30),
       target_amount: 5_000
     }
   end
@@ -65,13 +65,13 @@ RSpec.describe Campaign, type: :model do
   describe '::current' do
     before(:all) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
     after(:all) { Timecop.return }
-    let!(:campaign) { FactoryGirl.create(:campaign, book: book, target_date: '2016-03-31') }
+    let!(:campaign) { FactoryGirl.create(:campaign, book: book, target_date: '2016-04-30') }
     it 'returns campaigns having target dates on or after today' do
       expect(Campaign.current.map(&:id)).to eq [campaign.id]
     end
 
     it 'does not include campaigns that have target dates in the past' do
-      Timecop.freeze(DateTime.parse('2016-04-01 11:00:00 CST')) do
+      Timecop.freeze(DateTime.parse('2016-05-01 11:00:00 CST')) do
         expect(Campaign.current.map(&:id)).to eq []
       end
     end
@@ -150,7 +150,7 @@ RSpec.describe Campaign, type: :model do
   end
 
   shared_context :donations do
-    let (:campaign) { FactoryGirl.create(:campaign, target_amount: 500, target_date: '2016-03-31') }
+    let (:campaign) { FactoryGirl.create(:campaign, target_amount: 500, target_date: '2016-04-30') }
     let!(:donation1) { FactoryGirl.create(:donation, campaign: campaign, amount: 25) }
     let!(:donation2) { FactoryGirl.create(:donation, campaign: campaign, amount: 50) }
   end
@@ -203,12 +203,12 @@ RSpec.describe Campaign, type: :model do
       after(:each) { Timecop.return }
 
       it 'returns the number of days until the target date' do
-        expect(campaign.days_remaining).to eq 29
+        expect(campaign.days_remaining).to eq 59
       end
     end
 
     context 'on or after the target date' do
-      before(:each) { Timecop.freeze(DateTime.parse('2016-04-01 12:00:00 CST')) }
+      before(:each) { Timecop.freeze(DateTime.parse('2016-06-01 12:00:00 CST')) }
       after(:each) { Timecop.return }
 
       it 'returns zero' do
