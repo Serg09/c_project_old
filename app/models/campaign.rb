@@ -9,6 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  state         :string(20)       default("unstarted"), not null
+#  extended      :boolean          default(FALSE), not null
 #
 
 class Campaign < ActiveRecord::Base
