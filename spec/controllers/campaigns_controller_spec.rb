@@ -6,7 +6,7 @@ RSpec.describe CampaignsController, type: :controller do
   let (:campaign) { FactoryGirl.create(:campaign, book: book) }
   let (:attributes) do
     {
-      target_date: '3/31/2016',
+      target_date: '4/30/2016',
       target_amount: 5_000
     }
   end
@@ -74,19 +74,50 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       context 'for an unstarted campaign' do
-        let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
 
-        describe 'patch :start' do
-          it 'redirects to the campaign progress page' do
+        context 'with a valid start date' do
+          let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
+
+          describe 'patch :start' do
+            it 'redirects to the campaign progress page' do
+              patch :start, id: campaign
+              expect(response).to redirect_to campaign_path(campaign)
+            end
+
+            it 'changes the state to active' do
+              expect do
+                patch :start, id: campaign
+                campaign.reload
+              end.to change(campaign, :state).from('unstarted').to('active')
+            end
+          end
+        end
+
+        context 'with an invalid start date' do
+          let (:campaign) do
+            Timecop.freeze(Chronic.parse('2016-01-15')) do
+              FactoryGirl.create(:unstarted_campaign, book: book,
+                                                      target_date: '2016-03-01')
+            end
+          end
+          before(:each) { Timecop.freeze(Chronic.parse('2016-03-02')) }
+          after(:each) { Timecop.return }
+
+          it 'redirects to the index page' do
             patch :start, id: campaign
-            expect(response).to redirect_to campaign_path(campaign)
+            expect(response).to redirect_to book_campaigns_path(book)
           end
 
-          it 'changes the state to active' do
+          it 'does change the state' do
             expect do
               patch :start, id: campaign
               campaign.reload
-            end.to change(campaign, :state).from('unstarted').to('active')
+            end.not_to change(campaign, :state)
+          end
+
+          it 'indicates the reason it was not started' do
+            patch :start, id: campaign
+            expect(flash[:alert]).to match /target date must be at least 30 days in the future/
           end
         end
       end

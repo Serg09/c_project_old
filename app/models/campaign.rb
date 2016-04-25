@@ -18,7 +18,7 @@ class Campaign < ActiveRecord::Base
 
   validates_presence_of :book_id, :target_date, :target_amount
   validates_numericality_of :target_amount, greater_than: 0
-  validate :target_date, :is_in_range, on: :create
+  validate :target_date, :must_be_in_range, on: :create
 
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
@@ -103,22 +103,27 @@ class Campaign < ActiveRecord::Base
     Date.today >= target_date
   end
 
+  def target_date_in_range?
+    return false unless target_date
+    target_date_range.cover?(target_date)
+  end
+
   private
 
-  def is_in_range
+  def must_be_in_range
     return unless target_date
 
-    if Date.today >= target_date.to_date
-      errors.add :target_date, 'must be after today'
-    end
-
-    if maximum_target_date < target_date.to_date
-      errors.add :target_date, 'must be within 60 days'
+    unless target_date_range.cover?(target_date)
+      errors.add :target_date, 'must be between 30 and 60 days in the future'
     end
   end
 
   def maximum_target_date
     Date.today + 60
+  end
+
+  def minimum_target_date
+    Date.today + 30
   end
 
   def queue_collection
@@ -127,6 +132,10 @@ class Campaign < ActiveRecord::Base
 
   def target_amount_achieved?
     total_donated >= target_amount
+  end
+
+  def target_date_range
+    minimum_target_date..maximum_target_date
   end
 
   def void_donations

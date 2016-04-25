@@ -1,4 +1,3 @@
-@wip
 Feature: Validate a campaign at start
   As an author
   In order to know if my campaign does not meet any requirements at start time

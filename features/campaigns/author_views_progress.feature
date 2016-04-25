@@ -7,7 +7,7 @@ Feature: View progress of a campaign as an author
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
     And author john@doe.com has an approved book titled "How to Raise Money"
-    And author john@doe.com has a campaign for "How to Raise Money" targeting $1,000 by 3/31/2016
+    And author john@doe.com has a campaign for "How to Raise Money" targeting $1,000 by 4/30/2016
     And the campaign for the book "How to Raise Money" has received the following donations
       | Email          |      Date | Amount |
       | user1@user.com | 2/28/2016 |  50.00 |
@@ -28,7 +28,7 @@ Feature: View progress of a campaign as an author
     Then I should see "Campaigns for How to Raise Money" within the page title
     And I should see the following campaigns table
       | Target date | Target amount |
-      |   3/31/2016 |        $1,000 |
+      |   4/30/2016 |        $1,000 |
 
     When I click the progress button within the 1st campaign row
     Then I should see "Campaign progress" within the page title
@@ -37,4 +37,4 @@ Feature: View progress of a campaign as an author
       | Donations      |      3 |
       | Raised         |   $175 |
       | Still need     |   $825 |
-      | Days remaining |     29 |
+      | Days remaining |     59 |
