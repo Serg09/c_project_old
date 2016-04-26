@@ -29,6 +29,8 @@
       -if @campaign.active?
         .btn-group-vertical
           =link_to 'Collect', collect_campaign_path(@campaign), method: :patch, class: 'btn btn-success', title: 'Click here to collect the donations for this campaign.'
+          -if @campaign.can_prolong?
+            =link_to 'Extend', prolong_campaign_path(@campaign), method: :patch, class: 'btn btn-warning', title: 'Click here to extend the target date by 15 days. This can only be done once.'
           =link_to 'Cancel', cancel_campaign_path(@campaign), method: :patch, class: 'btn btn-danger', title: 'Click here to cancel this campaign.', 'data-confirm' => 'Are you sure you want to cancel this campaign?'
   .row
     =link_to 'Back', book_campaigns_path(@campaign.book_id), class: 'btn btn-default', title: 'Click here to return to the list of campaigns.'

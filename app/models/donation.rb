@@ -10,7 +10,6 @@
 #  updated_at  :datetime         not null
 #  ip_address  :string(15)       not null
 #  user_agent  :string           not null
-#  reward_id   :integer
 #  state       :string           default("pledged"), not null
 #
 

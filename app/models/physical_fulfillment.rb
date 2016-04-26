@@ -6,7 +6,7 @@
 #  type         :string(50)       not null
 #  donation_id  :integer          not null
 #  reward_id    :integer          not null
-#  email        :string
+#  email        :string(200)
 #  address1     :string(100)
 #  address2     :string(100)
 #  city         :string(100)
@@ -16,6 +16,8 @@
 #  delivered    :boolean          default(FALSE), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  first_name   :string(100)      not null
+#  last_name    :string(100)      not null
 #
 
 class PhysicalFulfillment < Fulfillment
