@@ -1,0 +1,5 @@
+Your campaign for #{h @campaign.book.administrative_title} has collected #{h number_to_currency(@campaign.total_donated, precision: 0)}, reaching its goal of #{h number_to_currency(@campaign.target_amount, precision: 0) }
+:plain
+
+Follow this link for more details
+=campaign_url(@campaign)

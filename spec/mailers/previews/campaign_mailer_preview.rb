@@ -13,6 +13,11 @@ class CampaignMailerPreview < ActionMailer::Preview
     CampaignMailer.cancelled campaign
   end
 
+  def succeeded
+    campaign = Campaign.cancelled.first || FactoryGirl.create(:cancelled_campaign)
+    CampaignMailer.succeeded(campaign)
+  end
+
   # Preview this email at http://localhost:3000/rails/mailers/campaign_mailer/collection_complete
   def collection_complete
     campaign = Campaign.collected.first || FactoryGirl.create(:collected_campaign)

@@ -18,4 +18,11 @@ class CampaignMailer < ApplicationMailer
     @campaign = campaign
     mail to: campaign.book.author.email, subject: 'Campaign donation collection complete'
   end
+
+  def succeeded(campaign)
+    inline_images
+    @campaign = campaign
+    subject = "Your campaign for #{@campaign.book.administrative_title} has reached its goal!"
+    mail to: campaign.book.author.email, subject: subject
+  end
 end
