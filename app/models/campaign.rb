@@ -115,9 +115,17 @@ class Campaign < ActiveRecord::Base
     active? && !prolonged?
   end
 
+  def success_notification_sent?
+    success_notification_sent_at.present?
+  end
+
   def target_date_in_range?
     return false unless target_date
     target_date_range.cover?(target_date)
+  end
+
+  def target_amount_reached?
+    donation_amount_needed == 0
   end
 
   private

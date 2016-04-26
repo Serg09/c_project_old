@@ -61,15 +61,26 @@ class DonationsController < ApplicationController
   end
 
   def send_notification_emails(donation)
+    # TODO Move this to resque jobs
     DonationMailer.donation_receipt(donation).deliver_now
     DonationMailer.donation_received_notify_author(donation).deliver_now
     DonationMailer.donation_received_notify_administrator(donation).deliver_now
+    CampaignMailer.succeeded(donation.campaign).deliver_now if campaign_just_succeeded?
+  end
+
+  def campaign_just_succeeded?
+    @campaign.donations.each{|d| puts "donation #{d.amount}"}
+
+    @campaign.target_amount_reached? && !@campaign.success_notification_sent?
   end
 
   def set_error_flash
     if Rails.env.production?
       flash.now[:alert] = 'We were unable to save your donation. Please try again later.'
     else
+
+      puts @donation_creator.exceptions.to_sentence
+
       flash.now[:alert] = "We were unable to save your donation. #{@donation_creator.exceptions.to_sentence}"
     end
   end

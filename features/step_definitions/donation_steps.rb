@@ -69,6 +69,6 @@ When /^a user donates (#{DOLLAR_AMOUNT}) for the (#{BOOK})$/ do |amount, book|
     fill_in 'City', with: Faker::Address.city
     fill_in 'State', with: Faker::Address.state_abbr
     fill_in 'Postal code', with: Faker::Address.postcode
-    click_on 'Submit'
+    click_button 'Submit'
   end
 end
