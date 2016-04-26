@@ -52,7 +52,7 @@ class CampaignsController < ApplicationController
 
   def prolong
     authorize! :update, @campaign
-    if @campaign.extended?
+    if @campaign.prolonged?
       flash[:alert] = 'This campaign has already been extended and cannot be extended again.'
     else
       flash[:notice] = 'The campaign was extended successfully.' if @campaign.prolong

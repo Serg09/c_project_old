@@ -9,7 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  state         :string(20)       default("unstarted"), not null
-#  extended      :boolean          default(FALSE), not null
+#  prolonged     :boolean          default(FALSE), not null
 #
 
 class Campaign < ActiveRecord::Base
@@ -107,12 +107,12 @@ class Campaign < ActiveRecord::Base
   def prolong
     return unless can_prolong?
     self.target_date = target_date + 15
-    self.extended = true
+    self.prolonged = true
     save
   end
 
   def can_prolong?
-    active? && !extended?
+    active? && !prolonged?
   end
 
   def target_date_in_range?

@@ -100,11 +100,11 @@ RSpec.describe CampaignsController, type: :controller do
             end.not_to change(campaign, :target_date)
           end
 
-          it 'does not change the extended flag' do
+          it 'does not change the prolonged flag' do
             expect do
               patch :prolong, id: campaign
               campaign.reload
-            end.not_to change(campaign, :extended)
+            end.not_to change(campaign, :prolonged)
           end
         end
 
@@ -168,7 +168,7 @@ RSpec.describe CampaignsController, type: :controller do
           end
         end
 
-        context 'that has not been extended' do
+        context 'that has not been prolonged' do
           describe 'patch :prolong' do
             it 'redirects to the campaign show page' do
               patch :prolong, id: campaign
@@ -182,17 +182,17 @@ RSpec.describe CampaignsController, type: :controller do
               end.to change(campaign, :target_date).to(Date.new(2016, 5, 15))
             end
 
-            it 'sets the "extended" flag' do
+            it 'sets the "prolonged" flag' do
               expect do
                 patch :prolong, id: campaign
                 campaign.reload
-              end.to change(campaign, :extended).from(false).to(true)
+              end.to change(campaign, :prolonged).from(false).to(true)
             end
           end
         end
 
-        context 'that has been extended' do
-          let (:campaign) { FactoryGirl.create(:active_campaign, book: book, extended: true) }
+        context 'that has been prolonged' do
+          let (:campaign) { FactoryGirl.create(:active_campaign, book: book, prolonged: true) }
 
           describe 'patch :prolong' do
             it 'redirects to the campaign show page' do
@@ -207,11 +207,11 @@ RSpec.describe CampaignsController, type: :controller do
               end.not_to change(campaign, :target_date)
             end
 
-            it 'does not change the "extended" flag' do
+            it 'does not change the "prolonged" flag' do
               expect do
                 patch :prolong, id: campaign
                 campaign.reload
-              end.not_to change(campaign, :extended)
+              end.not_to change(campaign, :prolonged)
             end
           end
         end
