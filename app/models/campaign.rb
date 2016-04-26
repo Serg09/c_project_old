@@ -2,14 +2,15 @@
 #
 # Table name: campaigns
 #
-#  id            :integer          not null, primary key
-#  book_id       :integer
-#  target_amount :decimal(, )
-#  target_date   :date
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  state         :string(20)       default("unstarted"), not null
-#  prolonged     :boolean          default(FALSE), not null
+#  id                           :integer          not null, primary key
+#  book_id                      :integer
+#  target_amount                :decimal(, )
+#  target_date                  :date
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  state                        :string(20)       default("unstarted"), not null
+#  prolonged                    :boolean          default(FALSE), not null
+#  success_notification_sent_at :time
 #
 
 class Campaign < ActiveRecord::Base

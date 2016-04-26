@@ -14,7 +14,6 @@ Feature: Success notifications
     Then "john@doe.com" should receive no email with subject "Your campaign for Tell Me When has reached its goal!"
 
     When a user donates $249 for the book "Tell Me When"
-    When a user donates $1 for the book "Tell Me When"
     Then "john@doe.com" should receive an email with subject "Your campaign for Tell Me When has reached its goal!"
     And "info@crowdscribed.com" should receive an email with subject "The campaign for Tell Me When has reached its goal!"
 
