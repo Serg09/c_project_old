@@ -8,8 +8,9 @@ Given /^(#{AUTHOR}) has an? (.*)?campaign for "([^"]+)" targeting (#{DOLLAR_AMOU
                                 state: state)
 end
 
-Given /^(?:the )?(#{BOOK}) has an? (.*)?campaign targeting (#{DOLLAR_AMOUNT}) by (#{DATE})$/ do |book, state, target_amount, target_date|
+Given /^(?:the )?(#{BOOK}) has an? (.*)?campaign targeting (#{DOLLAR_AMOUNT})(?: by (#{DATE}))?$/ do |book, state, target_amount, target_date|
   state = state.present? ? state.strip : 'active'
+  target_date = (Date.today + 30) unless target_date.present?
   FactoryGirl.create(:campaign, book: book,
                                 target_amount: target_amount,
                                 target_date: target_date,
