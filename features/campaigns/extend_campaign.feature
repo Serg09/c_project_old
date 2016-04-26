@@ -3,7 +3,6 @@ Feature: Extend a campaign
   In order to allow more time for a campaign to be successful
   I want to be able to extend the target date into the future
 
-  @wip
   Scenario: An author exents a campaign
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"

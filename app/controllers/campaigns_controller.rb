@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_filter :authenticate_author!
-  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :start, :collect, :cancel]
+  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :start, :collect, :cancel, :prolong]
   before_filter :load_book, only: [:index, :new, :create]
 
   respond_to :html
@@ -48,6 +48,16 @@ class CampaignsController < ApplicationController
     else
       redirect_to book_campaigns_path(@book), alert: 'The target date must be at least 30 days in the future.'
     end
+  end
+
+  def prolong
+    authorize! :update, @campaign
+    if @campaign.extended?
+      flash[:alert] = 'This campaign has already been extended and cannot be extended again.'
+    else
+      flash[:notice] = 'The campaign was extended successfully.' if @campaign.prolong
+    end
+    redirect_to campaign_path(@campaign)
   end
 
   def collect

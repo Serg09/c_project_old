@@ -311,7 +311,39 @@ RSpec.describe Campaign, type: :model do
   end
 
   context 'for an active campaign' do
-    let (:campaign) { FactoryGirl.create(:active_campaign) }
+    let (:target_date) { Date.new(2016, 4, 30) }
+    let (:campaign) { FactoryGirl.create(:active_campaign, target_date: target_date) }
+
+    context 'that has not been extended' do
+      describe '#prolong' do
+        it 'changes #target_date to 15 days later' do
+          expect do
+            campaign.prolong
+          end.to change(campaign, :target_date).from(target_date).to(Date.new(2016, 5, 15))
+        end
+
+        it 'sets #extended? to true' do
+          expect do
+            campaign.prolong
+          end.to change(campaign, :extended).from(false).to(true)
+        end
+      end
+    end
+
+    context 'that has been extended' do
+      let (:campaign) { FactoryGirl.create(:active_campaign, extended: true) }
+      it 'does not change #target_date' do
+        expect do
+          campaign.prolong
+        end.not_to change(campaign, :target_date)
+      end
+
+      it 'does not change #extended' do
+        expect do
+          campaign.prolong
+        end.not_to change(campaign, :extended)
+      end
+    end
 
     describe '#collect' do
       it 'changes the state to "collecting"' do
@@ -401,6 +433,20 @@ RSpec.describe Campaign, type: :model do
         expect do
           campaign.start
         end.not_to change(campaign, :state)
+      end
+    end
+
+    describe '#prolong' do
+      it 'does not change #target_date' do
+        expect do
+          campaign.prolong
+        end.not_to change(campaign, :target_date)
+      end
+
+      it 'does not change #extended' do
+        expect do
+          campaign.prolong
+        end.not_to change(campaign, :extended)
       end
     end
 

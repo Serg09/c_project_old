@@ -74,10 +74,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       context 'for an unstarted campaign' do
+        let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
 
         context 'with a valid start date' do
-          let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
-
           describe 'patch :start' do
             it 'redirects to the campaign progress page' do
               patch :start, id: campaign
@@ -90,6 +89,22 @@ RSpec.describe CampaignsController, type: :controller do
                 campaign.reload
               end.to change(campaign, :state).from('unstarted').to('active')
             end
+          end
+        end
+
+        describe 'patch :prolong' do
+          it 'does not change the target date' do
+            expect do
+              patch :prolong, id: campaign
+              campaign.reload
+            end.not_to change(campaign, :target_date)
+          end
+
+          it 'does not change the extended flag' do
+            expect do
+              patch :prolong, id: campaign
+              campaign.reload
+            end.not_to change(campaign, :extended)
           end
         end
 
@@ -123,7 +138,7 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       context 'for an active campaign' do
-        let!(:campaign) { FactoryGirl.create(:active_campaign, book: book) }
+        let!(:campaign) { FactoryGirl.create(:active_campaign, book: book, target_date: Date.new(2016, 4, 30)) }
 
         describe 'patch :collect' do
           it 'redirects to the campaign progress page' do
@@ -150,6 +165,54 @@ RSpec.describe CampaignsController, type: :controller do
               patch :cancel, id: campaign
               campaign.reload
             end.to change(campaign, :state).from('active').to('cancelling')
+          end
+        end
+
+        context 'that has not been extended' do
+          describe 'patch :prolong' do
+            it 'redirects to the campaign show page' do
+              patch :prolong, id: campaign
+              expect(response).to redirect_to campaign_path(campaign)
+            end
+
+            it 'changes the target date to 15 days later than before' do
+              expect do
+                patch :prolong, id: campaign
+                campaign.reload
+              end.to change(campaign, :target_date).to(Date.new(2016, 5, 15))
+            end
+
+            it 'sets the "extended" flag' do
+              expect do
+                patch :prolong, id: campaign
+                campaign.reload
+              end.to change(campaign, :extended).from(false).to(true)
+            end
+          end
+        end
+
+        context 'that has been extended' do
+          let (:campaign) { FactoryGirl.create(:active_campaign, book: book, extended: true) }
+
+          describe 'patch :prolong' do
+            it 'redirects to the campaign show page' do
+              patch :prolong, id: campaign
+              expect(response).to redirect_to campaign_path(campaign)
+            end
+
+            it 'does not change the target date' do
+              expect do
+                patch :prolong, id: campaign
+                campaign.reload
+              end.not_to change(campaign, :target_date)
+            end
+
+            it 'does not change the "extended" flag' do
+              expect do
+                patch :prolong, id: campaign
+                campaign.reload
+              end.not_to change(campaign, :extended)
+            end
           end
         end
       end
@@ -243,6 +306,19 @@ RSpec.describe CampaignsController, type: :controller do
         it 'does not change the state of the campaign' do
           expect do
             patch :start, id: campaign
+          end.not_to change(campaign, :state)
+        end
+      end
+
+      describe 'patch :prolong' do
+        it 'redirects to the author home page' do
+          patch :prolong, id: campaign
+          expect(response).to redirect_to author_root_path
+        end
+
+        it 'does not change the state of the campaign' do
+          expect do
+            patch :prolong, id: campaign
           end.not_to change(campaign, :state)
         end
       end
@@ -358,6 +434,20 @@ RSpec.describe CampaignsController, type: :controller do
       it 'does not change the state of the campaign' do
         expect do
           patch :start, id: campaign
+        end.not_to change(campaign, :state)
+      end
+    end
+
+    describe 'patch :prolong' do
+      it 'redirects to the author sign in page' do
+        patch :prolong, id: campaign
+        expect(response).to redirect_to new_author_session_path
+      end
+
+      it 'does not change the state of the campaign' do
+        expect do
+          patch :prolong, id: campaign
+          campaign.reload
         end.not_to change(campaign, :state)
       end
     end

@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       patch :start
       patch :collect
       patch :cancel
-      patch :extend
+      patch :prolong
     end
   end
   resources :donations, only: [:show]

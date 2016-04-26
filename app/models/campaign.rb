@@ -104,6 +104,17 @@ class Campaign < ActiveRecord::Base
     Date.today >= target_date
   end
 
+  def prolong
+    return unless can_prolong?
+    self.target_date = target_date + 15
+    self.extended = true
+    save
+  end
+
+  def can_prolong?
+    active? && !extended?
+  end
+
   def target_date_in_range?
     return false unless target_date
     target_date_range.cover?(target_date)
