@@ -21,9 +21,9 @@ Setup the database
 rake db:setup
 ```
 
-Start the web server
+Start the web server and the resque workers
 ```
-puma
+foreman start
 ```
 
 ### Contribution guidelines ###
