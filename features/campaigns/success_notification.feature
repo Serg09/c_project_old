@@ -1,4 +1,3 @@
-@wip
 Feature: Success notifications
   As an author
   In order to know that my campaign has reached its goal

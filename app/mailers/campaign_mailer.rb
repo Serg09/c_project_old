@@ -25,4 +25,11 @@ class CampaignMailer < ApplicationMailer
     subject = "Your campaign for #{@campaign.book.administrative_title} has reached its goal!"
     mail to: campaign.book.author.email, subject: subject
   end
+
+  def succeeded_notify_admin(campaign)
+    inline_images
+    @campaign = campaign
+    subject = "The campaign for #{@campaign.book.administrative_title} has reached its goal!"
+    mail to: 'info@crowdscribed.com', subject: subject
+  end
 end

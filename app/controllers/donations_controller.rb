@@ -67,6 +67,7 @@ class DonationsController < ApplicationController
     DonationMailer.donation_received_notify_administrator(donation).deliver_now
     if campaign_just_succeeded?
       CampaignMailer.succeeded(donation.campaign).deliver_now
+      CampaignMailer.succeeded_notify_admin(donation.campaign).deliver_now
       donation.campaign.success_notification_sent_at = DateTime.now
       donation.campaign.save!
     end
