@@ -2,14 +2,15 @@
 #
 # Table name: campaigns
 #
-#  id            :integer          not null, primary key
-#  book_id       :integer
-#  target_amount :decimal(, )
-#  target_date   :date
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  state         :string(20)       default("unstarted"), not null
-#  prolonged     :boolean          default(FALSE), not null
+#  id                           :integer          not null, primary key
+#  book_id                      :integer
+#  target_amount                :decimal(, )
+#  target_date                  :date
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  state                        :string(20)       default("unstarted"), not null
+#  prolonged                    :boolean          default(FALSE), not null
+#  success_notification_sent_at :time
 #
 
 class Campaign < ActiveRecord::Base
@@ -115,9 +116,17 @@ class Campaign < ActiveRecord::Base
     active? && !prolonged?
   end
 
+  def success_notification_sent?
+    success_notification_sent_at.present?
+  end
+
   def target_date_in_range?
     return false unless target_date
     target_date_range.cover?(target_date)
+  end
+
+  def target_amount_reached?
+    donation_amount_needed == 0
   end
 
   private

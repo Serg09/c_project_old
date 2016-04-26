@@ -62,6 +62,34 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
+  describe '#success_notification_sent?' do
+    let (:campaign) { FactoryGirl.create(:campaign) }
+
+    it 'is false if #success_notification_sent_at is nil' do
+      expect(campaign.success_notification_sent?).to be false
+    end
+
+    it 'is true if #success_notification_sent_at has a value' do
+      campaign.success_notification_sent_at = DateTime.now
+      expect(campaign.success_notification_sent?).to be true
+    end
+  end
+
+  describe '#target_amount_reached?' do
+    let (:campaign) { FactoryGirl.create(:campaign, target_amount: 500) }
+    let!(:donation) { FactoryGirl.create(:donation, campaign: campaign, amount: 499) }
+    let (:donation2) { FactoryGirl.create(:donation, campaign: campaign, amount: 1) }
+
+    it 'is false if the total donated is less than #target_amount' do
+      expect(campaign.target_amount_reached?).to be false
+    end
+
+    it 'is true if the total dontated is equal to or more than #target_amount' do
+      donation2
+      expect(campaign.target_amount_reached?).to be true
+    end
+  end
+
   describe '::current' do
     before(:all) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
     after(:all) { Timecop.return }

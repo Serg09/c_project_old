@@ -53,3 +53,22 @@ Given /^the (#{CAMPAIGN}) has received the following donations$/ do |campaign, t
     end
   end
 end
+
+When /^a user donates (#{DOLLAR_AMOUNT}) for the (#{BOOK})$/ do |amount, book|
+  campaign = book.campaigns.active.first
+  visit new_campaign_donation_path(campaign)
+  within('#main_content') do
+    fill_in 'Amount', with: amount.to_s
+    fill_in 'Credit card', with: Faker::Business.credit_card_number.gsub(/\D/, '')
+    fill_in 'CVV', with: Faker::Number.number(3).to_s
+    fill_in 'Email', with: Faker::Internet.email
+    fill_in 'First name', with: Faker::Name.first_name
+    fill_in 'Last name', with: Faker::Name.last_name
+    fill_in 'Address', with: Faker::Address.street_address
+    fill_in 'Line 2', with: Faker::Address.secondary_address
+    fill_in 'City', with: Faker::Address.city
+    fill_in 'State', with: Faker::Address.state_abbr
+    fill_in 'Postal code', with: Faker::Address.postcode
+    click_button 'Submit'
+  end
+end

@@ -14,7 +14,8 @@ module PaymentProvider
       path = Rails.root.join('spec', 'fixtures', 'files', file_name)
       raw = File.read(path)
       json = JSON.parse(raw, symbolize_names: true)
-      OpenStruct.new(id: json[:id], state: json[:state], to_json: json)
+      json[:id] = "PAY-#{Faker::Number.hexadecimal(10)}"
+      OpenStruct.new(id: json[:id], state: json[:state], to_json: json.to_json)
     end
   end
 end

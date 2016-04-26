@@ -61,9 +61,19 @@ class DonationsController < ApplicationController
   end
 
   def send_notification_emails(donation)
+    # TODO Move this to resque jobs
     DonationMailer.donation_receipt(donation).deliver_now
     DonationMailer.donation_received_notify_author(donation).deliver_now
     DonationMailer.donation_received_notify_administrator(donation).deliver_now
+    if campaign_just_succeeded?
+      CampaignMailer.succeeded(donation.campaign).deliver_now
+      donation.campaign.success_notification_sent_at = DateTime.now
+      donation.campaign.save!
+    end
+  end
+
+  def campaign_just_succeeded?
+    @campaign.target_amount_reached? && !@campaign.success_notification_sent?
   end
 
   def set_error_flash

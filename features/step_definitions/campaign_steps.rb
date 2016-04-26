@@ -8,8 +8,9 @@ Given /^(#{AUTHOR}) has an? (.*)?campaign for "([^"]+)" targeting (#{DOLLAR_AMOU
                                 state: state)
 end
 
-Given /^(?:the )?(#{BOOK}) has an? (.*)?campaign targeting (#{DOLLAR_AMOUNT}) by (#{DATE})$/ do |book, state, target_amount, target_date|
+Given /^(?:the )?(#{BOOK}) has an? (.*)?campaign targeting (#{DOLLAR_AMOUNT})(?: by (#{DATE}))?$/ do |book, state, target_amount, target_date|
   state = state.present? ? state.strip : 'active'
+  target_date = (Date.today + 30) unless target_date.present?
   FactoryGirl.create(:campaign, book: book,
                                 target_amount: target_amount,
                                 target_date: target_date,
@@ -32,4 +33,10 @@ end
 
 Given /(#{CAMPAIGN}) is (collected|active)/ do |campaign, state|
   campaign.update_attribute :state, state
+end
+
+Given /^notification has been sent for the success of the campaign for the (#{BOOK})$/ do |book|
+  campaign = book.campaigns.first
+  campaign.success_notification_sent_at = DateTime.now
+  campaign.save!
 end
