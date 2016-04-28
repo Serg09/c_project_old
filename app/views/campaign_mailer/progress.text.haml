@@ -1,0 +1,21 @@
+Campaign Progress: #{h @campaign.book.approved_version.title}
+:plain
+
+Total collected:
+=number_to_currency(@campaign.total_donated, precision: 0)
+:plain
+
+Goal:
+=number_to_currency(@campaign.target_amount, precision: 0)
+:plain
+
+Still needed:
+=number_to_currency(@campaign.donation_amount_needed, precision: 0)
+:plain
+
+Days remaining:
+=@campaign.days_remaining
+:plain
+
+Follow this link for more details
+=campaign_url(@campaign)

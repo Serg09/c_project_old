@@ -1,0 +1,32 @@
+:css
+  .text-right {
+    text-align: right;
+  }
+
+  .small {
+    font-size: 80%;
+  }
+%h1 Campaign Progress
+#{h @campaigns.count} active campaign(s).
+
+-@campaigns.each do |campaign|
+  %h2
+    %strong= campaign.book.approved_version.title
+    %span.small
+      by #{h link_to campaign.book.author.full_name, author_url(campaign.book.author)}
+  %table
+    %tr
+      %th.text-right Total collected:
+      %td.text-right= number_to_currency(campaign.total_donated, precision: 0)
+    %tr
+      %th.text-right Goal:
+      %td.text-right= number_to_currency(campaign.target_amount, precision: 0)
+    %tr
+      %th.text-right Still needed:
+      %td.text-right= number_to_currency(campaign.donation_amount_needed, precision: 0)
+    %tr
+      %th.text-right Days remaining:
+      %td.text-right= campaign.days_remaining
+%p
+  =link_to 'Sign in', new_administrator_session_url
+  for more details.

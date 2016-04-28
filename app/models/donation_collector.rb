@@ -1,7 +1,7 @@
 # Collects campaign donations by executing PayPal
 # transactions that have already been authorized
 class DonationCollector
-  @queue = :donation_collection
+  @queue = :normal
 
   def self.perform(campaign_id, attempt_number = 1)
     Rails.logger.info "Collecting donations for campaign #{campaign_id}"

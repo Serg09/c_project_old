@@ -1,0 +1,18 @@
+#{h @campaigns.count} active campaign(s).
+:plain
+
+-@campaigns.each do |campaign|
+  #{h campaign.book.approved_version.title}, by #{campaign.book.author.full_name}
+
+  Total collected: #{h number_to_currency(campaign.total_donated, precision: 0)}
+
+  Goal:            #{h number_to_currency(campaign.target_amount, precision: 0)}
+
+  Still needed:    #{h number_to_currency(campaign.donation_amount_needed, precision: 0)}
+
+  Days remaining:  #{h campaign.days_remaining}
+
+:plain
+  -
+Sign in for more details
+#{h new_administrator_session_url}
