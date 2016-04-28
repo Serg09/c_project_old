@@ -29,4 +29,12 @@ class CampaignMailerPreview < ActionMailer::Preview
     CampaignMailer.collection_complete campaign
   end
 
+  def progress
+    campaign = Campaign.active.first || FactoryGirl.create(:active_campaign)
+    CampaignMailer.progress campaign
+  end
+
+  def progress_admin
+    CampaignMailer.progress_admin Campaign.active.by_target_date
+  end
 end
