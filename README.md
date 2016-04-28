@@ -2,9 +2,35 @@
 
 Website facilitating book publishing
 
-(http://www.crowdscribed.com/)
+http://www.crowdscribed.com/
 
 ### How do I get set up? ###
+
+[Install PostgreSQL](https://help.ubuntu.com/community/PostgreSQL) for development. (SQLite is used for tests.)
+```
+sudo apt-get install postgresql postgresql-contrib
+sudo -u postgres createuser --superuser $USER
+sudo -u postgres psql
+
+sudo apt-get install postgresql-client
+
+sudo apt-get install postgresql-server-dev-9.5 # or whatever version is current
+```
+
+Install node.js
+```
+sudo apt-get install node.js
+```
+
+Install ImageMagick
+```
+sudo apt-get install imagemagick libmagickwand-dev
+```
+
+Install Redis
+```
+sudo apt-get install redis-server
+```
 
 Clone the repo
 ```
