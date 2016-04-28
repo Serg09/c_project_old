@@ -1,5 +1,5 @@
 class DonationCanceller
-  @queue = :donation_cancellation
+  @queue = :normal
 
   def self.perform(campaign_id, attempt_number = 1)
     Rails.logger.info "Cancelling donations for campaign #{campaign_id}"
