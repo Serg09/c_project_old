@@ -1,4 +1,4 @@
-### CrowdScribe ###
+### CrowdScribed ###
 
 Website facilitating book publishing
 
