@@ -80,6 +80,8 @@ Run any pending database migrations
 heroku run rake db:migrate
 ```
 
+Confirm the deployment at http://staging.crowdscribed.com.
+
 ### Who do I talk to? ###
 
 * [Doug Knight](mailto:doug.knight@crowdscribed.com)
