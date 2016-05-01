@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160426201758) do
+ActiveRecord::Schema.define(version: 20160501154500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,41 +47,6 @@ ActiveRecord::Schema.define(version: 20160426201758) do
   end
 
   add_index "app_settings", ["name"], name: "index_app_settings_on_name", unique: true, using: :btree
-
-  create_table "authors", force: :cascade do |t|
-    t.string   "email",                             default: "",        null: false
-    t.string   "encrypted_password",                default: "",        null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                     default: 0,         null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",                   default: 0,         null: false
-    t.string   "unlock_token"
-    t.datetime "locked_at"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-    t.string   "username",                                              null: false
-    t.string   "first_name",                                            null: false
-    t.string   "last_name",                                             null: false
-    t.string   "phone_number"
-    t.boolean  "contactable",                       default: false,     null: false
-    t.integer  "package_id"
-    t.string   "status",                 limit: 10, default: "pending", null: false
-  end
-
-  add_index "authors", ["confirmation_token"], name: "index_authors_on_confirmation_token", unique: true, using: :btree
-  add_index "authors", ["email"], name: "index_authors_on_email", unique: true, using: :btree
-  add_index "authors", ["reset_password_token"], name: "index_authors_on_reset_password_token", unique: true, using: :btree
-  add_index "authors", ["unlock_token"], name: "index_authors_on_unlock_token", unique: true, using: :btree
-  add_index "authors", ["username"], name: "index_authors_on_username", unique: true, using: :btree
 
   create_table "bios", force: :cascade do |t|
     t.integer  "author_id",                      null: false
@@ -192,7 +157,7 @@ ActiveRecord::Schema.define(version: 20160426201758) do
   end
 
   create_table "images", force: :cascade do |t|
-    t.integer  "author_id",                  null: false
+    t.integer  "user_id",                    null: false
     t.integer  "image_binary_id",            null: false
     t.string   "hash_id",         limit: 40, null: false
     t.string   "mime_type",       limit: 20, null: false
@@ -200,8 +165,8 @@ ActiveRecord::Schema.define(version: 20160426201758) do
     t.datetime "updated_at",                 null: false
   end
 
-  add_index "images", ["author_id"], name: "index_images_on_author_id", using: :btree
   add_index "images", ["hash_id"], name: "index_images_on_hash_id", unique: true, using: :btree
+  add_index "images", ["user_id"], name: "index_images_on_user_id", using: :btree
 
   create_table "inquiries", force: :cascade do |t|
     t.string   "first_name",                 null: false
@@ -246,5 +211,40 @@ ActiveRecord::Schema.define(version: 20160426201758) do
 
   add_index "rewards", ["campaign_id", "description"], name: "index_rewards_on_campaign_id_and_description", unique: true, using: :btree
   add_index "rewards", ["house_reward_id"], name: "index_rewards_on_house_reward_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                             default: "",        null: false
+    t.string   "encrypted_password",                default: "",        null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                     default: 0,         null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.integer  "failed_attempts",                   default: 0,         null: false
+    t.string   "unlock_token"
+    t.datetime "locked_at"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.string   "username",                                              null: false
+    t.string   "first_name",                                            null: false
+    t.string   "last_name",                                             null: false
+    t.string   "phone_number"
+    t.boolean  "contactable",                       default: false,     null: false
+    t.integer  "package_id"
+    t.string   "status",                 limit: 10, default: "pending", null: false
+  end
+
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

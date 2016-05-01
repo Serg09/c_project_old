@@ -81,16 +81,16 @@ RSpec.describe RewardsController, type: :controller do
         end
 
         describe "GET #edit" do
-          it "redirects to the author home page" do
+          it "redirects to the user home page" do
             get :edit, id: reward
-            expect(response).to redirect_to author_root_path #handled as a CanCan access exception
+            expect(response).to redirect_to user_root_path #handled as a CanCan access exception
           end
         end
 
         describe "patch #update" do
-          it "redirects to the author home page" do
+          it "redirects to the user home page" do
             patch :update, id: reward, reward: attributes
-            expect(response).to redirect_to author_root_path #handled as a CanCan access exception
+            expect(response).to redirect_to user_root_path #handled as a CanCan access exception
           end
 
           it 'does not update the reward' do
@@ -118,20 +118,20 @@ RSpec.describe RewardsController, type: :controller do
     end
 
     context 'that does not own the campaign' do
-      let (:other_author) { FactoryGirl.create(:author) }
-      before(:each) { sign_in other_author }
+      let (:other_user) { FactoryGirl.create(:user) }
+      before(:each) { sign_in other_user }
 
       describe "GET #new" do
-        it "redirects to the author home page" do
+        it "redirects to the user home page" do
           get :new, campaign_id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe "POST #create" do
-        it "redirects to the author home page" do
+        it "redirects to the user home page" do
           post :create, campaign_id: campaign, reward: attributes
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not create a new reward record' do
@@ -142,16 +142,16 @@ RSpec.describe RewardsController, type: :controller do
       end
 
       describe "GET #edit" do
-        it "redirects to the author home page" do
+        it "redirects to the user home page" do
           get :edit, id: reward
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the author home page" do
+        it "redirects to the user home page" do
           patch :update, id: reward, reward: attributes
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not update the reward' do
@@ -163,9 +163,9 @@ RSpec.describe RewardsController, type: :controller do
       end
 
       describe "DELETE #destroy" do
-        it "redirects to the author home page" do
+        it "redirects to the user home page" do
           get :destroy, id: reward
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not delete the reward record' do
@@ -182,14 +182,14 @@ RSpec.describe RewardsController, type: :controller do
     describe "GET #new" do
       it "redirects to the sign in page" do
         get :new, campaign_id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "POST #create" do
       it "redirects to the sign in page" do
         post :create, campaign_id: campaign, reward: attributes
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not create a new reward record' do
@@ -202,14 +202,14 @@ RSpec.describe RewardsController, type: :controller do
     describe "GET #edit" do
       it "redirects to the sign in page" do
           get :edit, id: reward
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "patch #update" do
       it "redirects to the sign in page" do
         patch :update, id: reward, reward: attributes
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not update the reward' do
@@ -223,7 +223,7 @@ RSpec.describe RewardsController, type: :controller do
     describe "DELETE #destroy" do
       it "redirects to the sign in page" do
         get :destroy, id: reward
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not delete the reward record' do

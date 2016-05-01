@@ -3,7 +3,7 @@
 # Table name: images
 #
 #  id              :integer          not null, primary key
-#  author_id       :integer          not null
+#  user_id         :integer          not null
 #  image_binary_id :integer          not null
 #  hash_id         :string(40)       not null
 #  mime_type       :string(20)       not null
@@ -15,13 +15,13 @@ class Image < ActiveRecord::Base
   MAX_IMAGE_WIDTH = 1024
   MAX_IMAGE_HEIGHT = 1024
 
-  belongs_to :author
+  belongs_to :user
   belongs_to :image_binary
   has_many :bios, foreign_key: 'photo_id'
   has_many :cover_of_book_versions, foreign_key: 'cover_image_id', class_name: 'BookVersion'
   has_many :sample_of_book_versions, foreign_key: 'sample_id', class_name: 'BookVersion'
 
-  validates_presence_of :author_id, :image_binary_id, :hash_id
+  validates_presence_of :user_id, :image_binary_id, :hash_id
   validates_length_of :hash_id, is: 40
   validates_uniqueness_of :hash_id
 
@@ -29,7 +29,7 @@ class Image < ActiveRecord::Base
     Digest::SHA1.hexdigest(data)
   end
 
-  def self.find_or_create_from_file(file, author)
+  def self.find_or_create_from_file(file, user)
     # read and resize the image
     magick = Magick::Image.from_blob(file.read).first
     scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
@@ -37,12 +37,12 @@ class Image < ActiveRecord::Base
 
     # see if the image is already present in the database
     hash_id = hash_id(data)
-    image = find_by(hash_id: hash_id, author_id: author.id)
+    image = find_by(hash_id: hash_id, user_id: user.id)
 
     # create the image record if it doesn't exist
     unless image
       image_binary = ImageBinary.create!(data: data)
-      image = create!(author: author,
+      image = create!(user: user,
                       image_binary: image_binary,
                       hash_id: hash_id,
                       mime_type: file.respond_to?(:content_type) ?
@@ -54,8 +54,8 @@ class Image < ActiveRecord::Base
     image
   end
 
-  def can_be_viewed_by?(author)
-    return true if author_id == author.id && references.any?{|r| r.pending?}
+  def can_be_viewed_by?(user)
+    return true if user_id == user.id && references.any?{|r| r.pending?}
     references.any?{|r| r.approved?}
   end
 

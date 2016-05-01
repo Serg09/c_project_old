@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Bio, type: :model do
-  let (:author) { FactoryGirl.create(:author) }
-  let (:photo) { FactoryGirl.create(:image, author: author) }
+  let (:author) { FactoryGirl.create(:user) }
+  let (:photo) { FactoryGirl.create(:image, user: author) }
   let (:attributes) do
     {
       author_id: author.id,
@@ -27,7 +27,7 @@ RSpec.describe Bio, type: :model do
       expect(bio).to have_at_least(1).error_on :author_id
     end
 
-    it 'points to an author record' do
+    it 'points to an user record' do
       bio = Bio.new(attributes)
       expect(bio.author.first_name).to eq author.first_name
     end

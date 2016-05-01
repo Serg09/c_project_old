@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::BookVersionsController, type: :controller do
-  let (:author) { FactoryGirl.create(:approved_author) }
+  let (:author) { FactoryGirl.create(:approved_user) }
   let (:book) { FactoryGirl.create(:pending_book, author: author) }
   let (:pending_book_version) { book.pending_version }
 

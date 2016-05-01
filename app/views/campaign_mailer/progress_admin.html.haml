@@ -13,7 +13,7 @@
   %h2
     %strong= campaign.book.approved_version.title
     %span.small
-      by #{h link_to campaign.book.author.full_name, author_url(campaign.book.author)}
+      by #{h link_to campaign.book.author.full_name, user_url(campaign.book.author)}
   %table
     %tr
       %th.text-right Total collected:

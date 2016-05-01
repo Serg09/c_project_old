@@ -1,5 +1,5 @@
 class DonationsController < ApplicationController
-  before_filter :authenticate_author!, only: [:index, :show]
+  before_filter :authenticate_user!, only: [:index, :show]
   before_filter :load_campaign, only: [:index, :new, :create]
   before_filter :load_donation, only: [:show]
 

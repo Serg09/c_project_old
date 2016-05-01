@@ -17,7 +17,7 @@ class Bio < ActiveRecord::Base
 
   before_save :process_photo_file
 
-  belongs_to :author
+  belongs_to :author, class_name: 'User'
   belongs_to :photo, class_name: Image
   validates_associated :links
   serialize :links, Link

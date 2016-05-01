@@ -1,10 +1,10 @@
 class FulfillmentsController < ApplicationController
-  before_filter :authenticate_author!
+  before_filter :authenticate_user!
   before_filter :load_fulfillment, only: :fulfill
 
   def index
     @fulfillments = Fulfillment.
-      author(current_author).
+      author(current_user).
       undelivered.
       ready.
       paginate(page: params[:page])

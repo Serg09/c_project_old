@@ -1,12 +1,12 @@
-class Admin::AuthorsController < ApplicationController
+class Admin::UsersController < ApplicationController
   before_filter :authenticate_administrator!
   before_filter :load_author, only: [:show, :approve, :reject]
   layout 'admin'
   respond_to :html
 
   def index
-    authorize! :read, Author
-    @authors = Author.where(status: query_status).paginate(page: params[:page])
+    authorize! :read, User
+    @authors = User.where(status: query_status).paginate(page: params[:page])
     respond_with @authors
   end
 
@@ -17,10 +17,10 @@ class Admin::AuthorsController < ApplicationController
 
   def approve
     authorize! :approve, @author
-    @author.status = Author.APPROVED
+    @author.status = User.APPROVED
     if @author.save
       flash[:notice] = 'The author has been approved successfully.'
-      redirect_to admin_authors_path
+      redirect_to admin_users_path
     else
       flash.now[:error] = 'Unable to update the author record.'
     end
@@ -28,10 +28,10 @@ class Admin::AuthorsController < ApplicationController
 
   def reject
     authorize! :reject, @author
-    @author.status = Author.REJECTED
+    @author.status = User.REJECTED
     if @author.save
       flash[:notice] = 'The author has been rejected successfully.'
-      redirect_to admin_authors_path
+      redirect_to admin_users_path
     else
       flash.now[:error] = 'Unable to update the author record.'
     end
@@ -40,10 +40,10 @@ class Admin::AuthorsController < ApplicationController
   private
 
   def load_author
-    @author = params[:id] ? Author.find(params[:id]) : current_author
+    @author = params[:id] ? User.find(params[:id]) : current_author
   end
 
   def query_status
-    params[:status] || Author.PENDING
+    params[:status] || User.PENDING
   end
 end

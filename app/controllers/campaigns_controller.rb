@@ -1,5 +1,5 @@
 class CampaignsController < ApplicationController
-  before_filter :authenticate_author!
+  before_filter :authenticate_user!
   before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :start, :collect, :cancel, :prolong]
   before_filter :load_book, only: [:index, :new, :create]
 

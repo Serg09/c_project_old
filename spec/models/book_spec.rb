@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Book, type: :model do
-  let (:author) { FactoryGirl.create(:author) }
+  let (:author) { FactoryGirl.create(:user) }
   let (:attributes) do
     {
       author_id: author.id,
@@ -107,7 +107,7 @@ RSpec.describe Book, type: :model do
   end
 
   shared_context :campaigns do
-    let (:author) { FactoryGirl.create(:approved_author) }
+    let (:author) { FactoryGirl.create(:approved_user) }
     let (:book) { FactoryGirl.create(:approved_book, author: author) }
     let!(:campaign) { FactoryGirl.create(:campaign, book: book) }
   end

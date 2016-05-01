@@ -50,7 +50,7 @@ Given /^there is an author named "([\S]+)\s([^"]+)" with email "([^"]+)" and pas
 end
 
 Given /^I am signed in as an author with "([^\/]+)\/([^"]+)"$/ do |email, password|
-  visit new_author_session_path
+  visit new_user_session_path
   within('#main_content') do
     fill_in 'Email', with: email
     fill_in 'Password', with: password

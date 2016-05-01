@@ -4,7 +4,7 @@ RSpec.describe FulfillmentsController, type: :controller do
   let (:fulfillment) { FactoryGirl.create(:electronic_fulfillment) }
   let (:author) { fulfillment.reward.campaign.book.author }
 
-  context 'for an authenticated author' do
+  context 'for an authenticated user' do
     before(:each){ sign_in author }
 
     describe "get :index" do
@@ -31,14 +31,14 @@ RSpec.describe FulfillmentsController, type: :controller do
     end
   end
 
-  context 'for an author that does not own the fulfillment' do
-    let (:other_author) { FactoryGirl.create(:approved_author) }
-    before(:each) { sign_in other_author }
+  context 'for an user that does not own the fulfillment' do
+    let (:other_user) { FactoryGirl.create(:approved_user) }
+    before(:each) { sign_in other_user }
 
     describe 'patch :fulfill' do
-      it 'redirects to the author home page' do
+      it 'redirects to the user home page' do
         patch :fulfill, id: fulfillment
-        expect(response).to redirect_to author_root_path
+        expect(response).to redirect_to user_root_path
       end
 
       it 'does not update the fulfillment' do
@@ -52,16 +52,16 @@ RSpec.describe FulfillmentsController, type: :controller do
 
   context 'for an unauthenticated user' do
     describe "get :index" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         get :index
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe 'patch :fulfill' do
-      it 'redirects to the author sign in page' do
+      it 'redirects to the user sign in page' do
         patch :fulfill, id: fulfillment
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not update the fulfillment' do

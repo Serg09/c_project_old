@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe DonationsController, type: :controller do
-  let (:author) { bio.author }
+  let (:author) { FactoryGirl.create(:user) }
   let (:bio) { FactoryGirl.create(:approved_bio) }
   let (:book) { FactoryGirl.create(:approved_book, author: author) }
   let (:campaign) { FactoryGirl.create(:campaign, book: book) }
@@ -25,7 +25,7 @@ RSpec.describe DonationsController, type: :controller do
     }
   end
 
-  context 'for an authenticated author' do
+  context 'for an authenticated user' do
     context 'that owns the associated book' do
       before(:each) { sign_in author }
 
@@ -38,13 +38,13 @@ RSpec.describe DonationsController, type: :controller do
     end
 
     context 'that does not own the associated book' do
-      let (:other_author) { FactoryGirl.create(:author) }
-      before(:each) { sign_in other_author }
+      let (:other_user) { FactoryGirl.create(:user) }
+      before(:each) { sign_in other_user }
 
       describe "get :show" do
-        it 'redirects to the author home page' do
+        it 'redirects to the user home page' do
           get :show, id: donation
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
     end
@@ -52,9 +52,9 @@ RSpec.describe DonationsController, type: :controller do
 
   context 'for an unauthenticated user' do
     describe "get :show" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         get :show, id: donation
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 

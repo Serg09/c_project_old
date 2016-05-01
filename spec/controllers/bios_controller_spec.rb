@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BiosController, type: :controller do
   include Devise::TestHelpers
 
-  let (:author) { FactoryGirl.create(:approved_author) }
+  let (:author) { FactoryGirl.create(:approved_user) }
   let (:bio) { FactoryGirl.create(:bio, author: author) }
   let (:approved_bio) { FactoryGirl.create(:bio, author: author, status: Bio.APPROVED) }
   let (:attributes) do
@@ -16,7 +16,7 @@ RSpec.describe BiosController, type: :controller do
     }
   end
 
-  context 'for an authenticated author' do
+  context 'for an authenticated user' do
     before(:each) { sign_in author}
 
     context 'with an approved bio' do
@@ -122,8 +122,8 @@ RSpec.describe BiosController, type: :controller do
 
     end
     context 'that does not own the bio' do
-      let (:other_author) { FactoryGirl.create(:approved_author) }
-      before(:each) { sign_in other_author }
+      let (:other_user) { FactoryGirl.create(:approved_user) }
+      before(:each) { sign_in other_user }
 
       describe "get :show" do
         it 'is successful' do
@@ -133,16 +133,16 @@ RSpec.describe BiosController, type: :controller do
       end
 
       describe "get :edit" do
-        it 'redirects to the author home page' do
+        it 'redirects to the user home page' do
           get :edit, id: bio
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe 'put :update' do
-        it 'redirects to the author home page' do
+        it 'redirects to the user home page' do
           put :update, id: bio, bio: attributes
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not update the bio' do
@@ -151,53 +151,6 @@ RSpec.describe BiosController, type: :controller do
             bio.reload
           end.not_to change(bio, :text)
         end
-      end
-    end
-  end
-
-  context 'for an authenticated administrator' do
-    let (:admin) { FactoryGirl.create(:administrator) }
-    before(:each) { sign_in admin }
-
-    describe 'get :index' do
-      it 'redirects to the admin bio index page' do
-        # may need to reconsider this later
-        get :index, author_id: author.id
-        expect(response).to redirect_to admin_bios_path
-      end
-    end
-
-    describe 'get :new' do
-      it 'redirects to the administrator home page' do
-        get :new, author_id: author
-        expect(response).to redirect_to admin_root_path
-      end
-    end
-
-    describe 'post :create' do
-      it 'redirects to the administrator home page' do
-        post :create, author_id: author, bio: attributes
-        expect(response).to redirect_to admin_root_path
-      end
-
-      it 'does not create a new bio' do
-        expect do
-          post :create, author_id: author, bio: attributes
-        end.not_to change(Bio, :count)
-      end
-    end
-
-    describe "get :show" do
-      it 'is successful' do
-        get :show, id: bio
-        expect(response).to have_http_status :success
-      end
-    end
-
-    describe "get :edit" do
-      it 'redirects to the administrator home page' do
-        get :edit, id: bio
-        expect(response).to redirect_to admin_root_path
       end
     end
   end
@@ -229,14 +182,14 @@ RSpec.describe BiosController, type: :controller do
     describe 'get :new' do
       it 'redirects to the sign in page' do
         get :new, author_id: author
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe 'post :create' do
       it 'redirects to the sign in page' do
         post :create, author_id: author, bio: attributes
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not create a new bio' do
@@ -269,7 +222,7 @@ RSpec.describe BiosController, type: :controller do
     describe "get :edit" do
       it 'redirects to the sign in page' do
         get :edit, id: bio
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
