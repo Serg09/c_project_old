@@ -1,5 +1,5 @@
 class BookVersionsController < ApplicationController
-  before_filter :authenticate_author!, except: [:show]
+  before_filter :authenticate_user!, except: [:show]
   before_filter :load_book_version, only: [:show, :edit, :update]
   before_filter :load_book, only: [:index, :new, :create]
   respond_to :html
@@ -103,15 +103,15 @@ class BookVersionsController < ApplicationController
   end
 
   def with_permission
-    unless author_signed_in?
-      # Not an author, they can't edit it
+    unless user_signed_in?
+      # Not a user, they can't edit it
       redirect_to root_path, notice: "We were not able to find the resource you requested."
       return
     end
 
-    unless current_author.id == @book_version.book.author_id
+    unless current_user.id == @book_version.book.author_id
       # Not the owner, they can't edit it
-      redirect_to author_root_path, notice: "We were not able to find the resource you requested."
+      redirect_to user_root_path, notice: "We were not able to find the resource you requested."
       return
     end
 

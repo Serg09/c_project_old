@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Image, type: :model do
-  let (:author) { FactoryGirl.create(:author) }
+  let (:user) { FactoryGirl.create(:user) }
   let (:image_binary) { FactoryGirl.create(:image_binary) }
   let (:attributes) do
     {
-      author_id: author.id,
+      user_id: user.id,
       image_binary_id: image_binary.id,
       hash_id: Image.hash_id(image_binary.data),
       mime_type: 'image/jpeg'
@@ -27,10 +27,10 @@ RSpec.describe Image, type: :model do
     end
   end
 
-  describe '#author_id' do
+  describe '#user_id' do
     it 'is required' do
-      image = Image.new attributes.except(:author_id)
-      expect(image).to have_at_least(1).error_on :author_id
+      image = Image.new attributes.except(:user_id)
+      expect(image).to have_at_least(1).error_on :user_id
     end
   end
 
@@ -64,10 +64,10 @@ RSpec.describe Image, type: :model do
     end
   end
 
-  describe '#author' do
-    it 'is a reference to the author that owns the image' do
+  describe '#user' do
+    it 'is a reference to the user that owns the image' do
       image = Image.new attributes
-      expect(image.author.full_name).to eq author.full_name
+      expect(image.user.full_name).to eq user.full_name
     end
   end
 

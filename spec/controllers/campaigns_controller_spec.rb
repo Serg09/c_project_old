@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CampaignsController, type: :controller do
-  let (:author) { FactoryGirl.create(:approved_author) }
+  let (:author) { FactoryGirl.create(:approved_user) }
   let (:book) { FactoryGirl.create(:approved_book, author: author) }
   let (:campaign) { FactoryGirl.create(:campaign, book: book) }
   let (:attributes) do
@@ -14,7 +14,7 @@ RSpec.describe CampaignsController, type: :controller do
   before(:each) { Timecop.freeze(Chronic.parse('2016-03-02 12:00:00 CST')) }
   after(:each) { Timecop.return }
 
-  context 'for an authenticated author' do
+  context 'for an authenticated user' do
     context 'that owns the book' do
       before(:each) { sign_in author  }
 
@@ -233,27 +233,27 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     context 'that does not own the book' do
-      let (:other_author) { FactoryGirl.create(:approved_author) }
-      before(:each) { sign_in other_author  }
+      let (:other_user) { FactoryGirl.create(:approved_user) }
+      before(:each) { sign_in other_user  }
 
       describe "get :index" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
           get :index, book_id: book
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe "get :new" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
           get :new, book_id: book
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe "post :create" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
           post :create, book_id: book, campaign: attributes
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not create a new campain record' do
@@ -267,23 +267,23 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe "get :show" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
           get :show, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe "get :edit" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
             get :edit, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
       end
 
       describe "patch :update" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
           patch :update, id: campaign, campaign: attributes
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not update the campaign' do
@@ -298,9 +298,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe 'patch :start' do
-        it 'redirects to the author home page' do
+        it 'redirects to the user home page' do
           patch :start, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not change the state of the campaign' do
@@ -311,9 +311,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe 'patch :prolong' do
-        it 'redirects to the author home page' do
+        it 'redirects to the user home page' do
           patch :prolong, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not change the state of the campaign' do
@@ -324,9 +324,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe 'patch :collect' do
-        it 'redirects to the author root page' do
+        it 'redirects to the user root page' do
           patch :collect, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not change the state of the campaign' do
@@ -337,9 +337,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe 'patch :cancel' do
-        it 'redirects to the author root page' do
+        it 'redirects to the user root page' do
           patch :cancel, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not change the campaign state' do
@@ -351,9 +351,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe "delete :destroy" do
-        it "redirects to the author root page" do
+        it "redirects to the user root page" do
           delete :destroy, id: campaign
-          expect(response).to redirect_to author_root_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'does not remove the campaign record' do
@@ -371,23 +371,23 @@ RSpec.describe CampaignsController, type: :controller do
 
   context 'for an unauthenticated user' do
     describe "get :index" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         get :index, book_id: book
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "get :new" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         get :new, book_id: book
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "post :create" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         post :create, book_id: book
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not create a new campain record' do
@@ -398,23 +398,23 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe "get :show" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         get :show, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "get :edit" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         get :edit, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "patch :update" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         patch :update, id: campaign, campaign: attributes
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not update the campaign' do
@@ -426,9 +426,9 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe 'patch :start' do
-      it 'redirects to the author sign in page' do
+      it 'redirects to the user sign in page' do
         patch :start, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not change the state of the campaign' do
@@ -439,9 +439,9 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe 'patch :prolong' do
-      it 'redirects to the author sign in page' do
+      it 'redirects to the user sign in page' do
         patch :prolong, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not change the state of the campaign' do
@@ -453,9 +453,9 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe 'patch :collect' do
-      it 'redirects to the author sign in page' do
+      it 'redirects to the user sign in page' do
         patch :collect, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not change the state of the campaign' do
@@ -466,9 +466,9 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe 'patch :cancel' do
-      it 'redirects to the author sign in page' do
+      it 'redirects to the user sign in page' do
         patch :cancel, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not change the campaign state' do
@@ -480,9 +480,9 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     describe "delete :destroy" do
-      it "redirects to the author sign in page" do
+      it "redirects to the user sign in page" do
         delete :destroy, id: campaign
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not remove the campaign record' do

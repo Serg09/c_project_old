@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BooksController, type: :controller do
-  let (:author) { FactoryGirl.create(:author) }
+  let (:author) { FactoryGirl.create(:user) }
   let (:pending_book) { FactoryGirl.create(:pending_book, author: author) }
   let (:approved_book) { FactoryGirl.create(:approved_book, author: author) }
   let (:rejected_book) { FactoryGirl.create(:rejected_book, author: author) }
@@ -20,7 +20,7 @@ RSpec.describe BooksController, type: :controller do
     }
   end
 
-  context 'for an authenticated author' do
+  context 'for an authenticated user' do
     before(:each) { sign_in author }
 
     describe 'get :browse' do
@@ -165,28 +165,28 @@ RSpec.describe BooksController, type: :controller do
     end
 
     context 'that does not own the book' do
-      let (:other_author) { FactoryGirl.create(:approved_author) }
-      before(:each) { sign_in other_author }
+      let (:other_user) { FactoryGirl.create(:approved_user) }
+      before(:each) { sign_in other_user }
 
       context 'that is pending approval' do
         describe 'get :show' do
           it 'redirects to the home page' do
             get :show, id: pending_book
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
         end
 
         describe 'get :edit' do
           it 'redirects to the home page' do
             get :edit, id: pending_book
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
         end
 
         describe 'patch :update' do
           it 'redirects to the home page' do
             patch :update, id: pending_book, book: attributes
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
 
           it 'does not update the book' do
@@ -210,14 +210,14 @@ RSpec.describe BooksController, type: :controller do
         describe 'get :edit' do
           it 'redirects to the home page' do
             get :edit, id: approved_book
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
         end
 
         describe 'patch :update' do
           it 'redirects to the home page' do
             patch :update, id: approved_book, book: attributes
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
 
           it 'does not update the book' do
@@ -234,21 +234,21 @@ RSpec.describe BooksController, type: :controller do
         describe 'get :show' do
           it 'redirects to the home page' do
             get :show, id: rejected_book
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
         end
 
         describe 'get :edit' do
           it 'redirects to the home page' do
             get :edit, id: rejected_book
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
         end
 
         describe 'patch :update' do
           it 'redirects to the home page' do
             patch :update, id: rejected_book, book: attributes
-            expect(response).to redirect_to author_root_path
+            expect(response).to redirect_to user_root_path
           end
 
           it 'does not update the book version' do
@@ -266,21 +266,21 @@ RSpec.describe BooksController, type: :controller do
     describe "get #index" do
       it "redirects to the home page" do
         get :index
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "get #new" do
       it "redirects to the home page" do
         get :new, author_id: author
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
     describe "post #create" do
       it "redirects to the home page" do
         post :create, author_id: author, book: book_version_attributes
-        expect(response).to redirect_to new_author_session_path
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not create a book record' do
@@ -299,16 +299,16 @@ RSpec.describe BooksController, type: :controller do
       end
 
       describe "get #edit" do
-        it "redirects to the author sign in page" do
+        it "redirects to the user sign in page" do
           get :edit, id: pending_book
-          expect(response).to redirect_to new_author_session_path
+          expect(response).to redirect_to new_user_session_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the author sign in page" do
+        it "redirects to the user sign in page" do
           patch :update, id: pending_book, book: attributes
-          expect(response).to redirect_to new_author_session_path
+          expect(response).to redirect_to new_user_session_path
         end
 
         it 'does not update the book' do
@@ -329,16 +329,16 @@ RSpec.describe BooksController, type: :controller do
       end
 
       describe "get #edit" do
-        it "redirects to the author sign in page" do
+        it "redirects to the user sign in page" do
           get :edit, id: approved_book
-          expect(response).to redirect_to new_author_session_path
+          expect(response).to redirect_to new_user_session_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the author sign in page" do
+        it "redirects to the user sign in page" do
           patch :update, id: approved_book, book: attributes
-          expect(response).to redirect_to new_author_session_path
+          expect(response).to redirect_to new_user_session_path
         end
 
         it 'does not update the book' do
@@ -359,16 +359,16 @@ RSpec.describe BooksController, type: :controller do
       end
 
       describe "get #edit" do
-        it "redirects to the author sign in page" do
+        it "redirects to the user sign in page" do
           get :edit, id: rejected_book
-          expect(response).to redirect_to new_author_session_path
+          expect(response).to redirect_to new_user_session_path
         end
       end
 
       describe "patch #update" do
-        it "redirects to the author sign in page" do
+        it "redirects to the user sign in page" do
           patch :update, id: rejected_book, book: attributes
-          expect(response).to redirect_to new_author_session_path
+          expect(response).to redirect_to new_user_session_path
         end
 
         it 'does not update the book' do

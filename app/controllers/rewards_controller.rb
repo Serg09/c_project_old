@@ -1,7 +1,7 @@
 class RewardsController < ApplicationController
   respond_to :html
 
-  before_filter :authenticate_author!
+  before_filter :authenticate_user!
   before_filter :load_campaign, only: [:new, :create]
   before_filter :load_reward, only: [:edit, :update, :destroy]
 

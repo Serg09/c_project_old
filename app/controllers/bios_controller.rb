@@ -18,11 +18,11 @@ class BiosController < ApplicationController
       flash[:notice] = "Your bio has been submitted successfully. It is now waiting for administrative approval."
       BioMailer.submission(@bio).deliver_now
     end
-    respond_with @bio, location: author_signed_in? ? bios_path : author_bios_path(@author)
+    respond_with @bio, location: user_signed_in? ? bios_path : author_bios_path(@author)
   end
 
   def index
-    if author_signed_in?
+    if user_signed_in?
       # Show the most recent non-rejected bio
       @bio = @author.working_bio
       if @bio
@@ -72,10 +72,10 @@ class BiosController < ApplicationController
     @author = case
               when @bio
                 @bio.author
-              when author_signed_in?
-                current_author
+              when user_signed_in?
+                current_user
               when params[:author_id]
-                Author.find(params[:author_id])
+                User.find(params[:author_id])
               else
                 nil
               end

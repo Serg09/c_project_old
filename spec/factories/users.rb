@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :author, aliases: [:pending_author] do
+  factory :user, aliases: [:pending_user] do
     transient do
       confirmed true
     end
@@ -12,18 +12,18 @@ FactoryGirl.define do
     password_confirmation "please01"
     contactable true
     package_id 1
-    status Author.PENDING
+    status User.PENDING
 
-    after(:create) do |author, evaluator|
-      author.confirm if evaluator.confirmed
+    after(:create) do |user, evaluator|
+      user.confirm if evaluator.confirmed
     end
 
-    factory :approved_author do
-      status Author.APPROVED
+    factory :approved_user do
+      status User.APPROVED
     end
 
-    factory :rejected_author do
-      status Author.REJECTED
+    factory :rejected_user do
+      status User.REJECTED
     end
   end
 end

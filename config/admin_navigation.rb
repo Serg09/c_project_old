@@ -3,12 +3,12 @@ SimpleNavigation::Configuration.run do |navigation|
 
   navigation.items do |primary|
     primary.dom_class = 'nav navbar-nav'
-    primary.item :authors, author_nav_item_caption, admin_authors_path, if: ->{administrator_signed_in?} do |authors|
-      authors.auto_highlight = false
-      authors.dom_class = 'nav nav-tabs'
-      authors.item :pending, 'Pending', admin_authors_path, highlights_on: -> { author_path?(Author.PENDING) }
-      authors.item :approved, 'approved', admin_authors_path(status: :approved), highlights_on: -> { author_path?(Author.APPROVED) }
-      authors.item :rejected, 'Rejected', admin_authors_path(status: :rejected), highlights_on: -> { author_path?(Author.REJECTED) }
+    primary.item :users, user_nav_item_caption, admin_users_path, if: ->{administrator_signed_in?} do |users|
+      users.auto_highlight = false
+      users.dom_class = 'nav nav-tabs'
+      users.item :pending, 'Pending', admin_users_path, highlights_on: -> { user_path?(User.PENDING) }
+      users.item :approved, 'approved', admin_users_path(status: :approved), highlights_on: -> { user_path?(User.APPROVED) }
+      users.item :rejected, 'Rejected', admin_users_path(status: :rejected), highlights_on: -> { user_path?(User.REJECTED) }
     end
     primary.item :bios, bio_nav_item_caption, admin_bios_path, if: ->{administrator_signed_in?} do |bios|
       bios.auto_highlight = false

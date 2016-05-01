@@ -19,7 +19,7 @@ Given /^authors have submitted the following books$/ do |table|
   table.raw.lazy.drop(1).map do |attr|
     Hash[*keys.zip(attr).flatten]
   end.each do |book_attributes|
-    author = find_or_create_author_by_full_name(book_attributes[:author])
+    author = find_or_create_user_by_full_name(book_attributes[:author])
     book = FactoryGirl.create(:approved_book, book_attributes.merge(author: author))
   end
 end

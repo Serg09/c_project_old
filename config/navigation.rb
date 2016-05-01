@@ -14,14 +14,14 @@ SimpleNavigation::Configuration.run do |navigation|
     end
     if !AppSetting.sign_in_disabled?
       primary.item :authors, 'Authors' do |authors|
-        if author_signed_in?
+        if user_signed_in?
           authors.item :bio, 'Bio', bios_path
           authors.item :my_books, 'My books', books_path
           authors.item :reward_fulfillment, 'Reward fulfillment', fulfillments_path
-          authors.item :author_sign_out, 'Sign Out', destroy_author_session_path, method: :delete, if: ->{author_signed_in? && !AppSetting.sign_in_disabled?}
+          authors.item :author_sign_out, 'Sign Out', destroy_user_session_path, method: :delete, if: ->{user_signed_in? && !AppSetting.sign_in_disabled?}
         else
-          authors.item :author_sign_in, 'Log in', new_author_session_path
-          authors.item :author_sign_up, 'Signup', new_author_registration_path, if: ->{!author_signed_in? && !AppSetting.sign_in_disabled?}
+          authors.item :author_sign_in, 'Log in', new_user_session_path
+          authors.item :author_sign_up, 'Signup', new_user_registration_path, if: ->{!user_signed_in? && !AppSetting.sign_in_disabled?}
         end
       end
     end

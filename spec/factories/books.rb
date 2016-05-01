@@ -6,7 +6,7 @@ FactoryGirl.define do
       long_description { Faker::Hipster.paragraphs.join("\n") }
       status BookVersion.APPROVED
     end
-    association :author, factory: :approved_author
+    association :author, factory: :approved_user
 
     after(:create) do |book, evaluator|
       book.versions << FactoryGirl.create(:book_version,

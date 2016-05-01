@@ -1,0 +1,21 @@
+:css
+  th {
+    text-align: right;
+  }
+%h1 New user
+
+%p
+  A new user has signed up at CrowdScribed.com.
+
+%table
+  %tr
+    %th Name:
+    %td= @user.full_name
+  -if @user.phone_number && @user.contactable?
+    %tr
+      %th Phone:
+      %td= @user.phone_number
+
+%p
+  =link_to 'Sign in', new_administrator_session_url
+  to administer user submissions.

@@ -13,4 +13,4 @@ Feature: Administrator sign in
     And I click "Sign in"
 
     Then I should see "Signed in successfully" within the notification area
-    And I should see "Authors" within the main menu
+    And I should see "Users" within the main menu

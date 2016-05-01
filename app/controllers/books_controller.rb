@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_filter :authenticate_author!, only: [ :index, :edit, :update, :new, :create ]
+  before_filter :authenticate_user!, only: [ :index, :edit, :update, :new, :create ]
   before_filter :load_author, only: [:index, :new, :create]
   before_filter :load_book, only: [:show, :edit, :update]
   respond_to :html
@@ -13,7 +13,7 @@ class BooksController < ApplicationController
   end
 
   def show
-    @book_version = if author_signed_in? && current_author.id == @author.id
+    @book_version = if user_signed_in? && current_user.id == @author.id
                       @book.working_version
                     else
                       @book.approved_version
@@ -46,13 +46,13 @@ class BooksController < ApplicationController
   end
 
   def update
-    unless author_signed_in?
+    unless user_signed_in?
       redirect_to root_path, notice: "We were not able to find the resource you requested."
       return
     end
 
-    unless current_author.id == @book.author_id
-      redirect_to author_root_path, notice: "We were not able to find the resource you requested."
+    unless current_user.id == @book.author_id
+      redirect_to user_root_path, notice: "We were not able to find the resource you requested."
       return
     end
 
@@ -83,7 +83,7 @@ class BooksController < ApplicationController
   end
 
   def load_author
-    @author = current_author
+    @author = current_user
   end
 
   def load_book
@@ -93,8 +93,8 @@ class BooksController < ApplicationController
   end
 
   def not_found_redirect_path
-    if author_signed_in?
-      author_root_path
+    if user_signed_in?
+      user_root_path
     else
       root_path
     end

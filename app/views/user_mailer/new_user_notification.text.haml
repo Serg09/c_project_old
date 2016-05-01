@@ -1,0 +1,14 @@
+New user
+:plain
+
+A new user has signed up at CrowdScribed.com
+:plain
+
+=@user.full_name
+-if @user.phone_number && @user.contactable?
+  =@user.phone_number
+:plain
+
+Follow the link below to administer new users
+=new_administrator_session_url
+

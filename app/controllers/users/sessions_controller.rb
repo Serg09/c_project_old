@@ -1,4 +1,4 @@
-class Authors::SessionsController < Devise::SessionsController
+class Users::SessionsController < Devise::SessionsController
 # before_filter :configure_sign_in_params, only: [:create]
   before_filter :ensure_sign_in_allowed, only: [:new, :create]
 
@@ -9,7 +9,7 @@ class Authors::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    return unless ensure_author_approved!
+    return unless ensure_user_approved!
     super
   end
 
@@ -27,15 +27,15 @@ class Authors::SessionsController < Devise::SessionsController
 
   private
 
-  def ensure_author_approved!
-    author = Author.find_by(email: sign_in_params[:email])
-    case author.try(:status)
-    when Author.PENDING
+  def ensure_user_approved!
+    user = User.find_by(email: sign_in_params[:email])
+    case user.try(:status)
+    when User.PENDING
       flash[:warning] = 'Unable to sign in. Your account is still pending approval by the administrator.'
       redirect_to pages_account_pending_path
       return false
-    when Author.REJECTED
-      redirect_to new_author_session_path, alert: 'Unable to sign in. Your account has been rejected by the administrator.'
+    when User.REJECTED
+      redirect_to new_user_session_path, alert: 'Unable to sign in. Your account has been rejected by the administrator.'
       return false
     end
     true

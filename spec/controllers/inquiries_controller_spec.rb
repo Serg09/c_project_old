@@ -43,9 +43,9 @@ describe InquiriesController do
     end
   end
 
-  context 'for an author' do
-    let (:author) { FactoryGirl.create(:author) }
-    before(:each) { sign_in author }
+  context 'for an authenticated user' do
+    let (:user) { FactoryGirl.create(:user) }
+    before(:each) { sign_in user }
 
     describe 'get :new' do
       it 'is successful' do

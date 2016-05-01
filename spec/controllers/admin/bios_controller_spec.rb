@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::BiosController, type: :controller do
-  let (:author) { FactoryGirl.create(:approved_author) }
+  let (:author) { FactoryGirl.create(:approved_user) }
   let (:pending_bio) { FactoryGirl.create(:pending_bio, author: author) }
   let (:approved_bio) { FactoryGirl.create(:approved_bio, author: author) }
   let (:attributes) do
@@ -14,9 +14,9 @@ RSpec.describe Admin::BiosController, type: :controller do
     }
   end
 
-  context 'for an authenticated author' do
+  context 'for an authenticated user' do
     describe 'get :index' do
-      it 'redirects to the author home page' do
+      it 'redirects to the user home page' do
         sign_in author
         get :index
         expect(response).to redirect_to root_path
@@ -28,7 +28,7 @@ RSpec.describe Admin::BiosController, type: :controller do
 
       context 'that is approved' do
         describe 'patch :approve' do
-          it 'redirects to the author home page' do
+          it 'redirects to the user home page' do
             patch :approve, id: approved_bio
             expect(response).to redirect_to root_path
           end
@@ -41,7 +41,7 @@ RSpec.describe Admin::BiosController, type: :controller do
           end
         end
         describe 'patch :reject' do
-          it 'redirects to the author home page' do
+          it 'redirects to the user home page' do
             patch :reject, id: approved_bio
             expect(response).to redirect_to root_path
           end
@@ -87,8 +87,8 @@ RSpec.describe Admin::BiosController, type: :controller do
     end
 
     context 'that does not own the bio' do
-      let (:other_author) { FactoryGirl.create(:approved_author) }
-      before(:each) { sign_in other_author }
+      let (:other_user) { FactoryGirl.create(:approved_user) }
+      before(:each) { sign_in other_user }
 
       context 'that is approved' do
         describe 'patch :approve' do
@@ -106,7 +106,7 @@ RSpec.describe Admin::BiosController, type: :controller do
         end
 
         describe 'patch :reject' do
-          it 'redirects to the author home page' do
+          it 'redirects to the user home page' do
             patch :reject, id: approved_bio
             expect(response).to redirect_to root_path
           end

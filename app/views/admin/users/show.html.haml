@@ -1,8 +1,5 @@
 =content_for :page_title do
-  -if administrator_signed_in?
-    Author
-  -else
-    My profile
+  User
 
 .container.container-default
   .row
@@ -10,30 +7,30 @@
       %table.table
         %tr
           %th First name
-          %td= @author.first_name
+          %td= @user.first_name
         %tr
           %th Last name
-          %td= @author.last_name
+          %td= @user.last_name
         %tr
           %th Email
-          %td= @author.email
+          %td= @user.email
         %tr
           %th Username
-          %td= @author.username
+          %td= @user.username
         %tr
           %th Phone number
-          %td= @author.phone_number
+          %td= @user.phone_number
         %tr
           %th OK to contact me
           %td
-            -if @author.contactable?
+            -if @user.contactable?
               &#x2713;
             -else
               &#x2715;
     -if administrator_signed_in?
       .col-md-2.btn-stack
-        =render 'shared/approval_buttons', resource: @author
-  -if can? :index, Author
+        =render 'shared/approval_buttons', resource: @user
+  -if can? :index, User
     .row
       .col-md-6
-        =link_to 'Back', authors_path, class: 'btn btn-default'
+        =link_to 'Back', users_path, class: 'btn btn-default'

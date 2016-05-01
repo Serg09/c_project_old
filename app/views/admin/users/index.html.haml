@@ -1,0 +1,18 @@
+=content_for :page_title do
+  Users
+
+.container
+  .row
+    .col-md-6
+      =render_navigation context: :admin, level: 2
+      %table#users-table.table.table-striped
+        %tr
+          %th Signup date
+          %th Name
+          %th Email
+        -@users.each do |user|
+          %tr
+            %td= format_date_time(user.created_at)
+            %td= link_to user.full_name, admin_user_path(user)
+            %td= user.email
+      =will_paginate @users, renderer: BootstrapPagination::Rails

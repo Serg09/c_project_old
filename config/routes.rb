@@ -7,14 +7,14 @@ Rails.application.routes.draw do
   devise_for :administrators, path: 'admin', controllers: {
     sessions: 'admin/sessions'
   }
-  devise_for :authors, controllers: {
-    sessions:      'authors/sessions',
-    registrations: 'authors/registrations',
-    confirmations: 'authors/confirmations'
+  devise_for :users, controllers: {
+    sessions:      'users/sessions',
+    registrations: 'users/registrations',
+    confirmations: 'users/confirmations'
   }
 
   resources :inquiries, only: [:new, :create]
-  resources :authors, only: [:show, :edit, :update, :index] do
+  resources :users, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
   end
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
@@ -51,7 +51,7 @@ Rails.application.routes.draw do
         patch :archive
       end
     end
-    resources :authors, only: [:index, :show] do
+    resources :users, only: [:index, :show] do
       member do
         patch :approve
         patch :reject
@@ -94,7 +94,7 @@ Rails.application.routes.draw do
   get 'pages/sign_up_confirmation'
   get 'pages/account_pending'
 
-  get 'authors', to: 'authors#show', as: :author_root
-  get 'admin', to: 'admin/authors#index', as: :admin_root
+  get 'users', to: 'users#show', as: :user_root
+  get 'admin', to: 'admin/users#index', as: :admin_root
   root to: 'pages#welcome'
 end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :bio, aliases: [:pending_bio] do
-    association :author, factory: :approved_author
+    association :author, factory: :approved_user
     text { Faker::Lorem.paragraphs(3).join("\n")}
 
     factory :approved_bio do

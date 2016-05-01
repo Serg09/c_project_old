@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: authors
+# Table name: users
 #
 #  id                     :integer          not null, primary key
 #  email                  :string           default(""), not null
@@ -31,11 +31,11 @@
 #  status                 :string(10)       default("pending"), not null
 #
 
-class Author < ActiveRecord::Base
+class User < ActiveRecord::Base
   include Approvable
 
-  has_many :bios
-  has_many :books
+  has_many :bios, foreign_key: :author_id
+  has_many :books, foreign_key: :author_id
   has_many :book_versions, through: :books, source: :versions
   has_many :campaigns, through: :books
 

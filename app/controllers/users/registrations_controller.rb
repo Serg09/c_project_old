@@ -1,4 +1,4 @@
-class Authors::RegistrationsController < Devise::RegistrationsController
+class Users::RegistrationsController < Devise::RegistrationsController
   before_filter :configure_sign_up_params, only: [:create]
   before_filter :ensure_sign_in_allowed, only: [:new, :create]
 # before_filter :configure_account_update_params, only: [:update]
@@ -13,7 +13,7 @@ class Authors::RegistrationsController < Devise::RegistrationsController
     super do |resource|
       if resource.valid?
         flash[:notice] = 'Your request for access has been accepted.'
-        AuthorMailer.new_author_notification(resource).deliver_now
+        UserMailer.new_user_notification(resource).deliver_now
       else
         flash[:alert] = 'We were unable to save your registration.'
       end
