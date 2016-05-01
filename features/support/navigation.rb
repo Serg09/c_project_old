@@ -11,6 +11,7 @@ module Navigation
     when "the administrator home page" then admin_root_path
     when "my profile page" then user_root_path
     when "the user home page" then user_root_path
+    when "the author home page" then user_root_path
     when /the campaign page for "([^"]+)/ then campaign_path(first_campaign_for_book_with_title($1))
     else raise "Unrecognized path identifier \"#{identifier}\""
     end

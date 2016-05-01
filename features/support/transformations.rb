@@ -15,9 +15,15 @@ DOLLAR_AMOUNT = Transform /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/ do |amount|
   end
 end
 
+USER = Transform /user (.+@.+)/ do |email|
+  user = User.find_by(email: email)
+  expect(user).not_to be_nil, "User with email \"#{email}\" not found"
+  user 
+end
+
 AUTHOR = Transform /author (.+@.+)/ do |email|
-  author = Author.find_by(email: email)
-  expect(author).not_to be_nil, "Author with email \"#{email}\" not found"
+  author = User.find_by(email: email)
+  expect(author).not_to be_nil, "User with email \"#{email}\" not found"
   author
 end
 

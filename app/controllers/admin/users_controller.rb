@@ -1,46 +1,46 @@
 class Admin::UsersController < ApplicationController
   before_filter :authenticate_administrator!
-  before_filter :load_author, only: [:show, :approve, :reject]
+  before_filter :load_user, only: [:show, :approve, :reject]
   layout 'admin'
   respond_to :html
 
   def index
     authorize! :read, User
-    @authors = User.where(status: query_status).paginate(page: params[:page])
-    respond_with @authors
+    @users = User.where(status: query_status).paginate(page: params[:page])
+    respond_with @users
   end
 
   def show
-    authorize! :show, @author
-    respond_with @author
+    authorize! :show, @user
+    respond_with @user
   end
 
   def approve
-    authorize! :approve, @author
-    @author.status = User.APPROVED
-    if @author.save
-      flash[:notice] = 'The author has been approved successfully.'
+    authorize! :approve, @user
+    @user.status = User.APPROVED
+    if @user.save
+      flash[:notice] = 'The user has been approved successfully.'
       redirect_to admin_users_path
     else
-      flash.now[:error] = 'Unable to update the author record.'
+      flash.now[:error] = 'Unable to update the user record.'
     end
   end
 
   def reject
-    authorize! :reject, @author
-    @author.status = User.REJECTED
-    if @author.save
-      flash[:notice] = 'The author has been rejected successfully.'
+    authorize! :reject, @user
+    @user.status = User.REJECTED
+    if @user.save
+      flash[:notice] = 'The user has been rejected successfully.'
       redirect_to admin_users_path
     else
-      flash.now[:error] = 'Unable to update the author record.'
+      flash.now[:error] = 'Unable to update the user record.'
     end
   end
 
   private
 
-  def load_author
-    @author = params[:id] ? User.find(params[:id]) : current_author
+  def load_user
+    @user = params[:id] ? User.find(params[:id]) : current_user
   end
 
   def query_status

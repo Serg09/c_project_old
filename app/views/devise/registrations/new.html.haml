@@ -15,7 +15,7 @@
   =form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     .row
       .col-md-4
-        =render partial: 'authors/form_fields', locals: { author: resource, f: f }
+        =render partial: 'users/form_fields', locals: { author: resource, f: f }
       .col-md-4
         .form-group{ :class => form_group_class(resource, :email) }
           =f.label :email, class: 'control-label'

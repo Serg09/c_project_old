@@ -1,4 +1,4 @@
-class Authors::ConfirmationsController < Devise::ConfirmationsController
+class Users::ConfirmationsController < Devise::ConfirmationsController
   # GET /resource/confirmation/new
   # def new
   #   super
@@ -12,7 +12,7 @@ class Authors::ConfirmationsController < Devise::ConfirmationsController
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
     super
-    AuthorMailer.account_pending_notification(resource).deliver_now if resource.errors.empty?
+    UserMailer.account_pending_notification(resource).deliver_now if resource.errors.empty?
   end
 
   # protected

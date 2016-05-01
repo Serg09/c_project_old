@@ -25,26 +25,26 @@ RSpec.describe UsersController, type: :controller do
         end
       end
 
-      describe "get :edit" do
-        it "returns http success" do
-          get :edit, id: user
-          expect(response).to have_http_status(:success)
-        end
-      end
+      #describe "get :edit" do
+      #  it "returns http success" do
+      #    get :edit, id: user
+      #    expect(response).to have_http_status(:success)
+      #  end
+      #end
 
-      describe "patch :update" do
-        it "updates the specified user" do
-          expect do
-            patch :update, id: user, user: { first_name: 'Jimbob' }
-            user.reload
-          end.to change(user, :first_name).to 'Jimbob'
-        end
+      #describe "patch :update" do
+      #  it "updates the specified user" do
+      #    expect do
+      #      patch :update, id: user, user: { first_name: 'Jimbob' }
+      #      user.reload
+      #    end.to change(user, :first_name).to 'Jimbob'
+      #  end
 
-        it "redirects to the user profile page" do
-          patch :update, id: user, user: { first_name: 'Jimbob' }
-          expect(response).to redirect_to user_path(user)
-        end
-      end
+      #  it "redirects to the user profile page" do
+      #    patch :update, id: user, user: { first_name: 'Jimbob' }
+      #    expect(response).to redirect_to user_path(user)
+      #  end
+      #end
     end
 
     context 'that is not the user in question' do
