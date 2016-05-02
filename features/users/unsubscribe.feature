@@ -10,8 +10,8 @@ Feature: Unsubscribe from emails
     When the mailer sends a campaign progress notification email to user john@doe.com
     Then "john@doe.com" should receive an email with subject /^Campaign progress/
 
-    When I open the email
-    Then I should see "Click here to unsubscribe" in the email body
+    When I open the email with subject /^Campaign progress/
+    Then I should see "unsubscribe" in the email body
 
     When I click the first link in the email
     Then I should see "You have been unsubscrbed" within the notification area

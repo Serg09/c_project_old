@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   resources :inquiries, only: [:new, :create]
   resources :users, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
+    member do
+      get :unsubscribe
+    end
   end
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
   resources :books, only: [:index, :show, :edit, :update, :new, :create] do

@@ -20,14 +20,37 @@
         font-size: 18px;
         line-height: 24px;
       }
+      a {
+        color: #00ADDE;
+        text-decoration:none;
+        font-weight: bold;
+      }
       .main-content {
         padding: 16px;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .text-top {
+        vertical-align: top;
+      }
+      .text-bottom{
+        vertical-align: bottom;
+      }
+      .small {
+        font-size: 80%;
       }
   %body{ style: 'margin: 0;' }
     %table
       %tr
         %td
           =image_tag attachments['logo.png'].url
+        %td.text-right.text-bottom
+          -if @unsubscribe_url
+            Click here to
+            =link_to 'unsubscribe', @unsubscribe_url
+          -else
+            &nbsp;
       %tr
-        %td.main-content
+        %td.main-content{ colspan: 2 }
           = yield
