@@ -40,3 +40,9 @@ Given /^notification has been sent for the success of the campaign for the (#{BO
   campaign.success_notification_sent_at = DateTime.now
   campaign.save!
 end
+
+When /^the mailer sends a campaign progress notification email to (#{USER})$/ do |user|
+  book = FactoryGirl.create(:book, author: user)
+  campaign = FactoryGirl.create(:campaign, book: book)
+  CampaignMailer.progress(campaign).deliver_now
+end
