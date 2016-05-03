@@ -146,6 +146,11 @@ RSpec.describe Admin::BiosController, type: :controller do
             pending_bio.reload
           end.to change(pending_bio, :status).to Bio.APPROVED
         end
+
+        it 'sends an email to the author' do
+          patch :approve, id: pending_bio
+          expect(pending_bio.author.email).to receive_an_email_with_subject("Bio approved!")
+        end
       end
       describe 'patch :reject' do
         it 'redirects to the bio index page' do
@@ -158,6 +163,11 @@ RSpec.describe Admin::BiosController, type: :controller do
             patch :reject, id: pending_bio
             pending_bio.reload
           end.to change(pending_bio, :status).to Bio.REJECTED
+        end
+
+        it 'sends an email to the author' do
+          patch :reject, id: pending_bio
+          expect(pending_bio.author.email).to receive_an_email_with_subject("Bio rejected")
         end
       end
     end

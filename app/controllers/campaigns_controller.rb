@@ -64,7 +64,7 @@ class CampaignsController < ApplicationController
     authorize! :update, @campaign
     if @campaign.collect
       flash[:notice] = 'The campaign was closed successfully.'
-      CampaignMailer.collecting(@campaign).deliver_now
+      CampaignMailer.collecting(@campaign).deliver_now unless @campaign.author.unsubscribed?
     end
     redirect_to campaign_path(@campaign)
   end
@@ -73,7 +73,7 @@ class CampaignsController < ApplicationController
     authorize! :update, @campaign
     if @campaign.cancel
       flash[:notice] = 'The campaign was cancelled successfully.'
-      CampaignMailer.cancelled(@campaign).deliver_now
+      CampaignMailer.cancelled(@campaign).deliver_now unless @campaign.author.unsubscribed?
     end
     redirect_to campaign_path(@campaign)
   end

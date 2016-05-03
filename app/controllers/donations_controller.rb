@@ -63,10 +63,10 @@ class DonationsController < ApplicationController
   def send_notification_emails(donation)
     # TODO Move this to resque jobs
     DonationMailer.donation_receipt(donation).deliver_now
-    DonationMailer.donation_received_notify_author(donation).deliver_now
+    DonationMailer.donation_received_notify_author(donation).deliver_now unless donation.campaign.author.unsubscribed?
     AdminMailer.donation_received(donation).deliver_now
     if campaign_just_succeeded?
-      CampaignMailer.succeeded(donation.campaign).deliver_now
+      CampaignMailer.succeeded(donation.campaign).deliver_now unless donation.campaign.author.unsubscribed?
       AdminMailer.campaign_succeeded(donation.campaign).deliver_now
       donation.campaign.success_notification_sent_at = DateTime.now
       donation.campaign.save!
