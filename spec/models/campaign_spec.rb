@@ -91,10 +91,13 @@ RSpec.describe Campaign, type: :model do
   end
 
   describe '::send_progress_notifications' do
+    let (:unsubscribed_author) { FactoryGirl.create(:user, unsubscribed: true) }
     let (:book_1) { FactoryGirl.create(:book, title: "You've Got Mail") }
     let (:book_2) { FactoryGirl.create(:book, title: "Manage Your Inbox") }
+    let (:book_3) { FactoryGirl.create(:book, author: unsubscribed_author) }
     let!(:active_1) { FactoryGirl.create(:active_campaign, book: book_1) }
     let!(:active_2) { FactoryGirl.create(:active_campaign, book: book_2) }
+    let!(:active_3) { FactoryGirl.create(:active_campaign, book: book_3) }
     let!(:unstarted) { FactoryGirl.create(:unstarted_campaign) }
     let!(:collecting) { FactoryGirl.create(:collecting_campaign) }
     let!(:collected) { FactoryGirl.create(:collected_campaign) }
@@ -103,13 +106,22 @@ RSpec.describe Campaign, type: :model do
 
     let (:not_active) { [unstarted, collecting, collected, cancelling, cancelled] }
 
-    it 'sends an email to the author for each active campaign' do
+    it 'sends an email to the author (if subscribed) for each active campaign' do
       Campaign.send_progress_notifications
       expect(book_1.author.email).to receive_an_email_with_subject("Campaign progress: You've Got Mail")
       expect(book_2.author.email).to receive_an_email_with_subject("Campaign progress: Manage Your Inbox")
+    end
+
+    it 'does not send an email for campaigns that are not active' do
+      Campaign.send_progress_notifications
       not_active.each do |campaign|
         expect(campaign.book.author.email).not_to receive_an_email_with_subject(/^Campaign progress/)
       end
+    end
+
+    it 'does not send an email to authors with active campaigns that are unsubscribed' do
+      Campaign.send_progress_notifications
+      expect(unsubscribed_author.email).not_to receive_an_email_with_subject(/^Campaign progress/)
     end
 
     it 'sends one email to the administrator for all active campaigns' do
