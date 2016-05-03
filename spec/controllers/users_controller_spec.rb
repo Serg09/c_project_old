@@ -109,5 +109,8 @@ RSpec.describe UsersController, type: :controller do
         end.not_to change(user, :first_name)
       end
     end
+
+    describe 'get :unsubscribe' do
+    end
   end
 end
