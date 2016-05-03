@@ -16,7 +16,7 @@ class BiosController < ApplicationController
 
     if @bio.save
       flash[:notice] = "Your bio has been submitted successfully. It is now waiting for administrative approval."
-      BioMailer.submission(@bio).deliver_now
+      AdminMailer.bio_submission(@bio).deliver_now
     end
     respond_with @bio, location: user_signed_in? ? bios_path : author_bios_path(@author)
   end

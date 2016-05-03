@@ -65,7 +65,7 @@ class Campaign < ActiveRecord::Base
     end
 
     begin
-      CampaignMailer.progress_admin(campaigns).deliver_now if campaigns.any?
+      AdminMailer.campaign_progress(campaigns).deliver_now if campaigns.any?
     rescue => e
       Rails.logger.error "Unable to send campaign progress email to the administrator. #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
     end

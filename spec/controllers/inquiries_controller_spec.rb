@@ -36,7 +36,7 @@ describe InquiriesController do
 
       it 'sends a notification email' do
         mail = spy('mail')
-        expect(InquiryMailer).to receive(:submission_notification).and_return(mail)
+        expect(AdminMailer).to receive(:inquiry_received).and_return(mail)
         post :create, inquiry: attributes
         expect(mail).to have_received(:deliver_now)
       end
@@ -68,7 +68,7 @@ describe InquiriesController do
 
       it 'sends a notification email' do
         mail = spy('mail')
-        expect(InquiryMailer).to receive(:submission_notification).and_return(mail)
+        expect(AdminMailer).to receive(:inquiry_received).and_return(mail)
         post :create, inquiry: attributes
         expect(mail).to have_received(:deliver_now)
       end

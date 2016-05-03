@@ -13,7 +13,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super do |resource|
       if resource.valid?
         flash[:notice] = 'Your request for access has been accepted.'
-        UserMailer.new_user_notification(resource).deliver_now
+        AdminMailer.new_user(resource).deliver_now
       else
         flash[:alert] = 'We were unable to save your registration.'
       end

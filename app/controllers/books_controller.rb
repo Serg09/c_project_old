@@ -35,7 +35,7 @@ class BooksController < ApplicationController
     authorize! :create, @book_creator.book
     if @book_creator.create
       flash[:notice] = 'Your book has been submitted successfully.'
-      BookMailer.submission(@book_creator.book_version).deliver_now
+      AdminMailer.book_submission(@book_creator.book_version).deliver_now
     end
     respond_with @book_creator.book
   end

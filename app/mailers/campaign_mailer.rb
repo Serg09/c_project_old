@@ -26,24 +26,11 @@ class CampaignMailer < ApplicationMailer
     mail to: campaign.book.author.email, subject: subject
   end
 
-  def succeeded_notify_admin(campaign)
-    inline_images
-    @campaign = campaign
-    subject = "The campaign for #{@campaign.book.administrative_title} has reached its goal!"
-    mail to: 'info@crowdscribed.com', subject: subject
-  end
-
   def progress(campaign)
     inline_images
     @campaign = campaign
     @unsubscribe_url = unsubscribe_user_url(campaign.book.author)
     subject = "Campaign progress: #{@campaign.book.approved_version.title}"
     mail to: campaign.author.email, subject: subject
-  end
-
-  def progress_admin(campaigns)
-    inline_images
-    @campaigns = campaigns
-    mail to: 'info@crowdscribed.com', subject: 'Campaign progress'
   end
 end

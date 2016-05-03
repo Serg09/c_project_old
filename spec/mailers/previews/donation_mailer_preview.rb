@@ -9,9 +9,4 @@ class DonationMailerPreview < ActionMailer::Preview
     donation = Donation.first || FactoryGirl.create(:donation)
     DonationMailer.donation_received_notify_user(donation)
   end
-
-  def donation_received_notify_administrator
-    donation = Donation.first || FactoryGirl.create(:donation)
-    DonationMailer.donation_received_notify_administrator(donation)
-  end
 end

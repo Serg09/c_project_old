@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "info@crowdscribe.com"
+  default from: 'noreply@crowdscribed.com'
   layout 'mailer'
 
   protected
