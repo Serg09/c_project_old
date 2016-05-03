@@ -14,11 +14,11 @@ Rails.application.routes.draw do
   }
 
   resources :inquiries, only: [:new, :create]
+  get '/unsubscribe/:token', to: 'users#unsubscribe',
+                             as: :unsubscribe,
+                             constraints: { token: /[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}/i }
   resources :users, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
-    member do
-      get :unsubscribe
-    end
   end
   resources :bios, only: [:show, :edit, :update, :index, :create, :new]
   resources :books, only: [:index, :show, :edit, :update, :new, :create] do

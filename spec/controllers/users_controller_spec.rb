@@ -111,6 +111,35 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe 'get :unsubscribe' do
+      let!(:user) { FactoryGirl.create(:user) }
+
+      context 'with a valid token' do
+        it 'is successful' do
+          get :unsubscribe, token: user.unsubscribe_token
+          expect(response).to have_http_status :success
+        end
+
+        it 'sets the #unsubscribed flag to true' do
+          expect do
+            get :unsubscribe, token: user.unsubscribe_token
+            user.reload
+          end.to change(user, :unsubscribed).from(false).to(true)
+        end
+      end
+
+      context 'with an invalid token' do
+        it 'redirects to the user sign in page' do
+          get :unsubscribe, token: SecureRandom.uuid
+          expect(response).to redirect_to new_user_session_path
+        end
+
+        it 'does not change the #unsubscribed flag' do
+          expect do
+            get :unsubscribe, token: SecureRandom.uuid
+            user.reload
+          end.not_to change(user, :unsubscribed)
+        end
+      end
     end
   end
 end

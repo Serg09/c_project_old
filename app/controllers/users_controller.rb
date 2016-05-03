@@ -19,6 +19,16 @@ class UsersController < ApplicationController
     respond_with @user
   end
 
+  def unsubscribe
+    @user = User.find_by(unsubscribe_token: params[:token])
+    if @user && @user.update_attribute(:unsubscribed, true)
+      flash.now[:notice] = 'You have been unsubscribed successfully.'
+    else
+      flash[:alert] = 'We were unable to unsubscribe your account. Please sign in an edit your email preferences directly'
+      redirect_to new_user_session_path
+    end
+  end
+
   def edit
     authorize! :update, @user
   end

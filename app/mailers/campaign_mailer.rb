@@ -29,7 +29,7 @@ class CampaignMailer < ApplicationMailer
   def progress(campaign)
     inline_images
     @campaign = campaign
-    @unsubscribe_url = unsubscribe_user_url(campaign.book.author)
+    @unsubscribe_url = unsubscribe_url(campaign.book.author.unsubscribe_token)
     subject = "Campaign progress: #{@campaign.book.approved_version.title}"
     mail to: campaign.author.email, subject: subject
   end
