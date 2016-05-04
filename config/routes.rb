@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get '/unsubscribe/:token', to: 'users#unsubscribe',
                              as: :unsubscribe,
                              constraints: { token: /[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}/i }
+  get '/profile/edit', to: 'users#edit',
+                       as: :edit_profile
   resources :users, only: [:show, :edit, :update, :index] do
     resources :bios, only: [:new, :index, :create]
   end

@@ -68,6 +68,16 @@ class User < ActiveRecord::Base
     pending_bio || active_bio
   end
 
+  def subscribed
+    !unsubscribed
+  end
+  alias_method :subscribed?, :subscribed
+
+  def subscribed=(subscribed)
+    subscribed = false if subscribed == "0"
+    self.unsubscribed = !subscribed
+  end
+
   private
 
   def ensure_unsubscribe_token

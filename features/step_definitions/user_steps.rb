@@ -64,3 +64,7 @@ end
 Given /^(#{USER}) is unsubscribed$/ do |user|
   user.update_attribute :unsubscribed, true
 end
+
+Then /^(#{USER}) should be subscribed$/ do |user|
+  expect(user).to be_subscribed
+end

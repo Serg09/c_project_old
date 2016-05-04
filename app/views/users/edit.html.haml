@@ -1,0 +1,12 @@
+=content_for :page_title do
+  Profile
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for(@user) do |f|
+        .checkbox
+          %label
+            =f.check_box :subscribed
+            I want to receive emails from Crowdscribed.
+        =f.submit 'Save', class: 'btn btn-primary', title: 'Click here to save the changes to your profile.'

@@ -1,4 +1,3 @@
-@wip
 Feature: Resubscribe
   As a user
   In order to start getting emails again that I had previously discontinued
@@ -19,3 +18,4 @@ Feature: Resubscribe
     And I click "Save"
 
     Then I should see "Your profile was updated successfully" within the notification area
+    And user john@doe.com should be subscribed
