@@ -1,4 +1,3 @@
-@wip
 Feature: Unsubscribe from emails
   As a user
   In order to avoid a cluttered inbox
@@ -14,5 +13,5 @@ Feature: Unsubscribe from emails
     Then I should see "unsubscribe" in the email body
 
     When I click the first link in the email
-    Then I should see "You have been unsubscrbed" within the notification area
-    And I should see "To start received emails again, sign in and update your profile" within the main content
+    Then I should see "You have been unsubscribed" within the notification area
+    And I should see "You may change your email preferences at any time by signing in and updating your profile" within the main content
