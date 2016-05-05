@@ -3,8 +3,8 @@ class AddUnsubscribeTokenToUsers < ActiveRecord::Migration
     add_column :users, :unsubscribed, :boolean, null: false, default: false
     add_column :users, :unsubscribe_token, :string
     User.all.each do |user|
-      user.unsubscribe_token = SecureRandom.uuid
-      user.save!
+      sql = "update users set unsubscribe_token='#{SecureRandom.uuid}' where id=#{user.id}"
+      User.connection.execute sql
     end
     change_column :users, :unsubscribe_token, :string, null:false, limit: 36
     add_index :users, :unsubscribe_token, unique: true
