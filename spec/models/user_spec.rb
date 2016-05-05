@@ -87,71 +87,10 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#status' do
-    it 'defaults to "pending"' do
-      user = User.new attributes
-      expect(user.status).to eq 'pending'
-      expect(user).to be_pending
-    end
-
-    context 'when set to "pending"' do
-      it 'can be set to "approved"' do
-        user = User.create! attributes
-        user.status = User.APPROVED
-        expect(user).to be_valid
-      end
-
-      it 'can be set to "rejected"' do
-        user = User.create! attributes
-        user.status = User.REJECTED
-        expect(user).to be_valid
-      end
-
-      it 'cannot be set to anything except "approved" or "rejected"' do
-        user = User.create! attributes
-        user.status = 'notvalid'
-        expect(user).to have_at_least(1).error_on :status
-      end
-    end
-  end
-
   describe '#full_name' do
     it 'concatenates the first and last names' do
       user = User.new attributes.merge(first_name: 'John', last_name: 'Doe')
       expect(user.full_name).to eq 'John Doe'
-    end
-  end
-
-  shared_context :multi_status do
-    let!(:p1) { FactoryGirl.create(:pending_user, first_name: 'John') }
-    let!(:p2) { FactoryGirl.create(:pending_user, first_name: 'Jake') }
-    let!(:a1) { FactoryGirl.create(:approved_user, first_name: 'Mike') }
-    let!(:a2) { FactoryGirl.create(:approved_user, first_name: 'Mark') }
-    let!(:r1) { FactoryGirl.create(:rejected_user, first_name: 'Fred') }
-    let!(:r2) { FactoryGirl.create(:rejected_user, first_name: 'Ferb') }
-  end
-
-  describe '::pending' do
-    include_context :multi_status
-    it 'lists the users in pending status' do
-      users = User.pending.map(&:first_name)
-      expect(users).to eq %w(Jake John)
-    end
-  end
-
-  describe '::approved' do
-    include_context :multi_status
-    it 'lists the users in approved status' do
-      users = User.approved.map(&:first_name)
-      expect(users).to eq %w(Mark Mike)
-    end
-  end
-
-  describe '::rejected' do
-    include_context :multi_status
-    it 'lists the users in rejected status' do
-      users = User.rejected.map(&:first_name)
-      expect(users).to eq %w(Ferb Fred)
     end
   end
 

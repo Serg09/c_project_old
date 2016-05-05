@@ -32,7 +32,7 @@ RSpec.describe FulfillmentsController, type: :controller do
   end
 
   context 'for an user that does not own the fulfillment' do
-    let (:other_user) { FactoryGirl.create(:approved_user) }
+    let (:other_user) { FactoryGirl.create(:user) }
     before(:each) { sign_in other_user }
 
     describe 'patch :fulfill' do

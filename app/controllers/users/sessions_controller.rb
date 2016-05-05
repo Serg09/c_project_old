@@ -8,10 +8,9 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  def create
-    return unless ensure_user_approved!
-    super
-  end
+  #def create
+  #  super
+  #end
 
   # DELETE /resource/sign_out
   # def destroy
@@ -24,20 +23,4 @@ class Users::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.for(:sign_in) << :attribute
   # end
-
-  private
-
-  def ensure_user_approved!
-    user = User.find_by(email: sign_in_params[:email])
-    case user.try(:status)
-    when User.PENDING
-      flash[:warning] = 'Unable to sign in. Your account is still pending approval by the administrator.'
-      redirect_to pages_account_pending_path
-      return false
-    when User.REJECTED
-      redirect_to new_user_session_path, alert: 'Unable to sign in. Your account has been rejected by the administrator.'
-      return false
-    end
-    true
-  end
 end

@@ -1,4 +1,3 @@
-@wip
 Feature: An user signs up
   As an unauthenticated user
   In order to use the services offered by the site
@@ -30,16 +29,3 @@ Feature: An user signs up
     And I click the first link in the email
     Then I should see "Your email address has been successfully confirmed." within the notification area
     And "info@crowdscribed.com" should receive an email with subject "New user"
-
-    When an administrator approves the account for user john@doe.com
-    Then "john@doe.com" should receive an email with subject "Account approved"
-
-    When I open the email with subject "Account approved"
-    And I click the first link in the email
-    Then I should see "Log in" within the page title
-
-    When I fill in "Email" with "john@doe.com" within the main content
-    And I fill in "Password" with "please01" within the main content
-    And I click "Sign in" within the main content
-    Then I should see "Signed in successfully" within the notification area
-    And I should see "My profile" within the page title

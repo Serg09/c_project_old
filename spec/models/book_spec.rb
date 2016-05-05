@@ -107,7 +107,7 @@ RSpec.describe Book, type: :model do
   end
 
   shared_context :campaigns do
-    let (:author) { FactoryGirl.create(:approved_user) }
+    let (:author) { FactoryGirl.create(:user) }
     let (:book) { FactoryGirl.create(:approved_book, author: author) }
     let!(:campaign) { FactoryGirl.create(:campaign, book: book) }
   end

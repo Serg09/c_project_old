@@ -28,14 +28,11 @@
 #  phone_number           :string
 #  contactable            :boolean          default(FALSE), not null
 #  package_id             :integer
-#  status                 :string(10)       default("pending"), not null
 #  unsubscribed           :boolean          default(FALSE), not null
 #  unsubscribe_token      :string(36)       not null
 #
 
 class User < ActiveRecord::Base
-  include Approvable
-
   has_many :bios, foreign_key: :author_id
   has_many :books, foreign_key: :author_id
   has_many :book_versions, through: :books, source: :versions
