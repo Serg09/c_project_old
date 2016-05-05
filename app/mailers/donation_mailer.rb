@@ -16,6 +16,7 @@ class DonationMailer < ApplicationMailer
     inline_images
     @donation = donation
     @book = @donation.campaign.book
+    @unsubscribe_url = unsubscribe_url(@book.author.unsubscribe_token)
     mail to: @book.author.email, subject: 'Donation Received!'
   end
 end
