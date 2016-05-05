@@ -56,12 +56,7 @@ Rails.application.routes.draw do
         patch :archive
       end
     end
-    resources :users, only: [:index, :show] do
-      member do
-        patch :approve
-        patch :reject
-      end
-    end
+    resources :users, only: [:index, :show]
     resources :bios, only: [:index, :show] do
       member do
         patch :approve

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BookVersionsController, type: :controller do
-  let (:author) { FactoryGirl.create(:approved_user) }
+  let (:author) { FactoryGirl.create(:user) }
   let (:book) { FactoryGirl.create(:approved_book, author: author) }
   let (:approved_version) { book.approved_version }
   let (:pending_version) { FactoryGirl.create(:pending_book_version, book: book) }
@@ -191,7 +191,7 @@ RSpec.describe BookVersionsController, type: :controller do
     end # context: that owns the book
 
     context 'that does not own the book' do
-      let (:other_user) { FactoryGirl.create(:approved_user) }
+      let (:other_user) { FactoryGirl.create(:user) }
       before(:each) { sign_in other_user }
 
       describe 'get :new' do

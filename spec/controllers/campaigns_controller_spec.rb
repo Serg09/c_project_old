@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CampaignsController, type: :controller do
-  let (:author) { FactoryGirl.create(:approved_user) }
+  let (:author) { FactoryGirl.create(:user) }
   let (:book) { FactoryGirl.create(:approved_book, author: author) }
   let (:campaign) { FactoryGirl.create(:campaign, book: book) }
   let (:attributes) do
@@ -233,7 +233,7 @@ RSpec.describe CampaignsController, type: :controller do
     end
 
     context 'that does not own the book' do
-      let (:other_user) { FactoryGirl.create(:approved_user) }
+      let (:other_user) { FactoryGirl.create(:user) }
       before(:each) { sign_in other_user  }
 
       describe "get :index" do

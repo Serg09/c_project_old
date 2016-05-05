@@ -12,16 +12,8 @@ module ApplicationHelper
     "reject_admin_#{resource.class.name.underscore}_path"
   end
 
-  def user_path?(status)
-    matches_path? '/admin/user', {status: status}, {status: User.PENDING}
-  end
-
-  def user_nav_item_caption
-    nav_item_caption 'Users', User.pending.count
-  end
-
   def bio_path?(status)
-    matches_path? '/admin/bio', {status: status}, {status: User.PENDING}
+    matches_path? '/admin/bio', {status: status}, {status: Bio.PENDING}
   end
 
   def bio_nav_item_caption

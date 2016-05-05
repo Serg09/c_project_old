@@ -10,10 +10,9 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # GET /resource/confirmation?confirmation_token=abcdef
-  def show
-    super
-    UserMailer.account_pending_notification(resource).deliver_now if resource.errors.empty?
-  end
+  #def show
+  #  super
+  #end
 
   # protected
 

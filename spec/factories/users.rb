@@ -13,18 +13,9 @@ FactoryGirl.define do
     contactable true
     package_id 1
     unsubscribe_token { SecureRandom.uuid }
-    status User.PENDING
 
     after(:create) do |user, evaluator|
       user.confirm if evaluator.confirmed
-    end
-
-    factory :approved_user do
-      status User.APPROVED
-    end
-
-    factory :rejected_user do
-      status User.REJECTED
     end
   end
 end

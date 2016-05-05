@@ -165,7 +165,7 @@ RSpec.describe BooksController, type: :controller do
     end
 
     context 'that does not own the book' do
-      let (:other_user) { FactoryGirl.create(:approved_user) }
+      let (:other_user) { FactoryGirl.create(:user) }
       before(:each) { sign_in other_user }
 
       context 'that is pending approval' do

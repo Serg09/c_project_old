@@ -5,7 +5,7 @@ module ContentHelpers
     last_name = user_match[2]
     user = User.find_by(first_name: first_name,
                         last_name: last_name)
-    user || FactoryGirl.create(:approved_user, first_name: first_name,
+    user || FactoryGirl.create(:user, first_name: first_name,
                                                last_name: last_name)
   end
 
