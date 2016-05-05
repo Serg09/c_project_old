@@ -12,6 +12,7 @@ FactoryGirl.define do
     password_confirmation "please01"
     contactable true
     package_id 1
+    unsubscribe_token { SecureRandom.uuid }
     status User.PENDING
 
     after(:create) do |user, evaluator|

@@ -16,15 +16,7 @@ class DonationMailer < ApplicationMailer
     inline_images
     @donation = donation
     @book = @donation.campaign.book
+    @unsubscribe_url = unsubscribe_url(@book.author.unsubscribe_token)
     mail to: @book.author.email, subject: 'Donation Received!'
-  end
-
-  # Notifies an administrator that a donation has been received
-  def donation_received_notify_administrator(donation)
-    inline_images
-    @donation = donation
-    @book = @donation.campaign.book
-    @author = @book.author
-    mail to: 'info@crowdscribed.com', subject: 'Donation Received!'
   end
 end

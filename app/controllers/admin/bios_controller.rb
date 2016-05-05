@@ -15,6 +15,7 @@ class Admin::BiosController < ApplicationController
     @bio.status = Bio.APPROVED
     if @bio.save
       redirect_to bios_path, notice: "The bio has been approved successfully."
+      BioMailer.approval(@bio).deliver_now unless @bio.author.unsubscribed?
     else
       render :show
     end
@@ -25,6 +26,7 @@ class Admin::BiosController < ApplicationController
     @bio.status = Bio.REJECTED
     if @bio.save
       redirect_to bios_path, notice: "The bio has been rejected successfully."
+      BioMailer.rejection(@bio).deliver_now unless @bio.author.unsubscribed?
     else
       render :show
     end

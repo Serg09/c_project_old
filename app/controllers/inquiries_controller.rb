@@ -9,7 +9,7 @@ class InquiriesController < ApplicationController
     @inquiry = Inquiry.new inquiry_params
     if @inquiry.save
       flash[:notice] = 'Your inquiry has been accepted.'
-      InquiryMailer.submission_notification(@inquiry).deliver_now
+      AdminMailer.inquiry_received(@inquiry).deliver_now
     else
       flash[:alert] = 'We were unable to accept your inquiry.'
     end

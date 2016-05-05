@@ -46,8 +46,11 @@ Feature: Make a donation
     Then I should see "Book" within the page title
     And I should see "Your donation has been saved successfully. Expect to receive a confirmation email with all of the details." within the notification area
     And "sally.readerton@mymail.com" should receive an email with subject "Donation receipt"
-    And "john@doe.com" should receive an email with subject "Donation Received!"
     And "info@crowdscribed.com" should receive an email with subject "Donation Received!"
+    And "john@doe.com" should receive an email with subject "Donation Received!"
+
+    When "john@doe.com" opens the email with subject "Donation Received!"
+    Then he should see "unsubscribe" in the email body
 
   Scenario: A user donates using a predefined amount + reward option
     When I select the "Signed copy" option

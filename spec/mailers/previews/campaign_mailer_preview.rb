@@ -18,11 +18,6 @@ class CampaignMailerPreview < ActionMailer::Preview
     CampaignMailer.succeeded(campaign)
   end
 
-  def succeeded_notify_admin
-    campaign = Campaign.cancelled.first || FactoryGirl.create(:cancelled_campaign)
-    CampaignMailer.succeeded_notify_admin(campaign)
-  end
-
   # Preview this email at http://localhost:3000/rails/mailers/campaign_mailer/collection_complete
   def collection_complete
     campaign = Campaign.collected.first || FactoryGirl.create(:collected_campaign)
@@ -32,9 +27,5 @@ class CampaignMailerPreview < ActionMailer::Preview
   def progress
     campaign = Campaign.active.first || FactoryGirl.create(:active_campaign)
     CampaignMailer.progress campaign
-  end
-
-  def progress_admin
-    CampaignMailer.progress_admin Campaign.active.by_target_date
   end
 end

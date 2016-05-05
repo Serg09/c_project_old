@@ -15,7 +15,7 @@ class Admin::BookVersionsController < ApplicationController
   def approve
     authorize! :approve, @book_version
     if @book_version.approve!
-      BookMailer.approval(@book_version).deliver_now
+      BookMailer.approval(@book_version).deliver_now unless @book_version.author.unsubscribed?
       redirect_to admin_book_versions_path, notice: 'The book has been approved successfully.'
     else
       render :show
@@ -25,7 +25,7 @@ class Admin::BookVersionsController < ApplicationController
   def reject
     authorize! :reject, @book_version
     if @book_version.reject!
-      BookMailer.rejection(@book_version).deliver_now
+      BookMailer.rejection(@book_version).deliver_now unless @book_version.author.unsubscribed?
       redirect_to admin_book_versions_path, notice: 'The book has been rejected successfully.'
     else
       render :show

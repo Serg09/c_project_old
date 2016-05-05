@@ -5,13 +5,8 @@ class DonationMailerPreview < ActionMailer::Preview
     DonationMailer.donation_receipt(donation)
   end
 
-  def donation_received_notify_user
+  def donation_received_notify_author
     donation = Donation.first || FactoryGirl.create(:donation)
-    DonationMailer.donation_received_notify_user(donation)
-  end
-
-  def donation_received_notify_administrator
-    donation = Donation.first || FactoryGirl.create(:donation)
-    DonationMailer.donation_received_notify_administrator(donation)
+    DonationMailer.donation_received_notify_author(donation)
   end
 end

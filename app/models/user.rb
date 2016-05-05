@@ -29,6 +29,8 @@
 #  contactable            :boolean          default(FALSE), not null
 #  package_id             :integer
 #  status                 :string(10)       default("pending"), not null
+#  unsubscribed           :boolean          default(FALSE), not null
+#  unsubscribe_token      :string(36)       not null
 #
 
 class User < ActiveRecord::Base
@@ -48,6 +50,8 @@ class User < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :username
   validates_uniqueness_of :username
 
+  before_save :ensure_unsubscribe_token
+
   def full_name
     "#{first_name} #{last_name}"
   end
@@ -62,5 +66,21 @@ class User < ActiveRecord::Base
 
   def working_bio
     pending_bio || active_bio
+  end
+
+  def subscribed
+    !unsubscribed
+  end
+  alias_method :subscribed?, :subscribed
+
+  def subscribed=(subscribed)
+    subscribed = false if subscribed == "0"
+    self.unsubscribed = !subscribed
+  end
+
+  private
+
+  def ensure_unsubscribe_token
+    self.unsubscribe_token = SecureRandom.uuid unless unsubscribe_token
   end
 end

@@ -108,31 +108,31 @@ end
 # Inspect the Email Contents
 #
 
-Then /^(?:I|they) should see "([^"]*?)" in the email subject$/ do |text|
+Then /^(?:I|they|he) should see "([^"]*?)" in the email subject$/ do |text|
   expect(current_email).to have_subject(text)
 end
 
-Then /^(?:I|they) should see \/([^"]*?)\/ in the email subject$/ do |text|
+Then /^(?:I|they|he) should see \/([^"]*?)\/ in the email subject$/ do |text|
   expect(current_email).to have_subject(Regexp.new(text))
 end
 
-Then /^(?:I|they) should see "([^"]*?)" in the email body$/ do |text|
+Then /^(?:I|they|he) should see "([^"]*?)" in the email body$/ do |text|
   expect(current_email.default_part_body.to_s).to include(text)
 end
 
-Then /^(?:I|they) should see \/([^"]*?)\/ in the email body$/ do |text|
+Then /^(?:I|they|he) should see \/([^"]*?)\/ in the email body$/ do |text|
   expect(current_email.default_part_body.to_s).to match Regexp.new(text)
 end
 
-Then /^(?:I|they) should see the email delivered from "([^"]*?)"$/ do |text|
+Then /^(?:I|they|he) should see the email delivered from "([^"]*?)"$/ do |text|
   expect(current_email).to be_delivered_from(text)
 end
 
-Then /^(?:I|they) should see "([^\"]*)" in the email "([^"]*?)" header$/ do |text, name|
+Then /^(?:I|they|he) should see "([^\"]*)" in the email "([^"]*?)" header$/ do |text, name|
   expect(current_email).to have_header(name, text)
 end
 
-Then /^(?:I|they) should see \/([^\"]*)\/ in the email "([^"]*?)" header$/ do |text, name|
+Then /^(?:I|they|he) should see \/([^\"]*)\/ in the email "([^"]*?)" header$/ do |text, name|
   expect(current_email).to have_header(name, Regexp.new(text))
 end
 

@@ -14,10 +14,6 @@ class Book < ActiveRecord::Base
   has_many :campaigns
   validates_presence_of :author_id
 
-  scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
-  scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
-  scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
-
   def active_campaign
     return nil unless author.active_bio
     @active_campaign ||= campaigns.current.active.first

@@ -30,9 +30,15 @@ Feature: Approve a bio
     Then I should see "The bio has been approved successfully." within the notification area
     And I should see the following bios table
       | Author   | Date submitted |
+    And "john@doe.com" should receive an email with subject "Bio approved!"
+    When "john@doe.com" opens the email with subject "Bio approved!"
+    Then he should see "unsubscribe" in the email body
 
   Scenario: An administrator rejects a pending bio
     When I click "Reject" within the admin content
     Then I should see "The bio has been rejected successfully." within the notification area
     And I should see the following bios table
       | Author   | Date submitted |
+    And "john@doe.com" should receive an email with subject "Bio rejected"
+    When "john@doe.com" opens the email with subject "Bio rejected"
+    Then he should see "unsubscribe" in the email body

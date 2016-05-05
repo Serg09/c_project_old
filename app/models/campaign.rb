@@ -31,6 +31,7 @@ class Campaign < ActiveRecord::Base
   scope :cancelling, ->{where(state: 'cancelling')}
   scope :cancelled, ->{where(state: 'cancelled')}
   scope :by_target_date, ->{order('target_date desc')}
+  scope :not_unsubscribed, ->{joins(book: :author).where('users.unsubscribed = ?', false)}
 
   state_machine :initial => :unstarted do
     before_transition :active => :collecting, :do => :queue_collection
@@ -55,7 +56,7 @@ class Campaign < ActiveRecord::Base
 
   def self.send_progress_notifications
     #TODO We may need to change this if we end up with a lot of campaigns
-    campaigns = active.by_target_date
+    campaigns = active.by_target_date.not_unsubscribed
     campaigns.each do |campaign|
       begin
         CampaignMailer.progress(campaign).deliver_now
@@ -65,7 +66,7 @@ class Campaign < ActiveRecord::Base
     end
 
     begin
-      CampaignMailer.progress_admin(campaigns).deliver_now if campaigns.any?
+      AdminMailer.campaign_progress(campaigns).deliver_now if campaigns.any?
     rescue => e
       Rails.logger.error "Unable to send campaign progress email to the administrator. #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
     end

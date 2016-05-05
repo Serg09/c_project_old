@@ -41,7 +41,7 @@ Given /^there is an? (?:(rejected|accepted|pending) )?(?:author|user) named "([^
                               created_at: created_at)
 end
 
-Given /^there is an (?:author|user) named "([\S]+)\s([^"]+)" with email "([^"]+)" and password "([^"]+)"$/ do |first_name, last_name, email, password|
+Given /^there is an? (?:author|user) named "([\S]+)\s([^"]+)" with email "([^"]+)" and password "([^"]+)"$/ do |first_name, last_name, email, password|
   FactoryGirl.create(:user, first_name: first_name,
                               last_name: last_name,
                               email: email,
@@ -49,7 +49,7 @@ Given /^there is an (?:author|user) named "([\S]+)\s([^"]+)" with email "([^"]+)
                               password_confirmation: password)
 end
 
-Given /^I am signed in as an (?:author|user) with "([^\/]+)\/([^"]+)"$/ do |email, password|
+Given /^I am signed in as an? (?:author|user) with "([^\/]+)\/([^"]+)"$/ do |email, password|
   visit new_user_session_path
   within('#main_content') do
     fill_in 'Email', with: email
@@ -59,4 +59,12 @@ Given /^I am signed in as an (?:author|user) with "([^\/]+)\/([^"]+)"$/ do |emai
   within('#top_bar') do
     expect(page).to have_content ('Sign out')
   end
+end
+
+Given /^(#{USER}) is unsubscribed$/ do |user|
+  user.update_attribute :unsubscribed, true
+end
+
+Then /^(#{USER}) should be subscribed$/ do |user|
+  expect(user).to be_subscribed
 end

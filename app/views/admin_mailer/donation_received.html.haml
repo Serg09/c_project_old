@@ -6,5 +6,5 @@ by #{h @author.full_name}
 has received a donation in the amount of #{h number_to_currency(@donation.amount)}.
 
 %p
-  =link_to 'Click here', admin_campaign_url(@donation.campaign_id)
-  to see the progress of the campaign.
+  =link_to 'Click here', new_administrator_session_url
+  to sign in and see the progress of the campaign.

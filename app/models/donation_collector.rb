@@ -16,7 +16,7 @@ class DonationCollector
         campaign.finalize_collection
       end
     end
-    CampaignMailer.collection_complete(campaign).deliver_now if campaign.collected?
+    CampaignMailer.collection_complete(campaign).deliver_now if campaign.collected? && !campaign.author.unsubscribed?
 
     Rails.logger.info "Completed donation collection for campaign #{campaign_id}"
   rescue Exceptions::InvalidCampaignStateError

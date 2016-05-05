@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501154500) do
+ActiveRecord::Schema.define(version: 20160503224203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,12 +239,15 @@ ActiveRecord::Schema.define(version: 20160501154500) do
     t.boolean  "contactable",                       default: false,     null: false
     t.integer  "package_id"
     t.string   "status",                 limit: 10, default: "pending", null: false
+    t.boolean  "unsubscribed",                      default: false,     null: false
+    t.string   "unsubscribe_token",      limit: 36,                     null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["unsubscribe_token"], name: "index_users_on_unsubscribe_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

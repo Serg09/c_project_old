@@ -32,6 +32,10 @@ class BookVersion < ActiveRecord::Base
   attr_accessor :cover_image_file, :sample_file
   delegate :author, :active_campaign, to: :book
 
+  scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
+  scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
+  scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
+
   def approve!
     BookVersion.transaction do
       self.status = BookVersion.APPROVED

@@ -1,11 +1,6 @@
 # Preview all emails at http://localhost:3000/rails/mailers/bios
 class BioMailerPreview < ActionMailer::Preview
 
-  # Preview this email at http://localhost:3000/rails/mailers/bios/submission
-  def submission
-    BioMailer.submission sample_bio
-  end
-
   # Preview this email at http://localhost:3000/rails/mailers/bios/approval
   def approval
     BioMailer.approval Bio.approved.first || FactoryGirl.create(:approved_bio)

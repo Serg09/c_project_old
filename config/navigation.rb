@@ -26,5 +26,6 @@ SimpleNavigation::Configuration.run do |navigation|
       end
     end
     primary.item :books, 'Books', browse_books_path
+    primary.item :profile, 'Profile', edit_profile_path, if: ->{user_signed_in?}
   end
 end

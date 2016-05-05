@@ -32,7 +32,7 @@ class BookVersionsController < ApplicationController
     genres_from_params.each{|g| @book_version.genres << g}
     if @book_version.save
       flash[:notice] = 'The book was updated successfully.'
-      BookMailer.edit_submission(@book_version).deliver_now
+      AdminMailer.book_edit_submission(@book_version).deliver_now
     end
     respond_with @book_version
   end

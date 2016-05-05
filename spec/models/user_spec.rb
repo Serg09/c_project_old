@@ -251,4 +251,11 @@ RSpec.describe User, type: :model do
       expect(user).to have(0).books
     end
   end
+
+  describe '#unsubscribe_token' do
+    it 'is generated automatically' do
+      user = User.create!(attributes)
+      expect(user.unsubscribe_token).not_to be_nil
+    end
+  end
 end
