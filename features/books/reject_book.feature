@@ -26,3 +26,5 @@ Feature: Reject a book
     Then I should see "Books" within the page title
     And I should see "The book has been rejected successfully." within the notification area
     And "john@doe.com" should receive an email with subject "Your book has been rejected"
+    When "john@doe.com" opens the email with subject "Your book has been rejected"
+    Then he should see "unsubscribe" in the email body

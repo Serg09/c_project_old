@@ -26,3 +26,5 @@ Feature: Approve a book
     Then I should see "Books" within the page title
     And I should see "The book has been approved successfully." within the notification area
     And "john@doe.com" should receive an email with subject "Your book has been approved!"
+    When "john@doe.com" opens the email with subject "Your book has been approved!"
+    Then he should see "unsubscribe" in the email body
