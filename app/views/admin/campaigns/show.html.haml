@@ -14,11 +14,16 @@
           %th Date
           %th Amount
           %th Status
+          %th &nbsp;
         -@campaign.donations.each do |donation|
           %tr{ class: donation_row_class(donation) }
             %td= donation.email
             %td= format_date(donation.created_at)
             %td= number_to_currency(donation.amount, precision: 0)
             %td= donation.state
+            %td
+              -if donation.payments.any?
+                =link_to admin_payment_path(donation.payments.first), class: 'btn btn-xs btn-info', title: 'Click here to view payment details.' do
+                  %span.glyphicon.glyphicon-zoom-in{ 'arial-hidden' => true }
     .col-md-6
       =render_progress_meter @campaign.current_progress

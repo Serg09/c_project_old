@@ -76,6 +76,7 @@ Rails.application.routes.draw do
         patch :fulfill
       end
     end
+    resources :payments, only: [:show]
   end
 
   get 'pages/welcome'
