@@ -13,10 +13,12 @@
           %th Donor
           %th Date
           %th Amount
+          %th Status
         -@campaign.donations.each do |donation|
-          %tr
+          %tr{ class: donation_row_class(donation) }
             %td= donation.email
             %td= format_date(donation.created_at)
             %td= number_to_currency(donation.amount, precision: 0)
+            %td= donation.state
     .col-md-6
       =render_progress_meter @campaign.current_progress

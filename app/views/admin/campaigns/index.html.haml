@@ -10,12 +10,14 @@
           %th Author
           %th Title
           %th Target date
+          %th Status
           %th &nbsp;
         -@campaigns.each do |campaign|
-          %tr
+          %tr{ class: campaign_row_class(campaign) }
             %td=campaign.book.author.full_name
             %td=campaign.book.approved_version.title
             %td=format_date(campaign.target_date)
+            %td=campaign.state
             %td
               =link_to admin_campaign_path(campaign), class: 'btn btn-info btn-xs campaign-progress-button', title: 'Click here to see the progress of the campaign' do
                 %span.glyphicon.glyphicon-stats{ 'arial-hidden' => true }
