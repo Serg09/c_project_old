@@ -1,0 +1,22 @@
+=content_for :page_title do
+  Payment
+
+.container.container-default
+  .row
+    .col-md-4
+      =link_to 'Back', admin_campaign_path(@payment.donation.campaign_id), class: 'btn btn-primary', title: 'Click here to return to the campaign page.'
+  .row
+    .col-md-12
+      &nbsp;
+      %table#transactions-table.table.table-striped
+        %tr
+          %th Intent
+          %th State
+        -@payment.transactions.each do |transaction|
+          %tr
+            %td= transaction.intent
+            %td= transaction.state
+          %tr
+            %td{ colspan: 2 }
+              %pre
+                =JSON.pretty_generate(JSON.parse(transaction.response))
