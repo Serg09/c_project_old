@@ -95,3 +95,5 @@ PayPal::SDK.configure(
   client_secret: ENV['PAYPAL_CLIENT_SECRET']
 )
 PayPal::SDK.logger = Rails.logger
+
+PAYMENT_PROVIDER = PaymentProvider::PayPalProvider.new

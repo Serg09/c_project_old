@@ -47,3 +47,5 @@ PayPal::SDK.configure(
   client_secret: 'EIHo7p65fWq2CG6FlCWo4bfYNG2P6Xsxw3CZ45G2YGXvVF-B-8NL77fj_Hayl1Jr3wzV7bwgs8EsWDW4',
 )
 PayPal::SDK.logger = Rails.logger
+
+PAYMENT_PROVIDER = PaymentProvider::NilPaymentProvider.new
