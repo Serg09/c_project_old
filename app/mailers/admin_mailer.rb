@@ -43,7 +43,7 @@ class AdminMailer < ApplicationMailer
   def inquiry_received(inquiry)
     inline_images
     @inquiry = inquiry
-    mail subject: "Crowdscribe inquiry #{('%06d' % inquiry.id)}"
+    mail subject: "Crowdscribed inquiry #{('%06d' % inquiry.id)}"
   end
 
   def new_user(user)
