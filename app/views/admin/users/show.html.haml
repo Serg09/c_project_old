@@ -27,10 +27,8 @@
               &#x2713;
             -else
               &#x2715;
-    -if administrator_signed_in?
-      .col-md-2.btn-stack
-        =render 'shared/approval_buttons', resource: @user
-  -if can? :index, User
-    .row
-      .col-md-6
-        =link_to 'Back', users_path, class: 'btn btn-default'
+    .col-md-2.btn-stack
+      =render 'shared/approval_buttons', resource: @user
+  .row
+    .col-md-6
+      =link_to 'Back', users_path, class: 'btn btn-default'

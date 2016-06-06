@@ -12,20 +12,21 @@ SimpleNavigation::Configuration.run do |navigation|
       about.item :contact_us, 'Contact us', new_inquiry_path
       about.item :book_incubator, 'Book Incubator', pages_book_incubator_path
     end
+    primary.item :authors, 'Authors', '#'
+    primary.item :books, 'Books', browse_books_path
     if !AppSetting.sign_in_disabled?
-      primary.item :authors, 'Authors' do |authors|
-        if user_signed_in?
-          authors.item :bio, 'Bio', bios_path
-          authors.item :my_books, 'My books', books_path
-          authors.item :reward_fulfillment, 'Reward fulfillment', fulfillments_path
-          authors.item :author_sign_out, 'Sign Out', destroy_user_session_path, method: :delete, if: ->{user_signed_in? && !AppSetting.sign_in_disabled?}
-        else
-          authors.item :author_sign_in, 'Log in', new_user_session_path
-          authors.item :author_sign_up, 'Signup', new_user_registration_path, if: ->{!user_signed_in? && !AppSetting.sign_in_disabled?}
+      if user_signed_in?
+        primary.item :profile, 'Profile' do |profile_item|
+          profile_item.item :view_profile, 'View', user_path(current_user)
+          profile_item.item :bio, 'Bio', bios_path
+          profile_item.item :my_books, 'My books', books_path
+          profile_item.item :reward_fulfillment, 'Reward fulfillment', fulfillments_path
+          profile_item.item :author_sign_out, 'Sign Out', destroy_user_session_path, method: :delete, if: ->{user_signed_in? && !AppSetting.sign_in_disabled?}
         end
+      else
+        primary.item :author_sign_in, 'Log in', new_user_session_path
+        primary.item :author_sign_up, 'Signup', new_user_registration_path, if: ->{!user_signed_in? && !AppSetting.sign_in_disabled?}
       end
     end
-    primary.item :books, 'Books', browse_books_path
-    primary.item :profile, 'Profile', edit_profile_path, if: ->{user_signed_in?}
   end
 end
