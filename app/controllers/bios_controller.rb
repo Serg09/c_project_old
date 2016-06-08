@@ -42,6 +42,7 @@ class BiosController < ApplicationController
 
   def browse
     @bios = Bio.
+      approved.
       joins(:author).
       order('users.last_name, users.first_name')
     @bio_rows = @bios.each_slice(3)
