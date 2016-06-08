@@ -56,9 +56,9 @@ Then /^I should see the following (.*) table$/ do |description, expected_table|
 end
 
 Then /^I should see the following (.*) records$/ do |description, expected_table|
-  locator = description.gsub(' ', '_')
+  locator = ".#{description.gsub(' ', '-')}-record"
   actual_table = parse_records(all(locator))
-  expected_table.diff!(actual_table)
+  expect(actual_table).to eq expected_table.hashes
 end
 
 When /^I select (?:the )?file "([^"]+)" for "([^"]+)"$/ do |file_name, locator|

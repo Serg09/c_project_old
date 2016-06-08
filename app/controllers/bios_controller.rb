@@ -41,6 +41,7 @@ class BiosController < ApplicationController
   end
 
   def browse
+    @bios = Bio.joins(:author).order('users.last_name, users.first_name')
   end
 
   def show

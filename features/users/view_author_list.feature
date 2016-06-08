@@ -15,8 +15,8 @@ Feature: View a list of authors
 
     When I click "Authors" within the main menu
     Then I should see "Authors" within the page title
-    And I should see the following authors records
-      | Name         |
-      | Robin Banks  |
-      | John Doe     |
-      | Michael Hunt |
+    And I should see the following author records
+      | First name | Last name |
+      | Robin      | Banks     |
+      | John       | Doe       |
+      | Michael    | Hunt      |

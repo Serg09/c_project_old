@@ -20,9 +20,12 @@ module ContentHelpers
   end
 
   def parse_records(elements)
-    elements.reduce({}) do |result, elem|
-      elem.all(:xpath, '//*[@data-record-field]').each do |field_elem|
-        result[field_elem['data-record-field']] = field_elem.text.strip
+    elements.map do |elem|
+      elem.all(:xpath, './/*[@data-record-field]').reduce({}) do |result, field_elem|
+        key = field_elem['data-record-field'].humanize
+        value = field_elem.text.strip
+        result.store key, value
+        result
       end
     end
   end
