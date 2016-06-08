@@ -1,4 +1,3 @@
-@wip
 Feature: View a list of authors
   As a user
   In order to see who is writing books I might want to read
