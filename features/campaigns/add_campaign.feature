@@ -31,7 +31,4 @@ Feature: Add a campaign
     And I fill in "Target date" with "4/30/2016"
     And I click "Save"
     Then I should see "The campaign was created successfully." within the notification area
-    Then I should see "Campaigns for Things I Know That You Don't" within the page title
-    And I should see the following campaigns table
-      | Target date | Target amount |
-      |   4/30/2016 |        $5,000 |
+    Then I should see "Campaign for Things I Know That You Don't" within the page title
