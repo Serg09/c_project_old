@@ -3,7 +3,7 @@
 
 .container.container-default
   .row
-    .col-md-6
+    .col-md-4
       %table.table
         %tr
           %th First name
@@ -34,5 +34,10 @@
               &#x2715;
             -else
               &#x2713;
-  -if can? :update, @user
-    =link_to 'Edit', edit_user_path(@user), class: 'btn btn-primary', title: 'Click here to edit.'
+      -if can? :update, @user
+        =link_to 'Edit', edit_user_path(@user), class: 'btn btn-primary', title: 'Click here to edit.'
+    .col-md-4
+      %h3 Quick links
+      .list-group
+        =link_to 'Add/Edit my titles', books_path(@user), class: 'list-group-item'
+        =link_to 'Home', root_path, class: 'list-group-item'
