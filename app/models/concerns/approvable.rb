@@ -21,8 +21,9 @@ module Approvable
   included do
     validates :status, presence: true, inclusion: { in: STATUSES }
 
-    scope :pending, -> { where(status: 'pending').order('created_at DESC') }
-    scope :approved, -> { where(status: 'approved').order('created_at DESC') }
-    scope :rejected, -> { where(status: 'rejected').order('created_at DESC') }
+    scope :pending, -> { where(status: 'pending') }
+    scope :approved, -> { where(status: 'approved') }
+    scope :rejected, -> { where(status: 'rejected') }
+    scope :by_date, -> { order('created_at DESC') }
   end
 end

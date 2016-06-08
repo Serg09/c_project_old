@@ -54,11 +54,11 @@ class User < ActiveRecord::Base
   end
 
   def active_bio
-    bios.approved.first
+    bios.approved.by_date.first
   end
 
   def pending_bio
-    bios.pending.first
+    bios.pending.by_date.first
   end
 
   def working_bio

@@ -86,7 +86,7 @@ RSpec.describe Bio, type: :model do
     include_context :multiple_bios
 
     it 'lists bios with a status of "pending"' do
-      expect(Bio.pending.map(&:id)).to eq [p2.id, p1.id]
+      expect(Bio.pending).to contain_exactly p1, p2
     end
   end
 
@@ -94,7 +94,7 @@ RSpec.describe Bio, type: :model do
     include_context :multiple_bios
 
     it 'lists bios with a status of "approved"' do
-      expect(Bio.approved.map(&:id)).to eq [a2.id, a1.id]
+      expect(Bio.approved).to contain_exactly a1, a2
     end
   end
 
