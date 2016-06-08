@@ -40,6 +40,9 @@ class BiosController < ApplicationController
     end
   end
 
+  def browse
+  end
+
   def show
     not_found! unless @bio.approved? || can?(:show, @bio)
     respond_with @bio do |format|

@@ -99,6 +99,7 @@ Rails.application.routes.draw do
   get 'pages/sign_up_confirmation'
   get 'pages/account_pending'
 
+  get 'authors', to: 'bios#browse', as: :browse_authors
   get 'users', to: 'users#show', as: :user_root
   get 'admin', to: 'admin/users#index', as: :admin_root
   root to: 'pages#welcome'
