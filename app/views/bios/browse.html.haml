@@ -1,0 +1,14 @@
+=content_for :page_title do
+  Authors
+
+.container.container-default
+  -@bio_rows.each do |row|
+    .row
+      -row.each do |bio|
+        .col-md-4.author-record
+          =link_to bio_path(bio) do
+            -if bio.photo_id.present?
+              %img{ src: image_path(bio.photo_id), class: 'img-rounded img-responsive' }
+            .author-name.text-center
+              %span{ 'data-record-field' => 'first_name'}= bio.author.first_name
+              %span{ 'data-record-field' => 'last_name'}= bio.author.last_name

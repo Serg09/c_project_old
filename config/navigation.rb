@@ -12,7 +12,7 @@ SimpleNavigation::Configuration.run do |navigation|
       about.item :contact_us, 'Contact us', new_inquiry_path
       about.item :book_incubator, 'Book Incubator', pages_book_incubator_path
     end
-    primary.item :authors, 'Authors', '#'
+    primary.item :authors, 'Authors', browse_authors_path
     primary.item :books, 'Books', browse_books_path
     if !AppSetting.sign_in_disabled?
       if user_signed_in?

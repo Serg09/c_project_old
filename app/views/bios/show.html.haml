@@ -29,7 +29,9 @@
     -if administrator_signed_in?
       .col-md-2.btn-stack
         =render 'shared/approval_buttons', resource: @bio
-  -if can? :index, Bio
-    .row
-      .col-md-6
-        =link_to 'Back', bios_path, class: 'btn btn-default'
+  .row
+    .col-md-6
+      -if can? :index, Bio
+        =link_to 'Back', bios_path, class: 'btn btn-primary'
+      -else
+        =link_to 'Back', browse_authors_path, class: 'btn btn-primary'

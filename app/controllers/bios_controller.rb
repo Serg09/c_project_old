@@ -40,6 +40,14 @@ class BiosController < ApplicationController
     end
   end
 
+  def browse
+    @bios = Bio.
+      approved.
+      joins(:author).
+      order('users.last_name, users.first_name')
+    @bio_rows = @bios.each_slice(3)
+  end
+
   def show
     not_found! unless @bio.approved? || can?(:show, @bio)
     respond_with @bio do |format|

@@ -18,5 +18,16 @@ module ContentHelpers
     rows = table_elem.all('tr')
     rows.map { |r| r.all('td,th').map { |c| c.text.strip } }
   end
+
+  def parse_records(elements)
+    elements.map do |elem|
+      elem.all(:xpath, './/*[@data-record-field]').reduce({}) do |result, field_elem|
+        key = field_elem['data-record-field'].humanize
+        value = field_elem.text.strip
+        result.store key, value
+        result
+      end
+    end
+  end
 end
 World(ContentHelpers)

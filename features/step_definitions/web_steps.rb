@@ -55,6 +55,12 @@ Then /^I should see the following (.*) table$/ do |description, expected_table|
   expected_table.diff!(actual_table)
 end
 
+Then /^I should see the following (.*) records$/ do |description, expected_table|
+  locator = ".#{description.gsub(' ', '-')}-record"
+  actual_table = parse_records(all(locator))
+  expect(actual_table).to eq expected_table.hashes
+end
+
 When /^I select (?:the )?file "([^"]+)" for "([^"]+)"$/ do |file_name, locator|
   attach_file(locator, Rails.root.join('features', 'resources', file_name))
 end
