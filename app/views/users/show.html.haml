@@ -27,5 +27,12 @@
               &#x2713;
             -else
               &#x2715;
+        %tr
+          %th Receive emails from Crowdscribed
+          %td
+            -if @user.unsubscribed?
+              &#x2715;
+            -else
+              &#x2713;
   -if can? :update, @user
     =link_to 'Edit', edit_user_path(@user), class: 'btn btn-primary', title: 'Click here to edit.'
