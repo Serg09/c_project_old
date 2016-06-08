@@ -19,7 +19,7 @@ class CampaignsController < ApplicationController
     @campaign = @book.campaigns.new(campaign_params)
     authorize! :create, @campaign
     flash[:notice] = "The campaign was created successfully." if @campaign.save
-    respond_with @campaign, location: book_campaigns_path(@book)
+    respond_with @campaign, location: edit_campaign_path(@campaign)
   end
 
   def show

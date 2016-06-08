@@ -33,9 +33,9 @@ RSpec.describe CampaignsController, type: :controller do
       end
 
       describe "post :create" do
-        it "redirects to the index page" do
+        it "redirects to the edit page" do
           post :create, book_id: book, campaign: attributes
-          expect(response).to redirect_to book_campaigns_path(book)
+          expect(response).to redirect_to edit_campaign_path(Campaign.last)
         end
 
         it 'creates a new campain record' do
