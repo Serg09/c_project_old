@@ -8,7 +8,7 @@
         .alert.alert-info
           This book is under review. We will review it as soon as we can.
       %h1#book-title= @book_version.title
-      =if @book_version.author.active_bio.present?
+      -if @book_version.author.active_bio.present?
         %h2= link_to @book_version.author.full_name, bio_path(@book_version.author.active_bio)
   =render 'details', book_version: @book_version
   -if can? :update, @book_version.book
