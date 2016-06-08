@@ -49,7 +49,7 @@ end
 
 Given /^there is an author named "(\S+) ([^"]+)"$/ do |first_name, last_name|
   author = FactoryGirl.create(:user, first_name: first_name, last_name: last_name)
-  FactoryGirl.create(:bio, author: author)
+  FactoryGirl.create(:approved_bio, author: author)
 end
 
 Given /^there is a user named "(\S+) ([^"]+)"$/ do |first_name, last_name|
