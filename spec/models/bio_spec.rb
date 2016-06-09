@@ -74,9 +74,23 @@ RSpec.describe Bio, type: :model do
   end
 
   describe '#approve!' do
-    it 'changes the status to "approved"'
+    let (:bio) { FactoryGirl.create(:pending_bio) }
+
+    it 'changes the status to "approved"' do
+      expect do
+        bio.approve!
+      end.to change(bio, :status).from('pending').to('approved')
+    end
+
     context 'when an approved bio is already present' do
-      it 'changes the status of the previously approved bio to "superseded"'
+      let (:current_bio) { FactoryGirl.create(:approved_bio, author: bio.author) }
+
+      it 'changes the status of the previously approved bio to "superseded"' do
+        expect do
+          bio.approve!
+          current_bio.reload
+        end.to change(current_bio, :status).from('approved').to('superseded')
+      end
     end
   end
 
