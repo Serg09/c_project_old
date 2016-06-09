@@ -14,6 +14,8 @@
 #
 
 class Donation < ActiveRecord::Base
+  include AASM
+
   belongs_to :campaign
   belongs_to :reward
   has_many :payments
@@ -26,23 +28,22 @@ class Donation < ActiveRecord::Base
   validates_format_of :ip_address, with: /\A\d{1,3}(\.\d{1,3}){3}\z/
   validate :reward_is_from_same_campaign
 
-  scope :pledged, ->{where(state: 'pledged')}
-  scope :collected, ->{where(state: 'collected')}
-  scope :cancelled, ->{where(state: 'cancelled')}
+  aasm(:state, whiny_transitions: false) do
+    state :pledged, initial: true
+    state :collected
+    state :cancelled
 
-  state_machine :initial => :pledged do
-    before_transition :pledged => :collected, do: :create_payment
-    before_transition :collected => :cancelled, do: :refund_payment
     event :collect do
-      transition :pledged => :collected
+      transitions from: :pledged, to: :collected, if: :create_payment
     end
+
     event :cancel do
-      transition [:pledged, :collected] => :cancelled
+      transitions from: [:pledged, :collected], to: :cancelled, if: :refund_payment
     end
-    state :pledged, :collected, :cancelled
   end
 
   def create_payment
+    raise 'not implemented'
   end
 
   def refund_payment

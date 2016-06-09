@@ -11,7 +11,7 @@ class DonationCanceller
         Resque.enqueue_in 2.hours, DonationCanceller, campaign_id, attempt_number + 1
       else
         Rails.logger.warn "At least one donation could not be collected for campaign #{campaign_id}. The maximum number of retries has been reached. The cancellation is being finalized now."
-        campaign.finalize_cancellation
+        campaign.finalize_cancellation!
       end
     end
     Rails.logger.info "Completed donation cancellation for campaign #{campaign_id}."

@@ -683,7 +683,7 @@ RSpec.describe Campaign, type: :model do
 
       it 'cancels each donation' do
         campaign.donations.each do |d|
-          expect(d).to receive(:cancel).and_return true
+          expect(d).to receive(:cancel!).and_return true
         end
         campaign.cancel_donations
       end

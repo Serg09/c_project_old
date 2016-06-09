@@ -21,7 +21,7 @@ describe DonationCollector do
       DonationCollector.perform(campaign.id)
     end
 
-    context 'when all donations are collected successfull' do
+    context 'when all donations are collected successfully' do
       it 'sends a notification email to the author' do
         expect(CampaignMailer).to receive(:collection_complete).with(campaign)
         DonationCollector.perform(campaign.id)
