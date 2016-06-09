@@ -73,6 +73,13 @@ RSpec.describe Bio, type: :model do
     end
   end
 
+  describe '#approve!' do
+    it 'changes the status to "approved"'
+    context 'when an approved bio is already present' do
+      it 'changes the status of the previously approved bio to "superseded"'
+    end
+  end
+
   shared_context :multiple_bios do
     let!(:p1) { FactoryGirl.create(:bio) }
     let!(:p2) { FactoryGirl.create(:bio) }

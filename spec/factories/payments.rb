@@ -10,7 +10,7 @@ FactoryGirl.define do
     end
     donation
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
-    state PaymentTransaction.APPROVED
+    state 'approved'
     after(:create) do |payment, evaluator|
       transaction = {
         id: payment.external_id,

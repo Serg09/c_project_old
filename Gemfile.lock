@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (4.10.1)
     actionmailer (4.2.4)
       actionpack (= 4.2.4)
       actionview (= 4.2.4)
@@ -310,6 +311,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   annotate
   byebug
   cancan

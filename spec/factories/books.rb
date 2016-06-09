@@ -4,7 +4,7 @@ FactoryGirl.define do
       title { Faker::Book.title }
       short_description { Faker::Hipster.sentence(3) }
       long_description { Faker::Hipster.paragraphs.join("\n") }
-      status BookVersion.APPROVED
+      status 'approved'
     end
     association :author, factory: :user
 
@@ -20,14 +20,14 @@ FactoryGirl.define do
 
     factory :pending_book do
       transient do
-        status BookVersion.PENDING
+        status 'pending'
       end
     end
 
 
     factory :rejected_book do
       transient do
-        status BookVersion.REJECTED
+        status 'rejected'
       end
     end
   end

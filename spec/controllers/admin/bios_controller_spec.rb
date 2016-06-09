@@ -144,7 +144,7 @@ RSpec.describe Admin::BiosController, type: :controller do
           expect do
             patch :approve, id: pending_bio
             pending_bio.reload
-          end.to change(pending_bio, :status).to Bio.APPROVED
+          end.to change(pending_bio, :status).to 'approved'
         end
 
         it 'sends an email to the author' do
