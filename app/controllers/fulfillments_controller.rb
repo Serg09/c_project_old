@@ -3,10 +3,8 @@ class FulfillmentsController < ApplicationController
   before_filter :load_fulfillment, only: :fulfill
 
   def index
-    @fulfillments = Fulfillment.
-      author(current_user).
-      undelivered.
-      ready.
+    @fulfillments = current_user.
+      pending_fulfillments
       paginate(page: params[:page])
   end
 

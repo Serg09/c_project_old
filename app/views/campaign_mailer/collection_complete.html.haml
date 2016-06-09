@@ -9,3 +9,19 @@
   by
   =@campaign.target_date.strftime '%-m/%-d/%Y'
   has finished.
+
+%table
+  %tr
+    %th.text-right Contributions
+    %td.text-right= @campaign.donations.count
+  %tr
+    %th.text-right Amount received
+    %td.text-right= number_to_currency(@campaign.total_donated)
+  %tr
+    %th.text-right Percent of goal
+    %td.text-right= number_to_percentage(@campaign.current_progress * 100, precision: 0)
+
+-if @campaign.book.author.pending_fulfillments.any?
+  %p
+    =link_to 'Click here', fulfillments_path
+    to fulfill the items that are due to the contributors.

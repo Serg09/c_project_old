@@ -75,6 +75,13 @@ class User < ActiveRecord::Base
     self.unsubscribed = !subscribed
   end
 
+  def pending_fulfillments
+    Fulfillment.
+      author(self).
+      undelivered.
+      ready
+  end
+
   private
 
   def ensure_unsubscribe_token
