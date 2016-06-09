@@ -79,14 +79,14 @@ RSpec.describe Admin::BookVersionsController, type: :controller do
         expect do
           patch :reject, id: pending_book_version
           pending_book_version.reload
-        end.to change(pending_book_version, :status).to BookVersion.REJECTED
+        end.to change(pending_book_version, :status).from('pending').to('rejected')
       end
 
       it 'changes the status of the book version to "rejected"' do
         expect do
           patch :reject, id: pending_book_version
           pending_book_version.reload
-        end.to change(pending_book_version, :status).to BookVersion.REJECTED
+        end.to change(pending_book_version, :status).from('pending').to('rejected')
       end
     end
   end

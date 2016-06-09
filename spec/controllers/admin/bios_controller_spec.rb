@@ -162,7 +162,7 @@ RSpec.describe Admin::BiosController, type: :controller do
           expect do
             patch :reject, id: pending_bio
             pending_bio.reload
-          end.to change(pending_bio, :status).to Bio.REJECTED
+          end.to change(pending_bio, :status).from('pending').to('rejected')
         end
 
         it 'sends an email to the author' do

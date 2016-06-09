@@ -4,7 +4,7 @@ class FulfillmentsController < ApplicationController
 
   def index
     @fulfillments = current_user.
-      pending_fulfillments
+      pending_fulfillments.
       paginate(page: params[:page])
   end
 

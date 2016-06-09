@@ -55,11 +55,11 @@ FactoryGirl.define do
     end
 
     factory :failed_payment do
-      state PaymentTransaction.FAILED
+      state 'failed'
     end
 
     factory :pending_payment do
-      state PaymentTransaction.PENDING
+      state 'pending'
     end
   end
 end

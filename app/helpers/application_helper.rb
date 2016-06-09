@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def bio_path?(status)
-    matches_path? '/admin/bio', {status: status}, {status: Bio.PENDING}
+    matches_path? '/admin/bio', {status: status}, {status: 'pending'}
   end
 
   def bio_nav_item_caption
@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def book_path?(status)
-    matches_path? '/admin/book', {status: status}, {status: BookVersion.PENDING}
+    matches_path? '/admin/book', {status: status}, {status: 'pending'}
   end
 
   def book_nav_item_caption
