@@ -92,12 +92,6 @@ module ApplicationHelper
     %w(1 true).include? (value || '').downcase
   end
 
-  def mark_up(text)
-    # TODO Implement markdown conversion here
-    # For now, we'll just put in paragraphs at line breaks
-    text.split(/\r\n?/).map{|p| content_tag :p, p}.join("").html_safe
-  end
-
   DEFAULT_PROGRESS_METER_OPTIONS = { width: 100, height: 300 }
   def render_progress_meter(progress, options = {})
     options = DEFAULT_PROGRESS_METER_OPTIONS.

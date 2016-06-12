@@ -20,7 +20,7 @@
             =image_tag "social/#{link.site}.png", class: 'img-circle'
     .col-md-5
       -if @bio.approved?
-        = mark_up(@bio.text)
+        = @bio.text.html_safe
       -else
         %p= @bio.text
 
