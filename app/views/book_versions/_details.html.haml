@@ -11,7 +11,7 @@
           %li=genre.name
   .col-md-8
     -if book_version.approved?
-      =mark_up book_version.long_or_short_description
+      =book_version.long_or_short_description.html_safe
     -else
       =book_version.long_or_short_description
     -if book_version.active_campaign.present?

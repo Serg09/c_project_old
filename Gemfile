@@ -42,6 +42,7 @@ gem 'aasm'
 gem 'resque'
 gem 'resque-scheduler'
 gem 'resque-web', require: 'resque_web'
+gem 'wysiwyg-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

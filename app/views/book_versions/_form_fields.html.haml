@@ -1,3 +1,11 @@
+=content_for :javascript do
+  =javascript_include_tag 'wysiwyg'
+  =stylesheet_link_tag 'wysiwyg'
+=content_for :after_footer do
+  :javascript
+    $(function() {
+      $('.wysiwyg').froalaEditor();
+    });
 .row
   .col-md-6
     .form-group{ :class => form_group_class(book_resource, :title) }
@@ -6,11 +14,11 @@
       =help_blocks book_resource, :title
     .form-group{ :class => form_group_class(book_resource, :short_description) }
       =f.label :short_description, class: 'control-label'
-      =f.text_area :short_description, class: 'form-control', rows: 5
+      =f.text_area :short_description, class: 'form-control wysiwyg', rows: 5
       =help_blocks book_resource, :short_description
     .form-group{ :class => form_group_class(book_resource, :long_description) }
       =f.label :long_description, class: 'control-label'
-      =f.text_area :long_description, class: 'form-control', rows: 10
+      =f.text_area :long_description, class: 'form-control wysiwyg', rows: 10
       =help_blocks book_resource, :long_description
     .form-group
       -if book_resource.cover_image_id
