@@ -13,7 +13,7 @@ class DonationCollector
         Resque.enqueue_in(2.hours, DonationCollector, campaign_id, attempt_number + 1)
       else
         Rails.logger.warn "At least one donation could not be collected for #{campaign_id}. The maximum number of retries has been reaching. Finalizing the collection now."
-        campaign.finalize_collection
+        campaign.finalize_collection!
       end
     end
     CampaignMailer.collection_complete(campaign).deliver_now if campaign.collected? && !campaign.author.unsubscribed?

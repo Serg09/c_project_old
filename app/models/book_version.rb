@@ -32,22 +32,6 @@ class BookVersion < ActiveRecord::Base
   attr_accessor :cover_image_file, :sample_file
   delegate :author, :active_campaign, to: :book
 
-  scope :pending, ->{ where(status: BookVersion.PENDING).order('created_at desc') }
-  scope :approved, ->{ where(status: BookVersion.APPROVED).order('created_at desc') }
-  scope :rejected, ->{ where(status: BookVersion.REJECTED).order('created_at desc') }
-
-  def approve!
-    BookVersion.transaction do
-      self.status = BookVersion.APPROVED
-      supersede_previous_approved_version && save
-    end
-  end
-
-  def reject!
-    self.status = BookVersion.REJECTED
-    save
-  end
-
   def long_or_short_description
     long_description.present? ? long_description : short_description
   end
@@ -109,10 +93,7 @@ class BookVersion < ActiveRecord::Base
     self.sample_id = image.id
   end
 
-  def supersede_previous_approved_version
-    return true unless book.approved_version
-
-    book.approved_version.status = BookVersion.SUPERSEDED
-    book.approved_version.save
+  def current_version
+    book.approved_version
   end
 end

@@ -5,7 +5,7 @@ RSpec.describe BiosController, type: :controller do
 
   let (:author) { FactoryGirl.create(:user) }
   let (:bio) { FactoryGirl.create(:bio, author: author) }
-  let (:approved_bio) { FactoryGirl.create(:bio, author: author, status: Bio.APPROVED) }
+  let (:approved_bio) { FactoryGirl.create(:approved_bio, author: author) }
   let (:attributes) do
     {
       text: 'This is some stuff about me',

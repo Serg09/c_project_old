@@ -43,7 +43,7 @@ class CampaignsController < ApplicationController
   def start
     authorize! :update, @campaign
     if @campaign.target_date_in_range?
-      flash[:notice] = 'The campaign was started successfully.' if @campaign.start
+      flash[:notice] = 'The campaign was started successfully.' if @campaign.start!
       redirect_to campaign_path(@campaign)
     else
       redirect_to book_campaigns_path(@book), alert: 'The target date must be at least 30 days in the future.'
@@ -62,7 +62,7 @@ class CampaignsController < ApplicationController
 
   def collect
     authorize! :update, @campaign
-    if @campaign.collect
+    if @campaign.collect!
       flash[:notice] = 'The campaign was closed successfully.'
       CampaignMailer.collecting(@campaign).deliver_now unless @campaign.author.unsubscribed?
     end
@@ -71,7 +71,7 @@ class CampaignsController < ApplicationController
 
   def cancel
     authorize! :update, @campaign
-    if @campaign.cancel
+    if @campaign.cancel!
       flash[:notice] = 'The campaign was cancelled successfully.'
       CampaignMailer.cancelled(@campaign).deliver_now unless @campaign.author.unsubscribed?
     end

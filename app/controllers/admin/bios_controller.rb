@@ -12,8 +12,7 @@ class Admin::BiosController < ApplicationController
 
   def approve
     authorize! :approve, @bio
-    @bio.status = Bio.APPROVED
-    if @bio.save
+    if @bio.approve!
       redirect_to bios_path, notice: "The bio has been approved successfully."
       BioMailer.approval(@bio).deliver_now unless @bio.author.unsubscribed?
     else
@@ -23,8 +22,7 @@ class Admin::BiosController < ApplicationController
 
   def reject
     authorize! :reject, @bio
-    @bio.status = Bio.REJECTED
-    if @bio.save
+    if @bio.reject!
       redirect_to bios_path, notice: "The bio has been rejected successfully."
       BioMailer.rejection(@bio).deliver_now unless @bio.author.unsubscribed?
     else

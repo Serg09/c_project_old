@@ -47,4 +47,8 @@ class Bio < ActiveRecord::Base
     image = Image.find_or_create_from_file(photo_file, author)
     self.photo_id = image.id
   end
+
+  def current_version
+    author.active_bio
+  end
 end

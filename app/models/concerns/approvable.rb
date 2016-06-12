@@ -2,28 +2,33 @@
 module Approvable
   extend ActiveSupport::Concern
 
-  STATUSES = %w(pending approved rejected superseded)
-
-  STATUSES.each do |status|
-    define_method "#{status}?" do
-      self.status == status
-    end
-  end
-
-  module ClassMethods
-    STATUSES.each do |status|
-      define_method status.upcase do
-        status
-      end
-    end
+  def supersede_current
+    current_version.supersede! if current_version
   end
 
   included do
-    validates :status, presence: true, inclusion: { in: STATUSES }
+    include AASM
 
-    scope :pending, -> { where(status: 'pending') }
-    scope :approved, -> { where(status: 'approved') }
-    scope :rejected, -> { where(status: 'rejected') }
+    aasm(:status) do
+      state :pending, initial: true
+      state :approved
+      state :rejected
+      state :superseded
+
+      event :approve do
+        before { supersede_current }
+        transitions from: :pending, to: :approved
+      end
+
+      event :reject do
+        transitions from: :pending, to: :rejected
+      end
+
+      event :supersede do
+        transitions from: :approved, to: :superseded
+      end
+    end
+
     scope :by_date, -> { order('created_at DESC') }
   end
 end

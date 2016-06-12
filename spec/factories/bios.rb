@@ -4,11 +4,15 @@ FactoryGirl.define do
     text { Faker::Lorem.paragraphs(3).join("\n")}
 
     factory :approved_bio do
-      status Bio.APPROVED
+      status 'approved'
     end
 
     factory :rejected_bio do
-      status Bio.REJECTED
+      status 'rejected'
+    end
+
+    factory :superseded_bio do
+      status 'superseded'
     end
   end
 end

@@ -14,6 +14,8 @@
 #
 
 class Campaign < ActiveRecord::Base
+  include AASM
+
   belongs_to :book
   has_many :donations
   has_many :rewards, dependent: :destroy
@@ -24,34 +26,36 @@ class Campaign < ActiveRecord::Base
 
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
-  scope :unstarted, ->{where(state: 'unstarted')}
-  scope :active, ->{where(state: 'active')}
-  scope :collecting, ->{where(state: 'collecting')}
-  scope :collected, ->{where(state: 'collected')}
-  scope :cancelling, ->{where(state: 'cancelling')}
-  scope :cancelled, ->{where(state: 'cancelled')}
   scope :by_target_date, ->{order('target_date desc')}
   scope :not_unsubscribed, ->{joins(book: :author).where('users.unsubscribed = ?', false)}
 
-  state_machine :initial => :unstarted do
-    before_transition :active => :collecting, :do => :queue_collection
-    after_transition :active => :cancelling, :do => :void_donations
+  aasm(:state, whiny_transitions: false) do
+    state :unstarted, initial: true
+    state :active
+    state :collecting, before_enter: :queue_collection
+    state :collected
+    state :cancelling, before_enter: :void_donations
+    state :cancelled
+
     event :start do
-      transition :unstarted => :active
+      transitions from: :unstarted, to: :active
     end
+
     event :collect do
-      transition :active => :collecting
+      transitions from: :active, to: :collecting
     end
+
     event :cancel do
-      transition :active => :cancelling
+      transitions from: :active, to: :cancelling
     end
+
     event :finalize_collection do
-      transition :collecting => :collected
+      transitions from: :collecting, to: :collected
     end
+
     event :finalize_cancellation do
-      transition :cancelling => :cancelled
+      transitions from: :cancelling, to: :cancelled
     end
-    state :unstarted, :active, :collecting, :collected, :cancelling, :cancelled
   end
 
   def self.send_progress_notifications
@@ -86,7 +90,7 @@ class Campaign < ActiveRecord::Base
   # If not, the method exists and returns false
   def cancel_donations
     raise Exceptions::InvalidCampaignStateError unless cancelling?
-    finalize_cancellation if donations.map(&:cancel).all?
+    finalize_cancellation! if donations.map(&:cancel!).all?
   end
 
   # Iterates through the donations and attempts
@@ -99,7 +103,7 @@ class Campaign < ActiveRecord::Base
   # If not, the method exists and returns false
   def collect_donations
     raise Exceptions::InvalidCampaignStateError unless collecting?
-    finalize_collection if donations.pledged.map(&:collect).all?
+    finalize_collection! if donations.pledged.map(&:collect!).all?
   end
 
   def total_donated
