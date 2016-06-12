@@ -58,7 +58,7 @@ end
 When /^a user donates (#{DOLLAR_AMOUNT}) for the (#{BOOK})$/ do |amount, book|
   campaign = book.campaigns.active.first
   visit new_campaign_donation_path(campaign)
-  within('#main_content') do
+  within('#main-content') do
     fill_in 'Amount', with: amount.to_s
     fill_in 'Credit card', with: Faker::Business.credit_card_number.gsub(/\D/, '')
     fill_in 'CVV', with: Faker::Number.number(3).to_s

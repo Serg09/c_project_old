@@ -20,7 +20,7 @@ module Navigation
   def locator_for(identifier)
     case identifier
     when "the main menu" then "#main-menu"
-    when "the main content" then "#main_content"
+    when "the main content" then "#main-content"
     when "the admin content" then "#admin-content"
     when "the page title" then "#page-title"
     when "the book title" then "#book-title"

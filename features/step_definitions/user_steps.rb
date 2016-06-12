@@ -29,7 +29,7 @@ end
 
 Given /^I am signed in as an? (?:author|user) with "([^\/]+)\/([^"]+)"$/ do |email, password|
   visit new_user_session_path
-  within('#main_content') do
+  within('#main-content') do
     fill_in 'Email', with: email
     fill_in 'Password', with: password
     click_on 'Sign in'
