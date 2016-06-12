@@ -24,7 +24,7 @@ Feature: Make a donation
     When I click "Great Stuff To Know" within the main content
     Then I should see "Great Stuff To Know" within the book title
 
-    When I click "Donate!"
+    When I click "Contribute!"
     Then I should see "Make a donation!" within the page title
 
   Scenario: A user donates using a credit card
