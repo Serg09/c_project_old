@@ -11,7 +11,8 @@ Given /^the (#{CAMPAIGN}) has received the following donations$/ do |campaign, t
     address_string = values.delete(:address)
     name_string = values.delete(:name)
 
-    donation = FactoryGirl.create(:donation, values.merge(campaign: campaign))
+    # TODO we'll need to add support for donations with deferred collection later
+    donation = FactoryGirl.create(:donation, values.merge(campaign: campaign, state: 'collected'))
 
     address = address_string.present? ? parse_address(address_string) : {}
     if address

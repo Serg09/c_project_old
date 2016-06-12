@@ -2,10 +2,6 @@ require 'rails_helper'
 
 describe DonationCollector do
   let (:campaign) { FactoryGirl.create(:collecting_campaign) }
-  let (:donation1) { FactoryGirl.create(:donation, campaign: campaign) }
-  let (:donation2) { FactoryGirl.create(:donation, campaign: campaign) }
-  let!(:payment1) { FactoryGirl.create(:payment, donation: donation1) }
-  let!(:payment2) { FactoryGirl.create(:payment, donation: donation2) }
   let (:success_response) { payment_create_response }
   let (:failure_response) { payment_create_response(state: :failed) }
 
@@ -21,7 +17,10 @@ describe DonationCollector do
       DonationCollector.perform(campaign.id)
     end
 
-    context 'when all donations are collected successfully' do
+    context 'when donations are paid immediately' do
+      let (:donation1) { FactoryGirl.create(:collected_donation, campaign: campaign) }
+      let (:donation2) { FactoryGirl.create(:collected_donation, campaign: campaign) }
+
       it 'sends a notification email to the author' do
         expect(CampaignMailer).to receive(:collection_complete).with(campaign)
         DonationCollector.perform(campaign.id)
@@ -33,6 +32,8 @@ describe DonationCollector do
         DonationCollector.perform(campaign.id)
       end
     end
+
+    #TODO Write specs for donations that aren't collected until the campaign makes
 
     #context 'when one or more donations are not collected successfully' do
     #  context 'before reaching 3 attempts' do
