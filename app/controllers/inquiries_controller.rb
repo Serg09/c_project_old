@@ -13,7 +13,7 @@ class InquiriesController < ApplicationController
     else
       flash[:alert] = 'We were unable to accept your inquiry.'
     end
-    respond_with @inquiry, location: browse_books_path
+    respond_with @inquiry
   end
 
   private

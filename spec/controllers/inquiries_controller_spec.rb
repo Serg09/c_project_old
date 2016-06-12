@@ -29,9 +29,9 @@ describe InquiriesController do
         end.to change(Inquiry, :count).by(1)
       end
 
-      it 'redirects to the books page' do
+      it 'redirects to the confirmation (show) page' do
         post :create, inquiry: attributes
-        expect(response).to redirect_to browse_books_path
+        expect(response).to redirect_to inquiry_path(Inquiry.last)
       end
 
       it 'sends a notification email' do
@@ -63,7 +63,7 @@ describe InquiriesController do
 
       it 'redirects to the books page' do
         post :create, inquiry: attributes
-        expect(response).to redirect_to browse_books_path
+        expect(response).to redirect_to inquiry_path(Inquiry.last)
       end
 
       it 'sends a notification email' do

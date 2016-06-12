@@ -16,7 +16,7 @@ Feature: An unauthenticated user submits an inquiry
     And I fill in "How can we help?" with "What can I do about the squirrels in my attic?"
     And I click "Submit"
     Then I should see "Your inquiry has been accepted." within the notification area
-    And I should see "Books" within the page title
+    And I should see "Contact us" within the page title
 
     Then "info@crowdscribed.com" should receive an email with subject /\ACrowdscribed inquiry \d{6}\z/
     When "info@crowdscribed.com" opens the email

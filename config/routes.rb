@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations'
   }
 
-  resources :inquiries, only: [:new, :create]
+  resources :inquiries, only: [:new, :create, :show]
   get '/unsubscribe/:token', to: 'users#unsubscribe',
                              as: :unsubscribe,
                              constraints: { token: /[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}/i }

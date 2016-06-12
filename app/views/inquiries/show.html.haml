@@ -1,0 +1,14 @@
+=content_for :page_title do
+  Contact us
+
+.container
+  .row
+    .col-md-5.col-md-offset-1
+      %h1 Inquiry received!
+      %p Try these links if you're interested in learning more.
+      %ul
+        %li= link_to 'Check out our authors', browse_authors_path
+        %li= link_to 'Check out our books', browse_books_path
+        %li= link_to 'Learn more about our pricing', pages_a_la_carte_pricing_path
+    .col-md-4.col-md-offset-1
+      =image_tag 'driver.jpg'
