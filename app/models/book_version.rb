@@ -83,14 +83,14 @@ class BookVersion < ActiveRecord::Base
     return unless cover_image_file
 
     image = Image.find_or_create_from_file(cover_image_file, author)
-    self.cover_image_id = image.id
+    self.cover_image_id = image.id if image
   end
 
   def process_sample_file
     return unless sample_file
 
     image = Image.find_or_create_from_file(sample_file, author)
-    self.sample_id = image.id
+    self.sample_id = image.id if image
   end
 
   def current_version

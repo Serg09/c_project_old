@@ -30,8 +30,14 @@ class Image < ActiveRecord::Base
   end
 
   def self.find_or_create_from_file(file, user)
+    file_data = file.read
+    if file_data.length == 0
+      Rails.logger.error "The specified image file #{file.inspect} is empty and cannot be processed."
+      return nil
+    end
+
     # read and resize the image
-    magick = Magick::Image.from_blob(file.read).first
+    magick = Magick::Image.from_blob(file_data).first
     scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
     data = scaled_magick.to_blob
 
