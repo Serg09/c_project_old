@@ -37,10 +37,14 @@ class Image < ActiveRecord::Base
       return nil
     end
 
-    # read and resize the image
-    magick = Magick::Image.from_blob(file_data).first
-    scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
-    data = scaled_magick.to_blob
+    # read and resize the image, unless it's a pdf
+    if file.content_type == 'application/pdf'
+      data = file_data
+    else
+      magick = Magick::Image.from_blob(file_data).first
+      scaled_magick = magick.resize_to_fit MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT
+      data =    scaled_magick.to_blob
+    end
 
     # see if the image is already present in the database
     hash_id = hash_id(data)
@@ -52,10 +56,7 @@ class Image < ActiveRecord::Base
       image = create!(user: user,
                       image_binary: image_binary,
                       hash_id: hash_id,
-                      mime_type: file.respond_to?(:content_type) ?
-                        file.content_type :
-                        'image/jpeg')
-
+                      mime_type: file.content_type)
     end
 
     image

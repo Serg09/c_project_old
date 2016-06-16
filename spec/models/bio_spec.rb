@@ -14,7 +14,19 @@ RSpec.describe Bio, type: :model do
       ]
     }.with_indifferent_access
   end
-  let (:photo_file) { Rails.root.join('spec', 'fixtures', 'files', 'author_photo.jpg') }
+  let (:photo_file) do
+    image_mock('image/jpeg', 'spec', 'fixtures', 'files', 'author_photo.jpg')
+    #result = double('uploaded_file')
+    #allow(result).to receive(:eof?).and_return(false)
+    #allow(result).to receive(:content_type).and_return('image/jpeg')
+    #allow(result).to \
+    #  receive(:read).
+    #  and_return(File.read(Rails.root.join('spec',
+    #                                       'fixtures',
+    #                                       'files',
+    #                                       'author_photo.jpg')))
+    #result
+  end
 
   it 'can be created from valid attributes' do
     bio = Bio.new(attributes)

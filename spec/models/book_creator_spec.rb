@@ -2,8 +2,12 @@ require 'rails_helper'
 
 RSpec.describe BookCreator do
   let (:author) { FactoryGirl.create(:user) }
-  let (:image_file) { Rails.root.join('spec', 'fixtures', 'files', 'author_photo.jpg') }
-  let (:sample_file) { Rails.root.join('spec', 'fixtures', 'files', 'sample.pdf') }
+  let (:image_file) do
+    image_mock('image/jpeg', 'spec', 'fixtures', 'files', 'author_photo.jpg')
+  end
+  let (:sample_file) do
+    image_mock('application/pdf', 'spec', 'fixtures', 'files', 'sample.pdf')
+  end
   let (:genre1) { FactoryGirl.create(:genre) }
   let (:genre2) { FactoryGirl.create(:genre) }
   let (:genre3) { FactoryGirl.create(:genre) }

@@ -56,8 +56,7 @@ class BookVersion < ActiveRecord::Base
   end
 
   def pdf?(file)
-    (file.respond_to?(:content_type) && file.content_type == "application/pdf") ||
-      (file.respond_to?(:extname) && file.extname == ".pdf")
+    file.content_type == 'application/pdf'
   end
 
   def must_be_pdf
