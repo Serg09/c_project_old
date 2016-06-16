@@ -22,7 +22,6 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # The path used after confirmation.
-  def after_confirmation_path_for(resource_name, resource)
-    pages_account_pending_path
-  end
+  #def after_confirmation_path_for(resource_name, resource)
+  #end
 end

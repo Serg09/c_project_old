@@ -96,8 +96,6 @@ Rails.application.routes.draw do
   get 'pages/predicament'
   get 'pages/covenant'
   get 'pages/piatt'
-  get 'pages/sign_up_confirmation'
-  get 'pages/account_pending'
 
   get 'authors', to: 'bios#browse', as: :browse_authors
   get 'users', to: 'users#show', as: :user_root
