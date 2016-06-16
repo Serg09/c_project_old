@@ -30,6 +30,7 @@ class Image < ActiveRecord::Base
   end
 
   def self.find_or_create_from_file(file, user)
+    file.rewind if file.eof?
     file_data = file.read
     if file_data.length == 0
       Rails.logger.error "The specified image file #{file.inspect} is empty and cannot be processed."
