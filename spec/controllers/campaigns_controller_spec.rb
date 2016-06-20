@@ -230,6 +230,13 @@ RSpec.describe CampaignsController, type: :controller do
           end.to change(Campaign, :count).by(-1)
         end
       end
+
+      describe "get :terms" do
+        it 'is successful' do
+          get :terms, id: campaign
+          expect(response).to have_http_status :success
+        end
+      end
     end
 
     context 'that does not own the book' do
@@ -366,6 +373,13 @@ RSpec.describe CampaignsController, type: :controller do
           end.not_to change(Campaign, :count)
         end
       end
+
+      describe "get :terms" do
+        it 'redirects to the use profile page' do
+          get :terms, id: campaign
+          expect(response).to redirect_to user_root_path
+        end
+      end
     end
   end
 
@@ -490,6 +504,13 @@ RSpec.describe CampaignsController, type: :controller do
         expect do
           delete :destroy, id: campaign
         end.not_to change(Campaign, :count)
+      end
+    end
+
+    describe "get :terms" do
+      it 'redirects to the sign in page' do
+        get :terms, id: campaign
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

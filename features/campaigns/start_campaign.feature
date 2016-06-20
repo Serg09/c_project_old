@@ -27,7 +27,7 @@ Feature: Start a campaign
       |   4/30/2016 |        $1,000 | unstarted |
 
     When I click the start button within the 1st campaign row
-    Then I should see "terms" within the main content
+    Then I should see "Campaign terms of use" within the page title
 
   Scenario: An author starts a campaign
     When I check "I agree"

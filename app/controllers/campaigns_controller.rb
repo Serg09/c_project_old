@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :load_campaign, only: [:show, :edit, :update, :destroy, :start, :collect, :cancel, :prolong]
+  before_filter :load_campaign, except: [:index, :new, :create]
   before_filter :load_book, only: [:index, :new, :create]
 
   respond_to :html
@@ -82,6 +82,10 @@ class CampaignsController < ApplicationController
     authorize! :destroy, @campaign
     flash[:notice] = "The campaign was removed successfully." if @campaign.destroy
     respond_with @campaign, location: book_campaigns_path(@campaign.book)
+  end
+
+  def terms
+    authorize! :update, @campaign
   end
 
   private
