@@ -39,7 +39,7 @@ class Campaign < ActiveRecord::Base
     state :cancelled
 
     event :start do
-      transitions from: :unstarted, to: :active, if: :agree_to_terms
+      transitions from: :unstarted, to: :active, if: :can_start?
     end
 
     event :collect do
@@ -155,6 +155,10 @@ class Campaign < ActiveRecord::Base
   end
 
   private
+
+  def can_start?
+    agree_to_terms? && target_date_in_range?
+  end
 
   def must_be_in_range
     return unless target_date
