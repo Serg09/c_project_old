@@ -8,7 +8,7 @@ Feature: Administrator views campaign progress
     And there is an author named "John Doe" with email address "john@doe.com"
     And author john@doe.com has a book titled "Some Words of Mine"
     And book "Some Words of Mine" has a campaign targeting $1,000 by 4/30/2016
-    And the campaign for the book "Some Words of Mine" has received the following donations
+    And the campaign for the book "Some Words of Mine" has received the following contributions
       | Email              | Amount |      Date |
       | some@reader.com    |    125 | 2/29/2016 |
       | another@person.com |     50 |  3/1/2016 |
@@ -28,12 +28,12 @@ Feature: Administrator views campaign progress
     Then I should see "Campaign for Some Words of Mine" within the page title
     And I should see the following campaign progress table
       | Goal           | $1,000 |
-      | Donations      |      2 |
+      | Contributions  |      2 |
       | Raised         |   $175 |
       | Still need     |   $825 |
       | Days remaining |     59 |
 
-    And I should see the following donations table
-      | Donor              |      Date | Amount |
+    And I should see the following contributions table
+      | Contributor        |      Date | Amount |
       | some@reader.com    | 2/29/2016 |   $125 |
       | another@person.com |  3/1/2016 |    $50 |

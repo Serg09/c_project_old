@@ -1,0 +1,17 @@
+-@contribution_creator.campaign.rewards.by_minimum_contribution.each do |reward|
+  %h3
+    .radio
+      %label{ for: "contribution_amount_option_#{reward.id}" }
+        =radio_button_tag 'contribution[reward_id]', reward.id, id: "contribution_amount_option_#{reward.id}"
+        =number_to_currency(reward.minimum_contribution, precision: 0)
+        =reward.description
+
+%h3
+  .radio
+    %label{ for: "contribution_amount_option_choose" }
+      =radio_button_tag 'contribution[reward_id]', '', id: "contribution_amount_option_choose"
+      Choose your amount
+.form-group{ class: form_group_class(@contribution_creator, :amount) }
+  =f.label :amount, class: 'control-label'
+  =f.text_field :amount, class: 'form-control', autofocus: true, maxlength: 20
+  =help_blocks @contribution_creator, :amount

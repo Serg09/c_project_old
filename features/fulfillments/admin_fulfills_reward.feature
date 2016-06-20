@@ -15,7 +15,7 @@ Feature: Admin fulfills reward
       | Description                 | House reward                |
       | Printed copy of the book    | Printed copy of the book    |
       | Electronic copy of the book | Electronic copy of the book |
-    And the campaign for the book "How To Raise Money" has received the following donations
+    And the campaign for the book "How To Raise Money" has received the following contributions
       | Email               | Amount | Reward                      | Address                                  | Name            | State     |
       | sally@readerton.com |    100 | Printed copy of the book    | 1234 Main St, Apt 227, Dallas, TX  75200 | Sally Readerton | collected |
       | billy@bookworm.com  |    150 | Electronic copy of the book | 4321 Elm St, Dallas, TX 75201            | Billy Bookworm  | collected |

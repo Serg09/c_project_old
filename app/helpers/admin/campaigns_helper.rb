@@ -1,6 +1,6 @@
 module Admin::CampaignsHelper
-  def donation_row_class(donation)
-    return 'danger' if donation.cancelled?
-    return 'success' if donation.collected?
+  def contribution_row_class(contribution)
+    return 'danger' if contribution.cancelled?
+    return 'success' if contribution.collected?
   end
 end

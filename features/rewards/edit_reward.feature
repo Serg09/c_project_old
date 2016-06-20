@@ -12,7 +12,7 @@ Feature: Edit a reward
 
   Scenario: An author edits an existing author-fulfilled reward
     Given the campaign for book "Giving It Away" has the following rewards
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Signed copy   |               20 |
       | Blank copy    |               10 |
 
@@ -34,19 +34,19 @@ Feature: Edit a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Blank copy    |              $10 |
       | Signed copy   |              $20 |
 
     When I click the edit button within the 1st reward row
     Then I should see "Edit reward" within the page title
     When I fill in "Description" with "Electronic copy"
-    And I fill in "Minimum donation" with "9"
+    And I fill in "Minimum contribution" with "9"
     And I click "Save"
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see "The reward was updated successfully." within the notification area
     And I should see the following rewards table
-      | Description     | Minimum donation |
+      | Description     | Minimum contribution |
       | Electronic copy |               $9 |
       | Signed copy     |              $20 |
 
@@ -56,7 +56,7 @@ Feature: Edit a reward
       | Printed copy of the book |
       | Token of gratitude       |
     And the campaign for book "Giving It Away" has the following rewards
-      | Description              | Minimum donation | House reward             |
+      | Description              | Minimum contribution | House reward             |
       | Signed copy              |               20 |                          |
       | Printed copy of the book |               10 | Printed copy of the book |
 
@@ -78,28 +78,28 @@ Feature: Edit a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description              | Minimum donation |
+      | Description              | Minimum contribution |
       | Printed copy of the book |              $10 |
       | Signed copy              |              $20 |
 
     When I click the edit button within the 1st reward row
     Then I should see "Edit reward" within the page title
     When I select "Token of gratitude" from "Reward"
-    And I fill in "Minimum donation" with "11"
+    And I fill in "Minimum contribution" with "11"
     And I click "Save"
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see "The reward was updated successfully." within the notification area
     And I should see the following rewards table
-      | Description        | Minimum donation |
+      | Description        | Minimum contribution |
       | Token of gratitude |              $11 |
       | Signed copy        |              $20 |
 
   Scenario: An author attempts to edit a reward that has already been promised
     Given the campaign for book "Giving It Away" has the following rewards
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Signed copy   |               20 |
       | Blank copy    |               10 |
-    And the campaign for the book "Giving It Away" has received the following donations
+    And the campaign for the book "Giving It Away" has received the following contributions
       | Amount | Reward      |
       |    100 | Signed copy |
 
@@ -121,7 +121,7 @@ Feature: Edit a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Blank copy    |              $10 |
       | Signed copy   |              $20 |
     And I should see a delete button within the 1st reward row

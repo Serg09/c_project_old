@@ -12,7 +12,7 @@
           %th &nbsp;
         -@fulfillments.each do |fulfillment|
           %tr
-            %td= fulfillment.donation.campaign.book.administrative_title
+            %td= fulfillment.contribution.campaign.book.administrative_title
             %td= fulfillment.reward.description
             %td= render 'fulfillments/delivery', fulfillment: fulfillment
             %td

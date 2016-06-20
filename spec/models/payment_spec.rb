@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Payment, type: :model do
-  let (:donation) { FactoryGirl.create(:donation) }
+  let (:contribution) { FactoryGirl.create(:contribution) }
   let (:attributes) do
     {
-      donation_id: donation.id,
+      contribution_id: contribution.id,
       external_id: 'PAY-17S8410768582940NKEE66EQ',
       state: 'approved',
     }
@@ -15,17 +15,17 @@ RSpec.describe Payment, type: :model do
     expect(payment).to be_valid
   end
 
-  describe '#donation_id' do
+  describe '#contribution_id' do
     it 'is required' do
-      payment = Payment.new attributes.except(:donation_id)
-      expect(payment).to have_at_least(1).error_on :donation_id
+      payment = Payment.new attributes.except(:contribution_id)
+      expect(payment).to have_at_least(1).error_on :contribution_id
     end
   end
 
-  describe '#donation' do
-    it 'is a reference to the donation to which the payment belongs' do
+  describe '#contribution' do
+    it 'is a reference to the contribution to which the payment belongs' do
       payment = Payment.new attributes
-      expect(payment.donation.id).to be donation.id
+      expect(payment.contribution.id).to be contribution.id
     end
   end
 

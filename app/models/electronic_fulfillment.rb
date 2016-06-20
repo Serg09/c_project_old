@@ -4,7 +4,7 @@
 #
 #  id           :integer          not null, primary key
 #  type         :string(50)       not null
-#  donation_id  :integer          not null
+#  contribution_id  :integer          not null
 #  reward_id    :integer          not null
 #  email        :string(200)
 #  address1     :string(100)

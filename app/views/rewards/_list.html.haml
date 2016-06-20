@@ -1,14 +1,14 @@
 %table#rewards-table.table.table-striped
   %tr
     %th Description
-    %th Minimum donation
+    %th Minimum contribution
     %th &nbsp;
-  -@campaign.rewards.by_minimum_donation.each do |reward|
+  -@campaign.rewards.by_minimum_contribution.each do |reward|
     %tr
       %td= reward.working_description
-      %td= number_to_currency(reward.minimum_donation, precision: 0)
+      %td= number_to_currency(reward.minimum_contribution, precision: 0)
       %td
-        -if reward.donations.any?
+        -if reward.contributions.any?
           &nbsp;
         -else
           .btn-group

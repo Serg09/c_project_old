@@ -26,9 +26,9 @@ class AdminMailerPreview < ActionMailer::Preview
     AdminMailer.campaign_succeeded(campaign)
   end
 
-  def donation_received
-    donation = Donation.first || FactoryGirl.create(:donation)
-    AdminMailer.donation_received(donation)
+  def contribution_received
+    contribution = Contribution.first || FactoryGirl.create(:contribution)
+    AdminMailer.contribution_received(contribution)
   end
 
   def inquiry_received

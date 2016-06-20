@@ -18,7 +18,7 @@ class Campaign < ActiveRecord::Base
   include AASM
 
   belongs_to :book
-  has_many :donations
+  has_many :contributions
   has_many :rewards, dependent: :destroy
 
   validates_presence_of :book_id, :target_date, :target_amount
@@ -35,7 +35,7 @@ class Campaign < ActiveRecord::Base
     state :active
     state :collecting, before_enter: :queue_collection
     state :collected
-    state :cancelling, before_enter: :void_donations
+    state :cancelling, before_enter: :void_contributions
     state :cancelled
 
     event :start do
@@ -81,37 +81,37 @@ class Campaign < ActiveRecord::Base
     book.try(:author)
   end
 
-  # Iterates through the donations and attempts
+  # Iterates through the contributions and attempts
   # to cancel each
   #
   # Returns true if successful in cancelling all
-  # donations. Otherwise returns false.
+  # contributions. Otherwise returns false.
   #
   # The campaign must be in the 'cancelling' state.
   # If not, the method exists and returns false
-  def cancel_donations
+  def cancel_contributions
     raise Exceptions::InvalidCampaignStateError unless cancelling?
-    finalize_cancellation! if donations.map(&:cancel!).all?
+    finalize_cancellation! if contributions.map(&:cancel!).all?
   end
 
-  # Iterates through the donations and attempts
+  # Iterates through the contributions and attempts
   # to collect payment on each.
   #
   # Returns true if success in collecting from all
-  # donations, otherwise false.
+  # contributions, otherwise false.
   #
   # The campaign must be in the 'collecting' state.
   # If not, the method exists and returns false
-  def collect_donations
+  def collect_contributions
     raise Exceptions::InvalidCampaignStateError unless collecting?
-    finalize_collection! if donations.pledged.map(&:collect!).all?
+    finalize_collection! if contributions.pledged.map(&:collect!).all?
   end
 
   def total_donated
-    donations.reduce(0){|sum, d| sum + d.amount}
+    contributions.reduce(0){|sum, d| sum + d.amount}
   end
 
-  def donation_amount_needed
+  def contribution_amount_needed
     return 0 if target_amount_achieved?
     target_amount - total_donated
   end
@@ -151,7 +151,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def target_amount_reached?
-    donation_amount_needed == 0
+    contribution_amount_needed == 0
   end
 
   private
@@ -177,7 +177,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def queue_collection
-    Resque.enqueue(DonationCollector, id)
+    Resque.enqueue(ContributionCollector, id)
   end
 
   def target_amount_achieved?
@@ -188,7 +188,7 @@ class Campaign < ActiveRecord::Base
     minimum_target_date..maximum_target_date
   end
 
-  def void_donations
-    Resque.enqueue(DonationCanceller, id)
+  def void_contributions
+    Resque.enqueue(ContributionCanceller, id)
   end
 end

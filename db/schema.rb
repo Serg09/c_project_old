@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160620185639) do
+ActiveRecord::Schema.define(version: 20160620224645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 20160620185639) do
 
   add_index "campaigns", ["book_id"], name: "index_campaigns_on_book_id", using: :btree
 
-  create_table "donations", force: :cascade do |t|
+  create_table "contributions", force: :cascade do |t|
     t.integer  "campaign_id",                                null: false
     t.decimal  "amount",                                     null: false
     t.string   "email",                                      null: false
@@ -112,28 +112,28 @@ ActiveRecord::Schema.define(version: 20160620185639) do
     t.string   "state",                  default: "pledged", null: false
   end
 
-  add_index "donations", ["campaign_id"], name: "index_donations_on_campaign_id", using: :btree
-  add_index "donations", ["email"], name: "index_donations_on_email", using: :btree
+  add_index "contributions", ["campaign_id"], name: "index_contributions_on_campaign_id", using: :btree
+  add_index "contributions", ["email"], name: "index_contributions_on_email", using: :btree
 
   create_table "fulfillments", force: :cascade do |t|
-    t.string   "type",         limit: 50,                  null: false
-    t.integer  "donation_id",                              null: false
-    t.integer  "reward_id",                                null: false
-    t.string   "email",        limit: 200
-    t.string   "address1",     limit: 100
-    t.string   "address2",     limit: 100
-    t.string   "city",         limit: 100
-    t.string   "state",        limit: 2
-    t.string   "postal_code",  limit: 15
-    t.string   "country_code", limit: 2
-    t.boolean  "delivered",                default: false, null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.string   "first_name",   limit: 100,                 null: false
-    t.string   "last_name",    limit: 100,                 null: false
+    t.string   "type",            limit: 50,                  null: false
+    t.integer  "contribution_id",                             null: false
+    t.integer  "reward_id",                                   null: false
+    t.string   "email",           limit: 200
+    t.string   "address1",        limit: 100
+    t.string   "address2",        limit: 100
+    t.string   "city",            limit: 100
+    t.string   "state",           limit: 2
+    t.string   "postal_code",     limit: 15
+    t.string   "country_code",    limit: 2
+    t.boolean  "delivered",                   default: false, null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.string   "first_name",      limit: 100,                 null: false
+    t.string   "last_name",       limit: 100,                 null: false
   end
 
-  add_index "fulfillments", ["donation_id"], name: "index_fulfillments_on_donation_id", unique: true, using: :btree
+  add_index "fulfillments", ["contribution_id"], name: "index_fulfillments_on_contribution_id", unique: true, using: :btree
   add_index "fulfillments", ["reward_id"], name: "index_fulfillments_on_reward_id", using: :btree
 
   create_table "genres", force: :cascade do |t|
@@ -189,21 +189,21 @@ ActiveRecord::Schema.define(version: 20160620185639) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.integer  "donation_id", null: false
-    t.string   "external_id", null: false
-    t.string   "state",       null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "contribution_id", null: false
+    t.string   "external_id",     null: false
+    t.string   "state",           null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
-  add_index "payments", ["donation_id"], name: "index_payments_on_donation_id", using: :btree
+  add_index "payments", ["contribution_id"], name: "index_payments_on_contribution_id", using: :btree
   add_index "payments", ["external_id"], name: "index_payments_on_external_id", unique: true, using: :btree
 
   create_table "rewards", force: :cascade do |t|
     t.integer  "campaign_id",                                           null: false
     t.string   "description",               limit: 100,                 null: false
     t.text     "long_description"
-    t.decimal  "minimum_donation",                                      null: false
+    t.decimal  "minimum_contribution",                                  null: false
     t.boolean  "physical_address_required",             default: false, null: false
     t.integer  "house_reward_id"
     t.datetime "created_at",                                            null: false

@@ -21,14 +21,14 @@ class Ability
     can :manage, Campaign do |campaign|
       campaign.book.author_id == user.id
     end
-    can :show, Donation do |donation|
-      donation.campaign.book.author_id == user.id
+    can :show, Contribution do |contribution|
+      contribution.campaign.book.author_id == user.id
     end
     can :manage, Reward do |reward|
       reward.campaign.book.author_id == user.id
     end
     cannot :update, Reward do |reward|
-      reward.donations.any?
+      reward.contributions.any?
     end
     can :fulfill, Fulfillment, reward: {campaign: {book: {author_id: user.id}}}
   end

@@ -1,7 +1,7 @@
 Feature: Add a reward
   As an author,
   In order to provide incentive for people to support my book project
-  I want to be able to offer a gift in return for a donation of a minimum amount
+  I want to be able to offer a gift in return for a contribution of a minimum amount
 
   Background:
     Given today is 3/2/2016
@@ -33,26 +33,26 @@ Feature: Add a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for How To Raise Money" within the page title
     And I should see the following rewards table
-      | Description | Minimum donation |
+      | Description | Minimum contribution |
 
     When I click "Add" within the rewards section
     Then I should see "New reward" within the page title
 
   Scenario: An author adds an author-fulfilled reward to a campaign
     When I fill in "Description" with "Signed copy of the book"
-    And I fill in "Minimum donation" with "50" within the author fulfilled section
+    And I fill in "Minimum contribution" with "50" within the author fulfilled section
     And I check "Physical address required"
     And I click "Save" within the author fulfilled section
     Then I should see "The reward was created successfully." within the notification area
     And I should see the following rewards table
-      | Description             | Minimum donation |
+      | Description             | Minimum contribution |
       | Signed copy of the book |              $50 |
 
   Scenario: An author adds a house-fulfilled reward to the campaign
     When I select "Printed copy of the book" from "Reward"
-    And I fill in "Minimum donation" with "50" within the house fulfilled section
+    And I fill in "Minimum contribution" with "50" within the house fulfilled section
     And I click "Save" within the house fulfilled section
     Then I should see "The reward was created successfully." within the notification area
     And I should see the following rewards table
-      | Description              | Minimum donation |
+      | Description              | Minimum contribution |
       | Printed copy of the book |              $50 |

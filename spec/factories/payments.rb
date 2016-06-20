@@ -8,7 +8,7 @@ FactoryGirl.define do
       state_abbr { Faker::Address.state_abbr }
       postal_code { Faker::Address.postcode }
     end
-    donation
+    contribution
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
     state 'approved'
     after(:create) do |payment, evaluator|
@@ -39,10 +39,10 @@ FactoryGirl.define do
         },
         transactions: [{
           amount: {
-            total: payment.donation.amount,
+            total: payment.contribution.amount,
             current: 'USD'
           },
-          description: 'Book donation',
+          description: 'Book contribution',
           related_resources: [{
             sale: {
               id: evaluator.sale_id,

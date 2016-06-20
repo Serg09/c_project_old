@@ -1,0 +1,21 @@
+%table#contributions-table.table.table-striped
+  %tr
+    %th.text-right Date
+    %th.text-right Pledged
+    -if campaign.collected? || campaign.collected?
+      %th.text-right Collected
+  -contributions.each do |contribution|
+    %tr
+      %td.text-right= format_date(contribution.created_at)
+      %td.text-right= number_to_currency(contribution.amount, precision: 0)
+      -if campaign.collected? || campaign.collected?
+        %td.text-right
+          -if contribution.collected?
+            =number_to_currency(contribution.amount, precision: 0)
+          -else
+            $0
+  %tr.summary-row
+    %td &nbsp;
+    %td.text-right= number_to_currency(total_pledged, precision: 0)
+    -if campaign.collected? || campaign.collected?
+      %td.text-right= number_to_currency(total_collected, precision: 0)

@@ -7,23 +7,23 @@
     .col-md-6
       %h2 Progress
       =render 'campaigns/progress_table'
-      %h2 Donations
-      %table#donations-table.table.table-striped
+      %h2 Contributions
+      %table#contributions-table.table.table-striped
         %tr
-          %th Donor
+          %th Contributor
           %th Date
           %th Amount
           %th Status
           %th &nbsp;
-        -@campaign.donations.each do |donation|
-          %tr{ class: donation_row_class(donation) }
-            %td= donation.email
-            %td= format_date(donation.created_at)
-            %td= number_to_currency(donation.amount, precision: 0)
-            %td= donation.state
+        -@campaign.contributions.each do |contribution|
+          %tr{ class: contribution_row_class(contribution) }
+            %td= contribution.email
+            %td= format_date(contribution.created_at)
+            %td= number_to_currency(contribution.amount, precision: 0)
+            %td= contribution.state
             %td
-              -if donation.payments.any?
-                =link_to admin_payment_path(donation.payments.first), class: 'btn btn-xs btn-info', title: 'Click here to view payment details.' do
+              -if contribution.payments.any?
+                =link_to admin_payment_path(contribution.payments.first), class: 'btn btn-xs btn-info', title: 'Click here to view payment details.' do
                   %span.glyphicon.glyphicon-zoom-in{ 'arial-hidden' => true }
     .col-md-6
       =render_progress_meter @campaign.current_progress

@@ -3,7 +3,7 @@
 # Table name: payments
 #
 #  id          :integer          not null, primary key
-#  donation_id :integer          not null
+#  contribution_id :integer          not null
 #  external_id :string           not null
 #  state       :string           not null
 #  created_at  :datetime         not null
@@ -21,9 +21,9 @@ class Payment < ActiveRecord::Base
     ['American Express', 'amex']
   ]
 
-  belongs_to :donation
+  belongs_to :contribution
 
-  validates_presence_of :donation_id, :external_id, :state
+  validates_presence_of :contribution_id, :external_id, :state
   validates_uniqueness_of :external_id
 
   PaymentTransaction::STATES.each do |state|

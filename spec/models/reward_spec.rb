@@ -8,7 +8,7 @@ RSpec.describe Reward, type: :model do
       campaign_id: campaign.id,
       description: 'Pat on the back',
       long_description: 'blah blah blah',
-      minimum_donation: 50,
+      minimum_contribution: 50,
       physical_address_required: true
     }
   end
@@ -56,15 +56,15 @@ RSpec.describe Reward, type: :model do
     end
   end
 
-  describe '#minimum_donation' do
+  describe '#minimum_contribution' do
     it 'is required' do
-      reward = Reward.new attributes.except(:minimum_donation)
-      expect(reward).to have_at_least(1).error_on :minimum_donation
+      reward = Reward.new attributes.except(:minimum_contribution)
+      expect(reward).to have_at_least(1).error_on :minimum_contribution
     end
 
     it 'must be greater than zero' do
-      reward = Reward.new attributes.merge(minimum_donation: 0)
-      expect(reward).to have_at_least(1).error_on :minimum_donation
+      reward = Reward.new attributes.merge(minimum_contribution: 0)
+      expect(reward).to have_at_least(1).error_on :minimum_contribution
     end
   end
 
@@ -115,28 +115,28 @@ RSpec.describe Reward, type: :model do
     end
   end
 
-  describe '::by_minimum_donation' do
-    let!(:r1) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 10) }
-    let!(:r2) { FactoryGirl.create(:reward, campaign: campaign, minimum_donation: 5) }
+  describe '::by_minimum_contribution' do
+    let!(:r1) { FactoryGirl.create(:reward, campaign: campaign, minimum_contribution: 10) }
+    let!(:r2) { FactoryGirl.create(:reward, campaign: campaign, minimum_contribution: 5) }
 
-    it 'returns the rewards sorted by minimum donation' do
-      expect(campaign.rewards.by_minimum_donation.map(&:id)).to eq [r2.id, r1.id]
+    it 'returns the rewards sorted by minimum contribution' do
+      expect(campaign.rewards.by_minimum_contribution.map(&:id)).to eq [r2.id, r1.id]
     end
   end
 
   shared_context :fulfillments do
     let (:reward) { FactoryGirl.create(:reward, campaign: campaign, physical_address_required: false) }
-    let (:d1) { FactoryGirl.create(:donation, campaign: campaign) }
-    let!(:f1) { FactoryGirl.create(:electronic_fulfillment, donation: d1, reward: reward) }
-    let (:d2) { FactoryGirl.create(:donation, campaign: campaign) }
-    let!(:f2) { FactoryGirl.create(:electronic_fulfillment, donation: d2, reward: reward) }
+    let (:d1) { FactoryGirl.create(:contribution, campaign: campaign) }
+    let!(:f1) { FactoryGirl.create(:electronic_fulfillment, contribution: d1, reward: reward) }
+    let (:d2) { FactoryGirl.create(:contribution, campaign: campaign) }
+    let!(:f2) { FactoryGirl.create(:electronic_fulfillment, contribution: d2, reward: reward) }
   end
 
-  describe '#donations' do
+  describe '#contributions' do
     include_context :fulfillments
 
-    it 'is a list of donations which selected the reward' do
-      expect(reward).to have(2).donations
+    it 'is a list of contributions which selected the reward' do
+      expect(reward).to have(2).contributions
     end
   end
 

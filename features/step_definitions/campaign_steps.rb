@@ -26,10 +26,10 @@ Given /^(?:the )?(#{BOOK}) has a campaign$/ do |book|
   FactoryGirl.create(:campaign, book: book)
 end
 
-When /^donation collection has finished for the (#{BOOK})$/ do |book|
+When /^contribution collection has finished for the (#{BOOK})$/ do |book|
   campaign = book.campaigns.collecting.first
   expect(campaign).not_to be_nil
-  DonationCollector.perform campaign.id
+  ContributionCollector.perform campaign.id
 end
 
 Given /(#{CAMPAIGN}) is (collected|active)/ do |campaign, state|

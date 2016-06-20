@@ -32,12 +32,12 @@ class AdminMailer < ApplicationMailer
     mail subject: 'Campaign progress'
   end
 
-  def donation_received(donation)
+  def contribution_received(contribution)
     inline_images
-    @donation = donation
-    @book = @donation.campaign.book
+    @contribution = contribution
+    @book = @contribution.campaign.book
     @author = @book.author
-    mail subject: 'Donation Received!'
+    mail subject: 'Contribution Received!'
   end
 
   def inquiry_received(inquiry)

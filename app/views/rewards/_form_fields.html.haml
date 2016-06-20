@@ -6,10 +6,10 @@
   =f.label :long_description, class: 'control-label'
   =f.text_area :long_description, class: 'form-control', rows: 3
   =help_blocks(@reward, :long_description)
-.form-group{ class: form_group_class(@reward, :minimum_donation) }
-  =f.label :minimum_donation, class: 'control-label'
-  =f.number_field :minimum_donation, class: 'form-control', rows: 3, min: 1, step: 1
-  =help_blocks(@reward, :minimum_donation)
+.form-group{ class: form_group_class(@reward, :minimum_contribution) }
+  =f.label :minimum_contribution, class: 'control-label'
+  =f.number_field :minimum_contribution, class: 'form-control', rows: 3, min: 1, step: 1
+  =help_blocks(@reward, :minimum_contribution)
 .checkbox
   %label
     =f.check_box :physical_address_required
