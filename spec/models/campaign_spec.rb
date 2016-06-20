@@ -293,13 +293,27 @@ RSpec.describe Campaign, type: :model do
   end
 
   context 'for an unstarted campaign' do
-    let (:campaign) { FactoryGirl.create(:unstarted_campaign) }
+    let (:campaign) { FactoryGirl.create(:unstarted_campaign, agree_to_terms: true) }
 
-    describe '#start' do
-      it 'changes the state to "active"' do
-        expect do
-          campaign.start
-        end.to change(campaign, :state).from('unstarted').to('active')
+    context 'when terms have been agreed to' do
+      describe '#start' do
+        it 'changes the state to "active"' do
+          expect do
+            campaign.start
+          end.to change(campaign, :state).from('unstarted').to('active')
+        end
+      end
+    end
+
+    context 'when terms have not been agreed to' do
+      let (:campaign) { FactoryGirl.create(:unstarted_campaign, agree_to_terms: false) }
+
+      describe '#start' do
+        it 'does not change the state' do
+          expect do
+            campaign.start
+          end.not_to change(campaign, :state)
+        end
       end
     end
 
