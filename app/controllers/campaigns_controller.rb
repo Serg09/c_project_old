@@ -42,11 +42,18 @@ class CampaignsController < ApplicationController
 
   def start
     authorize! :update, @campaign
-    if @campaign.target_date_in_range?
-      flash[:notice] = 'The campaign was started successfully.' if @campaign.start!
-      redirect_to campaign_path(@campaign)
-    else
-      redirect_to book_campaigns_path(@book), alert: 'The target date must be at least 30 days in the future.'
+
+    if params[:campaign]
+      @campaign.update_attributes agree_to_terms: params[:campaign][:agree_to_terms]
+    end
+
+    if @campaign.start!
+      redirect_to campaign_path(@campaign), notice: 'The campaign was started successfully.'
+    elsif !@campaign.target_date_in_range?
+      redirect_to edit_campaign_path(@campaign), alert: 'The target date must be at least 30 days in the future.'
+    elsif !@campaign.agree_to_terms?
+      flash[:alert] = 'You must agree to the terms to continue.'
+      render :terms
     end
   end
 
