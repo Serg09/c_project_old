@@ -1,4 +1,3 @@
-@wip
 Feature: Start a campaign
   As an author
   In order to begin collecting contributions
@@ -31,11 +30,11 @@ Feature: Start a campaign
 
   Scenario: An author starts a campaign
     When I check "I agree"
-    And I click "Continue"
+    And I click "Start"
     Then I should see "Campaign progress" within the page title
     And I should see "The campaign was started successfully" within the notification area
 
   Scenario: An author tries to start a campaign without agreeing to terms
-    When I click "Continue"
-    Then I should see "Campaigns for Things I Know That You Don't" within the page title
-    And I should see "You must agree to the terms in order to start the campaign" within the notification area
+    When I click "Start"
+    Then I should see "Campaign terms of use" within the page title
+    And I should see "You must agree to the terms to continue" within the notification area
