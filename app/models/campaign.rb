@@ -11,6 +11,7 @@
 #  state                        :string(20)       default("unstarted"), not null
 #  prolonged                    :boolean          default(FALSE), not null
 #  success_notification_sent_at :time
+#  agree_to_terms               :boolean
 #
 
 class Campaign < ActiveRecord::Base
@@ -38,7 +39,7 @@ class Campaign < ActiveRecord::Base
     state :cancelled
 
     event :start do
-      transitions from: :unstarted, to: :active
+      transitions from: :unstarted, to: :active, if: :can_start?
     end
 
     event :collect do
@@ -154,6 +155,10 @@ class Campaign < ActiveRecord::Base
   end
 
   private
+
+  def can_start?
+    agree_to_terms? && target_date_in_range?
+  end
 
   def must_be_in_range
     return unless target_date

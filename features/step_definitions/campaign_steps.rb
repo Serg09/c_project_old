@@ -14,7 +14,8 @@ Given /^(?:the )?(#{BOOK}) has an? (.*)?campaign targeting (#{DOLLAR_AMOUNT})(?:
   FactoryGirl.create(:campaign, book: book,
                                 target_amount: target_amount,
                                 target_date: target_date,
-                                state: state)
+                                state: state,
+                                agree_to_terms: state != 'unstarted')
 end
 
 Given /^(#{BOOK}) has an active campaign$/ do |book|

@@ -27,8 +27,9 @@ Feature: Validate a campaign at start
       |   1/31/2016 |        $1,000 | unstarted |
 
     When I click the start button within the 1st campaign row
-    Then I should see "Campaigns for Avoiding Procrastination" within the page title
+    Then I should see "Campaign terms of use" within the page title
+
+    When I check "I agree"
+    And I click "Start"
+    Then I should see "Campaign for Avoiding Procrastination" within the page title
     And I should see "The target date must be at least 30 days in the future"
-    And I should see the following campaigns table
-      | Target date | Target amount | State     |
-      |   1/31/2016 |        $1,000 | unstarted |

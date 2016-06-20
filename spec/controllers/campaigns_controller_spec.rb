@@ -77,17 +77,34 @@ RSpec.describe CampaignsController, type: :controller do
         let (:campaign) { FactoryGirl.create(:unstarted_campaign, book: book) }
 
         context 'with a valid start date' do
-          describe 'patch :start' do
-            it 'redirects to the campaign progress page' do
-              patch :start, id: campaign
-              expect(response).to redirect_to campaign_path(campaign)
-            end
+          context 'and terms agreement' do
+            describe 'patch :start' do
+              it 'redirects to the campaign progress page' do
+                patch :start, id: campaign, campaign: { agree_to_terms: true }
+                expect(response).to redirect_to campaign_path(campaign)
+              end
 
-            it 'changes the state to active' do
-              expect do
-                patch :start, id: campaign
-                campaign.reload
-              end.to change(campaign, :state).from('unstarted').to('active')
+              it 'changes the state to active' do
+                expect do
+                  patch :start, id: campaign, campaign: { agree_to_terms: true }
+                  campaign.reload
+                end.to change(campaign, :state).from('unstarted').to('active')
+              end
+            end
+          end
+
+          context 'without terms agreement' do
+            describe 'path :start' do
+              it 'does not change the state of the campaign' do
+                patch :start, id: campaign, campaign: { agree_to_terms: false }
+                expect(response).to have_http_status :success
+              end
+
+              it 'renders the terms page' do
+                expect do
+                  patch :start, id: campaign, campaign: { agree_to_terms: false }
+                end.not_to change(campaign, :state)
+              end
             end
           end
         end
@@ -112,15 +129,15 @@ RSpec.describe CampaignsController, type: :controller do
           let (:campaign) do
             Timecop.freeze(Chronic.parse('2016-01-15')) do
               FactoryGirl.create(:unstarted_campaign, book: book,
-                                                      target_date: '2016-03-01')
+                                 target_date: '2016-03-01')
             end
           end
           before(:each) { Timecop.freeze(Chronic.parse('2016-03-02')) }
           after(:each) { Timecop.return }
 
-          it 'redirects to the index page' do
+          it 'redirects to the edit page' do
             patch :start, id: campaign
-            expect(response).to redirect_to book_campaigns_path(book)
+            expect(response).to redirect_to edit_campaign_path(campaign)
           end
 
           it 'does change the state' do
@@ -230,6 +247,13 @@ RSpec.describe CampaignsController, type: :controller do
           end.to change(Campaign, :count).by(-1)
         end
       end
+
+      describe "get :terms" do
+        it 'is successful' do
+          get :terms, id: campaign
+          expect(response).to have_http_status :success
+        end
+      end
     end
 
     context 'that does not own the book' do
@@ -275,7 +299,7 @@ RSpec.describe CampaignsController, type: :controller do
 
       describe "get :edit" do
         it "redirects to the user root page" do
-            get :edit, id: campaign
+          get :edit, id: campaign
           expect(response).to redirect_to user_root_path
         end
       end
@@ -364,6 +388,13 @@ RSpec.describe CampaignsController, type: :controller do
             rescue ActiveRecord::RecordNotFound
             end
           end.not_to change(Campaign, :count)
+        end
+      end
+
+      describe "get :terms" do
+        it 'redirects to the use profile page' do
+          get :terms, id: campaign
+          expect(response).to redirect_to user_root_path
         end
       end
     end
@@ -490,6 +521,13 @@ RSpec.describe CampaignsController, type: :controller do
         expect do
           delete :destroy, id: campaign
         end.not_to change(Campaign, :count)
+      end
+    end
+
+    describe "get :terms" do
+      it 'redirects to the sign in page' do
+        get :terms, id: campaign
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

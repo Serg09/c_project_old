@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     resources :donations, only: [:new, :create]
     resources :rewards, only: [:new, :create]
     member do
+      get :terms
       patch :start
       patch :collect
       patch :cancel
