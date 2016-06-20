@@ -112,7 +112,7 @@ RSpec.describe CampaignsController, type: :controller do
           let (:campaign) do
             Timecop.freeze(Chronic.parse('2016-01-15')) do
               FactoryGirl.create(:unstarted_campaign, book: book,
-                                                      target_date: '2016-03-01')
+                                 target_date: '2016-03-01')
             end
           end
           before(:each) { Timecop.freeze(Chronic.parse('2016-03-02')) }
@@ -282,7 +282,7 @@ RSpec.describe CampaignsController, type: :controller do
 
       describe "get :edit" do
         it "redirects to the user root page" do
-            get :edit, id: campaign
+          get :edit, id: campaign
           expect(response).to redirect_to user_root_path
         end
       end
