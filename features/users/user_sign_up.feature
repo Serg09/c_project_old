@@ -22,7 +22,6 @@ Feature: An user signs up
     And I click "Sign up"
 
     Then I should see "A message with a confirmation link has been sent to your email address." within the notification area
-    And I should see "Sign up complete!" within the page title
     And "john@doe.com" should receive an email with subject "Confirmation instructions"
 
     When I open the email with subject "Confirmation instructions"
