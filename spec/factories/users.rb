@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user, aliases: [:pending_user] do
+  factory :user do
     transient do
       confirmed true
     end
@@ -11,7 +11,7 @@ FactoryGirl.define do
     password "please01"
     password_confirmation "please01"
     contactable true
-    package_id 1
+    topic { Faker::Lorem.sentence }
     unsubscribe_token { SecureRandom.uuid }
 
     after(:create) do |user, evaluator|

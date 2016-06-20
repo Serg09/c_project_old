@@ -53,7 +53,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
      :last_name,
      :phone_number,
      :contactable,
-     :package_id].each do |a|
+     :topic].each do |a|
        devise_parameter_sanitizer.for(:sign_up) << a
      end
   end

@@ -14,9 +14,9 @@
   =f.label :contactable do
     =f.check_box :contactable
     It is OK if my advisor contacts me by phone
-.form-group{ :class => form_group_class(author, :package_id) }
-  =f.label :package_id, 'Which package would you like?', class: 'control-label'
-  =f.select :package_id, package_options_for_select, {}, class: 'form-control'
+.form-group{ :class => form_group_class(author, :topic) }
+  =f.label :topic, 'What interests you most about Crowdscribed?', class: 'control-label'
+  =f.text_area:topic, class: 'form-control'
   =help_blocks author, :package_id
 .form-group{ :class => form_group_class(author, :username) }
   =f.label :username, class: 'control-label'

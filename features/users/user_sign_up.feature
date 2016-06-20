@@ -13,7 +13,7 @@ Feature: An user signs up
     When I fill in "First name" with "John"
     And I fill in "Last name" with "Doe"
     And I fill in "Email" with "john@doe.com" within the main content
-    And I select "Starter (Free)" from "Which package would you like?"
+    And I fill in "What interests you most about Crowdscribed?" with "money"
     And I fill in "Phone number" with "214-555-0000"
     And I check "It is OK if my advisor contacts me by phone"
     And I fill in "Username" with "jdoe"

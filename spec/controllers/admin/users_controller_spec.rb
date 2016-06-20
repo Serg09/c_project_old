@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :controller do
-  let (:user) { FactoryGirl.create(:pending_user) }
+  let (:user) { FactoryGirl.create(:user) }
   let (:admin) { FactoryGirl.create(:administrator) }
 
   context 'for an authenticated user' do

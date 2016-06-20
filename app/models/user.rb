@@ -27,9 +27,9 @@
 #  last_name              :string           not null
 #  phone_number           :string
 #  contactable            :boolean          default(FALSE), not null
-#  package_id             :integer
 #  unsubscribed           :boolean          default(FALSE), not null
 #  unsubscribe_token      :string(36)       not null
+#  topic                  :text
 #
 
 class User < ActiveRecord::Base
