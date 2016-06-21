@@ -1,25 +1,25 @@
-.form-group{ :class => form_group_class(@contribution_creator, :credit_card) }
-  =f.label :credit_card, class: 'control-label'
-  =f.text_field :credit_card, class: 'form-control', autocomplete: 'off', maxlength: 20
-  =help_blocks @contribution_creator, :credit_card
-.form-group{ :class => form_group_class(@contribution_creator, :credit_card_type) }
+.form-group{ :class => form_group_class(@payment, :credit_card_number) }
+  =f.label :credit_card_number, class: 'control-label'
+  =f.text_field :credit_card_number, class: 'form-control', autocomplete: 'off', maxlength: 20
+  =help_blocks @payment, :credit_card_number
+.form-group{ :class => form_group_class(@payment, :credit_card_type) }
   =f.label :credit_card_type, 'Type', class: 'control-label'
   =f.select :credit_card_type, Payment::CREDIT_CARD_TYPES, {}, class: 'form-control'
-  =help_blocks @contribution_creator, :credit_card_type
+  =help_blocks @payment, :credit_card_type
 .row
   .col-md-6
-    .form-group{ :class => form_group_class(@contribution_creator, :expiration_month) }
+    .form-group{ :class => form_group_class(@payment, :expiration_month) }
       =f.label :expiration_month, class: 'control-label'
       =f.select :expiration_month, expiration_month_options, {}, class: 'form-control'
-      =help_blocks @contribution_creator, :expiration_month
+      =help_blocks @payment, :expiration_month
   .col-md-6
-    .form-group{ :class => form_group_class(@contribution_creator, :expiration_year) }
+    .form-group{ :class => form_group_class(@payment, :expiration_year) }
       =f.label :expiration_year, class: 'control-label'
       =f.select :expiration_year, expiration_year_options, {}, class: 'form-control'
-      =help_blocks @contribution_creator, :expiration_year
+      =help_blocks @payment, :expiration_year
 .row
   .col-md-6
-    .form-group{ :class => form_group_class(@contribution_creator, :cvv) }
+    .form-group{ :class => form_group_class(@payment, :cvv) }
       =f.label :cvv, 'CVV', class: 'control-label'
       =f.text_field :cvv, class: 'form-control', maxlength: 4
-      =help_blocks @contribution_creator, :cvv
+      =help_blocks @payment, :cvv

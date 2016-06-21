@@ -1,7 +1,8 @@
 class ContributionsController < ApplicationController
   before_filter :authenticate_user!, only: [:index, :show]
   before_filter :load_campaign, only: [:index, :new, :create]
-  before_filter :load_contribution, only: [:show]
+  before_filter :load_contribution, only: [:show, :reward, :set_reward, :payment, :pay]
+  before_filter :load_reward, only: [:create, :set_reward]
 
   respond_to :html
 
@@ -14,42 +15,90 @@ class ContributionsController < ApplicationController
   end
 
   def new
-    @contribution_creator = ContributionCreator.new(campaign: @campaign)
+    @contribution = @campaign.contributions.new
+    @fulfillment = PhysicalFulfillment.new # TODO Need physical or electronic here
   end
 
   def create
-    @contribution_creator = ContributionCreator.new(contribution_attributes)
-    respond_with(@contribution_creator, location: book_path(@campaign.book_id)) do |format|
-      if @contribution_creator.create!
-        flash[:notice] = 'Your contribution has been saved successfully. Expect to receive a confirmation email with all of the details.'
-        send_notification_emails @contribution_creator.contribution
+    @contribution = @campaign.contributions.new contribution_params
+    if @contribution.save
+      if @reward
+        redirect_to payment_contribution_path(@contribution)
       else
-        set_error_flash
-        format.html { render :new }
+        redirect_to reward_contribution_path(@contribution)
       end
+    else
+      render :new
+    end
+  end
+
+  def reward
+  end
+
+  def set_reward
+    redirect_to payment_contribution_path(@contribution, reward_id: selected_reward_id)
+  end
+
+  def payment
+    @reward_id = selected_reward_id
+  end
+
+  def pay
+    @contribution.update_attributes contribution_params
+    if @contribution.save
+      @payment = @contribution.payments.new payment_attributes
+      if @payment.save && @payment.execute
+        redirect_to book_path(@campaign.book_id)
+      else
+        flash[:alert] = "Unable to process the payment."
+        render :payment
+      end
+    else
+      flash[:alert] = "Unable to save the contribution."
+      render :payment
     end
   end
 
   private
 
-  def contribution_attributes
-    params.require(:contribution).permit(:amount,
-                                     :reward_id,
-                                     :email,
-                                     :credit_card,
-                                     :credit_card_type,
-                                     :expiration_month,
-                                     :expiration_year,
-                                     :cvv,
-                                     :first_name,
-                                     :last_name,
-                                     :address_1,
-                                     :address_2,
-                                     :city,
-                                     :state,
-                                     :postal_code).merge(campaign: @campaign,
-                                                         ip_address: request.remote_ip,
-                                                         user_agent: request.headers['HTTP_USER_AGENT'])
+  def fulfillment_attributes
+    params.require(:fulfillment).permit(
+      :reward_id,
+      :address1,
+      :address2,
+      :city,
+      :state,
+      :postal_code
+    )
+  end
+
+  def payment_attributes
+    params.require(:payment).permit(
+      :credit_card,
+      :credit_card_type,
+      :expiration_month,
+      :expiration_year,
+      :cvv,
+      :address1,
+      :address2,
+      :city,
+      :state,
+      :postal_code
+    )
+  end
+
+  def contribution_params
+    {
+      ip_address: request.remote_ip,
+      user_agent: request.headers['HTTP_USER_AGENT']
+    }.with_indifferent_access.tap do |h|
+      if params[:contribution].present?
+        h.merge! params.require(:contribution).permit(:amount, :email)
+      end
+      if h[:amount].blank? && @reward.present?
+        h[:amount] = @reward.minimum_contribution
+      end
+    end
   end
 
   def load_campaign
@@ -58,6 +107,12 @@ class ContributionsController < ApplicationController
 
   def load_contribution
     @contribution = Contribution.find(params[:id])
+    @campaign = @contribution.campaign
+  end
+
+  def load_reward
+    id = params[:fulfillment].try(:[], :reward_id)
+    @reward = Reward.find(id) if id
   end
 
   def send_notification_emails(contribution)
@@ -83,5 +138,9 @@ class ContributionsController < ApplicationController
     else
       flash.now[:alert] = "We were unable to save your contribution. #{@contribution_creator.exceptions.to_sentence}"
     end
+  end
+
+  def selected_reward_id
+    params[:fulfillment].try(:[], :reward_id)
   end
 end

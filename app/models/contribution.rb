@@ -22,16 +22,21 @@ class Contribution < ActiveRecord::Base
   has_many :transactions, through: :payments
   has_one :fulfillment
 
-  validates_presence_of :campaign_id, :email, :amount, :ip_address, :user_agent
+  validates_presence_of :campaign_id, :amount, :ip_address, :user_agent
   validates_numericality_of :amount, greater_than: 0
-  validates_format_of :email, with: /\A^\w[\w_\.-]+@\w[\w_\.-]+\.[a-z]{2,}\z/i
+  validates_format_of :email, with: /\A^\w[\w_\.-]+@\w[\w_\.-]+\.[a-z]{2,}\z/i, if: :email
   validates_format_of :ip_address, with: /\A\d{1,3}(\.\d{1,3}){3}\z/
   validate :reward_is_from_same_campaign
 
   aasm(:state, whiny_transitions: false) do
-    state :pledged, initial: true
+    state :incipient, initial: true
+    state :pledged
     state :collected
     state :cancelled
+
+    event :pledge do
+      transitions from: :incipient, to: :pledged, if: :email_present?
+    end
 
     event :collect do
       transitions from: :pledged, to: :collected, if: :create_payment
@@ -63,6 +68,10 @@ class Contribution < ActiveRecord::Base
   end
 
   private
+
+  def email_present?
+    email.present?
+  end
 
   def first_approved_payment
     payment = payments.approved.first

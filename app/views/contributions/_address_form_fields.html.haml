@@ -1,24 +1,24 @@
-.form-group{ :class => form_group_class(@contribution_creator, :address_1) }
+.form-group{ :class => form_group_class(model, :address1) }
   =f.label :address_1, 'Address', class: 'control-label'
-  =f.text_field :address_1, class: 'form-control', maxlength: 100
-  =help_blocks @contribution_creator, :address_1
-.form-group{ :class => form_group_class(@contribution_creator, :address_2) }
-  =f.label :address_2, 'Line 2', class: 'control-label'
-  =f.text_field :address_2, class: 'form-control', maxlength: 100
-  =help_blocks @contribution_creator, :address_2
+  =f.text_field :address1, class: 'form-control', maxlength: 100
+  =help_blocks model, :address1
+.form-group{ :class => form_group_class(model, :address2) }
+  =f.label :address2, 'Line 2', class: 'control-label'
+  =f.text_field :address2, class: 'form-control', maxlength: 100
+  =help_blocks model, :address2
 .row
   .col-md-4
-    .form-group{ :class => form_group_class(@contribution_creator, :city) }
+    .form-group{ :class => form_group_class(model, :city) }
       =f.label :city, class: 'control-label'
       =f.text_field :city, class: 'form-control', maxlength: 50
-      =help_blocks @contribution_creator, :city
+      =help_blocks model, :city
   .col-md-4
-    .form-group{ :class => form_group_class(@contribution_creator, :state) }
+    .form-group{ :class => form_group_class(model, :state) }
       =f.label :state, class: 'control-label'
       =f.text_field :state, class: 'form-control', maxlength: 2
-      =help_blocks @contribution_creator, :state
+      =help_blocks model, :state
   .col-md-4
-    .form-group{ :class => form_group_class(@contribution_creator, :postal_code) }
+    .form-group{ :class => form_group_class(model, :postal_code) }
       =f.label :postal_code, class: 'control-label'
       =f.text_field :postal_code, class: 'form-control', maxlength: 10
-      =help_blocks @contribution_creator, :postal_code
+      =help_blocks model, :postal_code

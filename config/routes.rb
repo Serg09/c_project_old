@@ -47,7 +47,14 @@ Rails.application.routes.draw do
       patch :prolong
     end
   end
-  resources :contributions, only: [:show]
+  resources :contributions, only: [:show] do
+    member do
+      get :reward
+      patch :set_reward
+      get :payment
+      patch :pay
+    end
+  end
   resources :rewards, only: [:edit, :update, :destroy]
   resources :fulfillments, only: [:index] do
     member do

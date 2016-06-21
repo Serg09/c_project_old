@@ -33,9 +33,10 @@ RSpec.describe Contribution, type: :model do
   end
 
   describe '#email' do
-    it 'is required' do
+    it 'is required to advance past incipient state' do
       contribution = Contribution.new attributes.except(:email)
-      expect(contribution).to have_at_least(1).error_on :email
+      expect(contribution).to be_valid
+      expect(contribution.pledge).to be false
     end
 
     it 'must be a valid email' do
@@ -85,12 +86,21 @@ RSpec.describe Contribution, type: :model do
   end
 
   shared_context :various_states do
+    let!(:incipient1) { FactoryGirl.create(:incipient_contribution) }
+    let!(:incipient2) { FactoryGirl.create(:incipient_contribution) }
     let!(:pledged1) { FactoryGirl.create(:pledged_contribution) }
     let!(:pledged2) { FactoryGirl.create(:pledged_contribution) }
     let!(:collected1) { FactoryGirl.create(:collected_contribution) }
     let!(:collected2) { FactoryGirl.create(:collected_contribution) }
     let!(:cancelled1) { FactoryGirl.create(:cancelled_contribution) }
     let!(:cancelled2) { FactoryGirl.create(:cancelled_contribution) }
+  end
+
+  describe '::incipient' do
+    include_context :various_states
+    it 'returns the contributions that have a state of "incipient"' do
+      expect(Contribution.incipient.map(&:id)).to eq [incipient1.id, incipient2.id]
+    end
   end
 
   describe '::pledged' do

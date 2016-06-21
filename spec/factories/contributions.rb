@@ -17,5 +17,9 @@ FactoryGirl.define do
     factory :cancelled_contribution do
       state 'cancelled'
     end
+
+    factory :incipient_contribution do
+      state 'incipient'
+    end
   end
 end

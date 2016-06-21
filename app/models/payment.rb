@@ -23,6 +23,12 @@ class Payment < ActiveRecord::Base
 
   belongs_to :contribution
 
+  attr_accessor :credit_card_number,
+                :credit_card_type,
+                :cvv,
+                :expiration_month,
+                :expiration_year
+
   validates_presence_of :contribution_id, :external_id, :state
   validates_uniqueness_of :external_id
 
