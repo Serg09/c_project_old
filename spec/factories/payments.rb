@@ -2,12 +2,16 @@ FactoryGirl.define do
   factory :payment, aliases: [:approved_payment] do
     transient do
       sale_id { Faker::Number.hexadecimal(20) }
-      address_1 { Faker::Address.street_address }
-      address_2 { Faker::Address.secondary_address }
-      city { Faker::Address.city }
-      state_abbr { Faker::Address.state_abbr }
-      postal_code { Faker::Address.postcode }
     end
+    credit_card_number { Faker::Business.credit_card_number.gsub('-', '') }
+    credit_card_type { Faker::Business.credit_card_type }
+    cvv { Faker::Number.number(3).to_s }
+    billing_address_1 { Faker::Address.street_address }
+    billing_address_2 { Faker::Address.secondary_address }
+    billing_city { Faker::Address.city }
+    billing_state { Faker::Address.state_abbr }
+    billing_postal_code { Faker::Address.postcode }
+    billing_country_code 'US'
     contribution
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
     state 'approved'
@@ -27,11 +31,11 @@ FactoryGirl.define do
               first_name: 'John',
               last_name: 'Doe',
               billing_address: {
-                line1: evaluator.address_1,
-                line2: evaluator.address_2,
-                city: evaluator.city,
-                state: evaluator.state,
-                postal_code: evaluator.postal_code,
+                line1: evaluator.billing_address_1,
+                line2: evaluator.billing_address_2,
+                city: evaluator.billing_city,
+                state: evaluator.billing_state,
+                postal_code: evaluator.billing_postal_code,
                 country_code: 'US'
               }
             }

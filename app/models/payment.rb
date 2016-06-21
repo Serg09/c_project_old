@@ -11,6 +11,7 @@
 #
 
 class Payment < ActiveRecord::Base
+  include AASM
 
   has_many :transactions, class_name: 'PaymentTransaction'
 
@@ -27,13 +28,38 @@ class Payment < ActiveRecord::Base
                 :credit_card_type,
                 :cvv,
                 :expiration_month,
-                :expiration_year
+                :expiration_year,
+                :billing_address_1,
+                :billing_address_2,
+                :billing_city, 
+                :billing_state,
+                :billing_postal_code,
+                :billing_country_code,
+                :payment_error
 
-  validates_presence_of :contribution_id, :external_id, :state
+  validates_presence_of :contribution_id, :state
+  validates_presence_of :credit_card_number,
+    :credit_card_type,
+    :cvv,
+    :billing_address_1,
+    :billing_city,
+    :billing_state,
+    :billing_postal_code,
+    :billing_country_code,
+    on: :create
   validates_uniqueness_of :external_id
 
-  PaymentTransaction::STATES.each do |state|
-    scope state.to_sym, ->{where(state: state)}
+  aasm(:state) do
+    state :pending, initial: true
+    state :approved
+    state :completed
+    state :failed
+    state :refunded
+
+    event :execute do
+      transitions from: :pending, to: :approved, if: :_execute
+      transitions from: :pending, to: :failed, unless: :payment_error
+    end
   end
 
   def sale_id
@@ -44,6 +70,22 @@ class Payment < ActiveRecord::Base
   end
 
   private
+
+  def _execute
+    response = PAYMENT_PROVIDER.execute_payment(self)
+    create_transaction(response, :sale)
+    
+    response[:state] == 'approved'
+  end
+
+  def create_transaction(response, intent)
+    transaction = transactions.create(intent: intent,
+                                      state: response[:state],
+                                      response: response.to_json)
+    unless transaction.save
+      Rails.logger.warn "Unable to create payment transaction #{transaction.inspect} for response #{response.inspect}"
+    end
+  end
 
   def extract_sale_id(content)
     data = JSON.parse(content, symbolize_names: true)

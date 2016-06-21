@@ -29,7 +29,7 @@ module PaymentProvider
       end
     end
 
-    def create(attributes)
+    def execute_payment(internal_payment)
       payment = Payment.new payment_attributes(attributes)
       unless payment.create
         Rails.logger.error "Unable to complete the payment with the payment provider. #{payment.error.inspect}"
@@ -65,7 +65,7 @@ module PaymentProvider
     #  }]
     #}
 
-    def refund(sale_id, amount)
+    def refund_payment(payment, amount)
       sale = Sale.find(sale_id)
       sale.refund({
         amount: {
