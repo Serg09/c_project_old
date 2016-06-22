@@ -2,6 +2,7 @@ class ContributionsController < ApplicationController
   before_filter :authenticate_user!, only: [:index, :show]
   before_filter :load_campaign, only: [:index, :new, :create]
   before_filter :load_contribution, only: [:show, :reward, :set_reward, :payment, :pay]
+  before_filter :validate_state!, only: [:reward, :set_reward, :payment, :pay]
   before_filter :load_reward, only: [:create, :set_reward]
 
   respond_to :html
@@ -143,5 +144,11 @@ class ContributionsController < ApplicationController
 
   def selected_reward_id
     params[:fulfillment].try(:[], :reward_id)
+  end
+
+  def validate_state!
+    unless @contribution.incipient?
+      redirect_to user_root_path, alert: "The specified contribution cannot be modified"
+    end
   end
 end

@@ -126,23 +126,51 @@ RSpec.describe ContributionsController, type: :controller do
     end
   end
 
-  context 'with a pledged contribution' do
+  shared_examples :invalid_request do
     describe 'get :reward' do
-      it 'is redirects to the user profile'
+      it 'redirects to the user profile' do
+        get :reward, id: contribution
+        expect(response).to redirect_to user_root_path
+      end
     end
 
     describe 'patch :set_reward' do
-      it 'is redirects to the user profile'
-      it 'does not change the reward'
+      it 'redirects to the user profile' do
+        patch :set_reward, id: contribution, fulfillment: { reward_id: electronic_reward.id }
+        expect(response).to redirect_to user_root_path
+      end
     end
 
     describe 'get :payment' do
-      it 'is redirects to the user profile'
+      it 'is redirects to the user profile' do
+        get :payment, id: contribution
+        expect(response).to redirect_to user_root_path
+      end
     end
 
     describe 'patch :pay' do
-      it 'is redirects to the user profile'
-      it 'does not create a payment'
+      it 'is redirects to the user profile' do
+        patch :pay, id: contribution,
+                    fulfillment: {},
+                    contribution: { email: Faker::Internet.email },
+                    payment: payment_attributes
+        expect(response).to redirect_to user_root_path
+      end
+
+      it 'does not create a payment' do
+        expect do
+          patch :pay, id: contribution,
+                      fulfillment: {},
+                      contribution: { email: Faker::Internet.email },
+                      payment: payment_attributes
+        end.not_to change(Payment, :count)
+      end
+    end
+  end
+
+  context 'with a pledged contribution' do
+    include_examples :invalid_request do
+      let (:contribution) { FactoryGirl.create(:pledged_contribution) }
     end
   end
 end
