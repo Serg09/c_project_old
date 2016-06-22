@@ -1,0 +1,32 @@
+=content_for :page_title do
+  Make a contribution!
+
+.container.container-default
+  .row
+    .col-md-12
+      =form_for(@contribution, url: pay_contribution_path(@contribution)) do |f|
+        =fields_for :payment, @payment do |payment_fields|
+          .col-md-4
+            =render 'credit_card_form_fields', f: payment_fields
+        .col-md-4
+          .row
+            .col-md-12
+              .form-group{ :class => form_group_class(@contribution, :email) }
+                =f.label :email, class: 'control-label'
+                =f.text_field :email, class: 'form-control', maxlength: 256
+                =help_blocks @contribution, :email
+          =fields_for :fulfillment, @fulfillment do |fulfillment_fields|
+            .row
+              .col-md-6
+                .form-group{ :class => form_group_class(@fulfillment, :first_name) }
+                  =fulfillment_fields.label :first_name, class: 'control-label'
+                  =fulfillment_fields.text_field :first_name, class: 'form-control', maxlength: 50
+                  =help_blocks @fulfillment, :first_name
+              .col-md-6
+                .form-group{ :class => form_group_class(@fulfillment, :last_name) }
+                  =fulfillment_fields.label :last_name, class: 'control-label'
+                  =fulfillment_fields.text_field :last_name, class: 'form-control', maxlength: 50
+                  =help_blocks @fulfillment, :last_name
+            .row
+              .col-md-12
+                =render 'address_form_fields', f: fulfillment_fields, model: @fulfillment

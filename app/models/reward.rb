@@ -25,6 +25,7 @@ class Reward < ActiveRecord::Base
   validates_numericality_of :minimum_contribution, greater_than: 0
 
   scope :by_minimum_contribution, ->{order(:minimum_contribution)}
+  scope :for_amount, ->(amount){where('minimum_contribution <= ?', amount)}
 
   def initialize(attributes = {})
     super

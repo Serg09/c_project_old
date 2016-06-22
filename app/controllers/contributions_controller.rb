@@ -42,6 +42,8 @@ class ContributionsController < ApplicationController
 
   def payment
     @reward_id = selected_reward_id
+    @fulfillment = @contribution.build_fulfillment(reward_id: @reward_id)
+    @payment = @contribution.payments.new
   end
 
   def pay
@@ -114,7 +116,7 @@ class ContributionsController < ApplicationController
 
   def load_reward
     id = params[:fulfillment].try(:[], :reward_id)
-    @reward = Reward.find(id) if id
+    @reward = Reward.find(id) if id.present?
   end
 
   def send_notification_emails(contribution)

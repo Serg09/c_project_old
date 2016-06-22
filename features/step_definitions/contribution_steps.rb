@@ -61,7 +61,9 @@ When /^a user donates (#{DOLLAR_AMOUNT}) for the (#{BOOK})$/ do |amount, book|
   visit new_campaign_contribution_path(campaign)
   within('#main-content') do
     fill_in 'Amount', with: amount.to_s
-    fill_in 'Credit card', with: Faker::Business.credit_card_number.gsub(/\D/, '')
+    click_button 'Next'
+    click_button 'Next'
+    fill_in 'Credit card number', with: Faker::Business.credit_card_number.gsub(/\D/, '')
     fill_in 'CVV', with: Faker::Number.number(3).to_s
     fill_in 'Email', with: Faker::Internet.email
     fill_in 'First name', with: Faker::Name.first_name
