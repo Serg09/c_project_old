@@ -6,7 +6,7 @@ describe ContributionCollector do
   let (:failure_response) { payment_create_response(state: :failed) }
 
   before(:each) do
-    allow(PAYMENT_PROVIDER).to receive(:create).
+    allow(PAYMENT_PROVIDER).to receive(:execute_payment).
       and_return(success_response)
   end
 

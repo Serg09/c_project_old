@@ -12,7 +12,7 @@ describe ContributionCanceller do
   describe '::perform' do
     context 'when all contributions are cancelled successfully' do
       before(:each) do
-        allow(PAYMENT_PROVIDER).to receive(:refund)
+        allow(PAYMENT_PROVIDER).to receive(:refund_payment)
           .and_return(payment_refund_response)
       end
 
@@ -26,10 +26,10 @@ describe ContributionCanceller do
 
     context 'when any contribution cannot be cancelled' do
       before(:each) do
-        allow(PAYMENT_PROVIDER).to receive(:refund).
+        allow(PAYMENT_PROVIDER).to receive(:refund_payment).
           and_return(payment_refund_response)
-        expect(PAYMENT_PROVIDER).to receive(:refund).
-          with(payment2.sale_id, contribution2.amount).
+        expect(PAYMENT_PROVIDER).to receive(:refund_payment).
+          with(payment2, contribution2.amount * 0.97).
           and_raise('Induced error')
       end
       context 'before the maximum attempt count has been reached' do

@@ -12,11 +12,12 @@ RSpec.describe ContributionsController, type: :controller do
       expiration_month: '5',
       expiration_year: '2020',
       cvv: '123',
-      address1: '1234 Main Str',
-      address2: 'Apt 227',
-      city: 'Dallas',
-      state: 'TX',
-      postal_code: '75200'
+      billing_address_1: '1234 Main Str',
+      billing_address_2: 'Apt 227',
+      billing_city: 'Dallas',
+      billing_state: 'TX',
+      billing_postal_code: '75200',
+      billing_country_code: 'US'
     }
   end
 

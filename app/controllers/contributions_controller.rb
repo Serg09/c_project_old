@@ -46,8 +46,8 @@ class ContributionsController < ApplicationController
   def pay
     @contribution.update_attributes contribution_params
     if @contribution.save
-      @payment = @contribution.payments.new payment_attributes
-      if @payment.save && @payment.execute
+      @payment = @contribution.payments.new payment_params
+      if @payment.save && @contribution.collect!
         redirect_to book_path(@campaign.book_id)
       else
         flash[:alert] = "Unable to process the payment."
@@ -72,18 +72,19 @@ class ContributionsController < ApplicationController
     )
   end
 
-  def payment_attributes
+  def payment_params
     params.require(:payment).permit(
-      :credit_card,
+      :credit_card_number,
       :credit_card_type,
       :expiration_month,
       :expiration_year,
       :cvv,
-      :address1,
-      :address2,
-      :city,
-      :state,
-      :postal_code
+      :billing_address_1,
+      :billing_address_2,
+      :billing_city,
+      :billing_state,
+      :billing_postal_code,
+      :billing_country_code
     )
   end
 
