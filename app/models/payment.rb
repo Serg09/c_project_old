@@ -28,6 +28,8 @@ class Payment < ActiveRecord::Base
                 :cvv,
                 :expiration_month,
                 :expiration_year,
+                :first_name,
+                :last_name,
                 :billing_address_1,
                 :billing_address_2,
                 :billing_city, 

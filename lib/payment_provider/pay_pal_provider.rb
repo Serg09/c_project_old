@@ -30,7 +30,7 @@ module PaymentProvider
     end
 
     def execute_payment(internal_payment)
-      payment = Payment.new payment_attributes(attributes)
+      payment = Payment.new payment_attributes(internal_payment)
       unless payment.create
         Rails.logger.error "Unable to complete the payment with the payment provider. #{payment.error.inspect}"
         raise StandardError.new("Unable to complete the payment with the payment provider")
@@ -38,39 +38,12 @@ module PaymentProvider
       Payment.find(payment.id)
     end
 
-    # Sample refund response
-    #{
-    #  "id":"9D221860Y7916343V",
-    #  "amount": {
-    #    "currency":"USD",
-    #    "total":"12.34"
-    #  },
-    #  "state":"completed",
-    #  "sale_id":"8WH11713Y20128235",
-    #  "parent_payment":"PAY-2KC20852W9650701FK4J3RFY",
-    #  "create_time":"2016-04-17T16:24:22Z",
-    #  "update_time":"2016-04-17T16:24:22Z",
-    #  "links": [{
-    #    "href":"https://api.sandbox.paypal.com/v1/payments/refund/9D221860Y7916343V",
-    #    "rel":"self",
-    #    "method":"GET"
-    #  },{
-    #    "href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-2KC20852W9650701FK4J3RFY",
-    #    "rel":"parent_payment",
-    #    "method":"GET"
-    #  },{
-    #    "href":"https://api.sandbox.paypal.com/v1/payments/sale/8WH11713Y20128235",
-    #    "rel":"sale",
-    #    "method":"GET"
-    #  }]
-    #}
-
     def refund_payment(payment, amount)
-      sale = Sale.find(sale_id)
+      sale = Sale.find(payment.sale_id)
       sale.refund({
         amount: {
           currency: PayPalProvider.USD,
-          total: "%.2f" % amount #TODO subtract an amount to cover payment provider fees?
+          total: "%.2f" % amount
         }
       })
     rescue => e
@@ -80,33 +53,33 @@ module PaymentProvider
 
     private
 
-    def payment_attributes(attributes)
+    def payment_attributes(internal_payment)
       {
         intent: PayPalProvider.SALE,
-        payer: payer_attributes(attributes),
-        transactions: transactions_attributes(attributes)
+        payer: payer_attributes(internal_payment),
+        transactions: transactions_attributes(internal_payment)
       }
     end
 
-    def payer_attributes(attributes)
+    def payer_attributes(internal_payment)
       {
         payment_method: PayPalProvider.CREDIT_CARD,
         funding_instruments: [
           {
             credit_card: {
-              type: attributes[:credit_card_type],
-              number: attributes[:credit_card],
-              expire_month: attributes[:expiration_month],
-              expire_year: attributes[:expiration_year],
-              cvv2: attributes[:cvv],
-              first_name: attributes[:first_name],
-              last_name: attributes[:last_name],
+              type: internal_payment.credit_card_type,
+              number: internal_payment.credit_card_number,
+              expire_month: internal_payment.expiration_month,
+              expire_year: internal_payment.expiration_year,
+              cvv2: internal_payment.cvv,
+              first_name: internal_payment.first_name,
+              last_name: internal_payment.last_name,
               billing_address: {
-                line1: attributes[:address_1],
-                line2: attributes[:address_2],
-                city: attributes[:city],
-                state: attributes[:state],
-                postal_code: attributes[:postal_code],
+                line1: internal_payment.address_1,
+                line2: internal_payment.address_2,
+                city: internal_payment.city,
+                state: internal_payment.state,
+                postal_code: internal_payment.postal_code,
                 country_code: 'US'
               }
             }
@@ -115,14 +88,14 @@ module PaymentProvider
       }
     end
 
-    def transactions_attributes(attributes)
+    def transactions_attributes(internal_payment)
       [
         {
           amount: {
-            total: attributes[:amount],
+            total: '%.2f' % internal_payment.contribution.amount,
             currency: PayPalProvider.USD
           },
-          description: attributes[:description]
+          description: "#{number_to_currency(internal_payment.contribution.amount, precision: 2)} contribution to the book \"#{internal_payment.contribution.campaign.book.approved_title}\" by #{internal_payment.contribution.campaign.book.author.full_name}"
         }
       ]
     end
