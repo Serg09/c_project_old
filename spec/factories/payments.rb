@@ -58,6 +58,10 @@ FactoryGirl.define do
       FactoryGirl.create(:payment_transaction, payment: payment, response: transaction)
     end
 
+    factory :completed_payment do
+      state 'completed'
+    end
+
     factory :failed_payment do
       state 'failed'
     end

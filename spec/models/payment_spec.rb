@@ -145,10 +145,24 @@ RSpec.describe Payment, type: :model do
     end
   end
 
-  shared_examples 'non-refundable payment' do
-    it 'does not call the payment provider'
-    it 'does not create a transaction record'
-    it 'does not change the state'
+  shared_examples 'a non-refundable payment' do
+    it 'does not call the payment provider' do
+      expect(PAYMENT_PROVIDER).not_to \
+        receive(:refund_payment)
+      payment.refund!
+    end
+
+    it 'does not create a transaction record' do
+      expect do
+        payment.refund!
+      end.not_to change(PaymentTransaction, :count)
+    end
+
+    it 'does not change the state' do
+      expect do
+        payment.refund!
+      end.not_to change(payment, :state)
+    end
   end
 
   context 'for a pending payment' do
@@ -192,8 +206,17 @@ RSpec.describe Payment, type: :model do
             and_return(payment_create_response(state: :failed))
         end
 
-        it 'changes the state to "failed"'
-        it 'creates a transaction record'
+        it 'changes the state to "failed"' do
+          expect do
+            payment.execute!
+          end.to change(payment, :state).from('pending').to('failed')
+        end
+
+        it 'creates a transaction record' do
+          expect do
+            payment.execute!
+          end.to change(payment.transactions, :count).by(1)
+        end
       end
 
       context 'on error' do
@@ -204,50 +227,88 @@ RSpec.describe Payment, type: :model do
             and_raise('induced error')
         end
 
-        it 'does not change the state'
-        it 'does not create a transaction record'
+        it 'does not change the state' do
+          expect do
+            payment.execute!
+          end.not_to change(payment, :state)
+        end
+
+        it 'does not create a transaction record' do
+          expect do
+            payment.execute!
+          end.not_to change(payment.transactions, :count)
+        end
       end
     end
 
     describe '#refund' do
-      include_examples 'non-refundable payment'
+      it_behaves_like 'a non-refundable payment' do
+        let!(:payment) { FactoryGirl.create(:pending_payment) }
+      end
     end
   end
 
   context 'for an approved payment' do
     describe '#execute' do
       it_behaves_like 'a non-executable payment' do
-        let (:payment) { FactoryGirl.create(:approved_payment) }
+        let!(:payment) { FactoryGirl.create(:approved_payment) }
       end
     end
 
     describe '#refund' do
-      include_examples 'non-refundable payment'
+      it_behaves_like 'a non-refundable payment' do
+        let!(:payment) { FactoryGirl.create(:approved_payment) }
+      end
     end
   end
 
   context 'for a completed payment' do
+    let!(:payment) { FactoryGirl.create(:completed_payment) }
+
     describe '#execute' do
-      include_examples 'a non-executable payment'
+      it_behaves_like 'a non-executable payment' do
+        # TODO Fix this, add amount to payment and put specific values in the test
+        let!(:payment) { FactoryGirl.create(:completed_payment) }
+      end
     end
 
     describe '#refund' do
-      it 'calls the payment provider to refund the payment, less an administrative fee'
+      it 'calls the payment provider to refund the payment, less an administrative fee' do
+        expect(PAYMENT_PROVIDER).to \
+          receive(:refund_payment).
+          # TODO Fix this, add amount to payment and put specific values in the test
+          with(payment, payment.contribution.amount * 0.97).
+          and_return(payment_refund_response(state: :completed))
+        payment.refund!
+      end
       
       context 'on success' do
-        it 'creates a transaction record'
-        it 'changes the state to "refunded"'
+        it 'creates a transaction record' do
+          expect do
+            payment.refund!
+          end.to change(payment.transactions, :count).by(1)
+        end
+
+        it 'changes the state to "refunded"' do
+          expect do
+            payment.refund!
+          end.to change(payment, :state).from('completed').to('refunded')
+        end
       end
     end
   end
 
   context 'for a failed payment' do
     describe '#execute' do
-      include_examples 'a non-executable payment'
+      it_behaves_like 'a non-executable payment' do
+        let!(:payment) { FactoryGirl.create(:failed_payment) }
+      end
     end
 
     describe '#refund' do
-      include_examples 'non-refundable payment'
+      it_behaves_like 'a non-refundable payment' do
+        let!(:payment) { FactoryGirl.create(:failed_payment) }
+      end
     end
   end
 

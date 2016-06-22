@@ -14,6 +14,7 @@ class Payment < ActiveRecord::Base
   include AASM
 
   has_many :transactions, class_name: 'PaymentTransaction'
+  belongs_to :contribution
 
   CREDIT_CARD_TYPES = [
     ['VISA', 'visa'],
@@ -21,8 +22,6 @@ class Payment < ActiveRecord::Base
     ['Discover', 'discover'],
     ['American Express', 'amex']
   ]
-
-  belongs_to :contribution
 
   attr_accessor :credit_card_number,
                 :credit_card_type,
@@ -35,7 +34,7 @@ class Payment < ActiveRecord::Base
                 :billing_state,
                 :billing_postal_code,
                 :billing_country_code,
-                :payment_error
+                :payment_provider_error
 
   validates_presence_of :contribution_id, :state
   validates_presence_of :credit_card_number,
@@ -49,7 +48,7 @@ class Payment < ActiveRecord::Base
     on: :create
   validates_uniqueness_of :external_id
 
-  aasm(:state) do
+  aasm(:state, whiny_transitions: false) do
     state :pending, initial: true
     state :approved
     state :completed
@@ -58,7 +57,11 @@ class Payment < ActiveRecord::Base
 
     event :execute do
       transitions from: :pending, to: :approved, if: :_execute
-      transitions from: :pending, to: :failed, unless: :payment_error
+      transitions from: :pending, to: :failed, unless: :payment_provider_error
+    end
+
+    event :refund do
+      transitions from: :completed, to: :refunded, if: :_refund
     end
   end
 
@@ -76,6 +79,21 @@ class Payment < ActiveRecord::Base
     create_transaction(response, :sale)
     
     response[:state] == 'approved'
+  rescue => e
+    self.payment_provider_error = e
+    Rails.logger.error "Error executing payment #{self.inspect}, #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
+    false
+  end
+
+  def _refund
+    response = PAYMENT_PROVIDER.refund_payment(self, contribution.amount * 0.97)
+    create_transaction(response, :refund)
+
+    %w(pending completed).include?(response[:state])
+  rescue => e
+    self.payment_provider_error = e
+    Rails.logger.error "Error refunding payment #{self.inspect}, #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
+    false
   end
 
   def create_transaction(response, intent)
