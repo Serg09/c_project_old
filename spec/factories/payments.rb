@@ -69,5 +69,9 @@ FactoryGirl.define do
     factory :pending_payment do
       state 'pending'
     end
+
+    factory :refunded_payment do
+      state 'refunded'
+    end
   end
 end

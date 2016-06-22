@@ -145,6 +145,31 @@ RSpec.describe Payment, type: :model do
     end
   end
 
+  shared_examples 'a refundable payment' do
+    it 'calls the payment provider to refund the payment, less an administrative fee' do
+      expect(PAYMENT_PROVIDER).to \
+        receive(:refund_payment).
+        # TODO Fix this, add amount to payment and put specific values in the test
+        with(payment, payment.contribution.amount * 0.97).
+        and_return(payment_refund_response(state: :completed))
+      payment.refund!
+    end
+
+    context 'on success' do
+      it 'creates a transaction record' do
+        expect do
+          payment.refund!
+        end.to change(payment.transactions, :count).by(1)
+      end
+
+      it 'changes the state to "refunded"' do
+        expect do
+          payment.refund!
+        end.to change(payment, :state).to('refunded')
+      end
+    end
+  end
+
   shared_examples 'a non-refundable payment' do
     it 'does not call the payment provider' do
       expect(PAYMENT_PROVIDER).not_to \
@@ -256,7 +281,7 @@ RSpec.describe Payment, type: :model do
     end
 
     describe '#refund' do
-      it_behaves_like 'a non-refundable payment' do
+      it_behaves_like 'a refundable payment' do
         let!(:payment) { FactoryGirl.create(:approved_payment) }
       end
     end
@@ -273,27 +298,8 @@ RSpec.describe Payment, type: :model do
     end
 
     describe '#refund' do
-      it 'calls the payment provider to refund the payment, less an administrative fee' do
-        expect(PAYMENT_PROVIDER).to \
-          receive(:refund_payment).
-          # TODO Fix this, add amount to payment and put specific values in the test
-          with(payment, payment.contribution.amount * 0.97).
-          and_return(payment_refund_response(state: :completed))
-        payment.refund!
-      end
-      
-      context 'on success' do
-        it 'creates a transaction record' do
-          expect do
-            payment.refund!
-          end.to change(payment.transactions, :count).by(1)
-        end
-
-        it 'changes the state to "refunded"' do
-          expect do
-            payment.refund!
-          end.to change(payment, :state).from('completed').to('refunded')
-        end
+      it_behaves_like 'a refundable payment' do
+        let!(:payment) { FactoryGirl.create(:completed_payment) }
       end
     end
   end

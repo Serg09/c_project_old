@@ -124,247 +124,162 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
-  #context 'for a pledged contribution' do
-  #  let (:payment_id) { '6CR34526N64144512' }
-  #  let (:amount) { 123 }
-  #  let (:contribution) { FactoryGirl.create(:contribution, amount: amount) }
-  #  let!(:payment) do
-  #    FactoryGirl.create(:approved_payment, contribution: contribution,
-  #                                          payment_id: payment_id)
-  #  end
+  shared_examples 'a non-collectable contribution' do
+    let!(:payment) { contribution.payments.first }
 
-  #  describe '#collect' do
-  #    let (:response) { payment_capture_response }
-
-  #    it 'calls the payment provider to process the payment' do
-  #      expect(PAYMENT_PROVIDER).to receive(:create).
-  #        with(payment_id, amount).
-  #        and_return(response)
-  #      contribution.collect
-  #    end
-
-  #    context 'on success' do
-  #      before(:each) do
-  #        expect(PAYMENT_PROVIDER).to receive(:create).
-  #          with(authorization_id, amount).
-  #          and_return(response)
-  #      end
-  #      it 'updates the state to "collected"' do
-  #        expect do
-  #          contribution.collect
-  #        end.to change(contribution, :state).from('pledged').to('collected')
-  #      end
-  #    end
-
-  #    context 'on failure' do
-  #      let (:response) { payment_capture_response(state: :failed) }
-  #      before(:each) do
-  #        expect(PAYMENT_PROVIDER).to receive(:capture).
-  #          with(authorization_id, amount).
-  #          and_return(response)
-  #      end
-
-  #      it 'does not change the state of the contribution' do
-  #        expect do
-  #          contribution.collect
-  #        end.not_to change(contribution, :state)
-  #      end
-  #    end
-
-  #    context 'on error' do
-  #      before(:each) do
-  #        expect(PAYMENT_PROVIDER).to receive(:capture).
-  #          with(authorization_id, amount).
-  #          and_raise('Something bad happened')
-  #      end
-  #      it 'does not change the state of the contribution' do
-  #        expect do
-  #          contribution.collect
-  #        end.not_to change(contribution, :state)
-  #      end
-  #      it 'writes an error to the log' do
-  #        expect(Rails.logger).to receive(:error).with(/Unable to capture the payment/)
-  #        contribution.collect
-  #      end
-  #    end
-  #  end
-
-  #  describe '#cancel' do
-  #    it 'calls the payment provider to refund the payment' do
-  #      expect(PAYMENT_PROVIDER).to receive(:refund).
-  #        with(authorization_id).
-  #        and_return(authorization_void_response)
-  #      contribution.cancel
-  #    end
-
-  #    context 'on success' do
-  #      before(:each) do
-  #        expect(PAYMENT_PROVIDER).to receive(:void).
-  #          with(authorization_id).
-  #          and_return(authorization_void_response)
-  #      end
-
-  #      it 'updates the contribution state to "cancelled"' do
-  #        expect do
-  #          contribution.cancel
-  #        end.to change(contribution, :state).from('pledged').to('cancelled')
-  #      end
-  #    end
-
-  #    context 'on failure' do
-  #      before(:each) do
-  #        expect(PAYMENT_PROVIDER).to receive(:void).
-  #          with(authorization_id).
-  #          and_return(authorization_void_response(state: :expired))
-  #      end
-
-  #      it 'does not update the contribution state' do
-  #        expect do
-  #          contribution.cancel
-  #        end.not_to change(contribution, :state)
-  #      end
-  #    end
-
-  #    context 'on error' do
-  #      before(:each) do
-  #        expect(PAYMENT_PROVIDER).to receive(:void).
-  #          with(authorization_id).
-  #          and_raise('Something bad happened')
-  #      end
-
-  #      it 'does not change the state of the contribution' do
-  #        expect do
-  #          contribution.cancel
-  #        end.not_to change(contribution, :state)
-  #      end
-
-  #      it 'writes an error to the log' do
-  #        expect(Rails.logger).to receive(:error).with(/Unable to void the payment/)
-  #        contribution.cancel
-  #      end
-  #    end
-  #  end
-  #end
-
-  context 'for a collected contribution' do
-    let (:contribution) { FactoryGirl.create(:collected_contribution, amount: 101) }
-    let (:payment) { contribution.payments.first }
-
-    describe '#collect' do
-      it 'returns false' do
-        expect(contribution.collect).to be false
-      end
-
-      it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:create)
-        contribution.collect
-      end
-
-      it 'does not change the state of the contribution' do
-        expect do
-          contribution.collect
-        end.not_to change(contribution, :state)
-      end
+    it 'returns false' do
+      expect(contribution.collect).to be false
     end
 
-    describe '#cancel' do
-      it 'calls the payment provider to refund the payment' do
-        expect(PAYMENT_PROVIDER).to receive(:refund).
-          with(payment.sale_id, 101).
-          and_return(payment_refund_response)
-        contribution.cancel
-      end
+    it 'does not execute the payment' do
+      expect(payment).not_to receive(:execute!)
+      contribution.collect
+    end
 
-      context 'on success' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment.sale_id, 101).
-            and_return(payment_refund_response)
-        end
-
-        it 'returns true' do
-          expect(contribution.cancel).to be true
-        end
-
-        it 'changes the state of the contribution to cancelled' do
-          expect do
-            contribution.cancel
-          end.to change(contribution, :state).from('collected').to('cancelled')
-        end
-      end
-
-      context 'on failure' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment.sale_id, anything).
-            and_return(payment_refund_response(state: 'failed'))
-        end
-
-        it 'returns false' do
-          expect(contribution.cancel).to be false
-        end
-
-        it 'does not change the state of the contribution' do
-          expect do
-            contribution.cancel
-          end.not_to change(contribution, :state)
-        end
-      end
-
-      context 'on error' do
-        before(:each) do
-          expect(PAYMENT_PROVIDER).to receive(:refund).
-            with(payment.sale_id, anything).
-            and_raise('Induced error')
-        end
-
-        it 'returns false' do
-          expect(contribution.cancel).to be false
-        end
-
-        it 'does not change the state of the contribution' do
-          expect do
-            contribution.cancel
-          end.not_to change(contribution, :state)
-        end
-      end
+    it 'does not change the state of the contribution' do
+      expect do
+        contribution.collect
+      end.not_to change(contribution, :state)
     end
   end
 
-  context 'for a cancelled contribution' do
-    let (:contribution) { FactoryGirl.create(:cancelled_contribution) }
+  shared_examples 'a cancellable contribution' do
+    it 'refunds the payment' do
+      expect_any_instance_of(Payment).to receive(:refund!).and_return true
+      contribution.cancel
+    end
 
-    describe '#collect' do
-      it 'returns false' do
-        expect(contribution.collect).to be false
+    context 'on success' do
+      before(:each) do
+        expect_any_instance_of(Payment).to receive(:refund!).and_return true
       end
 
-      it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:create)
-        contribution.collect
+      it 'returns true' do
+        expect(contribution.cancel).to be true
       end
 
-      it 'does not change the state of the contribution' do
+      it 'changes the state of the contribution to cancelled' do
         expect do
-          contribution.collect
-        end.not_to change(contribution, :state)
+          contribution.cancel
+        end.to change(contribution, :state).from('collected').to('cancelled')
       end
     end
 
-    describe '#cancel' do
-      it 'returns false' do
-        expect(contribution.cancel).to be false
+    context 'on failure' do
+      before(:each) do
+        expect_any_instance_of(Payment).to receive(:refund!).and_return false
       end
 
-      it 'does not call the payment provider' do
-        expect(PAYMENT_PROVIDER).not_to receive(:refund)
-        contribution.cancel
+      it 'returns false' do
+        expect(contribution.cancel).to be false
       end
 
       it 'does not change the state of the contribution' do
         expect do
           contribution.cancel
         end.not_to change(contribution, :state)
+      end
+    end
+  end
+
+  shared_examples 'a non-cancellable contribution' do
+    let!(:payment) { contribution.payments.first }
+
+    it 'returns false' do
+      expect(contribution.cancel).to be false
+    end
+
+    it 'does not execute the payment' do
+      expect(payment).not_to receive(:execute)
+      contribution.cancel
+    end
+
+    it 'does not change the state of the contribution' do
+      expect do
+        contribution.cancel
+      end.not_to change(contribution, :state)
+    end
+  end
+
+  context 'when incipient' do
+    let (:contribution) { FactoryGirl.create(:incipient_contribution) }
+    let!(:payment) do
+      payment = FactoryGirl.create(:pending_payment, contribution: contribution)
+      contribution.payments << payment
+      payment
+    end
+
+    describe '#collect' do
+      it 'calls :execute on the payment' do
+        expect(payment).to receive(:execute!).and_return true
+        contribution.collect!
+      end
+
+      context 'on success' do
+        before(:each) do
+          expect(payment).to receive(:execute!).and_return true
+        end
+
+        it 'returns true' do
+          expect(contribution.collect!).to be true
+        end
+
+        it 'changes the state to "collected"' do
+          expect do
+            contribution.collect!
+          end.to change(contribution, :state).to 'collected'
+        end
+      end
+
+      context 'on failure' do
+        before(:each) do
+          expect(payment).to receive(:execute!).and_return false
+        end
+
+        it 'returns false' do
+          expect(contribution.collect!).to be false
+        end
+
+        it 'does not change the state' do
+          expect do
+            contribution.collect!
+          end.not_to change(contribution, :state)
+        end
+      end
+    end
+  end
+
+  context 'when collected' do
+    describe '#collect' do
+      it_behaves_like 'a non-collectable contribution' do
+        let (:contribution) { FactoryGirl.create(:collected_contribution, amount: 101) }
+      end
+    end
+
+    describe '#cancel' do
+      it_behaves_like 'a cancellable contribution' do
+        let (:contribution) { FactoryGirl.create(:collected_contribution, amount: 101) }
+      end
+    end
+  end
+
+  context 'when cancelled' do
+
+    describe '#collect' do
+      it_behaves_like 'a non-collectable contribution' do
+        let (:contribution) { FactoryGirl.create(:cancelled_contribution) }
+        let!(:payment) do
+          payment = FactoryGirl.create(:refunded_payment, contribution: contribution)
+        end
+      end
+    end
+
+    describe '#cancel' do
+      it_behaves_like 'a non-cancellable contribution' do
+        let (:contribution) { FactoryGirl.create(:cancelled_contribution) }
+        let!(:payment) do
+          payment = FactoryGirl.create(:refunded_payment, contribution: contribution)
+        end
       end
     end
   end

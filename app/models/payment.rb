@@ -63,7 +63,7 @@ class Payment < ActiveRecord::Base
     end
 
     event :refund do
-      transitions from: :completed, to: :refunded, if: :_refund
+      transitions from: [:approved, :completed], to: :refunded, if: :_refund
     end
   end
 

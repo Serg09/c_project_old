@@ -39,35 +39,26 @@ class Contribution < ActiveRecord::Base
     end
 
     event :collect do
-      transitions from: :pledged, to: :collected, if: :create_payment
+      transitions from: [:incipient, :pledged], to: :collected, if: :_collect
     end
 
     event :cancel do
-      transitions from: [:pledged, :collected], to: :cancelled, if: :refund_payment
+      transitions from: [:pledged, :collected], to: :cancelled, if: :_cancel
     end
-  end
-
-  def create_payment
-    raise 'not implemented'
-  end
-
-  def refund_payment
-    payment = first_approved_payment
-    refund = PAYMENT_PROVIDER.refund(payment.sale_id, amount)
-    if refund
-      tx = payment.transactions.create!(intent: PaymentTransaction.REFUND,
-                                        state: refund.state,
-                                        response: refund.to_json)
-      refund.state == 'completed'
-    else
-      false
-    end
-  rescue => e
-    Rails.logger.error "Unable to refund the payment. id=#{payment.try(:id)}, external_id=#{payment.try(:external_id)}, #{e.class.name}: #{e.message} at\n  #{e.backtrace.join("\n  ")}\n  refund=#{refund.try(:to_json)}"
-    false
   end
 
   private
+
+  def _collect
+    return true if payments.any?{|p| p.approved? || p.completed?}
+    payment = payments.detect{|p| p.pending?}
+    payment.execute!
+  end
+
+  def _cancel
+    payment = first_approved_payment
+    payment.refund!
+  end
 
   def email_present?
     email.present?
