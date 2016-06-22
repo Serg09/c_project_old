@@ -15,13 +15,14 @@ Given /^the (#{CAMPAIGN}) has received the following contributions$/ do |campaig
     contribution = FactoryGirl.create(:contribution, values.merge(campaign: campaign, state: 'collected'))
 
     address = address_string.present? ? parse_address(address_string) : {}
-    if address
+
+    if address.present?
       FactoryGirl.create(:payment, contribution: contribution,
-                                   address_1: address[:line1],
-                                   address_2: address[:line2],
-                                   city: address[:city],
-                                   state_abbr: address[:state],
-                                   postal_code: address[:postal_code])
+                                   billing_address_1: address[:line1],
+                                   billing_address_2: address[:line2],
+                                   billing_city: address[:city],
+                                   billing_state: address[:state],
+                                   billing_postal_code: address[:postal_code])
     else
       FactoryGirl.create(:payment, contribution: contribution)
     end
