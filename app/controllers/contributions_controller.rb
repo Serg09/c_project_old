@@ -23,7 +23,7 @@ class ContributionsController < ApplicationController
   def create
     @contribution = @campaign.contributions.new contribution_params
     if @contribution.save
-      if @reward
+      if @reward || @campaign.rewards.none?
         redirect_to payment_contribution_path(@contribution)
       else
         redirect_to reward_contribution_path(@contribution)
@@ -43,20 +43,42 @@ class ContributionsController < ApplicationController
   def payment
     @reward_id = selected_reward_id
     @fulfillment = @contribution.build_fulfillment(reward_id: @reward_id)
-    @payment = @contribution.payments.new
+    @payment = @contribution.payments.new billing_country_code: 'US'
   end
 
   def pay
     @contribution.update_attributes contribution_params
+
+    Rails.logger.info "payment_params #{payment_params.inspect}"
+
+    @payment = @contribution.payments.new payment_params
     if @contribution.save
-      @payment = @contribution.payments.new payment_params
-      if @payment.save && @contribution.collect!
-        redirect_to book_path(@campaign.book_id)
+      @fulfillment = build_fulfillment
+      if @fulfillment.nil? || @fulfillment.save
+        if @payment.save && @contribution.collect!
+          redirect_to book_path(@campaign.book_id)
+        else
+
+          Rails.logger.warn "Unable to save the payment #{@payment.inspect}"
+          Rails.logger.warn @payment.errors.full_messages.to_sentence
+
+          flash[:alert] = "Unable to process the payment."
+          render :payment
+        end
       else
-        flash[:alert] = "Unable to process the payment."
+
+        Rails.logger.warn "Unable to save the fulfillment #{@fulfillment.inspect}"
+        Rails.logger.warn @fulfillment.errors.full_messages.to_sentence
+
+        flash[:alert] = "Unable to save the fulfillmment."
         render :payment
       end
     else
+
+      Rails.logger.warn "Unable to save the contribution #{@contribution.inspect}"
+      Rails.logger.warn "contribution errors: #{@contribution.errors.full_messages.to_sentence}"
+      Rails.logger.warn "payment errors: #{@payment.errors.full_messages.to_sentence}"
+
       flash[:alert] = "Unable to save the contribution."
       render :payment
     end
@@ -64,15 +86,37 @@ class ContributionsController < ApplicationController
 
   private
 
-  def fulfillment_attributes
+  def build_fulfillment
+    if @reward.nil?
+      nil
+    elsif @reward.physical_address_required?
+      PhysicalFulfillment.new fulfillment_params
+    else
+      ElectronicFulfillmment.new fulfillment_params
+    end
+  end
+
+  def physical_fulfillment_params
     params.require(:fulfillment).permit(
       :reward_id,
+      :first_name,
+      :last_name,
       :address1,
       :address2,
       :city,
       :state,
       :postal_code
-    )
+    ). merge(contribution_id: @contribution.id,
+             first_name: @payment.first_name,
+             last_name: @payment.last_name)
+  end
+
+  def electronic_fulfillmment_params
+    params.require(:fulfillmment).permit(
+      :reward_id
+    ).merge(email: @payment.email,
+            first_name: @payment.first_name,
+            last_name: @payment.last_name)
   end
 
   def payment_params
@@ -82,6 +126,8 @@ class ContributionsController < ApplicationController
       :expiration_month,
       :expiration_year,
       :cvv,
+      :first_name,
+      :last_name,
       :billing_address_1,
       :billing_address_2,
       :billing_city,
@@ -145,7 +191,7 @@ class ContributionsController < ApplicationController
   end
 
   def selected_reward_id
-    params[:fulfillment].try(:[], :reward_id)
+    params[:fulfillment].try(:[], :reward_id) || params[:reward_id]
   end
 
   def validate_state!

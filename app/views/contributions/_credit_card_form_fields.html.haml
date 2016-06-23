@@ -8,6 +8,17 @@
   =help_blocks @payment, :credit_card_type
 .row
   .col-md-6
+    .form-group{ :class => form_group_class(@payment, :first_name) }
+      =f.label :first_name, class: 'control-label'
+      =f.text_field :first_name, class: 'form-control', maxlength: 50
+      =help_blocks @payment, :first_name
+  .col-md-6
+    .form-group{ :class => form_group_class(@payment, :last_name) }
+      =f.label :last_name, class: 'control-label'
+      =f.text_field :last_name, class: 'form-control', maxlength: 50
+      =help_blocks @payment, :last_name
+.row
+  .col-md-6
     .form-group{ :class => form_group_class(@payment, :expiration_month) }
       =f.label :expiration_month, class: 'control-label'
       =f.select :expiration_month, expiration_month_options, {}, class: 'form-control'
