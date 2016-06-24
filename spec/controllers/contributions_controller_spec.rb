@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ContributionsController, type: :controller do
   let (:campaign) { FactoryGirl.create(:campaign) }
-  let (:physical_reward) { FactoryGirl.create(:physical_reward, campaign: campaign) }
-  let (:electronic_reward) { FactoryGirl.create(:electronic_reward, campaign: campaign) }
+  let!(:physical_reward) { FactoryGirl.create(:physical_reward, campaign: campaign) }
+  let!(:electronic_reward) { FactoryGirl.create(:electronic_reward, campaign: campaign) }
 
   let (:payment_attributes) do
     {
