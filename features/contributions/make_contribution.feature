@@ -29,7 +29,9 @@ Feature: Make a contribution
 
   Scenario: A user donates using a credit card
     When I fill in "Amount" with "50"
-    And I fill in "Credit card" with "4444111144441111"
+    And I click "Next"
+    And I click "Next"
+    And I fill in "Credit card number" with "4444111144441111"
     And I select "VISA" from "Type"
     And I select "5" from "Expiration month"
     And I select "2020" from "Expiration year"
@@ -54,7 +56,9 @@ Feature: Make a contribution
 
   Scenario: A user donates using a predefined amount + reward option
     When I select the "Signed copy" option
-    And I fill in "Credit card" with "4444111144441111"
+    And I click "Next"
+
+    And I fill in "Credit card number" with "4444111144441111"
     And I select "VISA" from "Type"
     And I select "5" from "Expiration month"
     And I select "2020" from "Expiration year"
