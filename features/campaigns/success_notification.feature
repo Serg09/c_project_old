@@ -8,7 +8,6 @@ Feature: Success notifications
     And author john@doe.com has a book titled "Tell Me When"
     And the book "Tell Me When" has a campaign targeting $500
 
-  @wip
   Scenario: An author receives a notification when the campaign reaches its goal
     When a user donates $251 for the book "Tell Me When"
     Then "john@doe.com" should receive no email with subject "Your campaign for Tell Me When has reached its goal!"
