@@ -48,37 +48,22 @@ class ContributionsController < ApplicationController
 
   def pay
     @contribution.update_attributes contribution_params
-
-    Rails.logger.info "payment_params #{payment_params.inspect}"
-
     @payment = @contribution.payments.new payment_params
     if @contribution.save
       @fulfillment = build_fulfillment
       if @fulfillment.nil? || @fulfillment.save
         if @payment.save && @contribution.collect!
+          send_notification_emails
           redirect_to book_path(@campaign.book_id)
         else
-
-          Rails.logger.warn "Unable to save the payment #{@payment.inspect}"
-          Rails.logger.warn @payment.errors.full_messages.to_sentence
-
           flash[:alert] = "Unable to process the payment."
           render :payment
         end
       else
-
-        Rails.logger.warn "Unable to save the fulfillment #{@fulfillment.inspect}"
-        Rails.logger.warn @fulfillment.errors.full_messages.to_sentence
-
         flash[:alert] = "Unable to save the fulfillmment."
         render :payment
       end
     else
-
-      Rails.logger.warn "Unable to save the contribution #{@contribution.inspect}"
-      Rails.logger.warn "contribution errors: #{@contribution.errors.full_messages.to_sentence}"
-      Rails.logger.warn "payment errors: #{@payment.errors.full_messages.to_sentence}"
-
       flash[:alert] = "Unable to save the contribution."
       render :payment
     end
@@ -165,16 +150,16 @@ class ContributionsController < ApplicationController
     @reward = Reward.find(id) if id.present?
   end
 
-  def send_notification_emails(contribution)
+  def send_notification_emails
     # TODO Move this to resque jobs
-    ContributionMailer.contribution_receipt(contribution).deliver_now
-    ContributionMailer.contribution_received_notify_author(contribution).deliver_now unless contribution.campaign.author.unsubscribed?
-    AdminMailer.contribution_received(contribution).deliver_now
+    ContributionMailer.contribution_receipt(@contribution).deliver_now
+    ContributionMailer.contribution_received_notify_author(@contribution).deliver_now unless @contribution.campaign.author.unsubscribed?
+    AdminMailer.contribution_received(@contribution).deliver_now
     if campaign_just_succeeded?
-      CampaignMailer.succeeded(contribution.campaign).deliver_now unless contribution.campaign.author.unsubscribed?
-      AdminMailer.campaign_succeeded(contribution.campaign).deliver_now
-      contribution.campaign.success_notification_sent_at = DateTime.now
-      contribution.campaign.save!
+      CampaignMailer.succeeded(@contribution.campaign).deliver_now unless @contribution.campaign.author.unsubscribed?
+      AdminMailer.campaign_succeeded(@contribution.campaign).deliver_now
+      @contribution.campaign.success_notification_sent_at = DateTime.now
+      @contribution.campaign.save!
     end
   end
 
