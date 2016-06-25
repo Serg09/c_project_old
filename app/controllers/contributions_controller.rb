@@ -54,7 +54,7 @@ class ContributionsController < ApplicationController
       if @fulfillment.nil? || @fulfillment.save
         if @payment.save && @contribution.collect!
           send_notification_emails
-          redirect_to book_path(@campaign.book_id)
+          redirect_to book_path(@campaign.book_id), notice: 'Your contribution has been saved successfully. Expect to receive a confirmation email with all of the details.'
         else
           flash[:alert] = "Unable to process the payment."
           render :payment
