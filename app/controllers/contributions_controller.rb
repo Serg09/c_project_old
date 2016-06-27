@@ -23,7 +23,9 @@ class ContributionsController < ApplicationController
   def create
     @contribution = @campaign.contributions.new contribution_params
     if @contribution.save
-      if @reward || @campaign.rewards.none?
+      if @reward
+        redirect_to payment_contribution_path(@contribution, reward_id: @reward.id)
+      elsif @campaign.rewards.none?
         redirect_to payment_contribution_path(@contribution)
       else
         redirect_to reward_contribution_path(@contribution)
@@ -148,7 +150,7 @@ class ContributionsController < ApplicationController
   end
 
   def load_reward
-    id = params[:fulfillment].try(:[], :reward_id)
+    id = params[:fulfillment].try(:[], :reward_id) || params[:reward_id]
     @reward = Reward.find(id) if id.present?
   end
 
