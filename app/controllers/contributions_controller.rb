@@ -90,7 +90,8 @@ class ContributionsController < ApplicationController
       :address2,
       :city,
       :state,
-      :postal_code
+      :postal_code,
+      :country_code
     ). merge(contribution: @contribution,
              first_name: @payment.first_name,
              last_name: @payment.last_name)

@@ -31,7 +31,8 @@ RSpec.describe ContributionsController, type: :controller do
       address1: 'PO BOX 42',
       city: 'Dallas',
       state: 'TX',
-      postal_code: '75201'
+      postal_code: '75201',
+      country_code: 'US'
     }
   end
 
@@ -141,7 +142,7 @@ RSpec.describe ContributionsController, type: :controller do
         it 'creates a fulfillment record' do
           expect do
             patch :pay, id: contribution,
-              fulfillment: { reward_id: physical_reward.id },
+              fulfillment: physical_fulfillment_attributes,
               contribution: { email: Faker::Internet.email },
               payment: payment_attributes
           end.to change(PhysicalFulfillment, :count).by(1)
