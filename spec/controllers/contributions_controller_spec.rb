@@ -11,6 +11,8 @@ RSpec.describe ContributionsController, type: :controller do
       credit_card_type: 'visa',
       expiration_month: '5',
       expiration_year: '2020',
+      first_name: 'Sally',
+      last_name: 'Readerton',
       cvv: '123',
       billing_address_1: '1234 Main Str',
       billing_address_2: 'Apt 227',
@@ -122,6 +124,28 @@ RSpec.describe ContributionsController, type: :controller do
                       contribution: { email: Faker::Internet.email },
                       payment: payment_attributes
         end.to change(PaymentTransaction, :count).by(1)
+      end
+
+      context 'when an electronic reward is specified' do
+        it 'creates a fulfillment record' do
+          expect do
+            patch :pay, id: contribution,
+              fulfillment: { reward_id: electronic_reward.id },
+              contribution: { email: Faker::Internet.email },
+              payment: payment_attributes
+          end.to change(ElectronicFulfillment, :count).by(1)
+        end
+      end
+
+      context 'when a physical reward is specified' do
+        it 'creates a fulfillment record' do
+          expect do
+            patch :pay, id: contribution,
+              fulfillment: { reward_id: physical_reward.id },
+              contribution: { email: Faker::Internet.email },
+              payment: payment_attributes
+          end.to change(PhysicalFulfillment, :count).by(1)
+        end
       end
     end
   end
