@@ -3,7 +3,7 @@ class ContributionsController < ApplicationController
   before_filter :load_campaign, only: [:index, :new, :create]
   before_filter :load_contribution, only: [:show, :reward, :set_reward, :payment, :pay]
   before_filter :validate_state!, only: [:reward, :set_reward, :payment, :pay]
-  before_filter :load_reward, only: [:create, :set_reward]
+  before_filter :load_reward, only: [:create, :set_reward, :pay]
 
   respond_to :html
 
@@ -60,7 +60,7 @@ class ContributionsController < ApplicationController
           render :payment
         end
       else
-        flash[:alert] = "Unable to save the fulfillmment."
+        flash[:alert] = "Unable to save the fulfillment."
         render :payment
       end
     else
@@ -75,9 +75,9 @@ class ContributionsController < ApplicationController
     if @reward.nil?
       nil
     elsif @reward.physical_address_required?
-      PhysicalFulfillment.new fulfillment_params
+      PhysicalFulfillment.new physical_fulfillment_params
     else
-      ElectronicFulfillmment.new fulfillment_params
+      ElectronicFulfillment.new electronic_fulfillment_params
     end
   end
 
@@ -91,15 +91,16 @@ class ContributionsController < ApplicationController
       :city,
       :state,
       :postal_code
-    ). merge(contribution_id: @contribution.id,
+    ). merge(contribution: @contribution,
              first_name: @payment.first_name,
              last_name: @payment.last_name)
   end
 
-  def electronic_fulfillmment_params
-    params.require(:fulfillmment).permit(
+  def electronic_fulfillment_params
+    params.require(:fulfillment).permit(
       :reward_id
-    ).merge(email: @payment.email,
+    ).merge(contribution: @contribution,
+            email: @contribution.email,
             first_name: @payment.first_name,
             last_name: @payment.last_name)
   end
