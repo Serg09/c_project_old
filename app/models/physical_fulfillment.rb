@@ -25,7 +25,7 @@ class PhysicalFulfillment < Fulfillment
   validates_length_of :address1, maximum: 100
   validates_length_of :address2, maximum: 100
   validates_length_of :city, maximum: 100
-  validates_length_of :state, is: 2
-  validates_length_of :postal_code, minimum: 5, maximum: 15
-  validates_length_of :country_code, is: 2
+  validates_length_of :state, is: 2, if: :state
+  validates_length_of :postal_code, minimum: 5, maximum: 15, if: :postal_code
+  validates_length_of :country_code, is: 2, if: :country_code
 end
