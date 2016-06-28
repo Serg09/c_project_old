@@ -46,6 +46,12 @@ RSpec.describe Payment, type: :model do
       p2 = Payment.new attributes
       expect(p2).to have_at_least(1).error_on :external_id
     end
+
+    it 'ignores null values' do
+      p1 = Payment.create! attributes.except :external_id
+      p2 = Payment.new attributes.except :external_id
+      expect(p2).to be_valid
+    end
   end
 
   describe '#state' do

@@ -48,7 +48,7 @@ class Payment < ActiveRecord::Base
     :billing_postal_code,
     :billing_country_code,
     on: :create
-  validates_uniqueness_of :external_id
+  validates_uniqueness_of :external_id, if: :external_id
 
   aasm(:state, whiny_transitions: false) do
     state :pending, initial: true
