@@ -3,7 +3,7 @@ class ContributionsController < ApplicationController
   before_filter :load_campaign, only: [:index, :new, :create]
   before_filter :load_contribution, only: [:show, :reward, :set_reward, :payment, :pay]
   before_filter :validate_state!, only: [:reward, :set_reward, :payment, :pay]
-  before_filter :load_reward, only: [:create, :set_reward, :pay]
+  before_filter :load_reward, only: [:create, :set_reward, :pay, :payment]
 
   respond_to :html
 
@@ -43,29 +43,34 @@ class ContributionsController < ApplicationController
   end
 
   def payment
-    @reward_id = selected_reward_id
-    @fulfillment = @contribution.build_fulfillment(reward_id: @reward_id)
+    if @reward
+      @fulfillment = @contribution.build_fulfillment(reward_id: @reward.id)
+      @shipping_address_same = true
+    end
     @payment = @contribution.payments.new billing_country_code: 'US'
   end
 
   def pay
     @contribution.update_attributes contribution_params
     @payment = @contribution.payments.new payment_params
+    @fulfillment = build_fulfillment
     if @contribution.save
-      @fulfillment = build_fulfillment
       if @fulfillment.nil? || @fulfillment.save
         if @payment.save && @contribution.collect!
           send_notification_emails
           redirect_to book_path(@campaign.book_id), notice: 'Your contribution has been saved successfully. Expect to receive a confirmation email with all of the details.'
         else
+          logger.debug "Unable to process the payment #{@payment.inspect}: #{@payment.errors.full_messages.to_sentence}"
           flash[:alert] = "Unable to process the payment."
           render :payment
         end
       else
+        logger.debug "Unable to save the fulfillment #{@fulfillment.inspect}: #{@fulfillment.errors.full_messages.to_sentence}"
         flash[:alert] = "Unable to save the fulfillment."
         render :payment
       end
     else
+      logger.debug "Unable to save the contributions #{@contribution.inspect}: #{@contribution.errors.full_messages.to_sentence}, payment errors: #{@payment.errors.full_messages.to_sentence}"
       flash[:alert] = "Unable to save the contribution."
       render :payment
     end
@@ -92,11 +97,11 @@ class ContributionsController < ApplicationController
       :address2,
       :city,
       :state,
-      :postal_code,
-      :country_code
+      :postal_code
     ). merge(contribution: @contribution,
              first_name: @payment.first_name,
-             last_name: @payment.last_name)
+             last_name: @payment.last_name,
+             country_code: 'US')
   end
 
   def electronic_fulfillment_params
@@ -121,9 +126,8 @@ class ContributionsController < ApplicationController
       :billing_address_2,
       :billing_city,
       :billing_state,
-      :billing_postal_code,
-      :billing_country_code
-    )
+      :billing_postal_code
+    ).merge(billing_country_code: 'US')
   end
 
   def contribution_params
@@ -150,8 +154,7 @@ class ContributionsController < ApplicationController
   end
 
   def load_reward
-    id = params[:fulfillment].try(:[], :reward_id) || params[:reward_id]
-    @reward = Reward.find(id) if id.present?
+    @reward = Reward.find(selected_reward_id) if selected_reward_id.present?
   end
 
   def send_notification_emails
@@ -180,7 +183,7 @@ class ContributionsController < ApplicationController
   end
 
   def selected_reward_id
-    params[:fulfillment].try(:[], :reward_id) || params[:reward_id]
+    @selected_reward_id ||= params[:fulfillment].try(:[], :reward_id) || params[:reward_id]
   end
 
   def validate_state!

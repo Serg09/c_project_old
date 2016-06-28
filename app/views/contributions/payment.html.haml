@@ -3,24 +3,37 @@
 
 .container.container-default
   =form_for(@contribution, url: pay_contribution_path(@contribution)) do |f|
-    -if @fulfillment
-      =fields_for :fulfillment, @fulfillment do |fulfillment_fields|
-        =fulfillment_fields.hidden_field :reward_id
     .row
       .col-md-12
         =fields_for :payment, @payment do |payment_fields|
           .col-md-4
+            %h3 Payment
             =render 'credit_card_form_fields', f: payment_fields
           .col-md-4
+            %h3 Billing address
             .row
               .col-md-12
                 .form-group{ :class => form_group_class(@contribution, :email) }
                   =f.label :email, class: 'control-label'
                   =f.text_field :email, class: 'form-control', maxlength: 256
                   =help_blocks @contribution, :email
-                .row
-                  .col-md-12
-                    =render 'address_form_fields', f: payment_fields, model: @payment
+
+                =render 'billing_address_form_fields', f: payment_fields, model: @payment
+          -if @fulfillment
+            =fields_for :fulfillment, @fulfillment do |fulfillment_fields|
+              =fulfillment_fields.hidden_field :reward_id
+              -if @reward.physical_address_required?
+                .col-md-4
+                  %h3 Shipping address
+                  .radio
+                    =label_tag for: :shipping_address_same_1 do
+                      =radio_button_tag :shipping_address_same, 1, @shipping_address_same
+                      Same as billing address
+                  .radio
+                    =label_tag for: :shipping_address_same_0 do
+                      =radio_button_tag :shipping_address_same, 0, !@shipping_address_same
+                      Other
+                    =render 'address_form_fields', f: fulfillment_fields, model: @fulfillment
     .row
       .col-md-12
         =f.submit 'Submit', class: 'btn btn-primary'
