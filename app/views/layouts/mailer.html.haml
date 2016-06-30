@@ -45,12 +45,14 @@
       %tr
         %td
           =image_tag attachments['logo.png'].url
-        %td.text-right.text-bottom
-          -if @unsubscribe_url
+      %tr
+        %td.main-content
+          = yield
+      -if @unsubscribe_url
+        %tr
+          %td
+            %hr
+        %tr
+          %td
             Click here to
             =link_to 'unsubscribe', @unsubscribe_url
-          -else
-            &nbsp;
-      %tr
-        %td.main-content{ colspan: 2 }
-          = yield
