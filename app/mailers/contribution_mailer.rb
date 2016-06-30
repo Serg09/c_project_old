@@ -3,7 +3,6 @@ class ContributionMailer < ApplicationMailer
 
   # Sends an email receipt to the donor
   def contribution_receipt(contribution)
-    inline_images
     @contribution = contribution
     @book = @contribution.campaign.book
     @author = @book.author
@@ -13,7 +12,6 @@ class ContributionMailer < ApplicationMailer
   # Notifies the author of the book receiving the contribution
   # the the contribution has been received
   def contribution_received_notify_author(contribution)
-    inline_images
     @contribution = contribution
     @book = @contribution.campaign.book
     @unsubscribe_url = unsubscribe_url(@book.author.unsubscribe_token)

@@ -1,5 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
   default from: 'noreply@crowdscribed.com'
+  before_filter :inline_images
   layout 'mailer'
 
   protected
