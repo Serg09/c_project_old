@@ -1,5 +1,4 @@
-class ApplicationMailer < ActionMailer::Base
-  default from: 'noreply@crowdscribed.com'
+class DeviseCustomMailer < Devise::Mailer
   before_filter :inline_images
   layout 'mailer'
 

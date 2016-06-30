@@ -12,6 +12,6 @@ Feature: Unsubscribe from emails
     When I open the email with subject /^Campaign progress/
     Then I should see "unsubscribe" in the email body
 
-    When I click the first link in the email
+    When I follow "unsubscribe" in the email
     Then I should see "You have been unsubscribed" within the notification area
     And I should see "You may change your email preferences at any time by signing in and updating your profile" within the main content
