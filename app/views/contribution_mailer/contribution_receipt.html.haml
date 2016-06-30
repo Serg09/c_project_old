@@ -1,0 +1,13 @@
+%h1 Contribution Receipt
+
+Your contribution for the book
+%i= @book.administrative_title
+by #{h @author.full_name}
+in the amount of #{h number_to_currency(@contribution.amount)} has been
+received.
+
+Your card will not be charged until the campaign reaches its goal.
+
+%p
+  =link_to 'Click here', book_url(@book)
+  to find more information about the book.

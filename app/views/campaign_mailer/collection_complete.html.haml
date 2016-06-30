@@ -1,7 +1,7 @@
 %h1 Campaign collection complete
 
 %p
-  Donation collection for your campaign for 
+  Contribution collection for your campaign for 
   %i
     =@campaign.book.administrative_title
   targeting
@@ -13,7 +13,7 @@
 %table
   %tr
     %th.text-right Contributions
-    %td.text-right= @campaign.donations.count
+    %td.text-right= @campaign.contributions.count
   %tr
     %th.text-right Amount received
     %td.text-right= number_to_currency(@campaign.total_donated)

@@ -4,7 +4,7 @@
 #
 #  id           :integer          not null, primary key
 #  type         :string(50)       not null
-#  donation_id  :integer          not null
+#  contribution_id  :integer          not null
 #  reward_id    :integer          not null
 #  email        :string(200)
 #  address1     :string(100)
@@ -21,22 +21,22 @@
 #
 
 class Fulfillment < ActiveRecord::Base
-  belongs_to :donation
+  belongs_to :contribution
   belongs_to :reward
-  validates_presence_of :donation_id, :reward_id, :first_name, :last_name
+  validates_presence_of :contribution_id, :reward_id, :first_name, :last_name
   validates_length_of :first_name, maximum: 100
   validates_length_of :last_name, maximum: 100
 
   scope :delivered, ->{where(delivered: true)}
   scope :undelivered, ->{where(delivered: false)}
   scope :house, ->{joins(reward: :house_reward)}
-  scope :ready, ->{joins(donation: :campaign).where(campaigns: {state: 'collected'}, donations: {state: 'collected'})}
+  scope :ready, ->{joins(contribution: :campaign).where(campaigns: {state: 'collected'}, contributions: {state: 'collected'})}
 
   def self.author(author_or_id)
     id = author_or_id.respond_to?(:id) ?
       author_or_id.id :
       author_or_id
-    joins(:reward, donation: [campaign: :book]).
+    joins(:reward, contribution: [campaign: :book]).
       where('house_reward_id is null and books.author_id = ?', id)
   end
 end

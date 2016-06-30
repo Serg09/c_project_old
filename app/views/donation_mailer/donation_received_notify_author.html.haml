@@ -1,9 +1,0 @@
-%h1 Donation Received!
-
-Your campaign for
-%i= @donation.campaign.book.administrative_title
-has received a donation in the amount of #{h number_to_currency(@donation.amount)}.
-
-%p
-  =link_to 'Click here', campaign_url(@donation.campaign_id)
-  to see the progress of the campaign.

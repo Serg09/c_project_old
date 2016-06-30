@@ -1,0 +1,20 @@
+=content_for :page_title do
+  Make a contribution!
+
+.container.container-default
+  .row
+    .col-md-12
+      %h1 Contribute!
+      %h2
+        Support the book
+        %i= @campaign.book.approved_version.title
+        by
+        =@campaign.book.author.full_name
+        with a contribution.
+  =form_for(@contribution) do |f|
+    .row
+      .col-md-12
+        =render 'amounts_form_fields', f: f
+    .row
+      .col-md-12
+        =f.submit 'Next', class: 'btn btn-primary'

@@ -16,7 +16,7 @@ class CampaignMailer < ApplicationMailer
   def collection_complete(campaign)
     inline_images
     @campaign = campaign
-    mail to: campaign.book.author.email, subject: 'Campaign donation collection complete'
+    mail to: campaign.book.author.email, subject: 'Campaign contribution collection complete'
   end
 
   def succeeded(campaign)

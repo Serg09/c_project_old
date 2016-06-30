@@ -8,23 +8,23 @@ RSpec.describe Fulfillment, type: :model do
   let (:ar1) { FactoryGirl.create(:reward, campaign: collected_campaign) }
   let (:ar2) { FactoryGirl.create(:reward, campaign: active_campaign) }
 
-  let (:d1) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
-  let (:d2) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
-  let (:d3) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
-  let (:d4) { FactoryGirl.create(:collected_donation, campaign: active_campaign) }
-  let (:d5) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
-  let (:d6) { FactoryGirl.create(:collected_donation, campaign: collected_campaign) }
-  let (:d7) { FactoryGirl.create(:cancelled_donation, campaign: collected_campaign) }
-  let (:d8) { FactoryGirl.create(:collected_donation, campaign: active_campaign) }
+  let (:d1) { FactoryGirl.create(:collected_contribution, campaign: collected_campaign) }
+  let (:d2) { FactoryGirl.create(:collected_contribution, campaign: collected_campaign) }
+  let (:d3) { FactoryGirl.create(:collected_contribution, campaign: collected_campaign) }
+  let (:d4) { FactoryGirl.create(:collected_contribution, campaign: active_campaign) }
+  let (:d5) { FactoryGirl.create(:collected_contribution, campaign: collected_campaign) }
+  let (:d6) { FactoryGirl.create(:collected_contribution, campaign: collected_campaign) }
+  let (:d7) { FactoryGirl.create(:cancelled_contribution, campaign: collected_campaign) }
+  let (:d8) { FactoryGirl.create(:collected_contribution, campaign: active_campaign) }
 
-  let!(:f1) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: hr, donation: d1) }
-  let!(:f2) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: ar1, donation: d2) }
-  let!(:f3) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: hr, donation: d3) }
-  let!(:f4) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: ar2, donation: d4) }
-  let!(:f5) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: hr, donation: d5) }
-  let!(:f6) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: ar1, donation: d6) }
-  let!(:f7) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: hr, donation: d7) }
-  let!(:f8) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: ar2, donation: d8) }
+  let!(:f1) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: hr, contribution: d1) }
+  let!(:f2) { FactoryGirl.create(:physical_fulfillment, delivered: false, reward: ar1, contribution: d2) }
+  let!(:f3) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: hr, contribution: d3) }
+  let!(:f4) { FactoryGirl.create(:electronic_fulfillment, delivered: false, reward: ar2, contribution: d4) }
+  let!(:f5) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: hr, contribution: d5) }
+  let!(:f6) { FactoryGirl.create(:physical_fulfillment, delivered: true, reward: ar1, contribution: d6) }
+  let!(:f7) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: hr, contribution: d7) }
+  let!(:f8) { FactoryGirl.create(:electronic_fulfillment, delivered: true, reward: ar2, contribution: d8) }
 
   describe '::undelivered' do
     it 'returns a list of fulfillments that have not been delivered' do

@@ -1,0 +1,9 @@
+%h1 Contribution Received!
+
+Your campaign for
+%i= @contribution.campaign.book.administrative_title
+has received a contribution in the amount of #{h number_to_currency(@contribution.amount)}.
+
+%p
+  =link_to 'Click here', campaign_url(@contribution.campaign_id)
+  to see the progress of the campaign.

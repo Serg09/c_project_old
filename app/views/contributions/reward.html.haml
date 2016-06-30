@@ -1,0 +1,20 @@
+=content_for :page_title do
+  Make a contribution!
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for(@contribution, url: set_reward_contribution_path(@contribution)) do |f|
+        -@campaign.rewards.for_amount(@contribution.amount).by_minimum_contribution.each do |reward|
+          %h3
+            .radio
+              %label{ for: "contribution_amount_option_#{reward.id}" }
+                =radio_button_tag 'fulfillment[reward_id]', reward.id, reward.id == @reward.try(:id), id: "contribution_amount_option_#{reward.id}"
+                =reward.description
+        %h3
+          .radio
+            %label{ for: "contribution_amount_option_none" }
+              =radio_button_tag 'fulfillment[reward_id]', '', @reward.nil?, id: "contribution_amount_option_none"
+              I don't require anything in return for my contribution.
+        =link_to 'Back', edit_contribution_path(@contribution), class: 'btn btn-default', title: 'Click here to select a different contribution amount.'
+        =f.submit 'Next', class: 'btn btn-primary'

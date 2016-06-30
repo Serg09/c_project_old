@@ -9,7 +9,7 @@ Feature: Remove a reward
     And author john@doe.com has a book titled "Giving It Away"
     And book "Giving It Away" has an unstarted campaign targeting $1,000 by 4/30/2016
     And the campaign for book "Giving It Away" has the following rewards
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Signed copy   |               20 |
       | Unsigned copy |               15 |
       | Blank copy    |               10 |
@@ -34,7 +34,7 @@ Feature: Remove a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Blank copy    |              $10 |
       | Unsigned copy |              $15 |
       | Signed copy   |              $20 |
@@ -43,12 +43,12 @@ Feature: Remove a reward
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see "The reward was removed successfully" within the notification area
     And I should see the following rewards table
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Blank copy    |              $10 |
       | Signed copy   |              $20 |
 
   Scenario: An author attempts to remove a reward that has already been selected
-    Given the campaign for the book "Giving It Away" has received the following donations
+    Given the campaign for the book "Giving It Away" has received the following contributions
       | Email                     | Amount |     Date | Reward        |
       | sally.readerton@gmail.com |    100 | 4/1/2016 | Unsigned copy |
 
@@ -70,7 +70,7 @@ Feature: Remove a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description   | Minimum donation |
+      | Description   | Minimum contribution |
       | Blank copy    |              $10 |
       | Unsigned copy |              $15 |
       | Signed copy   |              $20 |

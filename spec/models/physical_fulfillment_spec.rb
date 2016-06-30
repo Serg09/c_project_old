@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe PhysicalFulfillment, type: :model do
   let (:reward) { FactoryGirl.create(:reward, physical_address_required: true) }
-  let (:donation) { FactoryGirl.create(:donation, campaign: reward.campaign) }
+  let (:contribution) { FactoryGirl.create(:contribution, campaign: reward.campaign) }
   let (:attributes) do
     {
-      donation_id: donation.id,
+      contribution_id: contribution.id,
       reward_id: reward.id,
       first_name: 'John',
       last_name: 'Doe',
@@ -23,17 +23,17 @@ RSpec.describe PhysicalFulfillment, type: :model do
     expect(fulfillment).to be_valid
   end
 
-  describe '#donation_id' do
+  describe '#contribution_id' do
     it 'is required' do
-      fulfillment = PhysicalFulfillment.new attributes.except(:donation_id)
-      expect(fulfillment).to have_at_least(1).error_on :donation_id
+      fulfillment = PhysicalFulfillment.new attributes.except(:contribution_id)
+      expect(fulfillment).to have_at_least(1).error_on :contribution_id
     end
   end
 
-  describe '#donation' do
-    it 'is a reference to the donation that earned the reward' do
+  describe '#contribution' do
+    it 'is a reference to the contribution that earned the reward' do
       fulfillment = PhysicalFulfillment.new attributes
-      expect(fulfillment.donation).to eq donation
+      expect(fulfillment.contribution).to eq contribution
     end
   end
 
@@ -45,7 +45,7 @@ RSpec.describe PhysicalFulfillment, type: :model do
   end
 
   describe '#reward' do
-    it 'is a reference to the reward the donor earned with the donation' do
+    it 'is a reference to the reward the donor earned with the contribution' do
       fulfillment = PhysicalFulfillment.new attributes
       expect(fulfillment.reward).to eq reward
     end

@@ -16,6 +16,6 @@
       =book_version.long_or_short_description
     %p
       -if book_version.active_campaign.present?
-        =link_to 'Contribute!', new_campaign_donation_path(book_version.active_campaign), :class => 'btn btn-lg btn-success', :title => 'Click here to contribute to the campaign to make this book a reality!'
+        =link_to 'Contribute!', new_campaign_contribution_path(book_version.active_campaign), :class => 'btn btn-lg btn-success', :title => 'Click here to contribute to the campaign to make this book a reality!'
       -if can?(:update, book_version.book) && book_version.book.campaigns.none?
         =link_to 'Fund This Title!', book_campaigns_path(book_version.book_id), :class => 'btn btn-lg btn-success', :title => 'Click here to create a crowdfunding campaign for this title.'

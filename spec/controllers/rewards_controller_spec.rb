@@ -7,7 +7,7 @@ RSpec.describe RewardsController, type: :controller do
     {
       description: 'Endless gratitude',
       long_description: 'blah blah blah',
-      minimum_donation: 10,
+      minimum_contribution: 10,
       physical_address_required: true
     }
   end
@@ -36,7 +36,7 @@ RSpec.describe RewardsController, type: :controller do
         end
       end
 
-      context 'for a reward that is not associated with any donations' do
+      context 'for a reward that is not associated with any contributions' do
         describe "GET #edit" do
           it "returns http success" do
             get :edit, id: reward
@@ -73,10 +73,10 @@ RSpec.describe RewardsController, type: :controller do
         end
       end
 
-      context 'for a reward that is associated at least one donation' do
-        let (:donation) { FactoryGirl.create(:donation, campaign: campaign) }
+      context 'for a reward that is associated at least one contribution' do
+        let (:contribution) { FactoryGirl.create(:contribution, campaign: campaign) }
         let!(:fulfillment) do
-          FactoryGirl.create(:electronic_fulfillment, donation: donation,
+          FactoryGirl.create(:electronic_fulfillment, contribution: contribution,
                                                       reward: reward)
         end
 

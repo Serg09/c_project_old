@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   resources :book_versions, only: [:edit, :update, :show]
   resources :images, only: :show
   resources :campaigns, only: [:show, :edit, :update, :destroy] do
-    resources :donations, only: [:new, :create]
+    resources :contributions, only: [:new, :create]
     resources :rewards, only: [:new, :create]
     member do
       get :terms
@@ -47,7 +47,14 @@ Rails.application.routes.draw do
       patch :prolong
     end
   end
-  resources :donations, only: [:show]
+  resources :contributions, only: [:show, :edit, :update] do
+    member do
+      get :reward
+      patch :set_reward
+      get :payment
+      patch :pay
+    end
+  end
   resources :rewards, only: [:edit, :update, :destroy]
   resources :fulfillments, only: [:index] do
     member do

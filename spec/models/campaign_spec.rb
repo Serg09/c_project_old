@@ -77,15 +77,15 @@ RSpec.describe Campaign, type: :model do
 
   describe '#target_amount_reached?' do
     let (:campaign) { FactoryGirl.create(:campaign, target_amount: 500) }
-    let!(:donation) { FactoryGirl.create(:donation, campaign: campaign, amount: 499) }
-    let (:donation2) { FactoryGirl.create(:donation, campaign: campaign, amount: 1) }
+    let!(:contribution) { FactoryGirl.create(:contribution, campaign: campaign, amount: 499) }
+    let (:contribution2) { FactoryGirl.create(:contribution, campaign: campaign, amount: 1) }
 
     it 'is false if the total donated is less than #target_amount' do
       expect(campaign.target_amount_reached?).to be false
     end
 
     it 'is true if the total dontated is equal to or more than #target_amount' do
-      donation2
+      contribution2
       expect(campaign.target_amount_reached?).to be true
     end
   end
@@ -210,32 +210,32 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  describe '#donations' do
-    it 'is a list of the donations that have been made to the campaign' do
+  describe '#contributions' do
+    it 'is a list of the contributions that have been made to the campaign' do
       campaign = Campaign.new attributes
-      expect(campaign).to have(0).donations
+      expect(campaign).to have(0).contributions
     end
   end
 
-  shared_context :donations do
+  shared_context :contributions do
     let (:campaign) { FactoryGirl.create(:campaign, target_amount: 500, target_date: '2016-04-30') }
-    let!(:donation1) { FactoryGirl.create(:donation, campaign: campaign, amount: 25) }
-    let!(:donation2) { FactoryGirl.create(:donation, campaign: campaign, amount: 50) }
+    let!(:contribution1) { FactoryGirl.create(:contribution, campaign: campaign, amount: 25) }
+    let!(:contribution2) { FactoryGirl.create(:contribution, campaign: campaign, amount: 50) }
   end
 
   describe '#total_donated' do
-    include_context :donations
-    it 'returns the sum of the donations' do
+    include_context :contributions
+    it 'returns the sum of the contributions' do
       expect(campaign.total_donated).to eq 75
     end
   end
 
   context 'before the target amount is reached' do
-    include_context :donations
+    include_context :contributions
 
-    describe '#donation_amount_needed' do
+    describe '#contribution_amount_needed' do
       it 'returns the difference between the target amount and the total donated' do
-        expect(campaign.donation_amount_needed).to eq 425
+        expect(campaign.contribution_amount_needed).to eq 425
       end
     end
 
@@ -247,12 +247,12 @@ RSpec.describe Campaign, type: :model do
   end
 
   context 'after the target amount is reached' do
-    include_context :donations
-    let!(:donation3) { FactoryGirl.create(:donation, campaign: campaign, amount: 426) }
+    include_context :contributions
+    let!(:contribution3) { FactoryGirl.create(:contribution, campaign: campaign, amount: 426) }
 
-    describe '#donation_amount_needed' do
+    describe '#contribution_amount_needed' do
       it 'returns zero' do
-        expect(campaign.donation_amount_needed).to eq 0
+        expect(campaign.contribution_amount_needed).to eq 0
       end
     end
 
@@ -264,7 +264,7 @@ RSpec.describe Campaign, type: :model do
   end
 
   describe '#days_remaining' do
-    include_context :donations
+    include_context :contributions
 
     context 'before the target date' do
       before(:each) { Timecop.freeze(DateTime.parse('2016-03-02 12:00:00 CST')) }
@@ -286,7 +286,7 @@ RSpec.describe Campaign, type: :model do
   end
 
   describe '#rewards' do
-    it 'is a list of donation rewards defined for the campaign' do
+    it 'is a list of contribution rewards defined for the campaign' do
       campaign = Campaign.new attributes
       expect(campaign).to have(0).rewards
     end
@@ -324,7 +324,7 @@ RSpec.describe Campaign, type: :model do
         end.not_to change(campaign, :state)
       end
 
-      it 'does not queue a job to execute the donation payments' do
+      it 'does not queue a job to execute the contribution payments' do
         expect(Resque).not_to receive(:enqueue)
         campaign.collect
       end
@@ -343,48 +343,48 @@ RSpec.describe Campaign, type: :model do
       end
     end
 
-    describe '#collect_donations' do
-      it 'does not execute payment on any donation' do
-        campaign.donations.each do |donation|
-          expect(donation).not_to receive(:collect)
+    describe '#collect_contributions' do
+      it 'does not execute payment on any contribution' do
+        campaign.contributions.each do |contribution|
+          expect(contribution).not_to receive(:collect)
         end
         begin
-          campaign.collect_donations
+          campaign.collect_contributions
         rescue
         end
       end
 
       it 'raises InvalidCampaignStateError' do
         expect do
-          campaign.collect_donations
+          campaign.collect_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
 
-    describe '#cancel_donations' do
-      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
-      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+    describe '#cancel_contributions' do
+      let!(:contribution1) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
+      let!(:contribution2) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
 
-      it 'does not cancel any donations' do
-        campaign.donations.each do |d|
+      it 'does not cancel any contributions' do
+        campaign.contributions.each do |d|
           expect(d).not_to receive(:cancel)
         end
         begin
-          campaign.cancel_donations
+          campaign.cancel_contributions
         rescue
         end
       end
 
       it 'raises InvalidCampaignStateError' do
         expect do
-          campaign.cancel_donations
+          campaign.cancel_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
 
       it 'does not change the state' do
         expect do
           begin
-            campaign.cancel_donations
+            campaign.cancel_contributions
           rescue
           end
         end.not_to change(campaign, :state)
@@ -434,8 +434,8 @@ RSpec.describe Campaign, type: :model do
         end.to change(campaign, :state).from('active').to('collecting')
       end
 
-      it 'queues a job to execute the donation payments' do
-        expect(Resque).to receive(:enqueue).with(DonationCollector, campaign.id)
+      it 'queues a job to execute the contribution payments' do
+        expect(Resque).to receive(:enqueue).with(ContributionCollector, campaign.id)
         campaign.collect
       end
     end
@@ -447,59 +447,59 @@ RSpec.describe Campaign, type: :model do
         end.to change(campaign, :state).from('active').to('cancelling')
       end
 
-      it 'does not queue a job to execute the donation payments' do
-        expect(Resque).not_to receive(:enqueue).with(DonationCollector, anything)
+      it 'does not queue a job to execute the contribution payments' do
+        expect(Resque).not_to receive(:enqueue).with(ContributionCollector, anything)
         campaign.cancel
       end
 
       it 'enqueues a job to void the payments' do
-        expect(Resque).to receive(:enqueue).with(DonationCanceller, campaign.id)
+        expect(Resque).to receive(:enqueue).with(ContributionCanceller, campaign.id)
         campaign.cancel
       end
     end
 
-    describe '#collect_donations' do
-      it 'does not execute payment on any donation' do
-        campaign.donations.each do |donation|
-          expect(donation).not_to receive(:collect)
+    describe '#collect_contributions' do
+      it 'does not execute payment on any contribution' do
+        campaign.contributions.each do |contribution|
+          expect(contribution).not_to receive(:collect)
         end
         begin
-          campaign.collect_donations
+          campaign.collect_contributions
         rescue
         end
       end
 
       it 'returns false' do
         expect do
-          campaign.collect_donations
+          campaign.collect_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
 
-    describe '#cancel_donations' do
-      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
-      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+    describe '#cancel_contributions' do
+      let!(:contribution1) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
+      let!(:contribution2) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
 
-      it 'does not cancel any donations' do
-        campaign.donations.each do |d|
+      it 'does not cancel any contributions' do
+        campaign.contributions.each do |d|
           expect(d).not_to receive(:cancel)
         end
         begin
-          campaign.cancel_donations
+          campaign.cancel_contributions
         rescue
         end
       end
 
       it 'raises InvalidCampaignStateError' do
         expect do
-          campaign.cancel_donations
+          campaign.cancel_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
 
       it 'does not change the state' do
         expect do
           begin
-            campaign.cancel_donations
+            campaign.cancel_contributions
           rescue
           end
         end.not_to change(campaign, :state)
@@ -539,7 +539,7 @@ RSpec.describe Campaign, type: :model do
         end.not_to change(campaign, :state)
       end
 
-      it 'does not queue a job to execute the donation payments' do
+      it 'does not queue a job to execute the contribution payments' do
         expect(Resque).not_to receive(:enqueue)
         campaign.collect
       end
@@ -552,54 +552,54 @@ RSpec.describe Campaign, type: :model do
         end.not_to change(campaign, :state)
       end
 
-      it 'does not queue a job to execute the donation payments' do
+      it 'does not queue a job to execute the contribution payments' do
         expect(Resque).not_to receive(:enqueue)
         campaign.cancel
       end
     end
 
-    describe '#collect_donations' do
-      it 'does not execute payment on any donation' do
-        campaign.donations.each do |donation|
-          expect(donation).not_to receive(:collect)
+    describe '#collect_contributions' do
+      it 'does not execute payment on any contribution' do
+        campaign.contributions.each do |contribution|
+          expect(contribution).not_to receive(:collect)
         end
         begin
-          campaign.collect_donations
+          campaign.collect_contributions
         rescue
         end
       end
 
       it 'returns false' do
         expect do
-          campaign.collect_donations
+          campaign.collect_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
 
-    describe '#cancel_donations' do
-      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
-      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+    describe '#cancel_contributions' do
+      let!(:contribution1) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
+      let!(:contribution2) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
 
-      it 'does not cancel any donations' do
-        campaign.donations.each do |d|
+      it 'does not cancel any contributions' do
+        campaign.contributions.each do |d|
           expect(d).not_to receive(:cancel)
         end
         begin
-          campaign.cancel_donations
+          campaign.cancel_contributions
         rescue
         end
       end
 
       it 'raises InvalidCampaignStateError' do
         expect do
-          campaign.cancel_donations
+          campaign.cancel_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
 
       it 'does not change the state' do
         expect do
           begin
-            campaign.cancel_donations
+            campaign.cancel_contributions
           rescue
           end
         end.not_to change(campaign, :state)
@@ -617,7 +617,7 @@ RSpec.describe Campaign, type: :model do
         end.not_to change(campaign, :state)
       end
 
-      it 'does not queue a job to execute the donation payments' do
+      it 'does not queue a job to execute the contribution payments' do
         expect(Resque).not_to receive(:enqueue)
         campaign.collect
       end
@@ -630,54 +630,54 @@ RSpec.describe Campaign, type: :model do
         end.not_to change(campaign, :state)
       end
 
-      it 'does not queue a job to execute the donation payments' do
+      it 'does not queue a job to execute the contribution payments' do
         expect(Resque).not_to receive(:enqueue)
         campaign.cancel
       end
     end
 
-    describe '#collect_donations' do
-      it 'does not execute payment on any donation' do
-        campaign.donations.each do |donation|
-          expect(donation).not_to receive(:collect)
+    describe '#collect_contributions' do
+      it 'does not execute payment on any contribution' do
+        campaign.contributions.each do |contribution|
+          expect(contribution).not_to receive(:collect)
         end
         begin
-          campaign.collect_donations
+          campaign.collect_contributions
         rescue
         end
       end
 
       it 'returns false' do
         expect do
-          campaign.collect_donations
+          campaign.collect_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
     end
 
-    describe '#cancel_donations' do
-      let!(:donation1) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
-      let!(:donation2) { FactoryGirl.create(:cancelled_donation, campaign: campaign) }
+    describe '#cancel_contributions' do
+      let!(:contribution1) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
+      let!(:contribution2) { FactoryGirl.create(:cancelled_contribution, campaign: campaign) }
 
-      it 'does not cancel any donations' do
-        campaign.donations.each do |d|
+      it 'does not cancel any contributions' do
+        campaign.contributions.each do |d|
           expect(d).not_to receive(:cancel)
         end
         begin
-          campaign.cancel_donations
+          campaign.cancel_contributions
         rescue
         end
       end
 
       it 'raises InvalidCampaignStateError' do
         expect do
-          campaign.cancel_donations
+          campaign.cancel_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
 
       it 'does not change the state' do
         expect do
           begin
-            campaign.cancel_donations
+            campaign.cancel_contributions
           rescue
           end
         end.not_to change(campaign, :state)
@@ -687,24 +687,24 @@ RSpec.describe Campaign, type: :model do
 
   context 'for a cancelling campaign' do
     let (:campaign) { FactoryGirl.create(:cancelling_campaign) }
-    let!(:donation1) { FactoryGirl.create(:collected_donation, campaign: campaign) }
-    let!(:donation2) { FactoryGirl.create(:collected_donation, campaign: campaign) }
+    let!(:contribution1) { FactoryGirl.create(:collected_contribution, campaign: campaign) }
+    let!(:contribution2) { FactoryGirl.create(:collected_contribution, campaign: campaign) }
 
-    describe '#cancel_donations' do
+    describe '#cancel_contributions' do
       it 'returns true' do
-        expect(campaign.cancel_donations).to be true
+        expect(campaign.cancel_contributions).to be true
       end
 
-      it 'cancels each donation' do
-        campaign.donations.each do |d|
+      it 'cancels each contribution' do
+        campaign.contributions.each do |d|
           expect(d).to receive(:cancel!).and_return true
         end
-        campaign.cancel_donations
+        campaign.cancel_contributions
       end
 
       it 'changes the state to "cancelled"' do
         expect do
-          campaign.cancel_donations
+          campaign.cancel_contributions
         end.to change(campaign, :state).from('cancelling').to('cancelled')
       end
     end
@@ -712,56 +712,56 @@ RSpec.describe Campaign, type: :model do
 
   context 'for a collecting campaign' do
     let (:campaign) { FactoryGirl.create(:collecting_campaign) }
-    let!(:donation1) { FactoryGirl.create(:collected_donation, campaign: campaign, amount: 100) }
-    let!(:donation2) { FactoryGirl.create(:collected_donation, campaign: campaign, amount: 125) }
-    let!(:donation3) { FactoryGirl.create(:collected_donation, campaign: campaign, amount: 75) }
-    let!(:payment1) { FactoryGirl.create(:payment, donation: donation1) }
-    let!(:payment2) { FactoryGirl.create(:payment, donation: donation2) }
-    let!(:payment3) { FactoryGirl.create(:payment, donation: donation3) }
+    let!(:contribution1) { FactoryGirl.create(:collected_contribution, campaign: campaign, amount: 100) }
+    let!(:contribution2) { FactoryGirl.create(:collected_contribution, campaign: campaign, amount: 125) }
+    let!(:contribution3) { FactoryGirl.create(:collected_contribution, campaign: campaign, amount: 75) }
+    let!(:payment1) { FactoryGirl.create(:payment, contribution: contribution1) }
+    let!(:payment2) { FactoryGirl.create(:payment, contribution: contribution2) }
+    let!(:payment3) { FactoryGirl.create(:payment, contribution: contribution3) }
 
-    describe '#collect_donations' do
-      context 'when all donations are collected successfully' do
-        before(:each) { allow_any_instance_of(Donation).to receive(:collect).and_return(true) }
+    describe '#collect_contributions' do
+      context 'when all contributions are collected successfully' do
+        before(:each) { allow_any_instance_of(Contribution).to receive(:collect).and_return(true) }
 
         it 'returns true' do
-          expect(campaign.collect_donations).to be true
+          expect(campaign.collect_contributions).to be true
         end
 
         it 'changes the campaign state to "collected"' do
           expect do
-            campaign.collect_donations
+            campaign.collect_contributions
           end.to change(campaign, :state).from('collecting').to('collected')
         end
       end
 
-      context 'when a donation collection fails' do
+      context 'when a contribution collection fails' do
 
         # This won't be implemented until we have readers that can save the credit cards with us
         #it 'does not change the state of the campaign'
       end
     end
 
-    describe '#cancel_donations' do
-      it 'does not cancel any donations' do
-        campaign.donations.each do |d|
+    describe '#cancel_contributions' do
+      it 'does not cancel any contributions' do
+        campaign.contributions.each do |d|
           expect(d).not_to receive(:cancel)
         end
         begin
-          campaign.cancel_donations
+          campaign.cancel_contributions
         rescue
         end
       end
 
       it 'raises InvalidCampaignStateError' do
         expect do
-          campaign.cancel_donations
+          campaign.cancel_contributions
         end.to raise_error Exceptions::InvalidCampaignStateError
       end
 
       it 'does not change the state' do
         expect do
           begin
-            campaign.cancel_donations
+            campaign.cancel_contributions
           rescue
           end
         end.not_to change(campaign, :state)
