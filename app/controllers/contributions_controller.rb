@@ -101,7 +101,16 @@ class ContributionsController < ApplicationController
     ). merge(contribution: @contribution,
              first_name: @payment.first_name,
              last_name: @payment.last_name,
-             country_code: 'US')
+             country_code: 'US').tap do |h|
+               if params[:shipping_address_same] == '1'
+                 h.merge! address1: @payment.billing_address_1,
+                          address2: @payment.billing_address_2,
+                          city: @payment.billing_city,
+                          state: @payment.billing_state,
+                          postal_code: @payment.billing_postal_code,
+                          country_code: @payment.billing_country_code
+               end
+             end
   end
 
   def electronic_fulfillment_params
