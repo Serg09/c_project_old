@@ -65,11 +65,11 @@ Feature: Make a contribution
     And I fill in "CVV" with "123"
     And I fill in "First name" with "Sally"
     And I fill in "Last name" with "Readerton"
-    And I fill in "Address" with "1234 Main St"
-    And I fill in "Line 2" with "Apt 227"
-    And I fill in "City" with "Bookville"
-    And I fill in "State" with "TX"
-    And I fill in "Postal code" with "75123"
+    And I fill in "Address" with "1234 Main St" within the billing address section
+    And I fill in "Line 2" with "Apt 227" within the billing address section
+    And I fill in "City" with "Bookville" within the billing address section
+    And I fill in "State" with "TX" within the billing address section
+    And I fill in "Postal code" with "75123" within the billing address section
     And I fill in "Email" with "sally.readerton@mymail.com" within the main content
     And I click "Submit"
     Then I should see "Book" within the page title

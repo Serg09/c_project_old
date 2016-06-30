@@ -11,7 +11,7 @@
         by
         =@campaign.book.author.full_name
         with a contribution.
-  =form_for([@campaign, @contribution]) do |f|
+  =form_for(@contribution) do |f|
     .row
       .col-md-12
         =render 'amounts_form_fields', f: f

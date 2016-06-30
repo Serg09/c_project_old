@@ -1,9 +1,9 @@
 class ContributionsController < ApplicationController
   before_filter :authenticate_user!, only: [:index, :show]
   before_filter :load_campaign, only: [:index, :new, :create]
-  before_filter :load_contribution, only: [:show, :reward, :set_reward, :payment, :pay]
+  before_filter :load_contribution, only: [:show, :edit, :update, :reward, :set_reward, :payment, :pay]
   before_filter :validate_state!, only: [:reward, :set_reward, :payment, :pay]
-  before_filter :load_reward, only: [:create, :set_reward, :pay, :payment]
+  before_filter :load_reward, only: [:create, :edit, :update, :reward, :set_reward, :pay, :payment]
 
   respond_to :html
 
@@ -23,15 +23,22 @@ class ContributionsController < ApplicationController
   def create
     @contribution = @campaign.contributions.new contribution_params
     if @contribution.save
-      if @reward
-        redirect_to payment_contribution_path(@contribution, reward_id: @reward.id)
-      elsif @campaign.rewards.none?
-        redirect_to payment_contribution_path(@contribution)
-      else
-        redirect_to reward_contribution_path(@contribution)
-      end
+      redirect_to create_or_edit_redirect_path
     else
       render :new
+    end
+  end
+
+  def edit
+    @fulfillment = @contribution.build_fulfillment(reward_id: @reward.try(:id))
+  end
+
+  def update
+    @contribution.update_attributes contribution_params
+    if @contribution.save
+      redirect_to create_or_edit_redirect_path
+    else
+      render :edit
     end
   end
 
@@ -46,6 +53,16 @@ class ContributionsController < ApplicationController
     if @reward
       @fulfillment = @contribution.build_fulfillment(reward_id: @reward.id)
       @shipping_address_same = true
+      if @reward.minimum_contribution == @contribution.amount
+        @back_path = edit_contribution_path(@contribution, reward_id: @reward.id)
+        @back_title = 'Click here to select a different contribution amount.'
+      else
+        @back_path = reward_contribution_path(@contribution, reward_id: @reward.id)
+        @back_title = 'Click here to select a different reward.'
+      end
+    else
+      @back_path = edit_contribution_path(@contribution)
+      @back_title = 'Click here to select a different contribution amount.'
     end
     @payment = @contribution.payments.new billing_country_code: 'US'
   end
@@ -85,6 +102,16 @@ class ContributionsController < ApplicationController
       PhysicalFulfillment.new physical_fulfillment_params
     else
       ElectronicFulfillment.new electronic_fulfillment_params
+    end
+  end
+
+  def create_or_edit_redirect_path
+    if @reward
+      payment_contribution_path(@contribution, reward_id: @reward.id)
+    elsif @campaign.rewards.none?
+      payment_contribution_path(@contribution)
+    else
+      reward_contribution_path(@contribution)
     end
   end
 
@@ -147,7 +174,7 @@ class ContributionsController < ApplicationController
       if params[:contribution].present?
         h.merge! params.require(:contribution).permit(:amount, :email)
       end
-      if h[:amount].blank? && @reward.present?
+      if @reward.present?
         h[:amount] = @reward.minimum_contribution
       end
     end

@@ -52,7 +52,7 @@ RSpec.describe ContributionsController, type: :controller do
         post :create, campaign_id: campaign,
                       fulfillment: { reward_id: physical_reward.id },
                       contribution: {}
-        expect(response).to redirect_to payment_contribution_path(Contribution.last)
+        expect(response).to redirect_to payment_contribution_path(Contribution.last, reward_id: physical_reward.id)
       end
     end
 
@@ -76,6 +76,49 @@ RSpec.describe ContributionsController, type: :controller do
 
   context 'with an incipient contribution' do
     let (:contribution) { FactoryGirl.create(:incipient_contribution, campaign: campaign) }
+
+    describe 'get :edit' do
+      it 'is successful' do
+        get :edit, id: contribution
+        expect(response).to have_http_status :success
+      end
+    end
+
+    describe 'patch :update' do
+      let (:contribution) do
+        FactoryGirl.create(:incipient_contribution, campaign: campaign,
+                                                    amount: 101)
+      end
+
+      context 'when a reward is selected' do
+        it 'redirects to the :payment action' do
+          patch :update, id: contribution,
+            fulfillment: { reward_id: physical_reward.id },
+            contribution: {}
+          expect(response).to redirect_to payment_contribution_path(Contribution.last, reward_id: physical_reward.id)
+        end
+
+        it 'updates the contribution' do
+          expect do
+            patch :update, id: contribution,
+              fulfillment: { reward_id: physical_reward.id },
+              contribution: {}
+            contribution.reload
+          end.to change(contribution, :amount).from(101).to(physical_reward.minimum_contribution)
+        end
+      end
+
+      context 'when an amount is entered' do
+        it 'redirects to the :reward action' do
+          expect do
+            patch :update, id: contribution,
+              fulfillment: {},
+              contribution: { amount: 201 }
+            contribution.reload
+          end.to change(contribution, :amount).to(201)
+        end
+      end
+    end
 
     describe 'get :reward' do
       it 'is successful' do

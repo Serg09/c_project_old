@@ -18,7 +18,8 @@
                   =f.text_field :email, class: 'form-control', maxlength: 256
                   =help_blocks @contribution, :email
 
-                =render 'billing_address_form_fields', f: payment_fields, model: @payment
+                #billing-address
+                  =render 'billing_address_form_fields', f: payment_fields, model: @payment
           -if @fulfillment
             =fields_for :fulfillment, @fulfillment do |fulfillment_fields|
               =fulfillment_fields.hidden_field :reward_id
@@ -33,7 +34,9 @@
                     =label_tag for: :shipping_address_same_0 do
                       =radio_button_tag :shipping_address_same, 0, !@shipping_address_same
                       Other
-                    =render 'address_form_fields', f: fulfillment_fields, model: @fulfillment
+                    #shipping-address
+                      =render 'address_form_fields', f: fulfillment_fields, model: @fulfillment
     .row
       .col-md-12
-        =f.submit 'Submit', class: 'btn btn-primary'
+        =link_to 'Back', @back_path, class: 'btn btn-default', title: @back_title
+        =f.submit 'Submit', class: 'btn btn-primary', title: 'Click here to complete your contribution.'

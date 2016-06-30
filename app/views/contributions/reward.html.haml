@@ -9,11 +9,12 @@
           %h3
             .radio
               %label{ for: "contribution_amount_option_#{reward.id}" }
-                =radio_button_tag 'fulfillment[reward_id]', reward.id, id: "contribution_amount_option_#{reward.id}"
+                =radio_button_tag 'fulfillment[reward_id]', reward.id, reward.id == @reward.try(:id), id: "contribution_amount_option_#{reward.id}"
                 =reward.description
         %h3
           .radio
             %label{ for: "contribution_amount_option_none" }
-              =radio_button_tag 'fulfillment[reward_id]', '', id: "contribution_amount_option_none"
+              =radio_button_tag 'fulfillment[reward_id]', '', @reward.nil?, id: "contribution_amount_option_none"
               I don't require anything in return for my contribution.
+        =link_to 'Back', edit_contribution_path(@contribution), class: 'btn btn-default', title: 'Click here to select a different contribution amount.'
         =f.submit 'Next', class: 'btn btn-primary'
