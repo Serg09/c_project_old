@@ -139,6 +139,12 @@ ul.footer-menu{
   font-weight: bold;
 }
 
+.floating {
+  width: 100%;
+  position: absolute;
+  margin-top: 4em;
+}
+
 @font-face {
   font-family: Quicksand;
   src: asset-url('Quicksand-Regular.otf');

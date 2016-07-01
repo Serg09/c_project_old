@@ -1,4 +1,6 @@
 -# Top section, guy in jacket
+-if AppSetting.sign_in_disabled?
+  =render 'subscription_form'
 %section#top-section.welcome
   .container
     .row
