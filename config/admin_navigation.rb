@@ -5,6 +5,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.dom_class = 'nav navbar-nav'
     if administrator_signed_in?
       primary.item :users, 'Users', admin_users_path
+      primary.item :subscribers, 'Subscribers', admin_subscribers_path
       primary.item :bios, bio_nav_item_caption, admin_bios_path do |bios|
         bios.auto_highlight = false
         bios.dom_class = 'nav nav-tabs'
