@@ -2,6 +2,7 @@ class SubscribersController < ApplicationController
   respond_to :html
 
   def new
+    @subscriber = Subscriber.new
   end
 
   def create
