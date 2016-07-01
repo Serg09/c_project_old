@@ -7,9 +7,6 @@ class SubscribersController < ApplicationController
   def create
     @subscriber = Subscriber.new subscriber_params
     flash[:notice] = 'You have signed up successfully.' if @subscriber.save
-
-    puts responder.inspect
-
     respond_with @subscriber
   end
 
