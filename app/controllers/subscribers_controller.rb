@@ -6,7 +6,10 @@ class SubscribersController < ApplicationController
 
   def create
     @subscriber = Subscriber.new subscriber_params
-    flash[:notice] = 'You have signed up successfully.' if @subscriber.save
+    if @subscriber.save
+      flash[:notice] = 'You have signed up successfully.'
+      cookies[:subscribed] = { value: '1', expires: 1.week.from_now }
+    end
     respond_with @subscriber
   end
 
