@@ -9,6 +9,7 @@ class SubscribersController < ApplicationController
     if @subscriber.save
       flash[:notice] = 'You have signed up successfully.'
       cookies[:subscribed] = { value: '1', expires: 1.week.from_now }
+      SubscriberMailer.confirmation(@subscriber).deliver_now
     end
     respond_with @subscriber
   end
