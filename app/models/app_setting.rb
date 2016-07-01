@@ -13,7 +13,7 @@
 class AppSetting < ActiveRecord::Base
   def self.app_setting_value(name)
     name = name.to_s.chomp('?')
-    Rails.cache.fetch("app_setting:#{name}", expires_in: 1.hour) do
+    Rails.cache.fetch("app_setting:#{name}", expires_in: cache_duration) do
       find_by(name: name).try(:typed_value)
     end
   end
@@ -37,5 +37,12 @@ class AppSetting < ActiveRecord::Base
 
   def self.well_known_setting_name?(name)
     %w(sign_in_disabled).include? name.to_s.chomp('?')
+  end
+
+  private
+
+  def self.cache_duration
+    return 1.minute if Rails.env.development?
+    1.hour
   end
 end
