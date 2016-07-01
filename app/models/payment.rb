@@ -2,12 +2,12 @@
 #
 # Table name: payments
 #
-#  id          :integer          not null, primary key
+#  id              :integer          not null, primary key
 #  contribution_id :integer          not null
-#  external_id :string           not null
-#  state       :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  external_id     :string
+#  state           :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 
 class Payment < ActiveRecord::Base
