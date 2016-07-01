@@ -9,4 +9,5 @@
               %span{ 'aria-hidden' => true } &times;
               %span.sr-only Close
           .panel-body
-            Form goes here
+            =form_for(@subscriber) do |f|
+              =render 'subscribers/form_fields', f: f, subscriber: @subscriber
