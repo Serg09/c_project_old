@@ -2,22 +2,22 @@
 #
 # Table name: fulfillments
 #
-#  id           :integer          not null, primary key
-#  type         :string(50)       not null
-#  contribution_id  :integer          not null
-#  reward_id    :integer          not null
-#  email        :string(200)
-#  address1     :string(100)
-#  address2     :string(100)
-#  city         :string(100)
-#  state        :string(2)
-#  postal_code  :string(15)
-#  country_code :string(2)
-#  delivered    :boolean          default(FALSE), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  first_name   :string(100)      not null
-#  last_name    :string(100)      not null
+#  id              :integer          not null, primary key
+#  type            :string(50)       not null
+#  contribution_id :integer          not null
+#  reward_id       :integer          not null
+#  email           :string(200)
+#  address1        :string(100)
+#  address2        :string(100)
+#  city            :string(100)
+#  state           :string(2)
+#  postal_code     :string(15)
+#  country_code    :string(2)
+#  delivered       :boolean          default(FALSE), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  first_name      :string(100)      not null
+#  last_name       :string(100)      not null
 #
 
 class Fulfillment < ActiveRecord::Base

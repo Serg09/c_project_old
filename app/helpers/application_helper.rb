@@ -108,6 +108,10 @@ module ApplicationHelper
     @request_uri ||= URI.parse(request.original_url)
   end
 
+  def html_true(value)
+    value.present? && %w(1 true).include?(value)
+  end
+
   private
 
   def matches_path?(path_root, query, defaults)

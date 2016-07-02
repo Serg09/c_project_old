@@ -14,7 +14,9 @@ SimpleNavigation::Configuration.run do |navigation|
     end
     primary.item :authors, 'Authors', browse_authors_path
     primary.item :books, 'Books', browse_books_path
-    if !AppSetting.sign_in_disabled?
+    if AppSetting.sign_in_disabled?
+      primary.item :subscribe, 'Sign up', new_subscriber_path
+    else
       if user_signed_in?
         primary.item :profile, 'Profile' do |profile_item|
           profile_item.item :view_profile, 'View', user_path(current_user)

@@ -6,7 +6,7 @@
 #  campaign_id               :integer          not null
 #  description               :string(100)      not null
 #  long_description          :text
-#  minimum_contribution          :decimal(, )      not null
+#  minimum_contribution      :decimal(, )      not null
 #  physical_address_required :boolean          default(FALSE), not null
 #  house_reward_id           :integer
 #  created_at                :datetime         not null

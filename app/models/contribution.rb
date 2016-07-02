@@ -5,12 +5,12 @@
 #  id          :integer          not null, primary key
 #  campaign_id :integer          not null
 #  amount      :decimal(, )      not null
-#  email       :string           not null
+#  email       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  ip_address  :string(15)       not null
 #  user_agent  :string           not null
-#  state       :string           default("pledged"), not null
+#  state       :string           default("incipient"), not null
 #
 
 class Contribution < ActiveRecord::Base

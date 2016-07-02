@@ -1,11 +1,6 @@
 require 'resque_web'
 
 Rails.application.routes.draw do
-
-  namespace :admin do
-  get 'payments/show'
-  end
-
   mount ResqueWeb::Engine => '/resque_web'
 
   devise_for :administrators, path: 'admin', controllers: {
@@ -17,6 +12,7 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations'
   }
 
+  resources :subscribers, only: [:new, :create, :show]
   resources :inquiries, only: [:new, :create, :show]
   get '/unsubscribe/:token', to: 'users#unsubscribe',
                              as: :unsubscribe,
@@ -89,6 +85,7 @@ Rails.application.routes.draw do
       end
     end
     resources :payments, only: [:show]
+    resources :subscribers, only: [:index]
   end
 
   get 'pages/welcome'

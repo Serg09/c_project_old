@@ -1,0 +1,8 @@
+=content_for :page_title do
+  Get on our mailing list!
+
+.container.default-container
+  .row
+    .col-md-6
+      =form_for(@subscriber) do |f|
+        =render 'form_fields', f: f, subscriber: @subscriber

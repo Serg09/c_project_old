@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160622200640) do
+ActiveRecord::Schema.define(version: 20160701005603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,6 +212,16 @@ ActiveRecord::Schema.define(version: 20160622200640) do
 
   add_index "rewards", ["campaign_id", "description"], name: "index_rewards_on_campaign_id_and_description", unique: true, using: :btree
   add_index "rewards", ["house_reward_id"], name: "index_rewards_on_house_reward_id", using: :btree
+
+  create_table "subscribers", force: :cascade do |t|
+    t.string   "first_name", limit: 50,  null: false
+    t.string   "last_name",  limit: 50,  null: false
+    t.string   "email",      limit: 250, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "subscribers", ["email"], name: "index_subscribers_on_email", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                             default: "",    null: false

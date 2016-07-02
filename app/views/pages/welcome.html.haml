@@ -1,4 +1,6 @@
 -# Top section, guy in jacket
+-if show_subscriber_form?
+  =render 'subscription_form'
 %section#top-section.welcome
   .container
     .row
@@ -33,7 +35,8 @@
       .col-md-12.text-center
         %p.larger This and many more tools are available in our incubator.
         %p.larger Get started today
-        =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
+        -unless AppSetting.sign_in_disabled?
+          =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
 
 %section#bottom-section.welcome
   .container
@@ -43,4 +46,5 @@
       .col-md-4
         %h1 Still need convincing?
         %p.larger Watch published author, Christian Piatt, Explain.
-        =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
+        -unless AppSetting.sign_in_disabled?
+          =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'

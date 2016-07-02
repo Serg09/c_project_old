@@ -1,0 +1,20 @@
+.row
+  .col-sm-6
+    .form-group{ class: form_group_class(subscriber, :first_name) }
+      =f.label :first_name, class: 'control-label'
+      =f.text_field :first_name, class: 'form-control'
+      =help_blocks subscriber, :first_name
+  .col-sm-6
+    .form-group{ class: form_group_class(subscriber, :last_name) }
+      =f.label :last_name, class: 'control-label'
+      =f.text_field :last_name, class: 'form-control'
+      =help_blocks subscriber, :last_name
+.row
+  .col-sm-12
+    .form-group{ class: form_group_class(subscriber, :email) }
+      =f.label :email, class: 'control-label'
+      =f.text_field :email, class: 'form-control'
+      =help_blocks subscriber, :email
+.row
+  .col-sm-12
+    =f.submit 'Submit', class: 'btn btn-primary', title: 'Click here to join our mailing list.'

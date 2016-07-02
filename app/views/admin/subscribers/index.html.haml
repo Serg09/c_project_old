@@ -1,0 +1,17 @@
+=content_for :page_title do
+  Subscribers
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#subscriber-table.table.table-striped
+        %tr
+          %th First name
+          %th Last name
+          %th Email
+        -@subscribers.each do |subscriber|
+          %tr
+            %td= subscriber.first_name
+            %td= subscriber.last_name
+            %td= link_to subscriber.email, "mailto:#{subscriber.email}"
+      =will_paginate @subscribers, renderer: BootstrapPagination::Rails
