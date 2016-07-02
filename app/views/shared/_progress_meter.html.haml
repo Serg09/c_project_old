@@ -1,6 +1,12 @@
 %svg{ width: width, height: height}
   %rect{ x: 0, y: 0, width: width, height: height, style: 'fill:#FFF;stroke-width:4;stroke:#00ADDE' }
   %rect{ x: 0, y: height * (1 - progress), width: width, height: height * progress, style: 'fill:#00ADDE;stroke-width:4;stroke:#00ADDE' }
-  %text{ x: width / 6, y: height * (1 - (progress/2.0)), fill: '#FFF', font: { size: 30, family: 'Quicksand', weight: 'bold' } }
+  -if progress < 0.4
+    -text_y = height / 2
+    -text_color = '#00ADDE'
+  -else
+    -text_y = height * (1 - (progress/2.0))
+    -text_color = '#FFF'
+  %text{ x: width / 6, y: text_y, fill: text_color, font: { size: 30, family: 'Quicksand', weight: 'bold' } }
     =number_to_percentage (100 * progress), precision: 0
 
