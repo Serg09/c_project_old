@@ -19,7 +19,7 @@
       %h2= @campaign.book.approved_version.title
   .row
     .col-md-3
-      =render 'progress_table'
+      =render 'progress_table', campaign: @campaign
     .col-md-5
       =render 'contributions/table', campaign: @campaign, contributions: @contributions, total_pledged: @total_pledged, total_collected: @total_collected
       =will_paginate @contributions, renderer: BootstrapPagination::Rails, param_name: :contributions_page

@@ -1,16 +1,16 @@
 %table#campaign-progress-table.table
   %tr
     %th Goal
-    %td.text-right= number_to_currency(@campaign.target_amount, precision: 0)
+    %td.text-right= number_to_currency(campaign.target_amount, precision: 0)
   %tr
     %th Contributions
-    %td.text-right= @campaign.contributions.count
+    %td.text-right= campaign.contributions.count
   %tr
     %th Raised
-    %td.text-right= number_to_currency(@campaign.total_donated, precision: 0)
+    %td.text-right= number_to_currency(campaign.total_donated, precision: 0)
   %tr
     %th Still need
-    %td.text-right= number_to_currency(@campaign.contribution_amount_needed, precision: 0)
+    %td.text-right= number_to_currency(campaign.contribution_amount_needed, precision: 0)
   %tr
     %th Days remaining
-    %td.text-right= @campaign.days_remaining
+    %td.text-right= campaign.days_remaining

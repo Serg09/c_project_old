@@ -10,12 +10,21 @@
         -book_version.genres.each do |genre|
           %li=genre.name
   .col-md-8
-    -if book_version.approved?
-      =book_version.long_or_short_description.html_safe
-    -else
-      =book_version.long_or_short_description
-    %p
-      -if book_version.active_campaign.present?
-        =link_to 'Contribute!', new_campaign_contribution_path(book_version.active_campaign), :class => 'btn btn-lg btn-success', :title => 'Click here to contribute to the campaign to make this book a reality!'
-      -if can?(:update, book_version.book) && book_version.book.campaigns.none?
-        =link_to 'Fund This Title!', book_campaigns_path(book_version.book_id), :class => 'btn btn-lg btn-success', :title => 'Click here to create a crowdfunding campaign for this title.'
+    .row
+      .col-sm-12
+        -if book_version.approved?
+          =book_version.long_or_short_description.html_safe
+        -else
+          =book_version.long_or_short_description
+    -if can?(:update, book_version.book) && book_version.book.campaigns.none?
+      .row
+        .col-sm-12
+          =link_to 'Fund This Title!', book_campaigns_path(book_version.book_id), :class => 'btn btn-lg btn-success', :title => 'Click here to create a crowdfunding campaign for this title.'
+    -if book_version.active_campaign.present?
+      .row
+        .col-sm-6
+          %h3 Contribute to the campaign!
+          =render 'campaigns/progress_table', campaign: book_version.active_campaign
+          =link_to 'Contribute!', new_campaign_contribution_path(book_version.active_campaign), :class => 'btn btn-lg btn-success', :title => 'Click here to contribute to the campaign to make this book a reality!'
+        .col-sm-2.col-sm-offset-2
+          =render_progress_meter book_version.active_campaign.current_progress

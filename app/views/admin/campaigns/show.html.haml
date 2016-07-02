@@ -6,7 +6,7 @@
   .row
     .col-md-6
       %h2 Progress
-      =render 'campaigns/progress_table'
+      =render 'campaigns/progress_table', campaign: @campaign
       %h2 Contributions
       %table#contributions-table.table.table-striped
         %tr
