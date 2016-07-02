@@ -156,7 +156,7 @@ RSpec.describe Payment, type: :model do
       expect(PAYMENT_PROVIDER).to \
         receive(:refund_payment).
         # TODO Fix this, add amount to payment and put specific values in the test
-        with(payment, payment.contribution.amount * 0.97).
+        with(payment, payment.contribution.amount).
         and_return(payment_refund_response(state: :completed))
       payment.refund!
     end

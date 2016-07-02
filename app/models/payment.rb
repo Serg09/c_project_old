@@ -89,7 +89,7 @@ class Payment < ActiveRecord::Base
   end
 
   def _refund
-    response = PAYMENT_PROVIDER.refund_payment(self, contribution.amount * 0.97)
+    response = PAYMENT_PROVIDER.refund_payment(self, contribution.amount)
     create_transaction(response, :refund)
 
     %w(pending completed).include?(response[:state])

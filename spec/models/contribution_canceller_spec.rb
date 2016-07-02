@@ -29,7 +29,7 @@ describe ContributionCanceller do
         allow(PAYMENT_PROVIDER).to receive(:refund_payment).
           and_return(payment_refund_response)
         expect(PAYMENT_PROVIDER).to receive(:refund_payment).
-          with(payment2, contribution2.amount * 0.97).
+          with(payment2, contribution2.amount).
           and_raise('Induced error')
       end
       context 'before the maximum attempt count has been reached' do
