@@ -92,14 +92,6 @@ module ApplicationHelper
     %w(1 true).include? (value || '').downcase
   end
 
-  DEFAULT_PROGRESS_METER_OPTIONS = { width: 100, height: 300 }
-  def render_progress_meter(progress, options = {})
-    options = DEFAULT_PROGRESS_METER_OPTIONS.
-      merge(options || {}).
-      merge(progress: progress)
-    render 'shared/progress_meter', options
-  end
-
   def request_query
     @request_query ||= parse_query(request_uri.query)
   end
