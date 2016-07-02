@@ -2,7 +2,7 @@
   .col-sm-6
     .form-group{ class: form_group_class(subscriber, :first_name) }
       =f.label :first_name, class: 'control-label'
-      =f.text_field :first_name, class: 'form-control'
+      =f.text_field :first_name, class: 'form-control', autofocus: true
       =help_blocks subscriber, :first_name
   .col-sm-6
     .form-group{ class: form_group_class(subscriber, :last_name) }
