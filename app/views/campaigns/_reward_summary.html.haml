@@ -1,0 +1,9 @@
+%table.table
+  %tr
+    %th Description
+    %th Count
+    %th Est. Cost
+  -campaign.rewards.each do |reward|
+    %tr
+      %td= reward.description
+      %td= reward.fulfillments.count

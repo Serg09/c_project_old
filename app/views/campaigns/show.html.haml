@@ -16,11 +16,15 @@
       This campaign was cancelled and the funds were not collected.
   .row
     .col-md-12
-      %h2= @campaign.book.approved_version.title
+      %h1= @campaign.book.approved_version.title
   .row
-    .col-md-3
+    .col-md-4
+      %h2 Summary
       =render 'progress_table', campaign: @campaign
-    .col-md-5
+      %h2 Rewards
+      =render 'reward_summary', campaign: @campaign
+    .col-md-4
+      %h2 Contributions
       =render 'contributions/table', campaign: @campaign, contributions: @contributions, total_pledged: @total_pledged, total_collected: @total_collected
       =will_paginate @contributions, renderer: BootstrapPagination::Rails, param_name: :contributions_page
     .col-md-2.text-center
