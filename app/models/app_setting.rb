@@ -42,7 +42,6 @@ class AppSetting < ActiveRecord::Base
   private
 
   def self.cache_duration
-    return 1.minute if Rails.env.development?
-    1.hour
+    @cache_duration ||= (ENV['APP_SETTING_CACHE_MINUTES'] || 1).to_i
   end
 end
