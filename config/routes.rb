@@ -1,9 +1,11 @@
 require 'resque_web'
 
 Rails.application.routes.draw do
-  match '*path' => redirect("https://#{ENV['WEBSITE_HOST']}/%{path}"),
-    constraints: { protocol: 'http://' },
-    via: [:get, :post]
+  if Rails.env.production?
+    match "*path" => redirect("https://#{ENV['WEBSITE_HOST']}/%{path}"),
+      constraints: { protocol: 'http://' },
+      via: [:get, :post]
+  end
 
   mount ResqueWeb::Engine => '/resque_web'
 
