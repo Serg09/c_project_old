@@ -2,6 +2,8 @@ require 'resque_web'
 
 Rails.application.routes.draw do
   if Rails.env.production?
+    get '/', to: redirect("https://#{ENV['WEBSITE_HOST']}/"),
+             constraints: { protocol: 'http://' }
     match "*path" => redirect("https://#{ENV['WEBSITE_HOST']}/%{path}"),
       constraints: { protocol: 'http://' },
       via: [:get, :post]
