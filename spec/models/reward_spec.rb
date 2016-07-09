@@ -76,13 +76,15 @@ RSpec.describe Reward, type: :model do
   end
 
   context 'when #house_reward_id is present' do
-    let (:house_reward) { FactoryGirl.create(:house_reward, physical_address_required: false) }
+    let!(:house_reward) { FactoryGirl.create(:house_reward, physical_address_required: false) }
+    let (:reward) do
+      Reward.new attributes.
+        except(:description, :physical_address_required).
+        merge(house_reward: house_reward)
+    end
 
     describe '#working_description' do
       it 'is the description of the house reward' do
-        reward = Reward.new attributes.
-          except(:description, :physical_address_required).
-          merge(house_reward_id: house_reward.id)
         expect(reward).to be_valid
         expect(reward.working_description).to eq house_reward.description
       end
@@ -90,27 +92,37 @@ RSpec.describe Reward, type: :model do
 
     describe '#working_physical_address_required' do
       it 'is the value from the house reward' do
-        reward = Reward.new attributes.
-          except(:description, :physical_address_required).
-          merge(house_reward_id: house_reward.id)
         expect(reward).to be_valid
         expect(reward.working_physical_address_required).to be false
+      end
+    end
+
+    describe '#estimate_cost' do
+      it 'delegates to HouseReward#estimate_cost' do
+        expect(house_reward).to receive(:estimate_cost).and_return(3.14)
+        expect(reward.estimate_cost).to eq 3.14
       end
     end
   end
 
   context 'when #house_reward_id is absent' do
+    let (:reward) { Reward.new attributes }
+
     describe '#working_description' do
       it 'is the description from the local record' do
-        reward = Reward.new attributes
         expect(reward.working_description).to eq 'Pat on the back'
       end
     end
 
     describe '#working_physical_address_required' do
       it 'is the value from the local record' do
-        reward = Reward.new attributes
         expect(reward.working_physical_address_required).to eq true
+      end
+    end
+
+    describe '#estimate_cost' do
+      it 'delegates to HouseReward#estimate_cost' do
+        expect(reward.estimate_cost).to be_nil
       end
     end
   end
