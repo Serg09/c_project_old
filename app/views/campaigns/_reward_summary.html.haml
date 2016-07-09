@@ -1,9 +1,10 @@
 %table.table
   %tr
     %th Description
-    %th Count
-    %th Est. Cost
+    %th.text-right Count
+    %th.text-right Est. Cost
   -campaign.rewards.each do |reward|
     %tr
       %td= reward.description
-      %td= reward.fulfillments.count
+      %td.text-right= reward.fulfillments.count
+      %td.text-right= number_to_currency(reward.estimate_cost, precision: 0) || 'N/A'
