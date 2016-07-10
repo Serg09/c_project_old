@@ -19,6 +19,7 @@ class Campaign < ActiveRecord::Base
 
   belongs_to :book
   has_many :contributions
+  has_many :payments, through: :contributions
   has_many :rewards, dependent: :destroy
 
   validates_presence_of :book_id, :target_date, :target_amount
@@ -127,13 +128,21 @@ class Campaign < ActiveRecord::Base
   end
 
   def estimated_cost_of_payments
+    payments.
+      map(&:provider_fee).
+      compact.
+      reduce(0){|sum, f| sum + f}
   end
 
   def estimated_cost_of_rewards
     rewards.
       map(&:estimate_cost).
-      select{|c| c}.
+      compact.
       reduce(0){|sum, c| sum + c}
+  end
+
+  def estimated_amount_available
+    total_donated - (estimated_cost_of_rewards + estimated_cost_of_payments)
   end
 
   def expired?

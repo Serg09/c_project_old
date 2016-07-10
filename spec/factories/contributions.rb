@@ -9,8 +9,11 @@ FactoryGirl.define do
 
     factory :collected_contribution do
       state 'collected'
-      after(:create) do |contribution|
-        payment = FactoryGirl.create(:approved_payment)
+      transient do
+        provider_fee 1.23
+      end
+      after(:create) do |contribution, evaluator|
+        payment = FactoryGirl.create(:approved_payment, provider_fee: evaluator.provider_fee)
         contribution.payments << payment
       end
     end
