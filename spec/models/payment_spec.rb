@@ -125,6 +125,13 @@ RSpec.describe Payment, type: :model do
     end
   end
 
+  describe '#provider_fee' do
+    it 'cannot be less than zero' do
+      payment = Payment.new attributes.merge(provider_fee: -0.01)
+      expect(payment).to have(1).error_on :provider_fee
+    end
+  end
+
   shared_examples 'a non-executable payment' do
     it 'does not call the payment provider' do
       expect(PAYMENT_PROVIDER).not_to receive(:execute_payment)

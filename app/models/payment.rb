@@ -8,6 +8,7 @@
 #  state           :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  provider_fee    :decimal(9, 2)
 #
 
 class Payment < ActiveRecord::Base
@@ -49,6 +50,7 @@ class Payment < ActiveRecord::Base
     :billing_country_code,
     on: :create
   validates_uniqueness_of :external_id, if: :external_id
+  validates_numericality_of :provider_fee, greater_than_or_equal_to: 0, if: :provider_fee
 
   aasm(:state, whiny_transitions: false) do
     state :pending, initial: true
