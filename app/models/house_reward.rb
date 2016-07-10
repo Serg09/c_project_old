@@ -7,6 +7,7 @@
 #  physical_address_required :boolean          default(FALSE), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  estimator_class           :string(200)
 #
 
 class HouseReward < ActiveRecord::Base
