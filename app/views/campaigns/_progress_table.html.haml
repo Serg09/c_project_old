@@ -9,7 +9,16 @@
     %th Raised
     %td.text-right= number_to_currency(campaign.total_donated, precision: 0)
   %tr
-    %th Still need
+    %th Est. reward fulfillment
+    %td.text-right= number_to_currency(campaign.estimated_cost_of_rewards, precision: 0)
+  %tr
+    %th Est. payment fees
+    %td.text-right= number_to_currency(campaign.estimated_cost_of_payments, precision: 0)
+  %tr
+    %th Est. available
+    %td.text-right= number_to_currency(campaign.estimated_cost_of_rewards, precision: 0)
+  %tr
+    %th Still seeking
     %td.text-right= number_to_currency(campaign.contribution_amount_needed, precision: 0)
   %tr
     %th Days remaining

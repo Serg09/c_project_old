@@ -126,6 +126,16 @@ class Campaign < ActiveRecord::Base
     (target_date - Date.today).to_i
   end
 
+  def estimated_cost_of_payments
+  end
+
+  def estimated_cost_of_rewards
+    rewards.
+      map(&:estimate_cost).
+      select{|c| c}.
+      reduce(0){|sum, c| sum + c}
+  end
+
   def expired?
     Date.today >= target_date
   end

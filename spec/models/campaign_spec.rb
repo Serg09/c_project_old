@@ -90,6 +90,53 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
+  describe '#estimated_cost_of_rewards' do
+    let (:campaign) { FactoryGirl.create(:active_campaign) }
+    let (:house_reward) do
+      FactoryGirl.create(:physical_house_reward, estimator_class: 'PublishingCostEstimator')
+    end
+    let (:physical_reward) do
+      FactoryGirl.create(:reward, campaign: campaign,
+                                  house_reward: house_reward)
+    end
+    let (:other_reward) { FactoryGirl.create(:reward, campaign: campaign) }
+    let (:c1) do
+      FactoryGirl.create(:contribution, campaign: campaign)
+    end
+    let!(:f1) do
+      FactoryGirl.create(:physical_fulfillment, contribution: c1,
+                                                reward: physical_reward)
+    end
+    let (:c2) do
+      FactoryGirl.create(:contribution, campaign: campaign)
+    end
+    let!(:f2) do
+      FactoryGirl.create(:physical_fulfillment, contribution: c2,
+                                                reward: other_reward)
+    end
+    let (:c3) do
+      FactoryGirl.create(:contribution, campaign: campaign)
+    end
+    let!(:f3) do
+      FactoryGirl.create(:physical_fulfillment, contribution: c3,
+                                                reward: physical_reward)
+    end
+
+    before do
+      allow_any_instance_of(PublishingCostEstimator).to \
+        receive(:estimate).
+        and_return(5)
+    end
+
+    it 'aggregates the estimated cost of the rewards' do
+      expect(campaign.estimated_cost_of_rewards).to eq 5
+    end
+  end
+
+  describe '#estimated_cost_of_payments' do
+    it 'aggregates the fees from the payments'
+  end
+
   describe '::send_progress_notifications' do
     let (:unsubscribed_author) { FactoryGirl.create(:user, unsubscribed: true) }
     let (:book_1) { FactoryGirl.create(:book, title: "You've Got Mail") }
