@@ -9,7 +9,9 @@
     %th Raised
     %td.text-right= number_to_currency(campaign.total_donated, precision: 0)
   %tr
-    %th Est. reward fulfillment
+    %th
+      Est. reward fulfillment
+      %sup 1
     %td.text-right= number_to_currency(campaign.estimated_cost_of_rewards, precision: 0)
   %tr
     %th Est. payment fees
