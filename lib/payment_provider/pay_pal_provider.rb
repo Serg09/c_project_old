@@ -89,13 +89,15 @@ module PaymentProvider
     end
 
     def transactions_attributes(internal_payment)
+      book = internal_payment.contribution.campaign.book
+      description = "#{number_to_currency(internal_payment.amount, precision: 2)} contribution to the book \"#{book.approved_title}\" by #{book.author.full_name}"
       [
         {
           amount: {
-            total: '%.2f' % internal_payment.contribution.amount,
+            total: '%.2f' % internal_payment.amount,
             currency: PayPalProvider.USD
           },
-          description: "#{number_to_currency(internal_payment.contribution.amount, precision: 2)} contribution to the book \"#{internal_payment.contribution.campaign.book.approved_title}\" by #{internal_payment.contribution.campaign.book.author.full_name}"
+          description: description
         }
       ]
     end
