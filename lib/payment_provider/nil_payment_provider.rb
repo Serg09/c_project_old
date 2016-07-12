@@ -15,7 +15,10 @@ module PaymentProvider
       raw = File.read(path)
       json = JSON.parse(raw, symbolize_names: true)
       json[:id] = "PAY-#{Faker::Number.hexadecimal(10)}"
-      OpenStruct.new(id: json[:id], state: json[:state], to_json: json.to_json)
+      OpenStruct.new(id: json[:id],
+                     state: json[:state],
+                     success?: %(approved completed).include?(json[:state]),
+                     serialize: json.to_json)
     end
   end
 end

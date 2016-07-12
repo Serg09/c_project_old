@@ -48,4 +48,4 @@ PayPal::SDK.configure(
 )
 PayPal::SDK.logger = Rails.logger
 
-PAYMENT_PROVIDER = PaymentProvider::NilPaymentProvider.new
+PAYMENT_PROVIDER = PaymentProvider::PayPalProvider.new

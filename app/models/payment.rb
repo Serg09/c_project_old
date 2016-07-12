@@ -83,9 +83,8 @@ class Payment < ActiveRecord::Base
   def _execute
     response = PAYMENT_PROVIDER.execute_payment(self)
     create_transaction(response, :sale)
-    self.external_id ||= response[:id]
-    
-    %w(approved completed).include?(response[:state])
+    self.external_id ||= response.id
+    response.success?
   rescue => e
     self.payment_provider_error = e
     Rails.logger.error "Error executing payment #{self.inspect}, #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
@@ -105,8 +104,8 @@ class Payment < ActiveRecord::Base
 
   def create_transaction(response, intent)
     transaction = transactions.create(intent: intent,
-                                      state: response[:state],
-                                      response: response.to_json)
+                                      state: response.state,
+                                      response: response.serialize)
     unless transaction.save
       Rails.logger.warn "Unable to create payment transaction #{transaction.inspect} for response #{response.inspect}"
     end

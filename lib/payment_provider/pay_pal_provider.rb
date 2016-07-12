@@ -1,6 +1,7 @@
 module PaymentProvider
   class PayPalProvider
     include PayPal::SDK::REST
+    include ActiveSupport::NumberHelper
 
     INTENTS = %w(sale authorize order)
     class << self
@@ -35,7 +36,8 @@ module PaymentProvider
         Rails.logger.error "Unable to complete the payment with the payment provider. #{payment.error.inspect}"
         raise StandardError.new("Unable to complete the payment with the payment provider")
       end
-      Payment.find(payment.id)
+      internal_payment.provider_fee = calculate_fee(internal_payment)
+      PayPalPaymentResponse.new(Payment.find(payment.id))
     end
 
     def refund_payment(payment)
@@ -52,6 +54,12 @@ module PaymentProvider
     end
 
     private
+
+    FEE_RATE = 0.029
+    FLAT_FEE = 0.30
+    def calculate_fee(payment)
+      payment.amount * FEE_RATE + FLAT_FEE
+    end
 
     def payment_attributes(internal_payment)
       {
@@ -75,11 +83,11 @@ module PaymentProvider
               first_name: internal_payment.first_name,
               last_name: internal_payment.last_name,
               billing_address: {
-                line1: internal_payment.address_1,
-                line2: internal_payment.address_2,
-                city: internal_payment.city,
-                state: internal_payment.state,
-                postal_code: internal_payment.postal_code,
+                line1: internal_payment.billing_address_1,
+                line2: internal_payment.billing_address_2,
+                city: internal_payment.billing_city,
+                state: internal_payment.billing_state,
+                postal_code: internal_payment.billing_postal_code,
                 country_code: 'US'
               }
             }
@@ -90,7 +98,7 @@ module PaymentProvider
 
     def transactions_attributes(internal_payment)
       book = internal_payment.contribution.campaign.book
-      description = "#{number_to_currency(internal_payment.amount, precision: 2)} contribution to the book \"#{book.approved_title}\" by #{book.author.full_name}"
+      description = "#{number_to_currency(internal_payment.amount, precision: 2)} contribution to the book \"#{book.public_title}\" by #{book.author.full_name}"
       [
         {
           amount: {
