@@ -2,7 +2,9 @@ FactoryGirl.define do
   factory :payment, aliases: [:approved_payment] do
     transient do
       sale_id { Faker::Number.hexadecimal(20) }
+      contribution nil
     end
+    amount { Faker::Number.decimal(2) }
     credit_card_number { Faker::Business.credit_card_number.gsub('-', '') }
     credit_card_type { Faker::Business.credit_card_type }
     cvv { Faker::Number.number(3).to_s }
@@ -12,10 +14,10 @@ FactoryGirl.define do
     billing_state { Faker::Address.state_abbr }
     billing_postal_code { Faker::Address.postcode }
     billing_country_code 'US'
-    contribution
     external_id { "PAY-#{Faker::Number.hexadecimal(24)}" }
     state 'approved'
     after(:create) do |payment, evaluator|
+      payment.contributions << evaluator.contribution if evaluator.contribution
       transaction = {
         id: payment.external_id,
         state: payment.state,
@@ -43,7 +45,7 @@ FactoryGirl.define do
         },
         transactions: [{
           amount: {
-            total: payment.contribution.amount,
+            total: payment.amount,
             current: 'USD'
           },
           description: 'Book contribution',

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160701005603) do
+ActiveRecord::Schema.define(version: 20160712024553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,14 @@ ActiveRecord::Schema.define(version: 20160701005603) do
   add_index "contributions", ["campaign_id"], name: "index_contributions_on_campaign_id", using: :btree
   add_index "contributions", ["email"], name: "index_contributions_on_email", using: :btree
 
+  create_table "contributions_payments", id: false, force: :cascade do |t|
+    t.integer "contribution_id", null: false
+    t.integer "payment_id",      null: false
+  end
+
+  add_index "contributions_payments", ["contribution_id"], name: "index_contributions_payments_on_contribution_id", using: :btree
+  add_index "contributions_payments", ["payment_id"], name: "index_contributions_payments_on_payment_id", unique: true, using: :btree
+
   create_table "fulfillments", force: :cascade do |t|
     t.string   "type",            limit: 50,                  null: false
     t.integer  "contribution_id",                             null: false
@@ -149,6 +157,7 @@ ActiveRecord::Schema.define(version: 20160701005603) do
     t.boolean  "physical_address_required",             default: false, null: false
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
+    t.string   "estimator_class",           limit: 200
   end
 
   create_table "image_binaries", force: :cascade do |t|
@@ -189,14 +198,14 @@ ActiveRecord::Schema.define(version: 20160701005603) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.integer  "contribution_id", null: false
     t.string   "external_id"
-    t.string   "state",           null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "state",                                null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.decimal  "provider_fee", precision: 9, scale: 2
+    t.decimal  "amount",       precision: 9, scale: 2, null: false
   end
 
-  add_index "payments", ["contribution_id"], name: "index_payments_on_contribution_id", using: :btree
   add_index "payments", ["external_id"], name: "index_payments_on_external_id", unique: true, using: :btree
 
   create_table "rewards", force: :cascade do |t|

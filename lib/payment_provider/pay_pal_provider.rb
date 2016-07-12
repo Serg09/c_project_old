@@ -38,12 +38,12 @@ module PaymentProvider
       Payment.find(payment.id)
     end
 
-    def refund_payment(payment, amount)
+    def refund_payment(payment)
       sale = Sale.find(payment.sale_id)
       sale.refund({
         amount: {
           currency: PayPalProvider.USD,
-          total: "%.2f" % amount
+          total: "%.2f" % payment.amount
         }
       })
     rescue => e

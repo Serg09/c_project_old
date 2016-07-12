@@ -4,7 +4,7 @@ RSpec.describe Payment, type: :model do
   let (:contribution) { FactoryGirl.create(:contribution) }
   let (:attributes) do
     {
-      contribution_id: contribution.id,
+      amount: contribution.amount,
       external_id: 'PAY-17S8410768582940NKEE66EQ',
       state: 'approved',
       credit_card_number: '4111111111111111',
@@ -26,17 +26,10 @@ RSpec.describe Payment, type: :model do
     expect(payment).to be_valid
   end
 
-  describe '#contribution_id' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:contribution_id)
-      expect(payment).to have_at_least(1).error_on :contribution_id
-    end
-  end
-
-  describe '#contribution' do
-    it 'is a reference to the contribution to which the payment belongs' do
+  describe '#contributions' do
+    it 'is a list of the contributions to which the payment belongs' do
       payment = Payment.new attributes
-      expect(payment.contribution.id).to be contribution.id
+      expect(payment).to have(0).contributions
     end
   end
 
@@ -152,11 +145,10 @@ RSpec.describe Payment, type: :model do
   end
 
   shared_examples 'a refundable payment' do
-    it 'calls the payment provider to refund the payment, less an administrative fee' do
+    it 'calls the payment provider to refund the payment' do
       expect(PAYMENT_PROVIDER).to \
         receive(:refund_payment).
-        # TODO Fix this, add amount to payment and put specific values in the test
-        with(payment, payment.contribution.amount).
+        with(payment).
         and_return(payment_refund_response(state: :completed))
       payment.refund!
     end

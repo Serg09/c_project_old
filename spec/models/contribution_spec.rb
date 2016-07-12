@@ -204,7 +204,7 @@ RSpec.describe Contribution, type: :model do
   context 'when incipient' do
     let (:contribution) { FactoryGirl.create(:incipient_contribution) }
     let!(:payment) do
-      payment = FactoryGirl.create(:pending_payment, contribution: contribution)
+      payment = FactoryGirl.create(:pending_payment)
       contribution.payments << payment
       payment
     end
@@ -269,7 +269,7 @@ RSpec.describe Contribution, type: :model do
       it_behaves_like 'a non-collectable contribution' do
         let (:contribution) { FactoryGirl.create(:cancelled_contribution) }
         let!(:payment) do
-          payment = FactoryGirl.create(:refunded_payment, contribution: contribution)
+          FactoryGirl.create(:refunded_payment, contribution: contribution)
         end
       end
     end
@@ -278,7 +278,7 @@ RSpec.describe Contribution, type: :model do
       it_behaves_like 'a non-cancellable contribution' do
         let (:contribution) { FactoryGirl.create(:cancelled_contribution) }
         let!(:payment) do
-          payment = FactoryGirl.create(:refunded_payment, contribution: contribution)
+          FactoryGirl.create(:refunded_payment, contribution: contribution)
         end
       end
     end

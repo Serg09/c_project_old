@@ -14,7 +14,7 @@ class Payment < ActiveRecord::Base
   include AASM
 
   has_many :transactions, class_name: 'PaymentTransaction'
-  belongs_to :contribution
+  has_and_belongs_to_many :contributions
 
   CREDIT_CARD_TYPES = [
     ['VISA', 'visa'],
@@ -38,7 +38,7 @@ class Payment < ActiveRecord::Base
                 :billing_country_code,
                 :payment_provider_error
 
-  validates_presence_of :contribution_id, :state
+  validates_presence_of :state
   validates_presence_of :credit_card_number,
     :credit_card_type,
     :cvv,
@@ -67,6 +67,10 @@ class Payment < ActiveRecord::Base
     end
   end
 
+  def contribution
+    contributions.first
+  end
+
   def sale_id
     transactions.lazy.
       map{|t| extract_sale_id(t.response)}.
@@ -89,7 +93,7 @@ class Payment < ActiveRecord::Base
   end
 
   def _refund
-    response = PAYMENT_PROVIDER.refund_payment(self, contribution.amount)
+    response = PAYMENT_PROVIDER.refund_payment(self)
     create_transaction(response, :refund)
 
     %w(pending completed).include?(response[:state])

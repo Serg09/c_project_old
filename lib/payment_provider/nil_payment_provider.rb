@@ -4,7 +4,7 @@ module PaymentProvider
       return_from_file('payment_create_approved.json')
     end
 
-    def refund_payment(payment, amount)
+    def refund_payment(payment)
       return_from_file('payment_refund_completed.json')
     end
 
