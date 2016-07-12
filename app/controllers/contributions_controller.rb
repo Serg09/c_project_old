@@ -163,7 +163,8 @@ class ContributionsController < ApplicationController
       :billing_city,
       :billing_state,
       :billing_postal_code
-    ).merge(billing_country_code: 'US')
+    ).merge(billing_country_code: 'US',
+            amount: @contribution.amount)
   end
 
   def contribution_params
