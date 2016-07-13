@@ -33,11 +33,11 @@ Feature: View progress of a campaign as an author
     When I click the progress button within the 1st campaign row
     Then I should see "Campaign progress" within the page title
     And I should see the following campaign progress table
-      | Goal                    | $1,000 |
-      | Contributions           |      3 |
-      | Raised                  |   $175 |
-      | Est. reward fulfillment |     $0 |
-      | Est. payment fees       |     $0 |
-      | Est. available          |   $175 |
-      | Still seeking           |   $825 |
-      | Days remaining          |     59 |
+      | Goal                      | $1,000 |
+      | Contributions             |      3 |
+      | Raised                    |   $175 |
+      | Est. reward fulfillment 1 |     $0 |
+      | Est. payment fees         |     $0 |
+      | Est. available            |   $175 |
+      | Still seeking             |   $825 |
+      | Days remaining            |     59 |
