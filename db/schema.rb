@@ -199,11 +199,10 @@ ActiveRecord::Schema.define(version: 20160712024553) do
 
   create_table "payments", force: :cascade do |t|
     t.string   "external_id"
-    t.string   "state",                                null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.decimal  "provider_fee", precision: 9, scale: 2
-    t.decimal  "amount",       precision: 9, scale: 2, null: false
+    t.string   "state",                               null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.decimal  "amount",      precision: 9, scale: 2, null: false
   end
 
   add_index "payments", ["external_id"], name: "index_payments_on_external_id", unique: true, using: :btree

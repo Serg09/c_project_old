@@ -36,7 +36,7 @@ module PaymentProvider
         Rails.logger.error "Unable to complete the payment with the payment provider. #{payment.error.inspect}"
         raise StandardError.new("Unable to complete the payment with the payment provider")
       end
-      internal_payment.provider_fee = calculate_fee(internal_payment)
+      #internal_payment.provider_fee = calculate_fee(internal_payment)
       PayPalPaymentResponse.new(Payment.find(payment.id))
     end
 
