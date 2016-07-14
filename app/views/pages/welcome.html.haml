@@ -6,7 +6,8 @@
     .row
       .col-md-5.col-md-offset-7
         =image_tag 'quote.png', class: 'quote-image'
-        =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
+        -unless AppSetting.sign_in_disabled?
+          =link_to 'Sign Up Free', new_user_registration_path, class: 'sign-up-btn btn btn-lg btn-primary'
 
 %section#middle-section.welcome
   .container
