@@ -34,11 +34,14 @@ Feature: Collect campaign contributions
     When I click the progress button within the 1st campaign row
     Then I should see "Campaign progress" within the page title
     And I should see the following campaign progress table
-      | Goal           | $1,000 |
-      | Contributions  |      3 |
-      | Raised         |   $950 |
-      | Still need     |    $50 |
-      | Days remaining |      0 |
+      | Goal                      | $1,000 |
+      | Contributions             |      3 |
+      | Raised                    |   $950 |
+      | Est. reward fulfillment 1 |     $0 |
+      | Est. payment fees         |     $0 |
+      | Est. available            |   $950 |
+      | Still seeking             |    $50 |
+      | Days remaining            |      0 |
 
   Scenario: An author collects contributions on a campaign
     When I click "Collect"

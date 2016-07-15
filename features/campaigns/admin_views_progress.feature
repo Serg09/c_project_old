@@ -27,11 +27,14 @@ Feature: Administrator views campaign progress
     When I click the campaign progress button within the 1st campaign row
     Then I should see "Campaign for Some Words of Mine" within the page title
     And I should see the following campaign progress table
-      | Goal           | $1,000 |
-      | Contributions  |      2 |
-      | Raised         |   $175 |
-      | Still need     |   $825 |
-      | Days remaining |     59 |
+      | Goal                      | $1,000 |
+      | Contributions             |      2 |
+      | Raised                    |   $175 |
+      | Est. reward fulfillment 1 |     $0 |
+      | Est. payment fees         |     $0 |
+      | Est. available            |   $175 |
+      | Still seeking             |   $825 |
+      | Days remaining            |     59 |
 
     And I should see the following contributions table
       | Contributor        |      Date | Amount |

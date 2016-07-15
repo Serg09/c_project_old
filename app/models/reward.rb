@@ -32,6 +32,11 @@ class Reward < ActiveRecord::Base
     apply_house_reward_attributes
   end
 
+  def estimate_cost
+    return unless house_reward.present?
+    house_reward.estimate_cost(fulfillments.count)
+  end
+
   def working_description
     house_reward ? house_reward.description : description
   end

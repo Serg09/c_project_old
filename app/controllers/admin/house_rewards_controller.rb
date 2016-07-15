@@ -44,6 +44,6 @@ class Admin::HouseRewardsController < ApplicationController
   end
 
   def house_reward_params
-    params.require(:house_reward).permit(:description, :physical_address_required)
+    params.require(:house_reward).permit(:description, :physical_address_required, :estimator_class)
   end
 end

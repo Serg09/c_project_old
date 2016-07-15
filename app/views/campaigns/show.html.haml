@@ -16,11 +16,15 @@
       This campaign was cancelled and the funds were not collected.
   .row
     .col-md-12
-      %h2= @campaign.book.approved_version.title
+      %h1= @campaign.book.approved_version.title
   .row
-    .col-md-3
+    .col-md-4
+      %h2 Summary
       =render 'progress_table', campaign: @campaign
-    .col-md-5
+      %h2 Rewards
+      =render 'reward_summary', campaign: @campaign
+    .col-md-4
+      %h2 Contributions
       =render 'contributions/table', campaign: @campaign, contributions: @contributions, total_pledged: @total_pledged, total_collected: @total_collected
       =will_paginate @contributions, renderer: BootstrapPagination::Rails, param_name: :contributions_page
     .col-md-2.text-center
@@ -34,3 +38,19 @@
           =link_to 'Cancel', cancel_campaign_path(@campaign), method: :patch, class: 'btn btn-danger', title: 'Click here to cancel this campaign.', 'data-confirm' => 'Are you sure you want to cancel this campaign?'
   .row
     =link_to 'Back', book_campaigns_path(@campaign.book_id), class: 'btn btn-default', title: 'Click here to return to the list of campaigns.'
+  .row
+    .col-md-12
+      %table.footnotes
+        %tr
+          %th 1
+          %td
+            %p
+              Printing estimates are based on economy print, ground shipping,
+              mailed to 75007 postal code for 6" x 9" trim size "trade"
+              paperback, 220 page count with color hard-back cover and
+              black/white interior. Any differences will change estimate.
+            %p
+              E-book estimates based on average cost of past e-book
+              conversions. Your actual cost may vary based on differences
+              in page count, interior elements, bullet lists, indents, pictures,
+              etc.

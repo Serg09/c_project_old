@@ -90,6 +90,79 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
+  shared_context :contributions_and_fulfillments do
+    let (:campaign) { FactoryGirl.create(:active_campaign) }
+    let (:house_reward) do
+      FactoryGirl.create(:physical_house_reward, estimator_class: 'PublishingCostEstimator')
+    end
+    let (:physical_reward) do
+      FactoryGirl.create(:reward, campaign: campaign,
+                                  house_reward: house_reward)
+    end
+    let (:other_reward) { FactoryGirl.create(:reward, campaign: campaign) }
+    let (:c1) do
+      FactoryGirl.create(:collected_contribution, campaign: campaign,
+                                                  amount: 100,
+                                                  provider_fee: 1.00)
+    end
+    let!(:f1) do
+      FactoryGirl.create(:physical_fulfillment, contribution: c1,
+                                                reward: physical_reward)
+    end
+    let (:c2) do
+      FactoryGirl.create(:collected_contribution, campaign: campaign,
+                                                  amount: 200,
+                                                  provider_fee: 1.50)
+    end
+    let!(:f2) do
+      FactoryGirl.create(:physical_fulfillment, contribution: c2,
+                                                reward: other_reward)
+    end
+    let (:c3) do
+      FactoryGirl.create(:collected_contribution, campaign: campaign,
+                                                  amount: 300,
+                                                  provider_fee: 1.75)
+    end
+    let!(:f3) do
+      FactoryGirl.create(:physical_fulfillment, contribution: c3,
+                                                reward: physical_reward)
+    end
+
+    before do
+      allow_any_instance_of(PublishingCostEstimator).to \
+        receive(:estimate).
+        and_return(5)
+    end
+  end
+
+  describe '#estimated_cost_of_rewards' do
+    include_context :contributions_and_fulfillments
+
+    it 'aggregates the estimated cost of the rewards' do
+      expect(campaign.estimated_cost_of_rewards).to eq 5
+    end
+  end
+
+  describe '#estimated_cost_of_payments' do
+    let (:campaign) { FactoryGirl.create(:campaign) }
+    let!(:c1) { FactoryGirl.create(:collected_contribution, campaign: campaign, provider_fee: 1.00) }
+    let!(:c2) { FactoryGirl.create(:collected_contribution, campaign: campaign, provider_fee: 1.50) }
+    let!(:c3) { FactoryGirl.create(:collected_contribution, campaign: campaign, provider_fee: 2.00) }
+
+    it 'aggregates the fees from the payments' do
+      expect(campaign.estimated_cost_of_payments).to eq 4.50
+    end
+  end
+
+  describe '#estimated_amount_available' do
+    include_context :contributions_and_fulfillments
+
+    it 'is the total contributions less est. cost of rewards and payment fees' do
+      # 100 + 200 + 300 - (1.00 + 1.50 + 1.75) - 5
+      expect(campaign.estimated_amount_available).to eq 590.75
+    end
+  end
+
   describe '::send_progress_notifications' do
     let (:unsubscribed_author) { FactoryGirl.create(:user, unsubscribed: true) }
     let (:book_1) { FactoryGirl.create(:book, title: "You've Got Mail") }
