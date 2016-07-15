@@ -2,13 +2,27 @@
 
 %table
   %tr
-    %th.text-right Total collected:
-    %td.text-right= number_to_currency(@campaign.total_donated, precision: 0)
-  %tr
     %th.text-right Goal:
     %td.text-right= number_to_currency(@campaign.target_amount, precision: 0)
   %tr
-    %th.text-right Still needed:
+    %th.text-right Contributions:
+    %td.text-right= @campaign.contributions.count
+  %tr
+    %th.text-right Raised:
+    %td.text-right= number_to_currency(@campaign.total_donated, precision: 0)
+  %tr
+    %th.text-right
+      Est. reward fulfillment
+      %sup 1
+    %td.text-right= number_to_currency(@campaign.estimated_cost_of_rewards, precision: 0)
+  %tr
+    %th.text-right Est. payment fees
+    %td.text-right= number_to_currency(@campaign.estimated_cost_of_payments, precision: 0)
+  %tr
+    %th.text-right Est. available
+    %td.text-right= number_to_currency(@campaign.estimated_amount_available, precision: 0)
+  %tr
+    %th.text-right Still seeking:
     %td.text-right= number_to_currency(@campaign.contribution_amount_needed, precision: 0)
   %tr
     %th.text-right Days remaining:
@@ -16,3 +30,19 @@
 %p
   =link_to 'Click here', campaign_url(@campaign)
   for more details.
+
+%p
+  %table{style: 'font-size: smaller;'}
+    %tr
+      %th{style: 'vertical-align: top;font-weight: normal'}
+        %sup 1
+      %td{style: 'vertical-align: top'}
+        Printing estimates are based on economy print, ground shipping,
+        mailed to 75007 postal code for 6" x 9" trim size "trade"
+        paperback, 220 page count with color hard-back cover and
+        black/white interior. Any differences will change estimate.
+        %p
+          E-book estimates based on average cost of past e-book
+          conversions. Your actual cost may vary based on differences
+          in page count, interior elements, bullet lists, indents, pictures,
+          etc.
