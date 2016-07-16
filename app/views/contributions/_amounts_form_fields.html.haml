@@ -5,14 +5,23 @@
         =radio_button_tag 'fulfillment[reward_id]', reward.id, reward.id == @reward.try(:id), id: "contribution_amount_option_#{reward.id}"
         =number_to_currency(reward.minimum_contribution, precision: 0)
         =reward.description
-  =reward.working_long_description
+  -if reward.photo_id
+    .row
+      .col-md-3
+        %img.img-rounded.img-responsive.pull-right{ src: image_path(reward.photo_id) }
+      .col-md-6
+        =reward.working_long_description
+  -else
+    =reward.working_long_description
 
-%h3
-  .radio
-    %label{ for: "contribution_amount_option_choose" }
-      =radio_button_tag 'fulfillment[reward_id]', '', @reward.nil?, id: "contribution_amount_option_choose"
-      Choose your amount
-.form-group{ class: form_group_class(@contribution, :amount) }
-  =f.label :amount, class: 'control-label'
-  =text_field_tag 'contribution[amount]', @reward.nil? ? @contribution.amount : '', class: 'form-control', autofocus: true, maxlength: 20
-  =help_blocks @contribution, :amount
+.row
+  .col-md-3
+    %h3
+      .radio
+        %label{ for: "contribution_amount_option_choose" }
+          =radio_button_tag 'fulfillment[reward_id]', '', @reward.nil?, id: "contribution_amount_option_choose"
+          Choose your amount
+    .form-group{ class: form_group_class(@contribution, :amount) }
+      =f.label :amount, class: 'control-label'
+      =text_field_tag 'contribution[amount]', @reward.nil? ? @contribution.amount : '', class: 'form-control', autofocus: true, maxlength: 20
+      =help_blocks @contribution, :amount
