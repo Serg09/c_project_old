@@ -4,6 +4,10 @@
       =f.label :house_reward_id, 'Reward', class: 'control-label'
       =f.select :house_reward_id, house_reward_options_for_select(@reward.house_reward_id), {}, class: 'form-control', autofocus: true
       =help_blocks(@reward, :house_reward_id)
+    .form-group{ class: form_group_class(@reward, :long_description) }
+      =f.label :long_description, class: 'control-label'
+      =f.text_area :long_description, class: 'form-control', rows: 3
+      =help_blocks(@reward, :long_description)
     .form-group{ class: form_group_class(@reward, :minimum_contribution) }
       =f.label :minimum_contribution, class: 'control-label'
       =f.number_field :minimum_contribution, class: 'form-control', rows: 3, min: 1, step: 1
