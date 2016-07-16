@@ -45,6 +45,11 @@ class Reward < ActiveRecord::Base
     house_reward ? house_reward.physical_address_required : physical_address_required
   end
 
+  def working_long_description
+    return long_description if long_description.present?
+    return house_reward.long_description if house_reward.present?
+  end
+
   private
 
   def apply_house_reward_attributes

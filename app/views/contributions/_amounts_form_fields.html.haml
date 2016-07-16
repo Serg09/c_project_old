@@ -5,6 +5,7 @@
         =radio_button_tag 'fulfillment[reward_id]', reward.id, reward.id == @reward.try(:id), id: "contribution_amount_option_#{reward.id}"
         =number_to_currency(reward.minimum_contribution, precision: 0)
         =reward.description
+  =reward.working_long_description
 
 %h3
   .radio

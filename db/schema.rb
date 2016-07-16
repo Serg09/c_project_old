@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713221108) do
+ActiveRecord::Schema.define(version: 20160716012052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 20160713221108) do
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.string   "estimator_class",           limit: 200
+    t.text     "long_description"
   end
 
   create_table "image_binaries", force: :cascade do |t|
@@ -202,8 +203,8 @@ ActiveRecord::Schema.define(version: 20160713221108) do
     t.string   "state",                                null: false
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
-    t.decimal  "provider_fee", precision: 9, scale: 2
     t.decimal  "amount",       precision: 9, scale: 2, null: false
+    t.decimal  "provider_fee", precision: 9, scale: 2
   end
 
   add_index "payments", ["external_id"], name: "index_payments_on_external_id", unique: true, using: :btree

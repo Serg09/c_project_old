@@ -56,6 +56,34 @@ RSpec.describe Reward, type: :model do
     end
   end
 
+  describe '#working_long_description' do
+    context 'for a house-fulfilled reward' do
+      let (:house_reward) { FactoryGirl.create(:house_reward) }
+
+      context 'when #long_description present' do
+        let (:reward) do
+          FactoryGirl.create(:reward, house_reward: house_reward,
+                                      long_description: 'this is the long desc.') 
+        end
+
+        it 'is equal to #long_description' do
+          expect(reward.working_long_description).to eq(reward.long_description)
+        end
+      end
+
+      context 'when #long_description is blank' do
+        let (:reward) do
+          FactoryGirl.create(:reward, house_reward: house_reward,
+                                      long_description: nil)
+        end
+
+        it 'is equal to #long_description on the house reward' do
+          expect(reward.working_long_description).to eq(house_reward.long_description)
+        end
+      end
+    end
+  end
+
   describe '#minimum_contribution' do
     it 'is required' do
       reward = Reward.new attributes.except(:minimum_contribution)
