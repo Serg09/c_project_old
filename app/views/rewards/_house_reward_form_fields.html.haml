@@ -1,10 +1,21 @@
-.form-group{ class: form_group_class(@reward, :house_reward_id) }
-  =f.label :house_reward_id, 'Reward', class: 'control-label'
-  =f.select :house_reward_id, house_reward_options_for_select(@reward.house_reward_id), {}, class: 'form-control', autofocus: true
-  =help_blocks(@reward, :house_reward_id)
-.form-group{ class: form_group_class(@reward, :minimum_contribution) }
-  =f.label :minimum_contribution, class: 'control-label'
-  =f.number_field :minimum_contribution, class: 'form-control', rows: 3, min: 1, step: 1
-  =help_blocks(@reward, :minimum_contribution)
-=f.submit 'Save', class: 'btn btn-primary', title: 'Click here to save this reward.'
-=link_to 'Back', edit_campaign_path(@campaign), class: 'btn btn-default', title: 'Click here to cancel and return to the campaign edit form.'
+.row
+  .col-md-6
+    .form-group{ class: form_group_class(@reward, :house_reward_id) }
+      =f.label :house_reward_id, 'Reward', class: 'control-label'
+      =f.select :house_reward_id, house_reward_options_for_select(@reward.house_reward_id), {}, class: 'form-control', autofocus: true
+      =help_blocks(@reward, :house_reward_id)
+    .form-group{ class: form_group_class(@reward, :minimum_contribution) }
+      =f.label :minimum_contribution, class: 'control-label'
+      =f.number_field :minimum_contribution, class: 'form-control', rows: 3, min: 1, step: 1
+      =help_blocks(@reward, :minimum_contribution)
+  .col-md-6
+    .form-group{ class: form_group_class(@reward, :photo_file) }
+      =f.label :photo_file, class: 'control-label'
+      =f.file_field :photo_file, class: 'form-control'
+      =help_blocks(@reward, :photo_file)
+    -if @reward.photo_id
+      %img.img-rounded.img-responsive{ src: image_path(@reward.photo_id) }
+.row
+  .col-md-6
+    =f.submit 'Save', class: 'btn btn-primary', title: 'Click here to save this reward.'
+    =link_to 'Back', edit_campaign_path(@campaign), class: 'btn btn-default', title: 'Click here to cancel and return to the campaign edit form.'

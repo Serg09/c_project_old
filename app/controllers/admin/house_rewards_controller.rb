@@ -7,7 +7,7 @@ class Admin::HouseRewardsController < ApplicationController
   respond_to :html
 
   def index
-    @house_rewards = HouseReward.all
+    @house_rewards = HouseReward.all.order(:description)
   end
 
   def new
@@ -44,6 +44,9 @@ class Admin::HouseRewardsController < ApplicationController
   end
 
   def house_reward_params
-    params.require(:house_reward).permit(:description, :physical_address_required, :estimator_class)
+    params.require(:house_reward).permit(:description,
+                                         :long_description,
+                                         :physical_address_required,
+                                         :estimator_class)
   end
 end
