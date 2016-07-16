@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160716012052) do
+ActiveRecord::Schema.define(version: 20160716175133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,7 @@ ActiveRecord::Schema.define(version: 20160716012052) do
     t.integer  "house_reward_id"
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
+    t.integer  "photo_id"
   end
 
   add_index "rewards", ["campaign_id", "description"], name: "index_rewards_on_campaign_id_and_description", unique: true, using: :btree

@@ -48,6 +48,7 @@ class RewardsController < ApplicationController
   def reward_params
     params.require(:reward).permit(:description,
                                    :long_description,
+                                   :photo_file,
                                    :minimum_contribution,
                                    :physical_address_required,
                                    :house_reward_id)

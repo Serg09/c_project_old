@@ -20,6 +20,7 @@ class Image < ActiveRecord::Base
   has_many :bios, foreign_key: 'photo_id'
   has_many :cover_of_book_versions, foreign_key: 'cover_image_id', class_name: 'BookVersion'
   has_many :sample_of_book_versions, foreign_key: 'sample_id', class_name: 'BookVersion'
+  has_many :reward_photos, foreign_key: 'photo_id', class_name: 'Reward'
 
   validates_presence_of :user_id, :image_binary_id, :hash_id
   validates_length_of :hash_id, is: 40
@@ -63,14 +64,14 @@ class Image < ActiveRecord::Base
   end
 
   def can_be_viewed_by?(user)
-    return true if user_id == user.id && references.any?{|r| r.pending?}
-    references.any?{|r| r.approved?}
+    return true if user_id == user.id && references.any?{|r| r.visible_to_owner?}
+    references.any?{|r| r.visible_to_public?}
   end
 
   private
 
   def reference_collections
-    [bios, cover_of_book_versions, sample_of_book_versions]
+    [bios, cover_of_book_versions, sample_of_book_versions, reward_photos]
   end
 
   def references

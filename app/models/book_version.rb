@@ -49,6 +49,14 @@ class BookVersion < ActiveRecord::Base
      result
   end
 
+  def visible_to_owner?
+    !rejected?
+  end
+
+  def visible_to_public?
+    approved?
+  end
+
   private
 
   def cannot_have_more_than_3
