@@ -163,6 +163,15 @@ table.footnotes {
   }
 }
 
+.instructional {
+  margin: {
+    top: .5em;
+    bottom: .5em;
+  }
+  font-size: 90%;
+  font-style: italic;
+}
+
 @font-face {
   font-family: Quicksand;
   src: asset-url('Quicksand-Regular.otf');

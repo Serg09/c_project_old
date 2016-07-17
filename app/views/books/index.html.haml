@@ -24,3 +24,6 @@
                   %span.glyphicon.glyphicon-usd{ 'arial-hidden' => true }
       -if user_signed_in? && current_user.id == @author.id
         =link_to 'Add', new_book_path, class: 'btn btn-primary', title: 'Click here to add a new book.'
+    .col-md-6
+      %p Click the pencil button to edit the book details.
+      %p Click the dollar sign to create a crowdfunding campaign.

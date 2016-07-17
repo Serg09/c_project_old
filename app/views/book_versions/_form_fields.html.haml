@@ -30,10 +30,20 @@
             =f.label :cover_image_file, class: 'control-label'
             =f.file_field :cover_image_file, class: 'form-control'
             =help_blocks book_resource, :cover_image_file
+            %p.instructional
+              The cover image file should be a JPEG (JPG), PNG, or GIF. It will automatically
+              be reduced to fit 1024 x 1024 pixels on upload if either the height or the
+              width is greater than 1024. Please do not upload files that are substantially 
+              larger than that.
       -else
         =f.label :cover_image_file, class: 'control-label'
         =f.file_field :cover_image_file, class: 'form-control'
         =help_blocks book_resource, :cover_image_file
+        %p.instructional
+          The cover image file should be a JPEG (JPG), PNG, or GIF. It will automatically
+          be reduced to fit 1024 x 1024 pixels on upload if either the height or the
+          width is greater than 1024. Please do not upload files that are substantially 
+          larger than that.
     .form-group{ :class => form_group_class(book_resource, :sample_file) }
       =f.label :sample_file, class: 'control-label'
       -if book_resource.sample_id
@@ -44,12 +54,19 @@
           .col-sm-9
             =f.file_field :sample_file, class: 'form-control'
             =help_blocks book_resource, :sample_file
+            %p.instructional
+              Sample files should be in PDF format. The sample should include enough of the
+              book content to engage the reader without giving away the entire story.
       -else
         =f.file_field :sample_file, class: 'form-control'
         =help_blocks book_resource, :sample_file
+        %p.instructional
+          Sample files should be in PDF format. The sample should include enough of the
+          book content to engage the reader without giving away the entire story.
   .col-md-6
     .form-group{ :class => form_group_class(book_resource, :genres) }
       =f.label :genres, 'Genres', class: 'control-label'
+      .instructional Select up to 3 genres
       .row.genre-list
         -genre_groups(2).each do |genre_group|
           .col-sm-6
