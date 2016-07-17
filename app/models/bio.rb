@@ -39,6 +39,14 @@ class Bio < ActiveRecord::Base
     links.select{|link| link.url.present?}
   end
 
+  def visible_to_public?
+    approved?
+  end
+
+  def visible_to_owner?
+    !rejected?
+  end
+
   private
 
   def process_photo_file
