@@ -36,7 +36,9 @@ class ApplicationController < ActionController::Base
   if Rails.env.production?
     Rails.logger.info "Environment is production, use https by default"
     def default_url_options
-      super.merge protocol: 'https'
+      super.merge(protocol: 'https').tap do |r|
+        Rails.logger.debug "default_url_options=#{r.inspect}"
+      end
     end
   else
     Rails.logger.debug "Environment is not production, use http by default"
