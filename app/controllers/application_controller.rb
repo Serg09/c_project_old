@@ -34,9 +34,12 @@ class ApplicationController < ActionController::Base
   end
 
   if Rails.env.production?
+    Rails.logger.info "Environment is production, use https by default"
     def default_url_options
       super.merge protocol: 'https'
     end
+  else
+    Rails.logger.debug "Environment is not production, use http by default"
   end
 
   rescue_from CanCan::AccessDenied do |exception|
