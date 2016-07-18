@@ -33,6 +33,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  if Rails.env.production?
+    def default_url_options
+      super.merge protocol: 'https'
+    end
+  end
+
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to access_denied_redirect_path, alert: exception.message
   end
