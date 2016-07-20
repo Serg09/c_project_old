@@ -16,6 +16,8 @@ class UsersController < ApplicationController
 
   def show
     authorize! :show, @user
+    create_next_step
+
     respond_with @user
   end
 
@@ -41,6 +43,30 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def create_next_step
+    case
+    when !@user.active_bio
+      @next_step = OpenStruct.new(
+        title: 'Create Your Bio!',
+        content: <<-eos
+          First, you'll need to create a bio. It can be simple for now, but
+          before adding any book titles or activating a campaign, do this
+          first. <a href="#{new_bio_path}">Click here</a> to get started.
+        eos
+      )
+    when @user.books.none?
+      @next_step = OpenStruct.new(
+        title: 'Create Your First Book!',
+        content: <<-eos
+          Now you're ready to start on your first book. Tell readers about
+          a book you've already written, or one that you're been thinking
+          about writing. They'll even be able to help you fund it.
+          <a href="#{new_book_path}">Click here</a> to get started.
+        eos
+      )
+    end
+  end
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :phone_number, :contactable, :subscribed)
