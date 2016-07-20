@@ -13,4 +13,5 @@
   =render 'details', book_version: @book_version
   -if can? :update, @book_version.book
     .row
-      =link_to 'Edit', dynamic_edit_path(@book_version), class: 'btn btn-default'
+      .col-md-3
+        =link_to 'Edit', dynamic_edit_path(@book_version), class: 'btn btn-default'
