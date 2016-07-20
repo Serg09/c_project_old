@@ -6,10 +6,21 @@
     .col-md-6
       #house-fulfilled
         %h2 Fulfilled by Crowdscribed
+        %p
+          The cost for fulfilling these rewards, including setup, printing, and
+          shipping, will be subtracted from the money that is raised during the
+          campaign. See our
+          =link_to 'pricing sheet', '/docs/price_list.pdf', target: '_blank'
+          for more details.
         =form_for([@campaign, @reward]) do |f|
           =render 'house_reward_form_fields', f: f
     .col-md-6
       #author-fulfilled
         %h2 Fulfilled by you
+        %p
+          You will be responsible for fulfilling these items yourself. You
+          may use money raised during the campaign to pay for book orders,
+          but you will be responsible for shipping and any other costs not
+          associated with Crowdscribed.com.
         =form_for([@campaign, @reward]) do |f|
           =render 'form_fields', f: f
