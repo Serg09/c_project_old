@@ -15,8 +15,8 @@
         -if book_version.approved?
           =book_version.long_or_short_description.html_safe
         -else
-          =book_version.long_or_short_description
-    -if can?(:update, book_version.book) && book_version.book.campaigns.none?
+          %p=book_version.long_or_short_description
+    -if can?(:update, book_version.book) && book_version.book.campaigns.none? && book_version.approved?
       .row
         .col-sm-12
           =link_to 'Fund This Title!', book_campaigns_path(book_version.book_id), :class => 'btn btn-lg btn-success', :title => 'Click here to create a crowdfunding campaign for this title.'
