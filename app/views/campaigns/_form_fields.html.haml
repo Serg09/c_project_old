@@ -9,6 +9,6 @@
 .form-group
   =f.submit 'Save', class: 'btn btn-primary', title: 'Click here to save the campaign.'
   -if @campaign.id.present? && @campaign.unstarted?
-    =link_to 'Start', terms_campaign_path(@campaign), class: 'btn btn-success', title: 'Click here to start this campaign.'
+    =link_to 'Start', start_campaign_path(@campaign), class: "btn #{start_campaign_button_class(@campaign)}", title: start_campaign_title(@campaign)
     =link_to 'Delete', campaign_path(@campaign), class: 'btn btn-default', method: :delete, 'data-confirm' => 'Are you sure you want to delete this campaign?', title: 'Click here to delete this campaign.'
   =link_to 'Back', book_campaigns_path(@campaign.book), class: 'btn btn-default', title: 'Click here to return to the campaign list.'
