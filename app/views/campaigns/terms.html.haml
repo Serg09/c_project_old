@@ -11,7 +11,8 @@
           %li Costs for printing, shipping, handling and any applicable sales tax will be deducted from the amount raised for copies required to fulfill preorders and any additional copies ordered by the author.
           %li If the money raised during a crowdfunding campaign is not sufficient to pay for all services ordered, the author is personally responsible for paying the balance.
           %li If a campaign does not reach its established goal and the author chooses not to make up the difference, extend the campaign or adjust the services requested, and therefore the related costs, all money collected will be refunded to supporters, minus fees charged by the payment processing service.
-      =form_for(@campaign, url: start_campaign_path(@campaign), method: :patch) do |f|
+
+      =form_for(@campaign, url: @form_url, method: :patch) do |f|
         .checkbox
           %label
             =f.check_box :agree_to_terms

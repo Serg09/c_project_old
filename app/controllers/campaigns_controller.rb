@@ -93,6 +93,7 @@ class CampaignsController < ApplicationController
 
   def terms
     authorize! :update, @campaign
+    @form_url = start_campaign_path(@campaign)
   end
 
   private
