@@ -173,6 +173,10 @@ class Campaign < ActiveRecord::Base
     contribution_amount_needed == 0
   end
 
+  def author_ready?
+    !!author.try(:active_bio)
+  end
+
   private
 
   def can_start?
