@@ -1,4 +1,6 @@
 class CampaignsController < ApplicationController
+  include ApplicationHelper
+
   before_filter :authenticate_user!
   before_filter :load_campaign, except: [:index, :new, :create]
   before_filter :load_book, only: [:index, :new, :create]
@@ -43,17 +45,16 @@ class CampaignsController < ApplicationController
   def start
     authorize! :update, @campaign
 
-    if params[:campaign]
-      @campaign.update_attributes agree_to_terms: params[:campaign][:agree_to_terms]
-    end
-
-    if @campaign.start!
-      redirect_to campaign_path(@campaign), notice: 'The campaign was started successfully.'
+    @campaign.agree_to_terms = user_agreed_to_terms?
+    if !@campaign.agree_to_terms?
+      flash.now[:alert] = 'You must agree to the terms to continue.'
+      render :terms
     elsif !@campaign.target_date_in_range?
       redirect_to edit_campaign_path(@campaign), alert: 'The target date must be at least 30 days in the future.'
-    elsif !@campaign.agree_to_terms?
-      flash[:alert] = 'You must agree to the terms to continue.'
-      render :terms
+    elsif @campaign.start!
+      redirect_to campaign_path(@campaign), notice: 'The campaign was started successfully.'
+    else
+      redirect_to edit_campaign_path(@campaign), alert: 'We were unable to start the campaign.'
     end
   end
 
@@ -113,5 +114,14 @@ class CampaignsController < ApplicationController
   def load_campaign
     @campaign = Campaign.find(params[:id])
     @book = @campaign.book
+  end
+
+  def user_agreed_to_terms?
+    campaign_params = params[:campaign]
+    return false unless campaign_params
+
+    keys = [:agree_to_terms]
+    keys << :agree_to_terms_2 if @campaign.has_house_rewards?
+    keys.map{|k| html_true(campaign_params[k])}.all?
   end
 end

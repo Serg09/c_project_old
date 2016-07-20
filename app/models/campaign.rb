@@ -22,6 +22,8 @@ class Campaign < ActiveRecord::Base
   has_many :payments, through: :contributions
   has_many :rewards, dependent: :destroy
 
+  attr_accessor :agree_to_terms_2
+
   validates_presence_of :book_id, :target_date, :target_amount
   validates_numericality_of :target_amount, greater_than: 0
   validate :target_date, :must_be_in_range, on: :create
@@ -93,6 +95,10 @@ class Campaign < ActiveRecord::Base
   def cancel_contributions
     raise Exceptions::InvalidCampaignStateError unless cancelling?
     finalize_cancellation! if contributions.map(&:cancel!).all?
+  end
+
+  def has_house_rewards?
+    rewards.where('house_reward_id is not null').count != 0
   end
 
   # Iterates through the contributions and attempts
