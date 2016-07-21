@@ -2,6 +2,11 @@
   Campaign for #{h @campaign.book.administrative_title}
 
 .container.container-default
+  -unless @campaign.author_ready?
+    .row
+      .col-md-12
+        .alert.alert-warning
+          You must have an approved bio before you can start a funding campaign.
   .row
     .col-md-3
       %h2 Campaign information

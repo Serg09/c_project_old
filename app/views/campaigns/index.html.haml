@@ -22,7 +22,7 @@
                     %span.glyphicon.glyphicon-pencil{ 'arial-hidden' => true }
                   =link_to campaign_path(campaign), :method => :delete, 'data-confirm' => 'Are you sure you want to remove this campaign?', :class => 'btn btn-danger btn-xs delete-button', :title => 'Click here to remove the campaign.' do
                     %span.glyphicon.glyphicon-remove{ 'arial-hidden' => true }
-                  =link_to terms_campaign_path(campaign), :class => 'btn btn-success btn-xs start-button', :title => 'Click here to start the campaign.' do
+                  =link_to start_campaign_path(campaign), :class => "btn btn-xs start-button #{start_campaign_button_class(campaign)}", :title => start_campaign_title(campaign) do
                     %span.glyphicon.glyphicon-play{ 'arial-hidden' => true }
                 -else
                   =link_to campaign_path(campaign), :class => 'btn btn-info btn-xs progress-button', :title => 'Click here to view campaign progress' do

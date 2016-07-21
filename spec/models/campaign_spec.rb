@@ -366,7 +366,27 @@ RSpec.describe Campaign, type: :model do
   end
 
   context 'for an unstarted campaign' do
-    let (:campaign) { FactoryGirl.create(:unstarted_campaign, agree_to_terms: true) }
+    let (:author) { FactoryGirl.create(:author) }
+    let (:book) { FactoryGirl.create(:approved_book, author: author) }
+    let (:campaign) do
+      FactoryGirl.create(:unstarted_campaign, agree_to_terms: true,
+                                              book: book)
+    end
+
+    describe '#author_ready?' do
+      context 'when the author has an approved bio' do
+        it 'is true' do
+          expect(campaign.author_ready?).to be true
+        end
+      end
+      context 'when the author does not have an approved bio' do
+        let (:author) { FactoryGirl.create(:user) }
+
+        it 'is false' do
+          expect(campaign.author_ready?).to be false
+        end
+      end
+    end
 
     context 'when terms have been agreed to' do
       describe '#start' do

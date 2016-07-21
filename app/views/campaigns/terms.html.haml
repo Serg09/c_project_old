@@ -5,17 +5,32 @@
   .row
     .col-md-6
       %strong By signing up, I agree:
-      .well
-        %ul
-          %li All money raised in a Crowdscribed campaign goes either toward direct services provided by Crowdscribed and/or printed copies of the author's completed works. No money is ever released in cash to the author.
-          %li Costs for printing, shipping, handling and any applicable sales tax will be deducted from the amount raised for copies required to fulfill preorders and any additional copies ordered by the author.
-          %li If the money raised during a crowdfunding campaign is not sufficient to pay for all services ordered, the author is personally responsible for paying the balance.
-          %li If a campaign does not reach its established goal and the author chooses not to make up the difference, extend the campaign or adjust the services requested, and therefore the related costs, all money collected will be refunded to supporters, minus fees charged by the payment processing service.
-      =form_for(@campaign, url: start_campaign_path(@campaign), method: :patch) do |f|
-        .checkbox
-          %label
-            =f.check_box :agree_to_terms
-            I agree to the terms above
+      =form_for(@campaign, url: @form_url, method: :patch) do |f|
+        #standard-terms
+          .well
+            %ul
+              %li All money raised in a Crowdscribed campaign goes either toward direct services provided by Crowdscribed and/or printed copies of the author's completed works. No money is ever released in cash to the author.
+              %li Costs for printing, shipping, handling and any applicable sales tax will be deducted from the amount raised for copies required to fulfill preorders and any additional copies ordered by the author.
+              %li If the money raised during a crowdfunding campaign is not sufficient to pay for all services ordered, the author is personally responsible for paying the balance.
+              %li If a campaign does not reach its established goal and the author chooses not to make up the difference, extend the campaign or adjust the services requested, and therefore the related costs, all money collected will be refunded to supporters, minus fees charged by the payment processing service.
+          .checkbox
+            %label
+              =f.check_box :agree_to_terms
+              I agree to the terms above
+        -if @campaign.has_house_rewards?
+          #fulfillment-terms
+            %hr
+            .well
+              %ul
+                %li
+                  The cost of contribution rewards fulfilled by Crowdscribed will be
+                  subtracted from the amount raised. See
+                  =link_to 'our pricing sheet', '/docs/price_list.pdf', target: '_blank'
+                  for details.
+            .checkbox
+              %label
+                =f.check_box :agree_to_terms_2
+                I agree to the terms above
         =f.submit 'Start', class: 'btn btn-success', title: 'Click here to start the campaign.'
 
 

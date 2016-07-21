@@ -41,3 +41,8 @@
       .list-group
         =link_to 'Add/Edit my titles', books_path(@user), class: 'list-group-item'
         =link_to 'Home', root_path, class: 'list-group-item'
+    .col-md-4
+      -if @next_step
+        .panel.panel-primary
+          .panel-heading= @next_step.title
+          .panel-body= @next_step.content.html_safe
