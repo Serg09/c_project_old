@@ -6,6 +6,7 @@ Feature: Validate a campaign at start
   Scenario: An author starts a campaign with less than 30 days until the target date
     Given today is 1/1/2016
     And there is an author with email "john@doe.com" and password "please01"
+    And author john@doe.com has an approved bio
     And author john@doe.com has a book titled "Avoiding Procrastination"
     And the book "Avoiding Procrastination" has a unstarted campaign targeting $1,000 by 1/31/2016
 
