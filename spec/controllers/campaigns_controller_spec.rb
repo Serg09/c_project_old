@@ -10,6 +10,12 @@ RSpec.describe CampaignsController, type: :controller do
       target_amount: 5_000
     }
   end
+  let (:start_attributes) do
+    {
+      agree_to_terms: '1',
+      agree_to_terms_2: '1'
+    }
+  end
 
   before(:each) { Timecop.freeze(Chronic.parse('2016-03-02 12:00:00 CST')) }
   after(:each) { Timecop.return }
@@ -80,13 +86,13 @@ RSpec.describe CampaignsController, type: :controller do
           context 'and terms agreement' do
             describe 'patch :start' do
               it 'redirects to the campaign progress page' do
-                patch :start, id: campaign, campaign: { agree_to_terms: true }
+                patch :start, id: campaign, campaign: start_attributes
                 expect(response).to redirect_to campaign_path(campaign)
               end
 
               it 'changes the state to active' do
                 expect do
-                  patch :start, id: campaign, campaign: { agree_to_terms: true }
+                  patch :start, id: campaign, campaign: start_attributes
                   campaign.reload
                 end.to change(campaign, :state).from('unstarted').to('active')
               end
@@ -94,15 +100,18 @@ RSpec.describe CampaignsController, type: :controller do
           end
 
           context 'without terms agreement' do
+            let (:start_attributes) do
+              { agree_to_terms_2: '1' }
+            end
             describe 'path :start' do
               it 'does not change the state of the campaign' do
-                patch :start, id: campaign, campaign: { agree_to_terms: false }
+                patch :start, id: campaign, campaign: start_attributes
                 expect(response).to have_http_status :success
               end
 
               it 'renders the terms page' do
                 expect do
-                  patch :start, id: campaign, campaign: { agree_to_terms: false }
+                  patch :start, id: campaign, campaign: start_attributes
                 end.not_to change(campaign, :state)
               end
             end
@@ -136,7 +145,7 @@ RSpec.describe CampaignsController, type: :controller do
           after(:each) { Timecop.return }
 
           it 'redirects to the edit page' do
-            patch :start, id: campaign
+            patch :start, id: campaign, campaign: start_attributes
             expect(response).to redirect_to edit_campaign_path(campaign)
           end
 
@@ -148,7 +157,7 @@ RSpec.describe CampaignsController, type: :controller do
           end
 
           it 'indicates the reason it was not started' do
-            patch :start, id: campaign
+            patch :start, id: campaign, campaign: start_attributes
             expect(flash[:alert]).to match /target date must be at least 30 days in the future/
           end
         end
