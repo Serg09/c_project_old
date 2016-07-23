@@ -7,6 +7,7 @@ class Admin::CampaignsController < ApplicationController
     @campaigns = (params[:status] || 'current') == 'current' ?
       Campaign.current :
       Campaign.past
+    @campaigns = @campaigns.paginate(page: params[:page])
   end
 
   def show

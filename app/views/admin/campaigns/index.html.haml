@@ -21,3 +21,4 @@
             %td
               =link_to admin_campaign_path(campaign), class: 'btn btn-info btn-xs campaign-progress-button', title: 'Click here to see the progress of the campaign' do
                 %span.glyphicon.glyphicon-stats{ 'arial-hidden' => true }
+      =will_paginate @campaigns, renderer: BootstrapPagination::Rails
