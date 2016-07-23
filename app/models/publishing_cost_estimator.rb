@@ -11,6 +11,7 @@ class PublishingCostEstimator
   ANNUAL_MARKET_DISTRIBUTION = 15.0
 
   def estimate(book_count)
+    return 0 unless book_count > 0
     additive = ADDITIVE / (MULTIPLIER ** book_count)
     price = (BASE_PRICE + additive) * MARKUP_FACTOR
     book_count * price +
