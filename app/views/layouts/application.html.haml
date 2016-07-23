@@ -24,14 +24,16 @@
     %footer
       .container
         .row
-          .col-md-1
-            %span#siteseal
-              %script{ async: true, type: 'text/javascript', src: 'https://seal.godaddy.com/getSeal?sealID=vtHm9g7YPEMuostLcMzrwMTMh7SEo9OLmPTe1kxmF1pnVtuabdQsTITJb8xc' }
           .col-md-10
             %ul.footer-menu
               %li=link_to 'Contact us', new_inquiry_path
               %li Crowdscribed 2014
               %li All Rights Reserved
+          .col-md-1
+            =link_to 'Built with Glyphicons', 'http://glyphicons.com/', class: 'smaller'
+          .col-md-1
+            %span#siteseal
+              %script{ async: true, type: 'text/javascript', src: 'https://seal.godaddy.com/getSeal?sealID=vtHm9g7YPEMuostLcMzrwMTMh7SEo9OLmPTe1kxmF1pnVtuabdQsTITJb8xc' }
     :javascript
       $(function() {
         $('.date-field').each(function(index, elem) {

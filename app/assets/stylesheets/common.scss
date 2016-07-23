@@ -94,6 +94,9 @@ body > footer {
   font-size: 12px;
   line-height: 20px;
   text-align: center;
+  a {
+    color: #8C8989;
+  }
 }
 
 ul.footer-menu{
@@ -103,10 +106,11 @@ ul.footer-menu{
   li {
     display: inline-block;
     width: 20em;
-    a {
-      color: #8C8989;
-    }
   }
+}
+
+.smaller {
+  font-size: 80%;
 }
 
 .container-default {
