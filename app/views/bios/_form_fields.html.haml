@@ -13,6 +13,12 @@
 .form-group
   =f.label :photo_file, class: 'control-label'
   =f.file_field :photo_file, class: 'form-control'
+  %p.instructional
+    Be sure your photo is rotated correctly before uploading. Some cameras
+    (e.g., iPhones) save the picture as landscape an include metadata to
+    instruct the viewer to rotate it on display. Browsers don't always
+    honor this metadata, so it's better to be sure the image itself
+    is properly rotated.
 -@bio.links.each do |link|
   - link_id = "bio_links_attributes_#{link.site}_"
   - link_name = "bio[links_attributes][]"
