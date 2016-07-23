@@ -8,6 +8,7 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  estimator_class           :string(200)
+#  long_description          :text
 #
 
 class HouseReward < ActiveRecord::Base

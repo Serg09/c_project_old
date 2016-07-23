@@ -2,13 +2,13 @@
 #
 # Table name: payments
 #
-#  id              :integer          not null, primary key
-#  contribution_id :integer          not null
-#  external_id     :string
-#  state           :string           not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  provider_fee    :decimal(9, 2)
+#  id           :integer          not null, primary key
+#  external_id  :string
+#  state        :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  amount       :decimal(9, 2)    not null
+#  provider_fee :decimal(9, 2)
 #
 
 class Payment < ActiveRecord::Base
