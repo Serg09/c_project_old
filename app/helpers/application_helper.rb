@@ -32,6 +32,10 @@ module ApplicationHelper
     matches_path? '/admin/campaigns', {status: status}, {status: 'current'}
   end
 
+  def payment_path?(status)
+    matches_path? '/admin/payments', {status: status}, {status: 'pending'}
+  end
+
   def flash_key_to_alert_class(flash_key)
     "alert-#{FLASH_MAP[flash_key] || flash_key}"
   end

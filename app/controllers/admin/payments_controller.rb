@@ -1,7 +1,14 @@
 class Admin::PaymentsController < ApplicationController
   before_filter :authenticate_administrator!
-  before_filter :load_payment
+  before_filter :load_payment, only: [:show]
   layout 'admin'
+
+  def index
+    @payments = Payment.
+      where(state: params[:status] || 'pending').
+      order('created_at desc').
+      paginate(page: params[:page], per_page: 5)
+  end
 
   def show
   end

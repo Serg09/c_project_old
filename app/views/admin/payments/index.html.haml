@@ -1,0 +1,21 @@
+=content_for :page_title do
+  Payments
+
+.container.container-default
+  .row
+    .col-md-5
+      =render_navigation context: :admin, level: 2
+      %table#payments-table.table.table-striped
+        %tr
+          %th.text-right Date
+          %th.text-right Amount
+          %th &nbsp;
+        -@payments.each do |payment|
+          %tr
+            %td.text-right= format_date(payment.created_at)
+            %td.text-right= number_to_currency(payment.amount, precision: 2)
+            %td
+              .btn-group
+                =link_to admin_payment_path(payment), class: 'btn btn-xs btn-info', title: 'Click here to view the payment details' do
+                  %span.glyphicon.glyphicon-zoom-in{ 'aria-hidden' => true }
+      =will_paginate @payments, renderer: BootstrapPagination::Rails

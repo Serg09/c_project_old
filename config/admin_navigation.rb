@@ -26,6 +26,15 @@ SimpleNavigation::Configuration.run do |navigation|
         campaigns.item :active, 'Current', admin_campaigns_path, highlights_on: ->{ campaign_path?('current') }
         campaigns.item :inactive, 'Past', admin_campaigns_path(status: :past), highlights_on: ->{ campaign_path?('past') }
       end
+      primary.item :payments, 'Payments', admin_payments_path, highlights_on: ->{ payment_path?('pending') } do |payments|
+        payments.auto_highlight = false
+        payments.dom_class = 'nav nav-tabs'
+        payments.item :pending, 'Pending', admin_payments_path, highlights_on: ->{ payment_path?('pending') }
+        payments.item :approved, 'Approved', admin_payments_path(status: :approved), highlights_on: ->{ payment_path?('approved') }
+        payments.item :completed, 'Completed', admin_payments_path(status: :completed), highlights_on: ->{ payment_path?('completed') }
+        payments.item :failed, 'Failed', admin_payments_path(status: :failed), highlights_on: ->{ payment_path?('failed') }
+        payments.item :refunded, 'Refunded', admin_payments_path(status: :refunded), highlights_on: ->{ payment_path?('refunded') }
+      end
       primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path do |inquiries|
         inquiries.auto_highlight = false
         inquiries.dom_class = 'nav nav-tabs'
