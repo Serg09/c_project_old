@@ -7,7 +7,7 @@ class Admin::PaymentsController < ApplicationController
     @payments = Payment.
       where(state: params[:status] || 'pending').
       order('created_at desc').
-      paginate(page: params[:page], per_page: 5)
+      paginate(page: params[:page])
   end
 
   def show
