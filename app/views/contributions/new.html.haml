@@ -1,7 +1,7 @@
 =content_for :page_title do
   Make a contribution!
 
-.container.container-default
+.container.container-default{ 'ng-app' => 'Crowdscribed' }
   .row
     .col-md-12
       %h1 Contribute!
@@ -11,10 +11,5 @@
         by
         =@campaign.book.author.full_name
         with a contribution.
-  =form_for([@campaign, @contribution]) do |f|
-    .row
-      .col-md-12
-        =render 'amounts_form_fields', f: f
-    .row
-      .col-md-12
-        =f.submit 'Next', class: 'btn btn-primary'
+      .app{ 'ng-controller' => 'ContributionController as contributionCtl' }
+        {{ test }}
