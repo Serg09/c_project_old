@@ -61,6 +61,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'timecop'
+  gem 'jasmine-rails'
 end
 
 group :development do

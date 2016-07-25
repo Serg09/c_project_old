@@ -1,6 +1,7 @@
 require 'resque_web'
 
 Rails.application.routes.draw do
+  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount ResqueWeb::Engine => '/resque_web'
 
   devise_for :administrators, path: 'admin', controllers: {
