@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   resources :images, only: :show
   resources :campaigns, only: [:show, :edit, :update, :destroy] do
     resources :contributions, only: [:new, :create]
-    resources :rewards, only: [:new, :create]
+    resources :rewards, only: [:index, :new, :create]
     member do
       get :terms
       patch :start

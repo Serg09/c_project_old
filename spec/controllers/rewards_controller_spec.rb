@@ -233,5 +233,26 @@ RSpec.describe RewardsController, type: :controller do
         end.not_to change(Reward, :count)
       end
     end
+
+    describe 'GET #index' do
+      context 'in JSON' do
+        let!(:reward1) do
+          FactoryGirl.create(:reward, campaign: campaign,
+                                      description: 'Total conciousness')
+        end
+        let!(:reward2) do
+          FactoryGirl.create(:reward, campaign: campaign,
+                                      description: 'Sharp stick in the eye')
+        end
+        it 'returns the rewards for the specified campaign' do
+          get :index, campaign_id: campaign, format: :json
+          returned = JSON.parse(response.body, symbolize_names: true)
+          expect(returned.map{|h| h[:description]}).to eq [
+            'Sharp stick in the eye',
+            'Total conciousness'
+          ]
+        end
+      end
+    end
   end
 end
