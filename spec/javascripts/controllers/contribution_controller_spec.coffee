@@ -1,3 +1,36 @@
 describe 'ContributionController', ->
+  beforeEach module('Crowdscribed')
+
+  httpBackend = null
+  controller = null
+  rootScope = null
+  scope = null
+  beforeEach(inject((_$rootScope_, _$controller_, _$httpBackend_) ->
+    httpBackend = _$httpBackend_
+    rootScope = _$rootScope_
+    scope = rootScope.$new()
+    controller = _$controller_ 'ContributionController',
+      $scope: scope
+  ))
+
   describe 'rewards', ->
-    it 'is a list of available rewards for the campaign'
+    it 'is a list of available rewards for the specified campaign', ->
+      httpBackend.expectGET('/campaigns/1/rewards.json').respond [
+        id: 1
+        campaign_id: 1
+        description: 'Printed copy of the book'
+        long_description: 'This is the long description'
+        minimum_contribution: 50
+        physical_address_required: true
+      ,
+        id: 2
+        campaign_id: 1
+        description: 'Electronic copy of the book'
+        long_description: 'This is the other long description'
+        minimum_contribution: 30
+        physical_address_required: false
+      ]
+      scope.campaignId = 1
+      scope.$digest()
+      httpBackend.flush()
+      expect(scope.rewards.length).toBe 2
