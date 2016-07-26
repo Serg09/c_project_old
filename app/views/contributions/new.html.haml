@@ -12,3 +12,6 @@
         =@campaign.book.author.full_name
         with a contribution.
       .app{ 'ng-controller' => 'ContributionController as contributionCtl', 'ng-init' => "campaignId = #{@campaign.id}" }
+        %ul
+          %li{ 'ng-repeat' => 'reward in rewards' }
+            {{ reward.description }}
