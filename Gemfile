@@ -44,6 +44,7 @@ gem 'resque-scheduler'
 gem 'resque-web', require: 'resque_web'
 gem 'wysiwyg-rails'
 gem 'angularjs-rails'
+gem 'underscore-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

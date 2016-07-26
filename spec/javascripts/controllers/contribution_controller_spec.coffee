@@ -33,4 +33,8 @@ describe 'ContributionController', ->
       scope.campaignId = 1
       scope.$digest()
       httpBackend.flush()
-      expect(scope.rewards.length).toBe 2
+      rewardNames = _.map(scope.rewards, 'description')
+      expect(rewardNames).toEqual [
+        'Printed copy of the book'
+        'Electronic copy of the book'
+      ]

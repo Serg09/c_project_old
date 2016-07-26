@@ -17,4 +17,5 @@
 //= require bootstrap
 //= require turbolinks
 //= require masonry.pkgd.min
+//= require underscore
 //= require_tree .
