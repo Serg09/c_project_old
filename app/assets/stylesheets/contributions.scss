@@ -3,17 +3,18 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .reward-description {
-  margin-left: 1em;
 }
 
-.reward-list {
-  margin-left: 0;
-  padding-left: 0;
-  list-style-type: none;
-  li {
-    margin: 1em;
-    button {
-      font-weight: bold;
-    }
+.reward-option {
+  margin: {
+    top: 1em;
   }
+}
+
+.reward-header {
+  font-size: 150%;
+}
+
+.selected-reward {
+  border: solid blue 2px;
 }

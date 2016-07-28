@@ -13,6 +13,9 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
   $scope.$watch 'selectedRewardId', ->
     selectReward()
 
+  $scope.handleRewardButtonClick = (e) ->
+    $scope.selectedRewardId = $(e.currentTarget).data('reward-id')
+
   loadRewards = ->
     if $scope.campaignId
       url = "/campaigns/#{$scope.campaignId}/rewards.json"
