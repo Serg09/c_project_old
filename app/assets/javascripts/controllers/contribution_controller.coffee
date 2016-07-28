@@ -6,9 +6,14 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
   $scope.campaignId = null
   $scope.rewards = []
   $scope.$watch 'campaignId', ->
-    $scope.loadRewards()
+    loadRewards()
 
-  $scope.loadRewards = ->
+  $scope.selectedRewardId = null
+  $scope.selectedReward = null
+  $scope.$watch 'selectedRewardId', ->
+    selectReward()
+
+  loadRewards = ->
     if $scope.campaignId
       url = "/campaigns/#{$scope.campaignId}/rewards.json"
       $http.get(url).then (response)->
@@ -17,6 +22,14 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         console.log "Unable to get the rewards: #{error}"
     else
       $scope.rewards = []
+
+  selectReward = ->
+    $scope.selectedReward = _.chain($scope.rewards).
+      filter((r)->
+        r['id'] == $scope.selectedRewardId
+      ).
+      first().
+      value()
 
   return
 ])
