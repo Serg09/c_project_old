@@ -17,11 +17,22 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
     if $scope.campaignId
       url = "/campaigns/#{$scope.campaignId}/rewards.json"
       $http.get(url).then (response)->
-        $scope.rewards = response.data
+        $scope.rewards = _.map(response.data, prepareReward)
       , (error)->
         console.log "Unable to get the rewards: #{error}"
     else
       $scope.rewards = []
+
+  prepareReward = (reward)->
+    if reward.house_reward_id && ! reward.long_description
+      getHouseReward reward.house_reward_id, (houseReward)->
+        reward.long_description = houseReward.long_description
+    reward
+
+  getHouseReward = (id, callback)->
+    url = "/house_rewards/#{id}.json"
+    $http.get(url).then (response)->
+      callback response.data
 
   selectReward = ->
     $scope.selectedReward = _.chain($scope.rewards).

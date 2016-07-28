@@ -12,6 +12,13 @@
         =@campaign.book.author.full_name
         with a contribution.
       .app{ 'ng-controller' => 'ContributionController as contributionCtl', 'ng-init' => "campaignId = #{@campaign.id}" }
-        %ul
-          %li{ 'ng-repeat' => 'reward in rewards' }
-            {{ reward.description }}
+        %ul.reward-list
+          %li.reward-option{ 'ng-repeat' => 'reward in rewards' }
+            %button.pull-left.btn.btn-lg.btn-success
+              {{ reward.minimum_contribution | currency : $ : 0}}
+
+            %img.img.img-responsive.img-rounded.pull-right{ 'ng-if' => 'reward.photo_id', 'ng-src' => 'images/{{reward.photo_id}}' }
+
+            %h3 {{ reward.description }}
+            %p.reward-description
+              {{ reward.long_description }}
