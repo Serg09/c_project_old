@@ -29,12 +29,8 @@ describe 'ContributionController', ->
       house_reward_id: 100
       minimum_contribution: 30
       physical_address_required: false
+      working_description: longDescription
     ]
-    httpBackend.whenGET('/house_rewards/100.json').respond
-      id: 100
-      description: 'Electronic copy of the book'
-      long_description: longDescription
-      physical_address_required: true
 
   describe 'rewards', ->
     it 'is a list of available rewards for the specified campaign', ->
@@ -56,6 +52,6 @@ describe 'ContributionController', ->
       scope.$digest()
       expect(scope.selectedReward).not.toBeNull()
       expect(scope.selectedReward['description']).toEqual 'Electronic copy of the book'
-      expect(scope.selectedReward['long_description']).toEqual longDescription
+      expect(scope.selectedReward['working_description']).toEqual longDescription
 
 

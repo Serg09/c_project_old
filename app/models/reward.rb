@@ -37,6 +37,11 @@ class Reward < ActiveRecord::Base
     apply_house_reward_attributes
   end
 
+  def as_json(options = {})
+    o = !!long_description ? options : options.merge(methods: :working_description)
+    super o
+  end
+
   def estimate_cost
     return unless house_reward.present?
     house_reward.estimate_cost(fulfillments.count)
