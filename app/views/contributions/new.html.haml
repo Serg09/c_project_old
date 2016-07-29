@@ -1,20 +1,20 @@
 =content_for :page_title do
   Make a contribution!
 
-.container.container-default{ 'ng-app' => 'Crowdscribed' }
+.container.container-default.contribution{ 'ng-app' => 'Crowdscribed', 'ng-controller' => 'ContributionController as contributionCtl', 'ng-init' => "campaignId = #{@campaign.id}" }
+  %h1 Contribute!
+  %h2
+    Support the book
+    %i= @campaign.book.approved_version.title
+    by
+    =@campaign.book.author.full_name
+    with a contribution.
   .row
     .col-md-8
-      %h1 Contribute!
-      %h2
-        Support the book
-        %i= @campaign.book.approved_version.title
-        by
-        =@campaign.book.author.full_name
-        with a contribution.
-      .app{ 'ng-controller' => 'ContributionController as contributionCtl', 'ng-init' => "campaignId = #{@campaign.id}" }
-        .row.reward-option{ 'ng-repeat' => 'reward in rewards', id: "reward_{{reward.id}}" }
+      .app
+        .row.reward-option{ 'ng-repeat' => 'reward in rewards', 'ng-class' => '{selected: reward.selected}', 'data-reward-id' => '{{reward.id}}' }
           .col-sm-2
-            %button.btn.btn-lg.btn-success{ 'data-reward-id' => '{{reward.id}}', 'ng-click' => 'handleRewardButtonClick($event)' }
+            %button.btn.btn-lg.btn-success{ 'ng-click' => 'handleRewardButtonClick($event)' }
               {{ reward.minimum_contribution | currency : $ : 0}}
           %div{ 'ng-class' => '{"col-sm-6": reward.photo_id, "col-sm-10": !reward.photo_id}' }
             .reward-header {{ reward.working_description }}
@@ -28,6 +28,4 @@
           .col-sm-10
             .reward-header Choose your amount
     .col-md-4
-      and the winner is!
-      {{ selectedRewardId }}
 

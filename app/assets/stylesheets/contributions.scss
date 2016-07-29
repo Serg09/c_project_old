@@ -9,12 +9,17 @@
   margin: {
     top: 1em;
   }
+  padding: 1em;
+}
+
+.contribution {
+  .selected {
+    background: #00ADDE;
+    color: #fff;
+    border-radius: 1em;
+  }
 }
 
 .reward-header {
   font-size: 150%;
-}
-
-.selected-reward {
-  border: solid blue 2px;
 }

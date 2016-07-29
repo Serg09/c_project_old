@@ -11,10 +11,12 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
   $scope.selectedRewardId = null
   $scope.selectedReward = null
   $scope.$watch 'selectedRewardId', ->
-    selectReward()
+    $scope.selectedReward.selected = false if $scope.selectedReward
+    r = selectReward()
+    r.selected = true if r
 
   $scope.handleRewardButtonClick = (e) ->
-    $scope.selectedRewardId = $(e.currentTarget).data('reward-id')
+    $scope.selectedRewardId = $(e.currentTarget).closest(".row").data('reward-id')
 
   loadRewards = ->
     if $scope.campaignId
