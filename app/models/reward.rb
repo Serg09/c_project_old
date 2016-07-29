@@ -38,8 +38,8 @@ class Reward < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    o = !!long_description ? options : options.merge(methods: :working_description)
-    super o
+    super options.merge(methods: [:working_description,
+                                  :working_long_description])
   end
 
   def estimate_cost

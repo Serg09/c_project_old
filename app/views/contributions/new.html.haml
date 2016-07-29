@@ -3,7 +3,7 @@
 
 .container.container-default{ 'ng-app' => 'Crowdscribed' }
   .row
-    .col-md-6
+    .col-md-8
       %h1 Contribute!
       %h2
         Support the book
@@ -16,19 +16,18 @@
           .col-sm-2
             %button.btn.btn-lg.btn-success{ 'data-reward-id' => '{{reward.id}}', 'ng-click' => 'handleRewardButtonClick($event)' }
               {{ reward.minimum_contribution | currency : $ : 0}}
-          .col-sm-6
-            .reward-header {{ reward.description }}
+          %div{ 'ng-class' => '{"col-sm-6": reward.photo_id, "col-sm-10": !reward.photo_id}' }
+            .reward-header {{ reward.working_description }}
             .reward-description
-              {{ reward.long_description }}
-          .col-sm-4
-            %img.img.img-responsive.img-rounded{ 'ng-if' => 'reward.photo_id', 'ng-src' => '/images/{{reward.photo_id}}' }
+              {{ reward.working_long_description }}
+          .col-sm-4{ 'ng-if' => 'reward.photo_id' }
+            %img.img.img-responsive.img-rounded{ 'ng-src' => '/images/{{reward.photo_id}}' }
         .row.reward-option
           .col-sm-2
             %input.form-control{ type: 'text' }
           .col-sm-10
             .reward-header Choose your amount
-    .col-md-6
+    .col-md-4
       and the winner is!
       {{ selectedRewardId }}
-      {{ selectedReward.description }}
 
