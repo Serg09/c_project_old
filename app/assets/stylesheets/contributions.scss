@@ -10,12 +10,27 @@
     top: 1em;
   }
   padding: 1em;
+  cursor: pointer;
+}
+
+.reward-contribution-amount {
+  text-align: right;
+  border-radius: 0.5em;
+  font-size: 200%;
+  font-weight: bold;
+  background-color: #2C8598;
+  color: #fff;
+  padding: {
+    top: 1em;
+    bottom: 1em;
+    right: 1em;
+  }
 }
 
 .contribution {
   .selected {
-    background: #00ADDE;
-    color: #fff;
+    background: #AAD8E5;
+    color: #000;
     border-radius: 1em;
   }
 }
