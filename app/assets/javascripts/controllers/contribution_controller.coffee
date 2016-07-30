@@ -3,6 +3,9 @@
 app = angular.module('Crowdscribed', [])
 app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
+  $scope.STATE_ABBR_PATTERN = "\\A[a-zA-Z]{2}\\z"
+  $scope.POSTAL_CODE_PATTERN = "\\A\\d{5}\\z"
+
   $scope.campaignId = null
   $scope.rewards = []
   $scope.$watch 'campaignId', ->
@@ -40,6 +43,9 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
     _.chain([$scope.selectedReward, $scope.customReward]).
       some((r) -> r && r.physical_address_required).
       value()
+
+  $scope.submitForm = () ->
+    console.log "submitForm"
 
   loadRewards = ->
     if $scope.campaignId

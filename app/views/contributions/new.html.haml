@@ -38,26 +38,31 @@
                   %input{ type: 'radio', name: 'customRewardId', 'ng-model' => 'customRewardId', value: '' }
                   I don't require anything in return for my contribution
     .col-md-4
-      .form-group
-        %label.control-label{ for: 'email' } Email
-        %input#email.form-control{ type: 'email', name: 'email', 'ng-model' => 'email' }
-      %fieldset{ 'ng-show' => 'addressRequired()' }
-        .form-group
-          %label.control-label{ for: 'address1' } Street address
-          %input#address1.form-control{ type: 'text', name: 'address1', 'ng-model' => 'address1' }
-        .form-group
-          %label.control-label{ for: 'address2' } Apt./Suite #
-          %input#address2.form-control{ type: 'text', name: 'address2', 'ng-model' => 'address2' }
-        .row
-          .col-sm-4
-            .form-group
-              %label.control-label{ for: 'city' } Apt./Suite #
-              %input#city.form-control{ type: 'text', name: 'city', 'ng-model' => 'city' }
-          .col-sm-4
-            .form-group
-              %label.control-label{ for: 'state' } Apt./Suite #
-              %input#state.form-control{ type: 'text', name: 'state', 'ng-model' => 'state' }
-          .col-sm-4
-            .form-group
-              %label.control-label{ for: 'postalCode' } Apt./Suite #
-              %input#postalCode.form-control{ type: 'text', name: 'postalCode', 'ng-model' => 'postalCode' }
+      %form{ novalidate: true, name: 'contributionForm' }
+        .form-group{ 'ng-class' => '{"has-error": contributionForm.email.$invalid && !contributionForm.email.$pristine, "has-success": contributionForm.email.$valid}' }
+          %label.control-label{ for: 'email' } Email
+          %input#email.form-control{ type: 'email', name: 'email', 'ng-model' => 'email', required: true, email: true }
+          %span.help-block{ 'ng-show' => 'contributionForm.email.$dirty && contributionForm.email.$error.required' } Email is required
+          %span.help-block{ 'ng-show' => 'contributionForm.email.$dirty && contributionForm.email.$error.email' } Email is invalid
+        %fieldset{ 'ng-show' => 'addressRequired()' }
+          .form-group
+            %label.control-label{ for: 'address1' } Street address
+            %input#address1.form-control{ type: 'text', name: 'address1', 'ng-model' => 'address1' }
+          .form-group
+            %label.control-label{ for: 'address2' } Apt./Suite #
+            %input#address2.form-control{ type: 'text', name: 'address2', 'ng-model' => 'address2' }
+          .row
+            .col-sm-5
+              .form-group
+                %label.control-label{ for: 'city' } City
+                %input#city.form-control{ type: 'text', name: 'city', 'ng-model' => 'city' }
+            .col-sm-3
+              .form-group
+                %label.control-label{ for: 'state' } State
+                %input#state.form-control{ type: 'text', name: 'state', 'ng-model' => 'state', 'ng-pattern' => "STATE_ABBR_PATTERN", maxlength: 2 }
+            .col-sm-4
+              .form-group
+                %label.control-label{ for: 'postalCode' } Postal code
+                %input#postalCode.form-control{ type: 'text', name: 'postalCode', 'ng-model' => 'postalCode', 'ng-pattern' => "POSTAL_CODE_PATTERN" }
+        %button.btn.btn-primary{ 'ng-click' => 'submitForm()', 'ng-disabled' => 'contributionForm.$invalid' }
+          Submit

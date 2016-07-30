@@ -126,3 +126,10 @@ describe 'ContributionController', ->
       scope.customRewardId = electronicRewardId
       scope.$apply()
       expect(scope.addressRequired()).toBe false
+
+  describe 'submitForm', ->
+    describe 'with validte data', ->
+      it 'executes the payment'
+      it 'saves the payment record'
+      it 'saves the transaction record'
+      it 'saves the contribution record'
