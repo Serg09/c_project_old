@@ -11,23 +11,35 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
   $scope.selectedRewardId = null
   $scope.selectedReward = null
   $scope.customContributionAmount = null
-  $scope.availableRewards = []
+  $scope.customRewardId = null # reward selected after entering a custom donation amount
+  $scope.customReward = null
+  $scope.availableRewards = [] # rewards available for a custom amount
 
   $scope.$watch 'selectedRewardId', ->
     $scope.selectedReward.selected = false if $scope.selectedReward
-    r = selectReward()
-    if r
-      r.selected = true
+    $scope.selectedReward = _.find $scope.rewards, (r) ->
+      r.id == $scope.selectedRewardId
+    if $scope.selectedReward
+      $scope.selectedReward.selected = true
       $scope.customContributionAmount = null
 
   $scope.$watch 'customContributionAmount', ->
     refreshAvailableRewards()
 
-  $scope.handleRewardButtonClick = (e) ->
+  $scope.$watch 'customRewardId', ->
+    $scope.customReward = _.find $scope.availableRewards, (r) ->
+      r.id == $scope.customRewardId
+
+  $scope.handleRewardClick = (e) ->
     $scope.selectedRewardId = $(e.currentTarget).data('reward-id')
 
   $scope.clearSelection = () ->
     $scope.selectedRewardId = null
+
+  $scope.addressRequired = () ->
+    _.chain([$scope.selectedReward, $scope.customReward]).
+      some((r) -> r && r.physical_address_required).
+      value()
 
   loadRewards = ->
     if $scope.campaignId
@@ -46,14 +58,6 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         r.minimum_contribution <= $scope.customContributionAmount
     else
       $scope.availableRewards = []
-
-  selectReward = ->
-    $scope.selectedReward = _.chain($scope.rewards).
-      filter((r)->
-        r['id'] == $scope.selectedRewardId
-      ).
-      first().
-      value()
 
   return
 ])

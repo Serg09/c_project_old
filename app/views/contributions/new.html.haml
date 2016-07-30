@@ -12,7 +12,7 @@
   .row
     .col-md-8
       .app
-        .row.reward-option{ 'ng-repeat' => 'reward in rewards', 'ng-class' => '{selected: reward.selected}', 'data-reward-id' => '{{reward.id}}', 'ng-click' => 'handleRewardButtonClick($event)' }
+        .row.reward-option{ 'ng-repeat' => 'reward in rewards', 'ng-class' => '{selected: reward.selected}', 'data-reward-id' => '{{reward.id}}', 'ng-click' => 'handleRewardClick($event)' }
           .col-sm-2
             .reward-contribution-amount
               {{ reward.minimum_contribution | currency : $ : 0}}
@@ -31,11 +31,33 @@
               Select one of the following:
               .radio{ 'ng-repeat' => 'reward in availableRewards' }
                 %label
-                  %input{ type: 'radio', name: 'custom_amount_reward', value: '{{reward.id}}' }
+                  %input{ type: 'radio', name: 'customRewardId', 'ng-model' => '$parent.customRewardId', 'ng-value': 'reward.id' }
                   {{ reward.description }}
               .radio
                 %label
-                  %input{ type: 'radio', name: 'custom_amount_reward', value: '' }
+                  %input{ type: 'radio', name: 'customRewardId', 'ng-model' => 'customRewardId', value: '' }
                   I don't require anything in return for my contribution
     .col-md-4
-
+      .form-group
+        %label.control-label{ for: 'email' } Email
+        %input#email.form-control{ type: 'email', name: 'email', 'ng-model' => 'email' }
+      %fieldset{ 'ng-show' => 'addressRequired()' }
+        .form-group
+          %label.control-label{ for: 'address1' } Street address
+          %input#address1.form-control{ type: 'text', name: 'address1', 'ng-model' => 'address1' }
+        .form-group
+          %label.control-label{ for: 'address2' } Apt./Suite #
+          %input#address2.form-control{ type: 'text', name: 'address2', 'ng-model' => 'address2' }
+        .row
+          .col-sm-4
+            .form-group
+              %label.control-label{ for: 'city' } Apt./Suite #
+              %input#city.form-control{ type: 'text', name: 'city', 'ng-model' => 'city' }
+          .col-sm-4
+            .form-group
+              %label.control-label{ for: 'state' } Apt./Suite #
+              %input#state.form-control{ type: 'text', name: 'state', 'ng-model' => 'state' }
+          .col-sm-4
+            .form-group
+              %label.control-label{ for: 'postalCode' } Apt./Suite #
+              %input#postalCode.form-control{ type: 'text', name: 'postalCode', 'ng-model' => 'postalCode' }
