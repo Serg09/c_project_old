@@ -44,14 +44,46 @@ describe 'ContributionController', ->
       ]
 
   describe 'selectedReward', ->
-    it 'is the reward associated with selectedRewardId', ->
+    beforeEach ->
       scope.campaignId = 1
       scope.$digest()
       httpBackend.flush()
+
+    it 'is the reward associated with selectedRewardId', ->
       scope.selectedRewardId = 2
       scope.$digest()
       expect(scope.selectedReward).not.toBeNull()
       expect(scope.selectedReward['description']).toEqual 'Electronic copy of the book'
       expect(scope.selectedReward['working_description']).toEqual longDescription
 
+  describe 'clearSelection', ->
+    beforeEach ->
+      scope.campaignId = 1
+      scope.$digest()
+      httpBackend.flush()
 
+    it 'unselects the selected reward', ->
+      expect(scope.selectedRewardId).not.toBeNull()
+      scope.clearSelection()
+      expect(scope.selectedRewardId).toBeNull()
+
+  describe 'customContributionAmount', ->
+    beforeEach ->
+      scope.campaignId = 1
+      scope.$digest()
+      httpBackend.flush()
+
+    describe 'when changed', ->
+      it 'populates $scope.availableRewards with the rewards that have a minimum donation less than or equal to the custom donation amount', ->
+        scope.selectedRewardId = null
+        scope.customContributionAmount = 10
+        scope.$apply()
+        expect(scope.availableRewards.map((r) -> r.description)).toEqual []
+
+        scope.customContributionAmount = 30
+        scope.$apply()
+        expect(scope.availableRewards.map((r) -> r.description)).toEqual ['Electronic copy of the book']
+
+        scope.customContributionAmount = 50
+        scope.$apply()
+        expect(scope.availableRewards.map((r) -> r.description)).toEqual ['Printed copy of the book', 'Electronic copy of the book']

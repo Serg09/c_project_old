@@ -22,10 +22,20 @@
               {{ reward.working_long_description }}
           .col-sm-4{ 'ng-if' => 'reward.photo_id' }
             %img.img.img-responsive.img-rounded{ 'ng-src' => '/images/{{reward.photo_id}}' }
-        .row.reward-option
+        .row.reward-option{ 'ng-class' => '{selected: !selectedRewardId}' }
           .col-sm-2
-            %input.form-control{ type: 'text' }
+            %input.form-control.custom-reward-amount{ type: 'number', 'ng-model' => 'customContributionAmount', 'ng-focus' => 'clearSelection()' }
           .col-sm-10
             .reward-header Choose your amount
+            %div{ 'ng-show' => 'availableRewards.length > 0' }
+              Select one of the following:
+              .radio{ 'ng-repeat' => 'reward in availableRewards' }
+                %label
+                  %input{ type: 'radio', name: 'custom_amount_reward', value: '{{reward.id}}' }
+                  {{ reward.description }}
+              .radio
+                %label
+                  %input{ type: 'radio', name: 'custom_amount_reward', value: '' }
+                  I don't require anything in return for my contribution
     .col-md-4
 
