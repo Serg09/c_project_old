@@ -3,8 +3,8 @@
 app = angular.module('Crowdscribed', [])
 app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
-  $scope.STATE_ABBR_PATTERN = "\\A[a-zA-Z]{2}\\z"
-  $scope.POSTAL_CODE_PATTERN = "\\A\\d{5}\\z"
+  $scope.STATE_ABBR_PATTERN = "^[a-zA-Z]{2}$"
+  $scope.POSTAL_CODE_PATTERN = "^\\d{5}$"
 
   $scope.campaignId = null
   $scope.rewards = []
@@ -38,7 +38,6 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
   $scope.clearSelection = () ->
     $scope.selectedRewardId = null
-
   $scope.addressRequired = () ->
     _.chain([$scope.selectedReward, $scope.customReward]).
       some((r) -> r && r.physical_address_required).
