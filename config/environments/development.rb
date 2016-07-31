@@ -41,11 +41,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 end
 
-PayPal::SDK.configure(
-  mode: 'sandbox',
-  client_id: 'AbPy-TXRln3F1b3vl52ENa6A8RQe7NHCYCGMAGO6479GINXG4FehZUzHfV5WHe_gl126dfM_c0Wx4ic3',
-  client_secret: 'EIHo7p65fWq2CG6FlCWo4bfYNG2P6Xsxw3CZ45G2YGXvVF-B-8NL77fj_Hayl1Jr3wzV7bwgs8EsWDW4',
-)
-PayPal::SDK.logger = Rails.logger
-
-PAYMENT_PROVIDER = PaymentProvider::PayPalProvider.new
+Braintree::Configuration.environment = :sandbox
+Braintree::Configuration.merchant_id = 'g6y4bsh5qmx9rt7v'
+Braintree::Configuration.public_key  = 'st2qmrznz2k2fg3d'
+Braintree::Configuration.private_key = '1d3dab63a6d489754e42236c753f9047'

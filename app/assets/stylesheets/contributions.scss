@@ -44,3 +44,24 @@
   text-align: right;
   padding-right: 1em;
 }
+
+// Credit card fields
+.braintree-field {
+  height: 34px;
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  padding: {
+    left: 1em;
+  }
+  -webkit-transition: border-color 160ms;
+  transition: border-color 160ms;
+  &.braintree-hosted-fields-focused {
+    border-color: #777;
+  }
+  &.braintree-hosted-fields-invalid {
+    border-color: #843534;
+  }
+  &.braintree-hosted-fields-valid {
+    border-color: #3c763d;
+  }
+}
