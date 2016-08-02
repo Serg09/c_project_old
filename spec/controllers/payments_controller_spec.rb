@@ -19,7 +19,7 @@ describe PaymentsController do
         post :create, payment: attributes, format: :json
         payment = JSON.parse(response.body, symbolize_names: true)
         expect(payment).to include :id
-        expect(payment).to include amount: 100
+        expect(payment).to include amount: '100.0'
       end
 
       it 'creates a payment record' do
