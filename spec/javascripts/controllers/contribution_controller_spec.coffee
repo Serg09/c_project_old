@@ -2,6 +2,7 @@ describe 'ContributionController', ->
   beforeEach module('Crowdscribed')
 
   longDescription = 'Aliquam egestas odio sit amet risus consectetur porttitor. Aliquam tristique hendrerit nisi sodales aliquet. Etiam.'
+  campaignId = 501
   physicalRewardId = 101
   electronicRewardId = 102
 
@@ -18,16 +19,16 @@ describe 'ContributionController', ->
   ))
 
   beforeEach ->
-    httpBackend.expectGET('/campaigns/1/rewards.json').respond [
+    httpBackend.expectGET("/campaigns/#{campaignId}/rewards.json").respond [
       id: physicalRewardId
-      campaign_id: 1
+      campaign_id: campaignId
       description: 'Printed copy of the book'
       long_description: 'This is the other long description'
       minimum_contribution: 50
       physical_address_required: true
     ,
       id: electronicRewardId
-      campaign_id: 1
+      campaign_id: campaignId
       description: 'Electronic copy of the book'
       house_reward_id: 100
       minimum_contribution: 30
@@ -37,7 +38,7 @@ describe 'ContributionController', ->
 
   describe 'rewards', ->
     it 'is a list of available rewards for the specified campaign', ->
-      scope.campaignId = 1
+      scope.campaignId = campaignId
       scope.$digest()
       httpBackend.flush()
       rewardNames = _.map(scope.rewards, 'description')
@@ -48,7 +49,7 @@ describe 'ContributionController', ->
 
   describe 'selectedReward', ->
     beforeEach ->
-      scope.campaignId = 1
+      scope.campaignId = campaignId
       scope.$digest()
       httpBackend.flush()
 
@@ -61,7 +62,7 @@ describe 'ContributionController', ->
 
   describe 'clearSelection', ->
     beforeEach ->
-      scope.campaignId = 1
+      scope.campaignId = campaignId
       scope.$digest()
       httpBackend.flush()
 
@@ -72,7 +73,7 @@ describe 'ContributionController', ->
 
   describe 'customContributionAmount', ->
     beforeEach ->
-      scope.campaignId = 1
+      scope.campaignId = campaignId
       scope.$digest()
       httpBackend.flush()
 
@@ -93,7 +94,7 @@ describe 'ContributionController', ->
 
   describe 'addressRequired', ->
     beforeEach ->
-      scope.campaignId = 1
+      scope.campaignId = campaignId
       scope.$apply()
       httpBackend.flush()
 
@@ -128,8 +129,21 @@ describe 'ContributionController', ->
       expect(scope.addressRequired()).toBe false
 
   describe 'submitForm', ->
+    beforeEach ->
+      scope.selectedRewardId = electronicRewardId
+
     describe 'with validte data', ->
-      it 'executes the payment'
-      it 'saves the payment record'
-      it 'saves the transaction record'
-      it 'saves the contribution record'
+      it 'creates the payment', ->
+        httpBackend.expectGET('/payments.json')
+          .respond
+            id: 201
+            amount: 100
+        scope.submitForm()
+
+      it 'creates the contribution', ->
+        httpBackend.expectGET("/campaign/#{campaignId}/contributions.json").
+          respond
+           id: 601
+           campaign_id: campaignId
+           amount: 30
+           email: 'sally@readerton.com'

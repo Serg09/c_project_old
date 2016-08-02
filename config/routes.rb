@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       patch :pay
     end
   end
+  resources :payments, only: :create
   resources :rewards, only: [:edit, :update, :destroy]
   resources :fulfillments, only: [:index] do
     member do
