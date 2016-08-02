@@ -22,16 +22,10 @@ describe PaymentsController do
         expect(payment).to include amount: '100.0'
       end
 
-      it 'creates a payment record' do
-        expect do
-          post :create, payment: attributes, format: :json
-        end.to change(Payment, :count).by(1)
-      end
-
-      it 'creates a transaction record' do
-        expect do
-          post :create, payment: attributes, format: :json
-        end.to change(Transaction, :count).by(1)
+      it 'executes the payment through the payment provider' do
+        expect(PAYMENT_PROVIDER).to receive(:execute_payment)
+          .with(Payment)
+        post :create, payment: attributes, format: :json
       end
     end
   end
