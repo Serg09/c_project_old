@@ -21,7 +21,7 @@
 #
 
 class PhysicalFulfillment < Fulfillment
-  validates_presence_of :address1, :city, :state, :postal_code, :country_code
+  validates_presence_of :address1, :city, :state, :postal_code, :country_code, :first_name, :last_name
   validates_length_of :address1, maximum: 100
   validates_length_of :address2, maximum: 100
   validates_length_of :city, maximum: 100

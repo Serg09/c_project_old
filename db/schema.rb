@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160716175133) do
+ActiveRecord::Schema.define(version: 20160803001245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,8 +137,8 @@ ActiveRecord::Schema.define(version: 20160716175133) do
     t.boolean  "delivered",                   default: false, null: false
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.string   "first_name",      limit: 100,                 null: false
-    t.string   "last_name",       limit: 100,                 null: false
+    t.string   "first_name",      limit: 100
+    t.string   "last_name",       limit: 100
   end
 
   add_index "fulfillments", ["contribution_id"], name: "index_fulfillments_on_contribution_id", unique: true, using: :btree
