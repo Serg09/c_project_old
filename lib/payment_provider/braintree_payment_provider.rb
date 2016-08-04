@@ -1,5 +1,9 @@
 module PaymentProvider
   class BraintreePaymentProvider
+    def get_token
+      Braintree::ClientToken.generate
+    end
+
     def execute_payment(payment)
       result = Braintree::Transaction.sale amount: payment.amount,
                                            payment_method_nonce: payment.nonce,

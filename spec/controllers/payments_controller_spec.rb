@@ -8,6 +8,21 @@ describe PaymentsController do
     }
   end
 
+  describe 'get :token' do
+    context 'in json' do
+      it 'is successful' do
+        get :token
+        expect(response).to have_http_status :success
+      end
+
+      it 'returns a token' do
+        get :token
+        # the test payment provider returns a 10-digit hexadecimal number
+        expect(response.body).to match /[a-f0-9]{10}/i
+      end
+    end
+  end
+
   describe 'post :create' do
     context 'in json' do
       it 'is successful' do
