@@ -33,10 +33,9 @@ RSpec.describe Contribution, type: :model do
   end
 
   describe '#email' do
-    it 'is required to advance past incipient state' do
+    it 'is required' do
       contribution = Contribution.new attributes.except(:email)
-      expect(contribution).to be_valid
-      expect(contribution.pledge).to be false
+      expect(contribution).to have_at_least(1).error_on :email
     end
 
     it 'must be a valid email' do
