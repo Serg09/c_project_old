@@ -70,17 +70,10 @@ class ContributionsController < ApplicationController
   end
 
   def contribution_params
-    {
-      ip_address: request.remote_ip,
-      user_agent: request.headers['HTTP_USER_AGENT']
-    }.with_indifferent_access.tap do |h|
-      if params[:contribution].present?
-        h.merge! params.require(:contribution).permit(:amount, :email)
-      end
-      if @reward.present?
-        h[:amount] = @reward.minimum_contribution
-      end
-    end
+    params.require(:contribution).
+      permit(:amount, :email).
+      merge ip_address: request.remote_ip,
+            user_agent: request.headers['HTTP_USER_AGENT']
   end
 
   def load_campaign
