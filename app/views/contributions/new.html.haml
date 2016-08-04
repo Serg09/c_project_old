@@ -24,7 +24,8 @@
             %img.img.img-responsive.img-rounded{ 'ng-src' => '/images/{{reward.photo_id}}' }
         .row.reward-option{ 'ng-class' => '{selected: !selectedRewardId}' }
           .col-sm-2
-            %input.form-control.custom-reward-amount{ type: 'number', 'ng-model' => 'customContributionAmount', 'ng-focus' => 'clearSelection()' }
+            %label{ for: 'custom_amount', 'aria-hidden' => true } Amount
+            %input#custom_amount.form-control.custom-reward-amount{ type: 'number', 'ng-model' => 'customContributionAmount', 'ng-focus' => 'clearSelection()' }
           .col-sm-10
             .reward-header Choose your amount
             %div{ 'ng-show' => 'availableRewards.length > 0' }
@@ -75,43 +76,7 @@
                 %span.help-block{ 'ng-show' => 'contributionForm.postalCode.$dirty && contributionForm.postalCode.$error.required' } Postal code is required
                 %span.help-block{ 'ng-show' => 'contributionForm.postalCode.$dirty && contributionForm.postalCode.$error.pattern' } Postal code is invalid
 
-      -# Payment
-      %form#payment-form{ action: '/', method: :post }
-        %fieldset
-          #card-number-group.form-group
-            %label.control-label{ for: 'card-number' } Card number
-            #card-number.braintree-field
-            %span#card-number-help.help-block{ style: 'display:none;' } Credit card is not valid
-          #cvv-group.form-group
-            %label.control-label{ for: 'cvv' } CVV
-            #cvv.braintree-field
-            %span#cvv-help.help-block{ style: 'display:none;' } CVV is not valid
-          #expiration-date-group.form-group
-            %label.control-label{ for: 'expiration-date' } Expiration date
-            #expiration-date.braintree-field
-            %span#expiration-date-help.help-block{ style: 'display:none;' } Expiration date is not valid
-      %script{ src: 'https://js.braintreegateway.com/js/braintree-2.27.0.min.js' }
-      :coffeescript
-        braintree.setup '#{h Braintree::ClientToken.generate}', 'custom',
-          id: 'payment-form'
-          hostedFields:
-            number:
-              selector: '#card-number'
-            cvv:
-              selector: '#cvv'
-            expirationDate:
-              selector: '#expiration-date'
-            onFieldEvent: (e) ->
-              selector = switch e.target.fieldKey
-                when 'number' then '#card-number'
-                when 'cvv' then '#cvv'
-                when 'expirationDate' then '#expiration-date'
-              if e.isValid
-                $(selector + '-group').addClass('has-success').removeClass('has-error')
-                $(selector + '-help').hide()
-              else
-                $(selector + '-group').addClass('has-error').removeClass('has-success')
-                $(selector + '-help').show()
+      =render 'payment_form'
       -# Submit
       %button.btn.btn-primary{ 'ng-click' => 'submitForm()', 'ng-disabled' => 'contributionForm.$invalid' }
         Submit
