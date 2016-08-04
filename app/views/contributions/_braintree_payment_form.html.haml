@@ -12,10 +12,14 @@
       %label.control-label{ for: 'expiration-date' } Expiration date
       #expiration-date.braintree-field
       %span#expiration-date-help.help-block{ style: 'display:none;' } Expiration date is not valid
+    %button#payment-button.ng-hide{ type: 'submit' }
 %script{ src: 'https://js.braintreegateway.com/js/braintree-2.27.0.min.js' }
 :coffeescript
+  window.paymentReceivedCallbacks = $.Callbacks()
   braintree.setup '#{h Braintree::ClientToken.generate}', 'custom',
     id: 'payment-form'
+    onPaymentMethodReceived: (details)->
+      window.paymentReceivedCallbacks.fire(details)
     hostedFields:
       number:
         selector: '#card-number'

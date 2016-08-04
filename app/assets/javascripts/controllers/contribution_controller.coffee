@@ -44,7 +44,41 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
       value()
 
   $scope.submitForm = () ->
-    console.log "submitForm"
+    $('#payment-button').click()
+    return
+
+
+  specifiedAmount = () ->
+    if $scope.selectedReward
+      $scope.selectedReward.minimum_contribution
+    else
+      $scope.customContributionAmount
+
+  handlePaymentReceived = (details)->
+    createPayment(details.nonce)
+    return
+
+  createPayment = (nonce) ->
+    url = "/payments.json"
+    data =
+      payment:
+        amount: specifiedAmount()
+        nonce: nonce
+    $http.post(url, data).then (response) ->
+      createContribution()
+      return
+
+
+  createContribution = ->
+    url = "/campaigns/#{$scope.campaignId}/contributions.json"
+    data =
+      contribution:
+        amount: specifiedAmount(),
+        email: $scope.email
+    $http.post(url, data).then (response) ->
+      console.log "contribution created"
+      console.log response.data
+      console.log "need to redirect to a confirmation page here"
 
   loadRewards = ->
     if $scope.campaignId
@@ -63,6 +97,15 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         r.minimum_contribution <= $scope.customContributionAmount
     else
       $scope.availableRewards = []
+
+
+
+  # this is only appropriate when the payment provider
+  # is brain tree. Need to figure out how to include it
+  # selectively
+
+  $(() ->
+    window.paymentReceivedCallbacks.add(handlePaymentReceived))
 
   return
 ])
