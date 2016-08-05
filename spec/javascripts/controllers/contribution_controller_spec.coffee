@@ -1,5 +1,7 @@
 describe 'ContributionController', ->
   beforeEach module('Crowdscribed')
+  beforeEach ->
+    window.paymentReceivedCallbacks = $.Callbacks()
 
   longDescription = 'Aliquam egestas odio sit amet risus consectetur porttitor. Aliquam tristique hendrerit nisi sodales aliquet. Etiam.'
   campaignId = 501
