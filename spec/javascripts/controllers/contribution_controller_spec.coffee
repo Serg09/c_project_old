@@ -132,20 +132,42 @@ describe 'ContributionController', ->
 
   describe 'submitForm', ->
     beforeEach ->
+      scope.campaignId = campaignId
+      scope.$apply()
+      httpBackend.flush()
       scope.selectedRewardId = electronicRewardId
+      scope.$apply()
 
-    describe 'with validte data', ->
+    describe 'with valid data', ->
       it 'creates the payment', ->
-        httpBackend.expectGET('/payments.json')
-          .respond
+        httpBackend.whenPOST("/campaigns/#{campaignId}/contributions.json").respond
+          id: 601
+          campaign_id: campaignId
+          amount: 30
+          email: 'sally@readerton.com'
+        httpBackend.expectPOST('/payments.json',
+          payment:
+            amount: 30
+            nonce: '123456'
+        ).respond
             id: 201
-            amount: 100
-        scope.submitForm()
+            amount: 30
+        window.paymentReceivedCallbacks.fire # The actual submit is done by braintree
+          nonce: '123456'
+        httpBackend.flush()
+        expect(1).toBe(1) #silence the complaint about no expectations, which ignore expectPOST
 
       it 'creates the contribution', ->
-        httpBackend.expectGET("/campaign/#{campaignId}/contributions.json").
+        httpBackend.whenPOST('/payments.json').respond
+          id: 202
+          amount: 30
+        httpBackend.expectPOST("/campaigns/#{campaignId}/contributions.json").
           respond
            id: 601
            campaign_id: campaignId
            amount: 30
            email: 'sally@readerton.com'
+        window.paymentReceivedCallbacks.fire
+          nonce: '123456'
+        httpBackend.flush()
+        expect(1).toBe(1) #silence the complaint about no expectations, which ignore expectPOST
