@@ -16,8 +16,8 @@
 #  delivered       :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  first_name      :string(100)      not null
-#  last_name       :string(100)      not null
+#  first_name      :string(100)
+#  last_name       :string(100)
 #
 
 class Fulfillment < ActiveRecord::Base
