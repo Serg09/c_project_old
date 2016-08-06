@@ -18,4 +18,6 @@
 //= require turbolinks
 //= require masonry.pkgd.min
 //= require underscore
+//= require angular
+//= require ng-rails-csrf
 //= require_tree .

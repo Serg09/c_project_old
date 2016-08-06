@@ -1,6 +1,6 @@
 #= require angular
 
-app = angular.module('Crowdscribed', [])
+app = angular.module('Crowdscribed', ['ng-rails-csrf'])
 app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
   $scope.STATE_ABBR_PATTERN = "^[a-zA-Z]{2}$"

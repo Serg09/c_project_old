@@ -44,6 +44,7 @@ gem 'resque-scheduler'
 gem 'resque-web', require: 'resque_web'
 gem 'wysiwyg-rails'
 gem 'angularjs-rails'
+gem 'ng-rails-csrf'
 gem 'underscore-rails'
 
 # Use ActiveModel has_secure_password
