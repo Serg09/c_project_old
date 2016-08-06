@@ -8,15 +8,16 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
   $scope.campaignId = null
   $scope.rewards = []
-  $scope.$watch 'campaignId', ->
-    loadRewards()
-
   $scope.selectedRewardId = null
   $scope.selectedReward = null
   $scope.customContributionAmount = null
   $scope.customRewardId = null # reward selected after entering a custom donation amount
   $scope.customReward = null
   $scope.availableRewards = [] # rewards available for a custom amount
+  $scope.isInProgress = false
+
+  $scope.$watch 'campaignId', ->
+    loadRewards()
 
   $scope.$watch 'selectedRewardId', ->
     $scope.selectedReward.selected = false if $scope.selectedReward
@@ -44,6 +45,7 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
       value()
 
   $scope.submitForm = () ->
+    $scope.isInProgress = true
     $('#payment-button').click()
     return
 

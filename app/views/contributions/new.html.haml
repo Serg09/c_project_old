@@ -2,6 +2,12 @@
   Make a contribution!
 
 .container.container-default.contribution{ 'ng-app' => 'Crowdscribed', 'ng-controller' => 'ContributionController as contributionCtl', 'ng-init' => "campaignId = #{@campaign.id}" }
+  .overlay{ 'ng-hide' => '!isInProgress' }
+    %center
+      .panel.panel-primary
+        .panel-heading Payment Processing
+        .panel-body
+          We're working on it!
   %h1 Contribute!
   %h2
     Support the book
@@ -78,5 +84,5 @@
 
       =render PAYMENT_PROVIDER.form_view
       -# Submit
-      %button.btn.btn-primary{ 'ng-click' => 'submitForm()', 'ng-disabled' => 'contributionForm.$invalid' }
+      %button.btn.btn-primary{ 'ng-click' => 'submitForm()', 'ng-disabled' => 'contributionForm.$invalid || isInProgress' }
         Submit
