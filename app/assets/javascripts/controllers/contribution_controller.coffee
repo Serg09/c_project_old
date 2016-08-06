@@ -79,7 +79,7 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         amount: specifiedAmount(),
         email: $scope.email
     $http.post(url, data).then (response) ->
-      window.location.href = "/contributions/#{response.data.id}.json"
+      window.location.href = "/contributions/#{response.data.public_key}"
     , (error) ->
       console.log "Unable to create the contribution."
       console.log error
