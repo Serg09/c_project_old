@@ -11,6 +11,7 @@
 #  ip_address  :string(15)       not null
 #  user_agent  :string           not null
 #  state       :string           default("incipient"), not null
+#  public_key  :string(36)       not null
 #
 
 class Contribution < ActiveRecord::Base
@@ -27,6 +28,8 @@ class Contribution < ActiveRecord::Base
   validates_format_of :email, with: /\A^\w[\w_\.-]+@\w[\w_\.-]+\.[a-z]{2,}\z/i, if: :email
   validates_format_of :ip_address, with: /\A\d{1,3}(\.\d{1,3}){3}\z/
   validate :reward_is_from_same_campaign
+
+  before_create :ensure_public_key
 
   aasm(:state, whiny_transitions: false) do
     state :incipient, initial: true
@@ -75,5 +78,9 @@ class Contribution < ActiveRecord::Base
     unless reward.campaign_id == campaign_id
       errors.add :reward_id, 'must belong to the campaign to which a contribution is being made'
     end
+  end
+
+  def ensure_public_key
+    self.public_key ||= SecureRandom.uuid
   end
 end
