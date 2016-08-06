@@ -131,12 +131,14 @@ describe 'ContributionController', ->
       expect(scope.addressRequired()).toBe false
 
   describe 'submitForm', ->
+    redirectSpy = null
     beforeEach ->
       scope.campaignId = campaignId
       scope.$apply()
       httpBackend.flush()
       scope.selectedRewardId = electronicRewardId
       scope.$apply()
+      redirectSpy = spyOn(window, 'redirectTo')
 
     describe 'with valid data', ->
       it 'creates the payment', ->
@@ -171,3 +173,18 @@ describe 'ContributionController', ->
           nonce: '123456'
         httpBackend.flush()
         expect(1).toBe(1) #silence the complaint about no expectations, which ignore expectPOST
+
+      it 'redirects to the confirmation page', ->
+        httpBackend.whenPOST('/payments.json').respond
+          id: 202
+          amount: 30
+        httpBackend.whenPOST("/campaigns/#{campaignId}/contributions.json").respond
+          id: 601
+          public_key: '0987654321'
+          campaign_id: campaignId
+          amount: 30
+          email: 'sally@readerton.com'
+        window.paymentReceivedCallbacks.fire
+          nonce: 123456
+        httpBackend.flush()
+        expect(redirectSpy).toHaveBeenCalledWith('/contributions/0987654321')

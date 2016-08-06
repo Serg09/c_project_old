@@ -79,7 +79,7 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         amount: specifiedAmount(),
         email: $scope.email
     $http.post(url, data).then (response) ->
-      window.location.href = "/contributions/#{response.data.public_key}"
+      window.redirectTo "/contributions/#{response.data.public_key}"
     , (error) ->
       console.log "Unable to create the contribution."
       console.log error
@@ -103,6 +103,8 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
     else
       $scope.availableRewards = []
 
+  window.redirectTo = (url) ->
+    window.location.href = url
 
 
   # this is only appropriate when the payment provider
