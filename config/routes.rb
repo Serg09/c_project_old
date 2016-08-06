@@ -44,7 +44,7 @@ Rails.application.routes.draw do
       patch :prolong
     end
   end
-  resources :contributions, only: [:show, :edit, :update] do
+  resources :contributions, only: [:edit, :update] do
     member do
       get :reward
       patch :set_reward
@@ -52,6 +52,9 @@ Rails.application.routes.draw do
       patch :pay
     end
   end
+  get '/contributions/:token', to: 'contributions#show',
+                               as: :show_contribution,
+                               constraints: { token: /[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}/i }
   resources :payments, only: :create do
     collection do
       get :token

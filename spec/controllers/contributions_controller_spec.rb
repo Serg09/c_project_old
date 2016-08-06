@@ -81,4 +81,13 @@ RSpec.describe ContributionsController, type: :controller do
       end
     end
   end
+
+  describe 'get :show' do
+    let!(:contribution) { FactoryGirl.create(:contribution) }
+
+    it 'is successful' do
+      get :show, token: contribution.public_key
+      expect(response).to have_http_status :success
+    end
+  end
 end

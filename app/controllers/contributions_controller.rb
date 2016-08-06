@@ -1,17 +1,12 @@
 class ContributionsController < ApplicationController
-  before_filter :authenticate_user!, only: [:index, :show]
-  before_filter :load_campaign, only: [:index, :new, :create]
-  before_filter :load_contribution, only: [:show, :edit, :update]
+  before_filter :load_campaign, only: [:new, :create]
+  before_filter :load_contribution, only: [:show]
   before_filter :load_reward, only: [:create]
 
   respond_to :html, :json
 
-  def index
-    authorize! :update, @campaign
-  end
-
   def show
-    authorize! :show, @contribution
+    respond_with @contribution
   end
 
   def new
@@ -81,7 +76,7 @@ class ContributionsController < ApplicationController
   end
 
   def load_contribution
-    @contribution = Contribution.find(params[:id])
+    @contribution = Contribution.find_by(public_key: params[:token])
     @campaign = @contribution.campaign
   end
 
