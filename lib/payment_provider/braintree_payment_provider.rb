@@ -4,6 +4,10 @@ module PaymentProvider
       Braintree::ClientToken.generate
     end
 
+    def form_view
+      'braintree_payment_form'
+    end
+
     def execute_payment(payment)
       result = Braintree::Transaction.sale amount: payment.amount,
                                            payment_method_nonce: payment.nonce,

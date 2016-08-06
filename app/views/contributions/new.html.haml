@@ -76,7 +76,7 @@
                 %span.help-block{ 'ng-show' => 'contributionForm.postalCode.$dirty && contributionForm.postalCode.$error.required' } Postal code is required
                 %span.help-block{ 'ng-show' => 'contributionForm.postalCode.$dirty && contributionForm.postalCode.$error.pattern' } Postal code is invalid
 
-      =render 'payment_form'
+      =render PAYMENT_PROVIDER.form_view
       -# Submit
       %button.btn.btn-primary{ 'ng-click' => 'submitForm()', 'ng-disabled' => 'contributionForm.$invalid' }
         Submit
