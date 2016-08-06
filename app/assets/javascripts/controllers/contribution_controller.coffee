@@ -66,6 +66,9 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         nonce: nonce
     $http.post(url, data).then (response) ->
       createContribution()
+    , (error) ->
+      console.log "Unable to create the payment."
+      console.log error
       return
 
 
@@ -76,9 +79,10 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         amount: specifiedAmount(),
         email: $scope.email
     $http.post(url, data).then (response) ->
-      console.log "contribution created"
-      console.log response.data
-      console.log "need to redirect to a confirmation page here"
+      window.location.href = "/contributions/#{response.data.id}.json"
+    , (error) ->
+      console.log "Unable to create the contribution."
+      console.log error
 
   loadRewards = ->
     if $scope.campaignId
@@ -87,7 +91,8 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         $scope.rewards = response.data
         $scope.selectedRewardId = $scope.rewards[0].id if $scope.rewards.length > 0
       , (error)->
-        console.log "Unable to get the rewards: #{error}"
+        console.log "Unable to get the rewards."
+        console.log error
     else
       $scope.rewards = []
 
