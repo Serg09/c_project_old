@@ -46,6 +46,9 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
   $scope.submitForm = () ->
     $scope.isInProgress = true
+    $('#progressbar').progressbar
+      max: 3
+      value: 0
     $('#payment-button').click()
     return
 
@@ -57,6 +60,7 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
       $scope.customContributionAmount
 
   handlePaymentReceived = (details)->
+    $('#progressbar').progressbar 'option', 'value', 1
     createPayment(details.nonce)
     return
 
@@ -67,6 +71,7 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         amount: specifiedAmount()
         nonce: nonce
     $http.post(url, data).then (response) ->
+      $('#progressbar').progressbar 'option', 'value', 2
       createContribution()
     , (error) ->
       console.log "Unable to create the payment."
@@ -81,6 +86,7 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         amount: specifiedAmount(),
         email: $scope.email
     $http.post(url, data).then (response) ->
+      $('#progressbar').progressbar 'option', 'value', 3
       window.redirectTo "/contributions/#{response.data.public_key}"
     , (error) ->
       console.log "Unable to create the contribution."
