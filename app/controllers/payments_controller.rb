@@ -7,7 +7,8 @@ class PaymentsController < ApplicationController
 
   def create
     @payment = Payment.new payment_params
-    PAYMENT_PROVIDER.execute_payment(@payment) if @payment.save
+    @payment.save!
+    @payment.execute
     respond_with @payment, location: '/'
   end
 

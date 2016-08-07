@@ -14,13 +14,38 @@ module PaymentProvider
                                            options: {
                                              submit_for_settlement: true
                                            }
-
-      Rails.logger.debug "Braintree result: #{result.inspect}"
-      Rails.logger.debug "Braintree result in JSON: #{result.to_json}"
-      true
+      return BraintreePaymentResult.new(result)
     rescue StandardError => e
       Rails.logger.error "Error executing payment #{payment.inspect} with Braintree: #{e.class.name} - #{e.message}\n  #{e.backtrace.join("\n  ")}"
       false
+    end
+  end
+
+  class BraintreePaymentResult
+    def initialize(result)
+      @result = result
+    end
+
+    def success?
+      @result.success
+    end
+
+    def serialize
+      @result.to_yaml
+    end
+
+    def state
+      @result.transaction.status
+    end
+
+    def errors
+      @result.errors.map do |error|
+        {
+          attribute: error.attribute,
+          code: error.code,
+          message: error.message
+        }
+      end
     end
   end
 end
