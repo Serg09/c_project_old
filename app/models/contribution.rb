@@ -58,7 +58,7 @@ class Contribution < ActiveRecord::Base
   def _collect
     return true if payments.any?{|p| p.approved? || p.completed?}
     payment = payments.detect{|p| p.pending?}
-    payment.execute!
+    payment ? payment.execute! : false
   end
 
   def _cancel
@@ -77,7 +77,10 @@ class Contribution < ActiveRecord::Base
   end
 
   def link_payment
-    payments << Payment.find(payment_id) if payment_id
+    if payment_id
+      payments << Payment.find(payment_id)
+      collect!
+    end
   end
 
   def reward_is_from_same_campaign
