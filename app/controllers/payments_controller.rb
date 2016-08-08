@@ -8,7 +8,8 @@ class PaymentsController < ApplicationController
   def create
     @payment = Payment.new payment_params
     @payment.save!
-    @payment.execute
+    @payment.execute!
+
     respond_with @payment, location: '/'
   end
 
