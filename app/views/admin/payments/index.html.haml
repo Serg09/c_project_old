@@ -12,7 +12,7 @@
           %th &nbsp;
         -@payments.each do |payment|
           %tr
-            %td.text-right= format_date(payment.created_at)
+            %td.text-right= format_date_time(payment.created_at)
             %td.text-right= number_to_currency(payment.amount, precision: 2)
             %td
               .btn-group

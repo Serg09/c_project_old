@@ -18,7 +18,7 @@
         -@campaign.contributions.each do |contribution|
           %tr{ class: contribution_row_class(contribution) }
             %td= contribution.email
-            %td= format_date(contribution.created_at)
+            %td= format_date_time(contribution.created_at)
             %td= number_to_currency(contribution.amount, precision: 0)
             %td= contribution.state
             %td
