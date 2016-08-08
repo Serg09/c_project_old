@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160806152837) do
+ActiveRecord::Schema.define(version: 20160808031216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,12 +192,12 @@ ActiveRecord::Schema.define(version: 20160806152837) do
   end
 
   create_table "payment_transactions", force: :cascade do |t|
-    t.integer  "payment_id",            null: false
-    t.string   "intent",     limit: 20, null: false
-    t.string   "state",      limit: 20, null: false
-    t.text     "response",              null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "payment_id",             null: false
+    t.string   "intent",     limit: 20,  null: false
+    t.string   "state",      limit: 100, null: false
+    t.text     "response",               null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "payments", force: :cascade do |t|
