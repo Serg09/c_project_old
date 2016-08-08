@@ -14,14 +14,23 @@ module PaymentProvider
                                            options: {
                                              submit_for_settlement: true
                                            }
-      return BraintreePaymentResult.new(result)
+      return BraintreeResult.new(result)
     rescue StandardError => e
       Rails.logger.error "Error executing payment #{payment.inspect} with Braintree: #{e.class.name} - #{e.message}\n  #{e.backtrace.join("\n  ")}"
       false
     end
+
+    def refund_payment(payment)
+      result = Braintree::Transaction.refund payment.external_id
+      return BraintreeResult.new(result)
+      true
+    rescue StandardError => e
+      Rails.logger.error "Error refunding payment #{payment.inspect} with Braintree: #{e.class.name} - #{e.message}\n  #{e.backtrace.join("\n  ")}"
+      false
+    end
   end
 
-  class BraintreePaymentResult
+  class BraintreeResult
     def initialize(result)
       @result = result
     end
@@ -31,7 +40,7 @@ module PaymentProvider
     end
 
     def success?
-      @result.success
+      @result.success?
     end
 
     def serialize
