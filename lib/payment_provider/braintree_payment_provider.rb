@@ -26,6 +26,10 @@ module PaymentProvider
       @result = result
     end
 
+    def id
+      @result.transaction.id
+    end
+
     def success?
       @result.success
     end

@@ -58,7 +58,7 @@ class Payment < ActiveRecord::Base
   def _execute
     response = PAYMENT_PROVIDER.execute_payment(self)
     create_transaction(response, :sale)
-    self.external_id ||= response.id
+    update_attribute(:external_id, response.id) if external_id.blank?
     response.success?
   rescue => e
     self.payment_provider_error = e
