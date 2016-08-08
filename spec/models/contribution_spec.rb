@@ -84,6 +84,15 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
+  describe '#payment_id' do
+    let (:payment) { FactoryGirl.create(:payment) }
+
+    it 'associates the specified payment with the contribution on create' do
+      contribution = Contribution.create! attributes.merge(payment_id: payment.id)
+      expect(contribution.payments).to include payment
+    end
+  end
+
   shared_context :various_states do
     let!(:incipient1) { FactoryGirl.create(:incipient_contribution) }
     let!(:incipient2) { FactoryGirl.create(:incipient_contribution) }

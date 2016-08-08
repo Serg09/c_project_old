@@ -17,6 +17,8 @@
 class Contribution < ActiveRecord::Base
   include AASM
 
+  attr_accessor :payment_id
+
   belongs_to :campaign
   belongs_to :reward
   has_and_belongs_to_many :payments
@@ -30,6 +32,7 @@ class Contribution < ActiveRecord::Base
   validate :reward_is_from_same_campaign
 
   before_create :ensure_public_key
+  after_create :link_payment
 
   aasm(:state, whiny_transitions: false) do
     state :incipient, initial: true
@@ -71,6 +74,10 @@ class Contribution < ActiveRecord::Base
     payment = payments.approved.first
     raise Exceptions::PaymentNotFoundError.new("No approved payment found for contribution #{id}") unless payment
     payment
+  end
+
+  def link_payment
+    payments << Payment.find(payment_id) if payment_id
   end
 
   def reward_is_from_same_campaign

@@ -72,19 +72,20 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
         nonce: nonce
     $http.post(url, data).then (response) ->
       $('#progressbar').progressbar 'option', 'value', 2
-      createContribution()
+      createContribution(response.data.id)
     , (error) ->
       console.log "Unable to create the payment."
       console.log error
       return
 
 
-  createContribution = ->
+  createContribution = (paymentId) ->
     url = "/campaigns/#{$scope.campaignId}/contributions.json"
     data =
       contribution:
         amount: specifiedAmount(),
-        email: $scope.email
+        email: $scope.email,
+        payment_id: paymentId
     $http.post(url, data).then (response) ->
       $('#progressbar').progressbar 'option', 'value', 3
       window.redirectTo "/contributions/#{response.data.public_key}"

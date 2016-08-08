@@ -4,11 +4,13 @@ RSpec.describe ContributionsController, type: :controller do
   let (:campaign) { FactoryGirl.create(:campaign) }
   let!(:physical_reward) { FactoryGirl.create(:physical_reward, campaign: campaign) }
   let!(:electronic_reward) { FactoryGirl.create(:electronic_reward, campaign: campaign) }
+  let (:payment) { FactoryGirl.create(:payment) }
 
   let (:attributes) do
     {
       email: 'john@doe.com',
-      amount: 100
+      amount: 100,
+      payment_id: payment.id
     }
   end
 
@@ -50,12 +52,21 @@ RSpec.describe ContributionsController, type: :controller do
                                         amount: '100.0',
                                         email: 'john@doe.com')
       end
+
       it 'creates a contribution record' do
         expect do
           post :create, campaign_id: campaign,
                         contribution: attributes,
                         format: :json
         end.to change(campaign.contributions, :count).by(1)
+      end
+
+      it 'links the payment to the contribution' do
+        post :create, campaign_id: campaign,
+                      contribution: attributes,
+                      format: :json
+        contribution = Contribution.last
+        expect(contribution.payments).to include payment
       end
 
       context 'when an electronic reward is specified' do

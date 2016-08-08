@@ -66,7 +66,7 @@ class ContributionsController < ApplicationController
 
   def contribution_params
     params.require(:contribution).
-      permit(:amount, :email).
+      permit(:amount, :email, :payment_id).
       merge ip_address: request.remote_ip,
             user_agent: request.headers['HTTP_USER_AGENT']
   end
