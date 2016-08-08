@@ -69,8 +69,7 @@ class Payment < ActiveRecord::Base
   def _refund
     response = PAYMENT_PROVIDER.refund_payment(self)
     create_transaction(response, :refund)
-
-    %w(pending completed).include?(response[:state])
+    response.success?
   rescue => e
     self.payment_provider_error = e
     Rails.logger.error "Error refunding payment #{self.inspect}, #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
