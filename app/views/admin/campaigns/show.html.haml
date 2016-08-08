@@ -15,7 +15,7 @@
           %th Amount
           %th Status
           %th &nbsp;
-        -@campaign.contributions.each do |contribution|
+        -@contributions.each do |contribution|
           %tr{ class: contribution_row_class(contribution) }
             %td= contribution.email
             %td= format_date_time(contribution.created_at)
@@ -25,5 +25,6 @@
               -if contribution.payments.any?
                 =link_to admin_payment_path(contribution.payments.first), class: 'btn btn-xs btn-info', title: 'Click here to view payment details.' do
                   %span.glyphicon.glyphicon-zoom-in{ 'arial-hidden' => true }
+      =will_paginate @contributions, renderer: BootstrapPagination::Rails
     .col-md-6
       =render_progress_meter @campaign.current_progress
