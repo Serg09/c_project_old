@@ -1,3 +1,5 @@
+-content_for :header do
+  %script{ src: 'https://js.braintreegateway.com/js/braintree-2.27.0.min.js' }
 %form#payment-form{ action: '/', method: :post }
   %fieldset
     #card-number-group.form-group
@@ -13,7 +15,6 @@
       #expiration-date.braintree-field
       %span#expiration-date-help.help-block{ style: 'display:none;' } Expiration date is not valid
     %button#payment-button.ng-hide{ type: 'submit' }
-%script{ src: 'https://js.braintreegateway.com/js/braintree-2.27.0.min.js' }
 :coffeescript
   window.paymentReceivedCallbacks = $.Callbacks()
   braintree.setup '#{h Braintree::ClientToken.generate}', 'custom',

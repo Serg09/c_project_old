@@ -45,7 +45,7 @@ class Payment < ActiveRecord::Base
     end
 
     event :complete do
-      transitions from: :approved, to: :completed if: :_completed?
+      transitions from: :approved, to: :completed, if: :_completed?
     end
 
     event :refund do

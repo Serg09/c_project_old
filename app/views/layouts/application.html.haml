@@ -5,7 +5,11 @@
     %title Crowdscribed
     %link{ rel: 'icon', type: 'image/png', href: asset_path('crowdscribed_logo_cropped.png') }
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'jquery', method: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'jquery-ui', method: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'jquery_ujs', method: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag params[:controller], media: 'all', 'data-turbo-links' => true
     -if content_for :header
       =yield :header
     = csrf_meta_tags
@@ -34,12 +38,5 @@
           .col-md-1
             %span#siteseal
               %script{ async: true, type: 'text/javascript', src: 'https://seal.godaddy.com/getSeal?sealID=vtHm9g7YPEMuostLcMzrwMTMh7SEo9OLmPTe1kxmF1pnVtuabdQsTITJb8xc' }
-    :javascript
-      $(function() {
-        $('.date-field').each(function(index, elem) {
-          e = $(elem);
-          e.datepicker(e.data());
-        });
-      });
     -if content_for :after_footer
       =yield :after_footer

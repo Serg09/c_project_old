@@ -1,7 +1,11 @@
 #= require angular
 
+console.log "define the angular app"
+
 app = angular.module('Crowdscribed', ['ng-rails-csrf'])
 app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
+
+  console.log "create the controller"
 
   $scope.STATE_ABBR_PATTERN = "^[a-zA-Z]{2}$"
   $scope.POSTAL_CODE_PATTERN = "^\\d{5}$"
@@ -125,3 +129,5 @@ app.controller('ContributionController', ['$scope', '$http', ($scope, $http) ->
 
   return
 ])
+
+console.log "defined the controller"
