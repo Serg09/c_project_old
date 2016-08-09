@@ -17,16 +17,28 @@ module PaymentProvider
       return BraintreeResult.new(result)
     rescue StandardError => e
       Rails.logger.error "Error executing payment #{payment.inspect} with Braintree: #{e.class.name} - #{e.message}\n  #{e.backtrace.join("\n  ")}"
-      false
     end
 
     def refund_payment(payment)
-      result = Braintree::Transaction.refund payment.external_id
+      transaction = Braintree::Transaction.find payment.external_id
+      if %(settled settling).include? transaction.status
+        result = Braintree::Transaction.refund payment.external_id
+      else
+        result = Braintree::Transaction.void payment.external_id
+      end
       return BraintreeResult.new(result)
-      true
     rescue StandardError => e
       Rails.logger.error "Error refunding payment #{payment.inspect} with Braintree: #{e.class.name} - #{e.message}\n  #{e.backtrace.join("\n  ")}"
-      false
+    end
+
+    def completed?(payment)
+      transaction = Braintree::Transaction.find payment.external_id
+      payment.transactions.create! intent: :update,
+                                   state: transaction.status,
+                                   response: transaction.to_yaml
+      transaction.status == 'settled'
+    rescue StandardError => e
+      Rails.logger.error "Error getting update for payment #{payment.inspect} with Braintree: #{e.class.name} - #{e.message}\n  #{e.backtrace.join("\n  ")}"
     end
   end
 

@@ -44,6 +44,10 @@ class Payment < ActiveRecord::Base
       transitions from: :pending, to: :failed, unless: :payment_provider_error
     end
 
+    event :complete do
+      transitions from: :approved, to: :completed if: :_completed?
+    end
+
     event :refund do
       transitions from: [:approved, :completed], to: :refunded, if: :_refund
     end
@@ -64,6 +68,10 @@ class Payment < ActiveRecord::Base
     self.payment_provider_error = e
     Rails.logger.error "Error executing payment #{self.inspect}, #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
     false
+  end
+
+  def _completed?
+    PAYMENT_PROVIDER.completed?(self)
   end
 
   def _refund
