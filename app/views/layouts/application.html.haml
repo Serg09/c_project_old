@@ -5,9 +5,6 @@
     %title Crowdscribed
     %link{ rel: 'icon', type: 'image/png', href: asset_path('crowdscribed_logo_cropped.png') }
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'jquery', method: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'jquery-ui', method: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'jquery_ujs', method: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = javascript_include_tag params[:controller], media: 'all', 'data-turbo-links' => true
     -if content_for :header
