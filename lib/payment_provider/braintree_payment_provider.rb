@@ -48,7 +48,7 @@ module PaymentProvider
     end
 
     def id
-      @result.transaction.id
+      @result.transaction.try(:id)
     end
 
     def success?
@@ -60,7 +60,7 @@ module PaymentProvider
     end
 
     def state
-      @result.transaction.status
+      @result.transaction.try(:status)
     end
 
     def errors
