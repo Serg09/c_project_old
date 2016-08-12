@@ -1,3 +1,5 @@
+require 'payment_provider/braintree_payment_provider'
+
 # == Schema Information
 #
 # Table name: payments
