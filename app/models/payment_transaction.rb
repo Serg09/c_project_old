@@ -20,7 +20,7 @@ class PaymentTransaction < ActiveRecord::Base
   #
   # Maybe we should use a cleaner separation of the
   # PayPal terminology and our own here
-  INTENTS = %w(sale refund)
+  INTENTS = %w(sale refund update)
   class << self
     INTENTS.each do |intent|
       define_method intent.upcase do

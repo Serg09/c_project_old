@@ -31,7 +31,7 @@
             %td= transaction.state
           %tr
             %td{ colspan: 2 }
-              %pre
+              %pre.payment-detail
                 -if transaction.response.start_with? '---'
                   =transaction.response
                 -else

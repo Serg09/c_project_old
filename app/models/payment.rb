@@ -59,6 +59,10 @@ class Payment < ActiveRecord::Base
     contributions.first
   end
 
+  def can_refund?
+    approved? || completed?
+  end
+
   private
 
   def _execute

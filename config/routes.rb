@@ -93,7 +93,12 @@ Rails.application.routes.draw do
         patch :fulfill
       end
     end
-    resources :payments, only: [:index, :show]
+    resources :payments, only: [:index, :show] do
+      member do
+        patch :refresh
+        patch :refund
+      end
+    end
     resources :subscribers, only: [:index]
   end
 
