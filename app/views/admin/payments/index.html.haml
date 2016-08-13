@@ -16,7 +16,7 @@
             %td.text-right= number_to_currency(payment.amount, precision: 2)
             %td
               .btn-group
-                =link_to admin_payment_path(payment), class: 'btn btn-xs btn-info', title: 'Click here to view the payment details' do
+                =link_to admin_payment_path(payment, status: @status), class: 'btn btn-xs btn-info', title: 'Click here to view the payment details' do
                   %span.glyphicon.glyphicon-zoom-in{ 'aria-hidden' => true }
                 -if payment.approved?
                   =link_to refresh_admin_payment_path(payment, status: @status), method: :patch, class: 'btn btn-xs btn-default', title: 'Click here to update the payment with from the provider.' do

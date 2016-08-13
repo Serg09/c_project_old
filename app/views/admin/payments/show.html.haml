@@ -17,8 +17,11 @@
         %tr
           %th Date
           %td= format_date_time @payment.created_at
-      -if @payment.contribution
-        =link_to 'Back', admin_campaign_path(@payment.contribution.campaign_id), class: 'btn btn-primary', title: 'Click here to return to the campaign page.'
+      =link_to 'Back', @back_path, class: 'btn btn-primary', title: @back_tool_tip
+      -if @payment.can_refund?
+        =link_to 'Refund', refund_admin_payment_path(@payment), method: :patch, class: 'btn btn-danger', title: 'Click here to refund this payment.', 'data-confirm' => 'Are you sure you want to refund this payment?'
+      -if @payment.approved?
+        =link_to 'Refresh', refresh_admin_payment_path(@payment), method: :patch, class: 'btn btn-default', title: 'Click here to see if the payment has settled.'
   .row
     .col-md-12
       %h2 Transactions

@@ -12,6 +12,13 @@ class Admin::PaymentsController < ApplicationController
   end
 
   def show
+    if params[:status].present? || @payment.contribution.nil?
+      @back_path = admin_payments_path(status: params[:status])
+      @back_tool_tip = 'Click here to return to the list of payments.'
+    else
+      @back_path = admin_campaign_path(@payment.contribution.campaign_id)
+      @back_tool_tip = 'Click here to return to the campaign page.'
+    end
   end
 
   def refresh
