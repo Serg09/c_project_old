@@ -15,5 +15,4 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require bootstrap
-//= require turbolinks
 //= require underscore
