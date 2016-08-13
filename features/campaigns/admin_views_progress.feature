@@ -37,6 +37,6 @@ Feature: Administrator views campaign progress
       | Days remaining            |     59 |
 
     And I should see the following contributions table
-      | Contributor        |      Date | Amount |
-      | some@reader.com    | 2/29/2016 |   $125 |
-      | another@person.com |  3/1/2016 |    $50 |
+      | Contributor        |              Date | Amount |
+      | another@person.com |  3/1/2016 6:00 PM |    $50 |
+      | some@reader.com    | 2/29/2016 6:00 PM |   $125 |
