@@ -1,6 +1,7 @@
 require 'resque_web'
 
 Rails.application.routes.draw do
+  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount ResqueWeb::Engine => '/resque_web'
 
   devise_for :administrators, path: 'admin', controllers: {
@@ -34,7 +35,7 @@ Rails.application.routes.draw do
   resources :images, only: :show
   resources :campaigns, only: [:show, :edit, :update, :destroy] do
     resources :contributions, only: [:new, :create]
-    resources :rewards, only: [:new, :create]
+    resources :rewards, only: [:index, :new, :create]
     member do
       get :terms
       patch :start
@@ -43,12 +44,20 @@ Rails.application.routes.draw do
       patch :prolong
     end
   end
-  resources :contributions, only: [:show, :edit, :update] do
+  resources :contributions, only: [:edit, :update] do
     member do
       get :reward
       patch :set_reward
       get :payment
       patch :pay
+    end
+  end
+  get '/contributions/:token', to: 'contributions#show',
+                               as: :show_contribution,
+                               constraints: { token: /[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}/i }
+  resources :payments, only: :create do
+    collection do
+      get :token
     end
   end
   resources :rewards, only: [:edit, :update, :destroy]
@@ -84,7 +93,12 @@ Rails.application.routes.draw do
         patch :fulfill
       end
     end
-    resources :payments, only: [:index, :show]
+    resources :payments, only: [:index, :show] do
+      member do
+        patch :refresh
+        patch :refund
+      end
+    end
     resources :subscribers, only: [:index]
   end
 

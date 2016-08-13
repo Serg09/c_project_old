@@ -1,3 +1,5 @@
+require 'payment_provider/braintree_payment_provider'
+
 # == Schema Information
 #
 # Table name: payments
@@ -24,31 +26,11 @@ class Payment < ActiveRecord::Base
     ['American Express', 'amex']
   ]
 
-  attr_accessor :credit_card_number,
-                :credit_card_type,
-                :cvv,
-                :expiration_month,
-                :expiration_year,
-                :first_name,
-                :last_name,
-                :billing_address_1,
-                :billing_address_2,
-                :billing_city, 
-                :billing_state,
-                :billing_postal_code,
-                :billing_country_code,
+  attr_accessor :nonce,
                 :payment_provider_error
 
   validates_presence_of :state
-  validates_presence_of :credit_card_number,
-    :credit_card_type,
-    :cvv,
-    :billing_address_1,
-    :billing_city,
-    :billing_state,
-    :billing_postal_code,
-    :billing_country_code,
-    on: :create
+  validates_presence_of :nonce, on: :create
   validates_uniqueness_of :external_id, if: :external_id
   validates_numericality_of :provider_fee, greater_than_or_equal_to: 0, if: :provider_fee
 
@@ -64,6 +46,10 @@ class Payment < ActiveRecord::Base
       transitions from: :pending, to: :failed, unless: :payment_provider_error
     end
 
+    event :complete do
+      transitions from: :approved, to: :completed, if: :_completed?
+    end
+
     event :refund do
       transitions from: [:approved, :completed], to: :refunded, if: :_refund
     end
@@ -73,11 +59,8 @@ class Payment < ActiveRecord::Base
     contributions.first
   end
 
-  def sale_id
-    transactions.lazy.
-      map{|t| extract_sale_id(t.response)}.
-      select{|id| id}.
-      first
+  def can_refund?
+    approved? || completed?
   end
 
   private
@@ -85,7 +68,7 @@ class Payment < ActiveRecord::Base
   def _execute
     response = PAYMENT_PROVIDER.execute_payment(self)
     create_transaction(response, :sale)
-    self.external_id ||= response.id
+    update_attribute(:external_id, response.id) if external_id.blank?
     response.success?
   rescue => e
     self.payment_provider_error = e
@@ -93,11 +76,14 @@ class Payment < ActiveRecord::Base
     false
   end
 
+  def _completed?
+    PAYMENT_PROVIDER.completed?(self)
+  end
+
   def _refund
     response = PAYMENT_PROVIDER.refund_payment(self)
     create_transaction(response, :refund)
-
-    %w(pending completed).include?(response[:state])
+    response.success?
   rescue => e
     self.payment_provider_error = e
     Rails.logger.error "Error refunding payment #{self.inspect}, #{e.class.name}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
@@ -111,13 +97,5 @@ class Payment < ActiveRecord::Base
     unless transaction.save
       Rails.logger.warn "Unable to create payment transaction #{transaction.inspect} for response #{response.inspect}"
     end
-  end
-
-  def extract_sale_id(content)
-    data = JSON.parse(content, symbolize_names: true)
-    transaction = data[:transactions].first
-    related_resource = transaction[:related_resources].first
-    sale = related_resource[:sale]
-    sale[:id]
   end
 end

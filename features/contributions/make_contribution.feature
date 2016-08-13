@@ -1,3 +1,5 @@
+# TODO Rework this for the AJAX interface
+@ignore
 Feature: Make a contribution
   As a user
   In order to support a book project I want to see completed

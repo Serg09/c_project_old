@@ -1,20 +1,89 @@
 =content_for :page_title do
   Make a contribution!
 
-.container.container-default
+.container.container-default.contribution{ 'ng-app' => 'Crowdscribed', 'ng-controller' => 'ContributionController as contributionCtl', 'ng-init' => "campaignId = #{@campaign.id}" }
+  .overlay{ 'ng-hide' => '!isInProgress' }
+    %center
+      .panel.panel-primary
+        .panel-heading Payment Processing
+        .panel-body
+          %p We are processing your contribution. This shouldn't take too long.
+          #progressbar
+  %h1 Contribute!
+  %h2
+    Support the book
+    %i= @campaign.book.approved_version.title
+    by
+    =@campaign.book.author.full_name
+    with a contribution.
   .row
-    .col-md-12
-      %h1 Contribute!
-      %h2
-        Support the book
-        %i= @campaign.book.approved_version.title
-        by
-        =@campaign.book.author.full_name
-        with a contribution.
-  =form_for([@campaign, @contribution]) do |f|
-    .row
-      .col-md-12
-        =render 'amounts_form_fields', f: f
-    .row
-      .col-md-12
-        =f.submit 'Next', class: 'btn btn-primary'
+    .col-md-8
+      .app
+        .row.reward-option{ 'ng-repeat' => 'reward in rewards', 'ng-class' => '{selected: reward.selected}', 'data-reward-id' => '{{reward.id}}', 'ng-click' => 'handleRewardClick($event)' }
+          .col-sm-2
+            .reward-contribution-amount
+              {{ reward.minimum_contribution | currency : $ : 0}}
+          %div{ 'ng-class' => '{"col-sm-6": reward.photo_id, "col-sm-10": !reward.photo_id}' }
+            .reward-header {{ reward.working_description }}
+            .reward-description
+              {{ reward.working_long_description }}
+          .col-sm-4{ 'ng-if' => 'reward.photo_id' }
+            %img.img.img-responsive.img-rounded{ 'ng-src' => '/images/{{reward.photo_id}}' }
+        .row.reward-option{ 'ng-class' => '{selected: !selectedRewardId}' }
+          .col-sm-2
+            %label{ for: 'custom_amount', 'aria-hidden' => true } Amount
+            %input#custom_amount.form-control.custom-reward-amount{ type: 'number', 'ng-model' => 'customContributionAmount', 'ng-focus' => 'clearSelection()' }
+          .col-sm-10
+            .reward-header Choose your amount
+            %div{ 'ng-show' => 'availableRewards.length > 0' }
+              Select one of the following:
+              .radio{ 'ng-repeat' => 'reward in availableRewards' }
+                %label
+                  %input{ type: 'radio', name: 'customRewardId', 'ng-model' => '$parent.customRewardId', 'ng-value': 'reward.id' }
+                  {{ reward.description }}
+              .radio
+                %label
+                  %input{ type: 'radio', name: 'customRewardId', 'ng-model' => 'customRewardId', value: '' }
+                  I don't require anything in return for my contribution
+    .col-md-4
+      %form{ novalidate: true, name: 'contributionForm' }
+
+        -# Email
+        .form-group{ 'ng-class' => '{"has-error": contributionForm.email.$invalid && !contributionForm.email.$pristine, "has-success": contributionForm.email.$valid}' }
+          %label.control-label{ for: 'email' } Email
+          %input#email.form-control{ type: 'email', name: 'email', 'ng-model' => 'email', required: true, email: true }
+          %span.help-block{ 'ng-show' => 'contributionForm.email.$dirty && contributionForm.email.$error.required' } Email is required
+          %span.help-block{ 'ng-show' => 'contributionForm.email.$dirty && contributionForm.email.$error.email' } Email is invalid
+
+        -# Address
+        %fieldset{ 'ng-show' => 'addressRequired()' }
+          .form-group{ 'ng-class' => '{"has-error": contributionForm.address1.$invalid && !contributionForm.address1.$pristine, "has-success": contributionForm.address1.$valid}' }
+            %label.control-label{ for: 'address1' } Street address
+            %input#address1.form-control{ type: 'text', name: 'address1', 'ng-model' => 'address1', 'ng-required' => 'addressRequired()' }
+            %span.help-block{ 'ng-show' => 'contributionForm.address1.$dirty && contributionForm.address1.$error.required' } Street address is required
+          .form-group{ 'ng-class' => '{"has-error": contributionForm.address2.$invalid && !contributionForm.address2.$pristine, "has-success": contributionForm.address2.$dirty && contributionForm.address2.$valid}' }
+            %label.control-label{ for: 'address2' } Apt./Suite #
+            %input#address2.form-control{ type: 'text', name: 'address2', 'ng-model' => 'address2' }
+          .row
+            .col-sm-5
+              .form-group{ 'ng-class' => '{"has-error": contributionForm.city.$invalid && !contributionForm.city.$pristine, "has-success": contributionForm.city.$valid}' }
+                %label.control-label{ for: 'city' } City
+                %input#city.form-control{ type: 'text', name: 'city', 'ng-model' => 'city', 'ng-required' => 'addressRequired()' }
+                %span.help-block{ 'ng-show' => 'contributionForm.city.$dirty && contributionForm.city.$error.required' } City is required
+            .col-sm-3
+              .form-group{ 'ng-class' => '{"has-error": contributionForm.state.$invalid && !contributionForm.state.$pristine, "has-success": contributionForm.state.$valid}' }
+                %label.control-label{ for: 'state' } State
+                %input#state.form-control{ type: 'text', name: 'state', 'ng-model' => 'state', 'ng-pattern' => "STATE_ABBR_PATTERN", maxlength: 2, 'ng-required' => 'addressRequired()' }
+                %span.help-block{ 'ng-show' => 'contributionForm.state.$dirty && contributionForm.state.$error.required' } state is required
+                %span.help-block{ 'ng-show' => 'contributionForm.state.$dirty && contributionForm.state.$error.pattern' } Postal code is invalid
+            .col-sm-4
+              .form-group{ 'ng-class' => '{"has-error": contributionForm.postalCode.$invalid && !contributionForm.postalCode.$pristine, "has-success": contributionForm.postalCode.$valid}' }
+                %label.control-label{ for: 'postalCode' } Postal code
+                %input#postalCode.form-control{ type: 'text', name: 'postalCode', 'ng-model' => 'postalCode', maxlength: 10, 'ng-pattern' => "POSTAL_CODE_PATTERN", 'ng-required' => 'addressRequired()' }
+                %span.help-block{ 'ng-show' => 'contributionForm.postalCode.$dirty && contributionForm.postalCode.$error.required' } Postal code is required
+                %span.help-block{ 'ng-show' => 'contributionForm.postalCode.$dirty && contributionForm.postalCode.$error.pattern' } Postal code is invalid
+
+      =render PAYMENT_PROVIDER.form_view
+      -# Submit
+      %button.btn.btn-primary{ 'ng-click' => 'submitForm()', 'ng-disabled' => 'contributionForm.$invalid || isInProgress' }
+        Submit

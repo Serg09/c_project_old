@@ -1,5 +1,13 @@
 module PaymentProvider
   class NilPaymentProvider
+    def get_token
+      Faker::Number.hexadecimal(10)
+    end
+
+    def form_view
+      'test_payment_form'
+    end
+
     def execute_payment(payment)
       return_from_file('payment_create_approved.json')
     end

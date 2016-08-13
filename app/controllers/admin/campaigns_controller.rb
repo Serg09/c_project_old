@@ -11,6 +11,10 @@ class Admin::CampaignsController < ApplicationController
   end
 
   def show
+    @contributions = @campaign.
+      contributions.
+      order('created_at desc').
+      paginate(page: params[:page], per_page: 5)
   end
 
   private

@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  payment_id :integer          not null
 #  intent     :string(20)       not null
-#  state      :string(20)       not null
+#  state      :string(100)      not null
 #  response   :text             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -20,7 +20,7 @@ class PaymentTransaction < ActiveRecord::Base
   #
   # Maybe we should use a cleaner separation of the
   # PayPal terminology and our own here
-  INTENTS = %w(sale refund)
+  INTENTS = %w(sale refund update)
   class << self
     INTENTS.each do |intent|
       define_method intent.upcase do

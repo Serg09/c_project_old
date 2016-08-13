@@ -1,9 +1,14 @@
 class RewardsController < ApplicationController
-  respond_to :html
+  respond_to :html, :json
 
-  before_filter :authenticate_user!
-  before_filter :load_campaign, only: [:new, :create]
+  before_filter :authenticate_user!, except: :index
+  before_filter :load_campaign, only: [:index, :new, :create]
   before_filter :load_reward, only: [:edit, :update, :destroy]
+
+  def index
+    @rewards = @campaign.rewards
+    respond_with @rewards
+  end
 
   def new
     @reward = @campaign.rewards.new

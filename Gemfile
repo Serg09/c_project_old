@@ -17,8 +17,6 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -37,12 +35,15 @@ gem 'will_paginate-bootstrap'
 gem 'rmagick'
 gem 'puma'
 gem 'chronic'
-gem 'paypal-sdk-rest'
+gem 'braintree', '~> 2.64.0'
 gem 'aasm'
 gem 'resque'
 gem 'resque-scheduler'
 gem 'resque-web', require: 'resque_web'
 gem 'wysiwyg-rails'
+gem 'angularjs-rails'
+gem 'ng-rails-csrf'
+gem 'underscore-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -60,6 +61,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'timecop'
+  gem 'jasmine-rails'
 end
 
 group :development do

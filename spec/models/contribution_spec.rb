@@ -33,10 +33,9 @@ RSpec.describe Contribution, type: :model do
   end
 
   describe '#email' do
-    it 'is required to advance past incipient state' do
+    it 'is required' do
       contribution = Contribution.new attributes.except(:email)
-      expect(contribution).to be_valid
-      expect(contribution.pledge).to be false
+      expect(contribution).to have_at_least(1).error_on :email
     end
 
     it 'must be a valid email' do
@@ -82,6 +81,15 @@ RSpec.describe Contribution, type: :model do
 
     it 'contains information about the selected reward' do
       expect(contribution.fulfillment).to eq fulfillment
+    end
+  end
+
+  describe '#payment_id' do
+    let (:payment) { FactoryGirl.create(:payment) }
+
+    it 'associates the specified payment with the contribution on create' do
+      contribution = Contribution.create! attributes.merge(payment_id: payment.id)
+      expect(contribution.payments).to include payment
     end
   end
 

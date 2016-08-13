@@ -5,19 +5,9 @@ RSpec.describe Payment, type: :model do
   let (:attributes) do
     {
       amount: contribution.amount,
-      external_id: 'PAY-17S8410768582940NKEE66EQ',
-      state: 'approved',
-      credit_card_number: '4111111111111111',
-      credit_card_type: 'visa',
-      expiration_month: '03',
-      expiration_year: '2020',
-      cvv: '123',
-      billing_address_1: '1234 Main St',
-      billing_address_2: 'Apt 227',
-      billing_city: 'Dallas',
-      billing_state: 'TX',
-      billing_postal_code: '75200',
-      billing_country_code: 'US'
+      nonce: Faker::Number.hexadecimal(10),
+      external_id: Faker::Number.hexadecimal(10),
+      state: 'approved'
     }
   end
 
@@ -62,73 +52,17 @@ RSpec.describe Payment, type: :model do
     end
   end
 
-  describe '#sale_id' do
-    let (:payment) { FactoryGirl.create(:approved_payment, sale_id: 'ABC123') }
-    it 'returns the first sale ID found  in the transaction content' do
-      expect(payment.sale_id).to eq 'ABC123'
-    end
-  end
-
-  describe '#credit_card_number' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:credit_card_number)
-      expect(payment).to have_at_least(1).error_on :credit_card_number
-    end
-  end
-
-  describe '#credit_card_type' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:credit_card_type)
-      expect(payment).to have_at_least(1).error_on :credit_card_type
-    end
-  end
-
-  describe '#cvv' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:cvv)
-      expect(payment).to have_at_least(1).error_on :cvv
-    end
-  end
-
-  describe '#billing_address_1' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:billing_address_1)
-      expect(payment).to have_at_least(1).error_on :billing_address_1
-    end
-  end
-
-  describe '#billing_city' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:billing_city)
-      expect(payment).to have_at_least(1).error_on :billing_city
-    end
-  end
-
-  describe '#billing_state' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:billing_state)
-      expect(payment).to have_at_least(1).error_on :billing_state
-    end
-  end
-
-  describe '#billing_postal_code' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:billing_postal_code)
-      expect(payment).to have_at_least(1).error_on :billing_postal_code
-    end
-  end
-
-  describe '#billing_country_code' do
-    it 'is required' do
-      payment = Payment.new attributes.except(:billing_country_code)
-      expect(payment).to have_at_least(1).error_on :billing_country_code
-    end
-  end
-
   describe '#provider_fee' do
     it 'cannot be less than zero' do
       payment = Payment.new attributes.merge(provider_fee: -0.01)
       expect(payment).to have(1).error_on :provider_fee
+    end
+  end
+
+  describe '#nonce' do
+    it 'is required' do
+      payment = Payment.new attributes.except :nonce
+      expect(payment).to have_at_least(1).error_on :nonce
     end
   end
 

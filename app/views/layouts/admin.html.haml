@@ -3,8 +3,8 @@
   %head
     %title Crowdscribed Administration
     %link{ rel: 'icon', type: 'image/png', href: asset_path('crowdscribed_logo_cropped.png') }
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
     = csrf_meta_tags
   %body
     =render 'shared/admin_navigation'

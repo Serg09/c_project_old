@@ -7,9 +7,7 @@ RSpec.describe ElectronicFulfillment, type: :model do
     {
       contribution_id: contribution.id, 
       reward_id: reward.id,
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe'
+      email: 'john@doe.com'
     }
   end
 
@@ -47,11 +45,6 @@ RSpec.describe ElectronicFulfillment, type: :model do
   end
 
   describe '#first_name' do
-    it 'is required' do
-      fulfillment = ElectronicFulfillment.new attributes.except(:first_name)
-      expect(fulfillment).to have_at_least(1).error_on :first_name
-    end
-
     it 'cannot be more than 100 characters' do
       fulfillment = ElectronicFulfillment.new attributes.merge(first_name: 'a' * 101)
       expect(fulfillment).to have_at_least(1).error_on :first_name
@@ -59,11 +52,6 @@ RSpec.describe ElectronicFulfillment, type: :model do
   end
 
   describe '#last_name' do
-    it 'is required' do
-      fulfillment = ElectronicFulfillment.new attributes.except(:last_name)
-      expect(fulfillment).to have_at_least(1).error_on :last_name
-    end
-
     it 'cannot be more than 100 characters' do
       fulfillment = ElectronicFulfillment.new attributes.merge(last_name: 'a' * 101)
       expect(fulfillment).to have_at_least(1).error_on :last_name

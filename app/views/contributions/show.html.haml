@@ -1,0 +1,17 @@
+-content_for :page_title do
+  Contribution
+
+.container.container-default
+  .row
+    .col-md-12
+      %p
+        Thank you for your contribution to the book
+        %i= @campaign.book.public_title
+        by #{h @campaign.book.author.full_name}
+        in the amount of #{h number_to_currency(@contribution.amount)}!
+      %p
+        Confirmation:
+        =@contribution.public_key
+      %p
+        Status:
+        =@contribution.state

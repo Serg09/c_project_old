@@ -16,14 +16,14 @@
 #  delivered       :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  first_name      :string(100)      not null
-#  last_name       :string(100)      not null
+#  first_name      :string(100)
+#  last_name       :string(100)
 #
 
 class Fulfillment < ActiveRecord::Base
   belongs_to :contribution
   belongs_to :reward
-  validates_presence_of :contribution_id, :reward_id, :first_name, :last_name
+  validates_presence_of :contribution_id, :reward_id
   validates_length_of :first_name, maximum: 100
   validates_length_of :last_name, maximum: 100
   validates_uniqueness_of :contribution_id, message: 'This contribution already has a fulfillment'

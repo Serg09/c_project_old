@@ -89,11 +89,9 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 end
 
-PayPal::SDK.configure(
-  mode: ENV['PAYPAL_MODE'],
-  client_id: ENV['PAYPAL_CLIENT_ID'],
-  client_secret: ENV['PAYPAL_CLIENT_SECRET']
-)
-PayPal::SDK.logger = Rails.logger
+Braintree::Configuration.environment = ENV['BRAINTREE_ENVIRONMENT']
+Braintree::Configuration.merchant_id = ENV['BRAINTREE_MERCHANT_ID']
+Braintree::Configuration.public_key  = ENV['BRAINTREE_PUBLIC_KEY']
+Braintree::Configuration.private_key = ENV['BRAINTREE_PRIVATE_KEY']
 
-PAYMENT_PROVIDER = PaymentProvider::PayPalProvider.new
+PAYMENT_PROVIDER = PaymentProvider::BraintreePaymentProvider.new

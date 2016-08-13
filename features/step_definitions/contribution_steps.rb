@@ -15,17 +15,7 @@ Given /^the (#{CAMPAIGN}) has received the following contributions$/ do |campaig
     contribution = FactoryGirl.create(:contribution, values.merge(campaign: campaign, state: 'collected'))
 
     address = address_string.present? ? parse_address(address_string) : {}
-
-    if address.present?
-      FactoryGirl.create(:payment, contribution: contribution,
-                                   billing_address_1: address[:line1],
-                                   billing_address_2: address[:line2],
-                                   billing_city: address[:city],
-                                   billing_state: address[:state],
-                                   billing_postal_code: address[:postal_code])
-    else
-      FactoryGirl.create(:payment, contribution: contribution)
-    end
+    FactoryGirl.create(:payment, contribution: contribution)
 
     if reward_description.present?
       reward = campaign.rewards.find_by(description: reward_description)
@@ -58,23 +48,11 @@ end
 
 When /^a user donates (#{DOLLAR_AMOUNT}) for the (#{BOOK})$/ do |amount, book|
   campaign = book.campaigns.active.first
-  visit new_campaign_contribution_path(campaign)
-  within('#main-content') do
-    fill_in 'Amount', with: amount.to_s
-    click_button 'Next'
-  end
-
-  within('#main-content') do
-    fill_in 'Credit card number', with: Faker::Business.credit_card_number.gsub(/\D/, '')
-    fill_in 'CVV', with: Faker::Number.number(3).to_s
-    fill_in 'Email', with: Faker::Internet.email
-    fill_in 'First name', with: Faker::Name.first_name
-    fill_in 'Last name', with: Faker::Name.last_name
-    fill_in 'Address', with: Faker::Address.street_address
-    fill_in 'Line 2', with: Faker::Address.secondary_address
-    fill_in 'City', with: Faker::Address.city
-    fill_in 'State', with: Faker::Address.state_abbr
-    fill_in 'Postal code', with: Faker::Address.postcode
-    click_button 'Submit'
-  end
+  # by passing AJAX page details
+  contribution = {
+    amount: amount,
+    email: Faker::Internet.email,
+    nonce: Faker::Number.hexadecimal(10)
+  }
+  page.driver.post "/campaigns/#{campaign.id}/contributions.json", contribution: contribution
 end
