@@ -4,4 +4,5 @@
 #
 #= require angular
 #= require ng-rails-csrf
+#= require crowdscribed
 #= require controllers/contribution_controller
