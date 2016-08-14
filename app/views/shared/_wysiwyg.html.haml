@@ -1,0 +1,8 @@
+=content_for :header do
+  =javascript_include_tag 'wysiwyg'
+  =stylesheet_link_tag 'wysiwyg'
+=content_for :after_footer do
+  :coffee
+    $(->
+      $('.wysiwyg').froalaEditor
+        key: '#{ENV['FROALA_ACTIVATION_KEY']}')

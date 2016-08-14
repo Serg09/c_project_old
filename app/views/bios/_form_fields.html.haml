@@ -1,11 +1,4 @@
-=content_for :javascript do
-  =javascript_include_tag 'wysiwyg'
-  =stylesheet_link_tag 'wysiwyg'
-=content_for :after_footer do
-  :javascript
-    $(function() {
-      $('.wysiwyg').froalaEditor();
-    });
+= render 'shared/wysiwyg'
 .form-group{ :class => form_group_class(@bio, :text) }
   =f.label :text, class: 'control-label'
   =f.text_area :text, class: 'form-control wysiwyg', autofocus: true, rows: 5
