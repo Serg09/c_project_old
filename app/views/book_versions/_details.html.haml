@@ -19,7 +19,8 @@
     -if can?(:update, book_version.book) && book_version.book.campaigns.none? && book_version.approved?
       .row
         .col-sm-12
-          =link_to 'Fund This Title!', book_campaigns_path(book_version.book_id), :class => 'btn btn-lg btn-success', :title => 'Click here to create a crowdfunding campaign for this title.'
+          .button-panel
+            =link_to 'create a funding campaign', book_campaigns_path(book_version.book_id), :class => 'btn btn-lg btn-success', :title => 'Click here to create a crowdfunding campaign for this title.'
     -if book_version.active_campaign.present?
       .row
         .col-sm-6
