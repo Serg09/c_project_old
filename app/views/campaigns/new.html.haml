@@ -6,3 +6,5 @@
     .col-md-6
       =form_for [@book, @campaign] do |f|
         =render 'form_fields', f: f
+    .col-md-6
+      =render 'shared/payment_fees'

@@ -1,0 +1,13 @@
+%button#fee-notes-button.btn.btn-sm.btn-default{ data: {toggle: 'modal', target: '#fee-notes' } }
+  Note about fees
+#fee-notes.modal.fade{ role: 'dialog' }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{ 'data-dismiss' => 'modal' }
+          &times;
+        Note about fees
+      .modal-body
+        =render 'shared/payment_fees'
+      .modal-footer
+        %button.btn.btn-primary{ 'data-dismiss' => 'modal' } OK

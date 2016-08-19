@@ -27,6 +27,7 @@
       %h2 Contributions
       =render 'contributions/table', campaign: @campaign, contributions: @contributions, total_pledged: @total_pledged, total_collected: @total_collected
       =will_paginate @contributions, renderer: BootstrapPagination::Rails, param_name: :contributions_page
+      =render 'shared/payment_fees_modal'
     .col-md-2.text-center
       =render_progress_meter @campaign.current_progress
     .col-md-2
