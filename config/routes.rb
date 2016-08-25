@@ -108,7 +108,7 @@ Rails.application.routes.draw do
   get 'pages/faqs'
   get 'pages/about_us'
   get 'pages/our_team'
-  get 'pages/book_incubator'
+  get 'pages/author_portal'
   get 'pages/why'
   get 'pages/klososky'
   get 'pages/rewilding'

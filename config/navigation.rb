@@ -12,7 +12,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :services, 'Services' do |services_item|
       services_item.item :package_pricing, 'Package Pricing', pages_package_pricing_path
       services_item.item :a_la_carte, 'A La Carte Pricing', pages_a_la_carte_pricing_path
-      services_item.item :book_incubator, 'Book Incubator', pages_book_incubator_path
+      services_item.item :author_portal, 'Author Portal', pages_author_portal_path
       services_item.item :faqs, 'FAQs', pages_faqs_path
     end
     primary.item :readers, 'Readers' do |readers_item|
