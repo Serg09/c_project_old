@@ -176,6 +176,13 @@ table.footnotes {
   font-style: italic;
 }
 
+.our-team .row {
+  .row {
+    margin-top: 2em;
+    font-size: 120%;
+  }
+}
+
 @font-face {
   font-family: Quicksand;
   src: asset-url('Quicksand-Regular.otf');

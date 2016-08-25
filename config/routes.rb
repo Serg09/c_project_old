@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   get 'pages/a_la_carte_pricing'
   get 'pages/faqs'
   get 'pages/about_us'
+  get 'pages/our_team'
   get 'pages/book_incubator'
   get 'pages/why'
   get 'pages/klososky'

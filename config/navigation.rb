@@ -10,6 +10,7 @@ SimpleNavigation::Configuration.run do |navigation|
       about.item :faqs, 'FAQs', pages_faqs_path
       about.item :about_us, 'About Us', pages_about_us_path
       about.item :contact_us, 'Contact us', new_inquiry_path
+      about.item :our_team, 'Our team', pages_our_team_path
       about.item :book_incubator, 'Book Incubator', pages_book_incubator_path
     end
     primary.item :authors, 'Authors', browse_authors_path
