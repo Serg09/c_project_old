@@ -15,13 +15,13 @@ SimpleNavigation::Configuration.run do |navigation|
       services_item.item :author_portal, 'Author Portal', pages_author_portal_path
       services_item.item :faqs, 'FAQs', pages_faqs_path
     end
-    primary.item :readers, 'Readers' do |readers_item|
-      readers_item.item :browse_authors, 'Browse authors', browse_authors_path
-      readers_item.item :browse_books, 'Browse books', browse_books_path
-    end
     if AppSetting.sign_in_disabled?
       primary.item :subscribe, 'Sign up', new_subscriber_path
     else
+      primary.item :readers, 'Readers' do |readers_item|
+        readers_item.item :browse_authors, 'Browse authors', browse_authors_path
+        readers_item.item :browse_books, 'Browse books', browse_books_path
+      end
       primary.item :authors, 'Authors' do |authors_item|
         if user_signed_in?
           authors_item.item :view_profile, 'Profile', user_path(current_user)
