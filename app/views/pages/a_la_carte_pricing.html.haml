@@ -3,34 +3,124 @@
 
 .container
   .row.a-la-carte
-    .col-md-4
-      %h1 Editorial Services
-      %p Editorial Director (required) – $120.00
-      %p Typesetting/Page Design (Basic) – $90.00
-      %p Typesetting/Page Design premium – $600.00
-      %p Copy Editing – $1,200.00
-      %p Developmental Editing – $2,400.00
-      %p Cover Design (Simple) – $600.00
-      %p Cover Design (Complex) – $950.00
-      %p Chapter Writing – $15,000.00
-      %p ISBN &nbsp; PCN set up and acquisition – $78.00
-      %p POD set up – $72.00
-      %p ePub Conversion – $30.00
-      %p Global Distribution (LSI) – $32.40
-      %p Set up Package (4 items above) – $210.00
-      %p.action
-        =link_to 'To order a service please contact us.', 'mail:info@crowdscribed.com'
-    .col-md-4
-      %h1 Marketing Services
-      %p HTML email set up – $100
-      %p Digital marketing guide – $50
-      %p Monthly digital marketing consult via email – $25
-      %p Individual Project Services – $2,500
-      %p.action
-        =link_to 'To order a service please contact us.', 'mail:info@crowdscribed.com'
-    .col-md-4
-      %h1 Production Services / Global Distribution
-      %p 3DM – $3,450
-      %p Others – $2,000
-      %p.action
-        =link_to 'To order a service please contact us.', 'mail:info@crowdscribed.com'
+    .col-md-6
+      %h1 Basic services
+      %table
+        %tr
+          %td Title Setup:
+          %td &nbsp;
+        %tr
+          %td.indent Paperback
+          %td.text-right 95.00
+        %tr
+          %td.indent Hardback
+          %td.text-right 125.00
+        %tr
+          %td Physical Book Proof Paperback
+          %td.text-right 40.00
+        %tr
+          %td Physical Book Proof Hardback
+          %td.text-right 45.00
+        %tr
+          %td Revision to Cover and Interior Files
+          %td.text-right 50.00
+        %tr
+          %td Yearly Print Market Distribution
+          %td.text-right 15.00
+        %tr
+          %td Yearly EBook Distribution
+          %td.text-right 38.00
+        %tr
+          %td EBook Conversion
+          %td.text-right Custom
+        %tr
+          %td{ 'col-span' => 2} &nbsp;
+        %tr
+          %td ISBN Only
+          %td.text-right 35.00
+        %tr
+          %td ISBN/PCN Setup
+          %td.text-right 75.00
+
+    .col-md-6
+      %p
+        %h1 Editorial &amp; typeset
+        %strong Interior Design
+        Per Page
+        %br
+        %strong All Editing
+        Per Word
+      %table
+        %tr
+          %td Interior Design:
+          %td &nbsp;
+        %tr
+          %td.indent Less than 100 pages, Base rate
+          %td.text-right 500.00
+        %tr
+          %td.indent Novel: Plain text
+          %td.text-right 4.50
+        %tr
+          %td.indent Novel: Images, other elements
+          %td.text-right 5.00
+        %tr
+          %td.indent Non-fiction, General
+          %td.text-right 7.00
+        %tr
+          %td.indent Illustration
+          %td.text-right 10.00
+        %tr
+          %td{ 'col-span' => 2} &nbsp;
+        %tr
+          %td Exterior Design:
+          %td &nbsp;
+        %tr
+          %td.indent Cover Design
+          %td.text-right Custom
+        %tr
+          %td{ 'col-span' => 2} &nbsp;
+        %tr
+          %td Development Editing:
+          %td &nbsp;
+        %tr
+          %td.indent Fiction
+          %td.text-right .048
+        %tr
+          %td.indent Non-fiction, General
+          %td.text-right .053
+        %tr
+          %td.indent Illustration
+          %td.text-right .056
+        %tr
+          %td{ 'col-span' => 2} &nbsp;
+        %tr
+          %td Copy Editing:
+          %td &nbsp;
+        %tr
+          %td.indent Fiction
+          %td.text-right .041
+        %tr
+          %td.indent Non-fiction, General
+          %td.text-right .045
+        %tr
+          %td.indent Illustration
+          %td.text-right .048
+        %tr
+          %td{ 'col-span' => 2} &nbsp;
+        %tr
+          %td Proofreading:
+          %td &nbsp;
+        %tr
+          %td.indent Fiction
+          %td.text-right .020
+        %tr
+          %td.indent Non-fiction, General
+          %td.text-right .023
+        %tr
+          %td.indent Illustration
+          %td.text-right .025
+        %tr
+          %td{ 'col-span' => 2} &nbsp;
+        %tr
+          %td Back Cover Copy
+          %td.text-right 625.00
