@@ -7,6 +7,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :about, 'About', pages_about_us_path do |about|
       about.item :about_us, 'About Us', pages_about_us_path
       about.item :what_we_do, 'What We Do', pages_what_we_do_path
+      about.item :why_we_do_it, 'Why We Do It', pages_why_path
       about.item :contact_us, 'Contact us', new_inquiry_path
       about.item :our_team, 'Our team', pages_our_team_path
     end
