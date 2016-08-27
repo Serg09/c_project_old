@@ -4,6 +4,8 @@
 .container.container-default
   .row
     .col-md-6
+      %p
+        =link_to 'Download', admin_subscribers_path(format: :csv), class: 'btn btn-default', title: 'Click here to download all of the scribers in a spreadsheet-compatible format.'
       %table#subscriber-table.table.table-striped
         %tr
           %th First name

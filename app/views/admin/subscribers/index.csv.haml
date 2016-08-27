@@ -1,0 +1,3 @@
+=CSV.generate_line ['id', 'first_name', 'last_name', 'email']
+-@subscribers.each do |subscriber|
+  =CSV.generate_line [subscriber.id, subscriber.first_name, subscriber.last_name, subscriber.email]
