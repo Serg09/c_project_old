@@ -120,6 +120,7 @@ Rails.application.routes.draw do
   get 'pages/community_standards'
   get 'pages/what_we_do'
   get 'pages/why_model_works'
+  get 'pages/printing_costs'
   get 'pages/klososky'
   get 'pages/rewilding'
   get 'pages/discipling'

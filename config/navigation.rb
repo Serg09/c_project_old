@@ -14,6 +14,8 @@ SimpleNavigation::Configuration.run do |navigation|
     end
     primary.item :services, 'Services' do |services_item|
       services_item.item :a_la_carte, 'A La Carte Pricing', pages_a_la_carte_pricing_path
+      services_item.item :printing_costs, 'Printing Costs', pages_printing_costs_path
+      services_item.item :author_portal, 'Author Portal', pages_author_portal_path
       services_item.item :faqs, 'FAQs', pages_faqs_path
     end
     if AppSetting.sign_in_disabled?
