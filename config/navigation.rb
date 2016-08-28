@@ -10,9 +10,7 @@ SimpleNavigation::Configuration.run do |navigation|
       about.item :our_team, 'Our team', pages_our_team_path
     end
     primary.item :services, 'Services' do |services_item|
-      services_item.item :package_pricing, 'Package Pricing', pages_package_pricing_path
       services_item.item :a_la_carte, 'A La Carte Pricing', pages_a_la_carte_pricing_path
-      services_item.item :author_portal, 'Author Portal', pages_author_portal_path
       services_item.item :faqs, 'FAQs', pages_faqs_path
     end
     if AppSetting.sign_in_disabled?
@@ -23,6 +21,7 @@ SimpleNavigation::Configuration.run do |navigation|
         readers_item.item :browse_books, 'Browse books', browse_books_path
       end
       primary.item :authors, 'Authors' do |authors_item|
+        authors_item.item :author_portal, 'Author Portal', pages_author_portal_path
         if user_signed_in?
           authors_item.item :view_profile, 'Profile', user_path(current_user)
           authors_item.item :my_bio, 'My bio', bios_path
