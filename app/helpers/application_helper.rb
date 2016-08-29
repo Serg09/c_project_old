@@ -12,6 +12,18 @@ module ApplicationHelper
     "reject_admin_#{resource.class.name.underscore}_path"
   end
 
+  def render_status_nav(statuses, &path_helper)
+    current_status = params[:status] || statuses.first.downcase
+    content_tag(:ul, class: 'nav nav-tabs') do
+      statuses.map do |status|
+        css = (status.downcase == current_status) ? 'active' : ''
+        content_tag(:li, role: 'presentation', class: css) do
+          link_to status, path_helper.call(status: status.downcase)
+        end
+      end.join('').html_safe
+    end
+  end
+
   def bio_path?(status)
     matches_path? '/admin/bio', {status: status}, {status: 'pending'}
   end
