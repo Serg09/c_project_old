@@ -4,21 +4,29 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
     primary.dom_class = 'nav navbar-nav'
     if administrator_signed_in?
-      primary.item :users, 'Users', admin_users_path
       primary.item :subscribers, 'Subscribers', admin_subscribers_path
-      primary.item :bios, bio_nav_item_caption, admin_bios_path do |bios|
-        bios.auto_highlight = false
-        bios.dom_class = 'nav nav-tabs'
-        bios.item :pending, 'Pending', admin_bios_path, highlights_on: -> { bio_path?('pending') }
-        bios.item :approved, 'Approved', admin_bios_path(status: :approved), highlights_on: -> { bio_path?('approved') }
-        bios.item :rejected, 'Rejected', admin_bios_path(status: :rejected), highlights_on: -> { bio_path?('rejected') }
+      primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path do |inquiries|
+        inquiries.auto_highlight = false
+        inquiries.dom_class = 'nav nav-tabs'
+        inquiries.item :active, 'Active', admin_inquiries_path, highlights_on: -> { inquiry_path?(false) }
+        inquiries.item :archived, 'Archived', admin_inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
       end
-      primary.item :books, book_nav_item_caption, admin_book_versions_path do |books|
-        books.auto_highlight = false
-        books.dom_class = 'nav nav-tabs'
-        books.item :pending, 'Pending', admin_book_versions_path, highlights_on: -> { book_path?('pending') }
-        books.item :approved, 'Approved', admin_book_versions_path(status: :approved), highlights_on: -> { book_path?('approved') }
-        books.item :rejected, 'Rejected', admin_book_versions_path(status: :rejected), highlights_on: -> { book_path?('rejected') }
+      primary.item :users, 'Users', admin_users_path
+      primary.item :approvals, 'Approvals', '#' do |approvals|
+        approvals.item :bios, bio_nav_item_caption, admin_bios_path do |bios|
+          bios.auto_highlight = false
+          bios.dom_class = 'nav nav-tabs'
+          bios.item :pending, 'Pending', admin_bios_path, highlights_on: -> { bio_path?('pending') }
+          bios.item :approved, 'Approved', admin_bios_path(status: :approved), highlights_on: -> { bio_path?('approved') }
+          bios.item :rejected, 'Rejected', admin_bios_path(status: :rejected), highlights_on: -> { bio_path?('rejected') }
+        end
+        approvals.item :books, book_nav_item_caption, admin_book_versions_path do |books|
+          books.auto_highlight = false
+          books.dom_class = 'nav nav-tabs'
+          books.item :pending, 'Pending', admin_book_versions_path, highlights_on: -> { book_path?('pending') }
+          books.item :approved, 'Approved', admin_book_versions_path(status: :approved), highlights_on: -> { book_path?('approved') }
+          books.item :rejected, 'Rejected', admin_book_versions_path(status: :rejected), highlights_on: -> { book_path?('rejected') }
+        end
       end
       primary.item :campaigns, 'Campaigns', admin_campaigns_path, highlights_on: ->{false} do |campaigns|
         campaigns.auto_highlight = false
@@ -35,14 +43,10 @@ SimpleNavigation::Configuration.run do |navigation|
         payments.item :failed, 'Failed', admin_payments_path(status: :failed), highlights_on: ->{ payment_path?('failed') }
         payments.item :refunded, 'Refunded', admin_payments_path(status: :refunded), highlights_on: ->{ payment_path?('refunded') }
       end
-      primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path do |inquiries|
-        inquiries.auto_highlight = false
-        inquiries.dom_class = 'nav nav-tabs'
-        inquiries.item :active, 'Active', admin_inquiries_path, highlights_on: -> { inquiry_path?(false) }
-        inquiries.item :archived, 'Archived', admin_inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
+      primary.item :rewards, 'Rewards', '#' do |rewards_item|
+        rewards_item.item :manage_rewards, 'Manage Rewards', admin_house_rewards_path
+        rewards_item.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path
       end
-      primary.item :rewards, 'Rewards', admin_house_rewards_path
-      primary.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path
       primary.item :sign_out, 'Sign out', destroy_administrator_session_path, method: :delete
     end
   end
