@@ -5,12 +5,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.dom_class = 'nav navbar-nav'
     if administrator_signed_in?
       primary.item :subscribers, 'Subscribers', admin_subscribers_path
-      primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path do |inquiries|
-        inquiries.auto_highlight = false
-        inquiries.dom_class = 'nav nav-tabs'
-        inquiries.item :active, 'Active', admin_inquiries_path, highlights_on: -> { inquiry_path?(false) }
-        inquiries.item :archived, 'Archived', admin_inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
-      end
+      primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path
       primary.item :users, 'Users', admin_users_path
       primary.item :approvals, 'Approvals', '#' do |approvals|
         approvals.item :bios, bio_nav_item_caption, admin_bios_path do |bios|
