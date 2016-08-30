@@ -4,7 +4,7 @@
 .container.container-default
   .row
     .col-md-5
-      =render_navigation context: :admin, level: 2
+      =render_status_nav(Payment::STATUSES){|h| admin_payments_path h}
       %table#payments-table.table.table-striped
         %tr
           %th.text-right Date

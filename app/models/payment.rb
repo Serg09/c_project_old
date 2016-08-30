@@ -34,6 +34,7 @@ class Payment < ActiveRecord::Base
   validates_uniqueness_of :external_id, if: :external_id
   validates_numericality_of :provider_fee, greater_than_or_equal_to: 0, if: :provider_fee
 
+  STATUSES = %w(Pending Approved Completed Failed Refunded)
   aasm(:state, whiny_transitions: false) do
     state :pending, initial: true
     state :approved
