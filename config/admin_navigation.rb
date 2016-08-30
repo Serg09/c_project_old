@@ -9,13 +9,7 @@ SimpleNavigation::Configuration.run do |navigation|
       primary.item :users, 'Users', admin_users_path
       primary.item :approvals, 'Approvals', '#' do |approvals|
         approvals.item :bios, bio_nav_item_caption, admin_bios_path
-        approvals.item :books, book_nav_item_caption, admin_book_versions_path do |books|
-          books.auto_highlight = false
-          books.dom_class = 'nav nav-tabs'
-          books.item :pending, 'Pending', admin_book_versions_path, highlights_on: -> { book_path?('pending') }
-          books.item :approved, 'Approved', admin_book_versions_path(status: :approved), highlights_on: -> { book_path?('approved') }
-          books.item :rejected, 'Rejected', admin_book_versions_path(status: :rejected), highlights_on: -> { book_path?('rejected') }
-        end
+        approvals.item :books, book_nav_item_caption, admin_book_versions_path
       end
       primary.item :campaigns, 'Campaigns', admin_campaigns_path, highlights_on: ->{false} do |campaigns|
         campaigns.auto_highlight = false

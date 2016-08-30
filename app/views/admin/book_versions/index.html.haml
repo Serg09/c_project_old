@@ -4,7 +4,7 @@
 .container.container-default
   .row
     .col-md-6
-      =render_navigation context: :admin, level: 2
+      =render_status_nav(BookVersion::STATUSES){|h| admin_book_versions_path h}
       %table#books-table.table.table-striped
         %tr
           %th Title
