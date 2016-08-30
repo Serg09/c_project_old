@@ -8,13 +8,7 @@ SimpleNavigation::Configuration.run do |navigation|
       primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path
       primary.item :users, 'Users', admin_users_path
       primary.item :approvals, 'Approvals', '#' do |approvals|
-        approvals.item :bios, bio_nav_item_caption, admin_bios_path do |bios|
-          bios.auto_highlight = false
-          bios.dom_class = 'nav nav-tabs'
-          bios.item :pending, 'Pending', admin_bios_path, highlights_on: -> { bio_path?('pending') }
-          bios.item :approved, 'Approved', admin_bios_path(status: :approved), highlights_on: -> { bio_path?('approved') }
-          bios.item :rejected, 'Rejected', admin_bios_path(status: :rejected), highlights_on: -> { bio_path?('rejected') }
-        end
+        approvals.item :bios, bio_nav_item_caption, admin_bios_path
         approvals.item :books, book_nav_item_caption, admin_book_versions_path do |books|
           books.auto_highlight = false
           books.dom_class = 'nav nav-tabs'
