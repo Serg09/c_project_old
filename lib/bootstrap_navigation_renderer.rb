@@ -44,8 +44,8 @@ class BootstrapNavigationRenderer < SimpleNavigation::Renderer::Base
 
   def list_class(container)
     case container.level
-    when 1 then 'nav navbar-nav navbar-right'
-    when 2 then 'dropdown-menu'
+    when 1 then container.dom_class
+    when 2 && container.items.any? then 'dropdown-menu'
     end
   end
 
