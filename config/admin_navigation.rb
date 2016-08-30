@@ -11,13 +11,8 @@ SimpleNavigation::Configuration.run do |navigation|
         approvals.item :bios, bio_nav_item_caption, admin_bios_path
         approvals.item :books, book_nav_item_caption, admin_book_versions_path
       end
-      primary.item :campaigns, 'Campaigns', admin_campaigns_path, highlights_on: ->{false} do |campaigns|
-        campaigns.auto_highlight = false
-        campaigns.dom_class = 'nav nav-tabs'
-        campaigns.item :active, 'Current', admin_campaigns_path, highlights_on: ->{ campaign_path?('current') }
-        campaigns.item :inactive, 'Past', admin_campaigns_path(status: :past), highlights_on: ->{ campaign_path?('past') }
-      end
-      primary.item :payments, 'Payments', admin_payments_path, highlights_on: ->{ payment_path?('pending') }
+      primary.item :campaigns, 'Campaigns', admin_campaigns_path
+      primary.item :payments, 'Payments', admin_payments_path
       primary.item :rewards, 'Rewards', '#' do |rewards_item|
         rewards_item.item :manage_rewards, 'Manage Rewards', admin_house_rewards_path
         rewards_item.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path

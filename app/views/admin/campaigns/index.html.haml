@@ -4,7 +4,7 @@
 .container.container-default
   .row
     .col-md-6
-      =render_navigation context: :admin, level: 2
+      =render_status_nav(Campaign::STATUSES){|h| admin_campaigns_path h}
       %table#campaigns-table.table.table-striped
         %tr
           %th Author

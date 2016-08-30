@@ -33,6 +33,7 @@ class Campaign < ActiveRecord::Base
   scope :by_target_date, ->{order('target_date desc')}
   scope :not_unsubscribed, ->{joins(book: :author).where('users.unsubscribed = ?', false)}
 
+  STATUSES = %w(Unstarted Active Collecting Collected Cancelling Cancelled)
   aasm(:state, whiny_transitions: false) do
     state :unstarted, initial: true
     state :active
