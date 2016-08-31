@@ -141,6 +141,8 @@ RSpec.describe Admin::AuthorsController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
+      let!(:author) { FactoryGirl.create(:author) }
+
       it "redirects to the home page" do
         delete :destroy, id: author
         expect(response).to redirect_to root_path
