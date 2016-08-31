@@ -366,7 +366,7 @@ RSpec.describe Campaign, type: :model do
   end
 
   context 'for an unstarted campaign' do
-    let (:author) { FactoryGirl.create(:author) }
+    let (:author) { FactoryGirl.create(:author_user) }
     let (:book) { FactoryGirl.create(:approved_book, author: author) }
     let (:campaign) do
       FactoryGirl.create(:unstarted_campaign, agree_to_terms: true,
