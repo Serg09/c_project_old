@@ -14,6 +14,7 @@ SimpleNavigation::Configuration.run do |navigation|
         approvals.item :books, book_nav_item_caption, admin_book_versions_path
       end
       primary.item :manage, 'Manage', '#' do |manage|
+        manage.item :manage_authors, 'Authors', admin_authors_path
         manage.item :manage_rewards, 'Rewards', admin_house_rewards_path
         manage.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path
       end
