@@ -10,9 +10,9 @@ Feature: View a list of authors
     And there is a user named "Jane Doe"
 
     When I am on the welcome page
-    Then I should see "Authors" within the main menu
+    Then I should see "Browse authors" within the main menu
 
-    When I click "Authors" within the main menu
+    When I click "Browse authors" within the main menu
     Then I should see "Authors" within the page title
     And I should see the following author records
       | First name | Last name |

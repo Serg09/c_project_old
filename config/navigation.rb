@@ -27,8 +27,6 @@ SimpleNavigation::Configuration.run do |navigation|
           authors_item.item :my_bio, 'My bio', bios_path
           authors_item.item :my_books, 'My books', books_path
           authors_item.item :reward_fulfillment, 'Reward fulfillment', fulfillments_path
-        else
-          authors_item.item :author_sign_up, 'Signup', new_user_registration_path
         end
       end
       if user_signed_in?

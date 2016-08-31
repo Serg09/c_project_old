@@ -12,9 +12,9 @@ Feature: Make a contribution
     And author john@doe.com has an approved bio
     And book "Great Stuff To Know" has an active campaign
     And the campaign for book "Great Stuff To Know" has the following rewards
-      | Description     | Minimum contribution | Physical address required |
-      | Signed copy     |               20 | true                      |
-      | Electronic copy |               15 | false                     |
+      | Description     | Min. contribution | Physical address required |
+      | Signed copy     |                20 | true                      |
+      | Electronic copy |                15 | false                     |
 
     When I am on the welcome page
     Then I should see "Books" within the main menu
