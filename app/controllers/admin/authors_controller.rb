@@ -2,11 +2,14 @@ class Admin::AuthorsController < ApplicationController
   respond_to :html
   before_action :authenticate_administrator!
   before_action :load_author, only: [:show, :edit, :update, :destroy]
+  layout 'admin'
 
   def index
+    @authors = Author.by_name.paginate page: params[:page]
   end
 
   def new
+    @author = Author.new
   end
 
   def create

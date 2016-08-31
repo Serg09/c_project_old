@@ -33,6 +33,8 @@
 #
 
 class User < ActiveRecord::Base
+  include NamedThing
+
   has_many :bios, foreign_key: :author_id
   has_many :books, foreign_key: :author_id
   has_many :book_versions, through: :books, source: :versions
@@ -48,10 +50,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username
 
   before_save :ensure_unsubscribe_token
-
-  def full_name
-    "#{first_name} #{last_name}"
-  end
 
   def active_bio
     bios.approved.by_date.first

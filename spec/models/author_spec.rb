@@ -48,4 +48,26 @@ RSpec.describe Author, type: :model do
       expect(author).to have(1).error_on :last_name
     end
   end
+
+  describe '::by_name' do
+    let!(:a1) do
+      FactoryGirl.create :author, last_name: 'Smith',
+                                  first_name: 'Steve'
+    end
+    let!(:a2) do
+      FactoryGirl.create :author, last_name: 'Smith',
+                                  first_name: 'Andrew'
+    end
+    let!(:a3) do
+      FactoryGirl.create :author, last_name: 'Anderson',
+                                  first_name: 'Aaron'
+    end
+    it 'lists authors by last name, the first name alphabeticaly order' do
+      expect(Author.by_name.map(&:full_name)).to eq [
+        'Aaron Anderson',
+        'Andrew Smith',
+        'Steve Smith'
+      ]
+    end
+  end
 end

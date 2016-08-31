@@ -1,2 +1,15 @@
-%h1 Authors#index
-%p Find me in app/views/authors/index.html.haml
+-content_for :page_title do
+  Authors
+
+.container
+  .row
+    .col-md-6
+      %table#author-table.table.table-striped
+        %tr
+          %th Last name
+          %th First name
+        -@authors.each do |author|
+          %tr
+            %td= author.last_name
+            %td= author.first_name
+      =link_to 'Add', new_admin_author_path, class: 'btn btn-primary', title: 'Click here to add a new author.'

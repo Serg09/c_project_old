@@ -1,4 +1,3 @@
-@wip
 Feature: Add an author
   As an administrator
   In order to make author information availabel without a corresponding user account
@@ -14,7 +13,7 @@ Feature: Add an author
     When I click "Authors" within the main menu
     Then I should see "Authors" within the page title
 
-    When I click "Add" within the administration content
+    When I click "Add" within the admin content
     Then I should see "New author" within the page title
 
     When I fill in "First name" with "Earnest"
