@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160808031216) do
+ActiveRecord::Schema.define(version: 20160831024938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,15 @@ ActiveRecord::Schema.define(version: 20160808031216) do
   end
 
   add_index "app_settings", ["name"], name: "index_app_settings_on_name", unique: true, using: :btree
+
+  create_table "authors", force: :cascade do |t|
+    t.string   "first_name", limit: 100, null: false
+    t.string   "last_name",  limit: 100, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "authors", ["last_name", "first_name"], name: "index_authors_on_last_name_and_first_name", unique: true, using: :btree
 
   create_table "bios", force: :cascade do |t|
     t.integer  "author_id",                      null: false

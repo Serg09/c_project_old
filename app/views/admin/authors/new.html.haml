@@ -1,0 +1,9 @@
+-content_for :page_title do
+  New author
+
+.container
+  .row
+    .col-md-6
+      =form_for([:admin, @author]) do |f|
+        =render 'form_fields', f: f, author: @author
+

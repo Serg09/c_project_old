@@ -12,28 +12,24 @@ module ApplicationHelper
     "reject_admin_#{resource.class.name.underscore}_path"
   end
 
-  def bio_path?(status)
-    matches_path? '/admin/bio', {status: status}, {status: 'pending'}
+  def render_status_nav(statuses, &path_helper)
+    current_status = params[:status] || statuses.first.downcase
+    content_tag(:ul, id: 'status-nav', class: 'nav nav-tabs') do
+      statuses.map do |status|
+        css = (status.downcase == current_status) ? 'active' : ''
+        content_tag(:li, role: 'presentation', class: css) do
+          link_to status, path_helper.call(status: status.downcase)
+        end
+      end.join('').html_safe
+    end
   end
 
   def bio_nav_item_caption
     nav_item_caption 'Bios', Bio.pending.count
   end
 
-  def book_path?(status)
-    matches_path? '/admin/book', {status: status}, {status: 'pending'}
-  end
-
   def book_nav_item_caption
     nav_item_caption 'Books', BookVersion.pending.count
-  end
-
-  def campaign_path?(status)
-    matches_path? '/admin/campaigns', {status: status}, {status: 'current'}
-  end
-
-  def payment_path?(status)
-    matches_path? '/admin/payments', {status: status}, {status: 'pending'}
   end
 
   def flash_key_to_alert_class(flash_key)
@@ -75,11 +71,6 @@ module ApplicationHelper
     pending_count = Inquiry.active.count
     return 'Inquiries' if pending_count == 0
     "Inquiries <span class=\"badge\">#{pending_count}</span>".html_safe
-  end
-
-  def inquiry_path?(archived)
-    return false unless request_uri.path.starts_with? '/admin/inquiries'
-    archived == html_true?(request_query[:archived])
   end
 
   def parse_query(query)

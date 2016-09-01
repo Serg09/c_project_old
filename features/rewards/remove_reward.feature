@@ -10,9 +10,9 @@ Feature: Remove a reward
     And book "Giving It Away" has an unstarted campaign targeting $1,000 by 4/30/2016
     And the campaign for book "Giving It Away" has the following rewards
       | Description   | Minimum contribution |
-      | Signed copy   |               20 |
-      | Unsigned copy |               15 |
-      | Blank copy    |               10 |
+      | Signed copy   |                   20 |
+      | Unsigned copy |                   15 |
+      | Blank copy    |                   10 |
     And I am signed in as an author with "john@doe.com/please01"
 
   Scenario: An author removes an existing reward
@@ -34,18 +34,18 @@ Feature: Remove a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description   | Minimum contribution |
-      | Blank copy    |              $10 |
-      | Unsigned copy |              $15 |
-      | Signed copy   |              $20 |
+      | Description   | Min. contribution |
+      | Blank copy    |               $10 |
+      | Unsigned copy |               $15 |
+      | Signed copy   |               $20 |
 
     When I click the delete button within the 2nd reward row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see "The reward was removed successfully" within the notification area
     And I should see the following rewards table
-      | Description   | Minimum contribution |
-      | Blank copy    |              $10 |
-      | Signed copy   |              $20 |
+      | Description   | Min. contribution |
+      | Blank copy    |               $10 |
+      | Signed copy   |               $20 |
 
   Scenario: An author attempts to remove a reward that has already been selected
     Given the campaign for the book "Giving It Away" has received the following contributions
@@ -70,8 +70,8 @@ Feature: Remove a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for Giving It Away" within the page title
     And I should see the following rewards table
-      | Description   | Minimum contribution |
-      | Blank copy    |              $10 |
-      | Unsigned copy |              $15 |
-      | Signed copy   |              $20 |
+      | Description   | Min. contribution |
+      | Blank copy    |               $10 |
+      | Unsigned copy |               $15 |
+      | Signed copy   |               $20 |
     And I should not see a delete button within the 2nd reward row

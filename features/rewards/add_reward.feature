@@ -33,7 +33,7 @@ Feature: Add a reward
     When I click the edit button within the 1st campaign row
     Then I should see "Campaign for How To Raise Money" within the page title
     And I should see the following rewards table
-      | Description | Minimum contribution |
+      | Description | Min. contribution |
 
     When I click "Add" within the rewards section
     Then I should see "New reward" within the page title
@@ -45,8 +45,8 @@ Feature: Add a reward
     And I click "Save" within the author fulfilled section
     Then I should see "The reward was created successfully." within the notification area
     And I should see the following rewards table
-      | Description             | Minimum contribution |
-      | Signed copy of the book |              $50 |
+      | Description             | Min. contribution |
+      | Signed copy of the book |               $50 |
 
   Scenario: An author adds a house-fulfilled reward to the campaign
     When I select "Printed copy of the book" from "Reward"
@@ -54,5 +54,5 @@ Feature: Add a reward
     And I click "Save" within the house fulfilled section
     Then I should see "The reward was created successfully." within the notification area
     And I should see the following rewards table
-      | Description              | Minimum contribution |
-      | Printed copy of the book |              $50 |
+      | Description              | Min. contribution |
+      | Printed copy of the book |               $50 |

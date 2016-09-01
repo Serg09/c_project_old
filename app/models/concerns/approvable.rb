@@ -2,6 +2,7 @@
 module Approvable
   extend ActiveSupport::Concern
 
+  STATUSES = %w(Pending Approved Rejected Superceded)
   def supersede_current
     current_version.supersede! if current_version
   end

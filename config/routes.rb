@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :authors
     resources :inquiries, only: [:index, :show] do
       member do
         patch :archive

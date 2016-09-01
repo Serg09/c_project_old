@@ -18,7 +18,7 @@ FactoryGirl.define do
       user.confirm if evaluator.confirmed
     end
 
-    factory :author do
+    factory :author_user do
       after(:create) do |author, evaluator|
         FactoryGirl.create(:approved_bio, author: author)
       end

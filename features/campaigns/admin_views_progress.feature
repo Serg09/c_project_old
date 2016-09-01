@@ -19,6 +19,9 @@ Feature: Administrator views campaign progress
     Then I should see "Campaigns" within the main menu
 
     When I click "Campaigns" within the main menu
+    Then I should see "Active" within the status menu
+
+    When I click "Active" within the status menu
     Then I should see "Campaigns" within the page title
     And I should see the following campaigns table
       | Author   | Title              | Target date |

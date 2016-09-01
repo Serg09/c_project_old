@@ -2,7 +2,7 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.selected_class = 'active' #TODO make this the default in the renderer
 
   navigation.items do |primary|
-    primary.dom_class = 'nav navbar-nav' # TODO set a reasonable default in the renderer
+    primary.dom_class = 'nav navbar-nav navbar-right' # TODO set a reasonable default in the renderer
 
     primary.item :about, 'About', pages_about_us_path do |about|
       about.item :about_us, 'About Us', pages_about_us_path
@@ -27,8 +27,6 @@ SimpleNavigation::Configuration.run do |navigation|
           authors_item.item :my_bio, 'My bio', bios_path
           authors_item.item :my_books, 'My books', books_path
           authors_item.item :reward_fulfillment, 'Reward fulfillment', fulfillments_path
-        else
-          authors_item.item :author_sign_up, 'Signup', new_user_registration_path
         end
       end
       if user_signed_in?

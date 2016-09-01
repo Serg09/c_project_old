@@ -9,4 +9,4 @@
         %span.icon-bar
       =link_to image_tag(asset_path('crowdscribed_logo.png')), root_path
     #navbar.navbar-collapse.collapse
-      =render_navigation context: :admin, level: 1
+      =render_navigation context: :admin, renderer: :bootstrap_navigation_renderer, expand_all: true

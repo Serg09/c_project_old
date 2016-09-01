@@ -4,45 +4,20 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
     primary.dom_class = 'nav navbar-nav'
     if administrator_signed_in?
-      primary.item :users, 'Users', admin_users_path
       primary.item :subscribers, 'Subscribers', admin_subscribers_path
-      primary.item :bios, bio_nav_item_caption, admin_bios_path do |bios|
-        bios.auto_highlight = false
-        bios.dom_class = 'nav nav-tabs'
-        bios.item :pending, 'Pending', admin_bios_path, highlights_on: -> { bio_path?('pending') }
-        bios.item :approved, 'Approved', admin_bios_path(status: :approved), highlights_on: -> { bio_path?('approved') }
-        bios.item :rejected, 'Rejected', admin_bios_path(status: :rejected), highlights_on: -> { bio_path?('rejected') }
+      primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path
+      primary.item :users, 'Users', admin_users_path
+      primary.item :campaigns, 'Campaigns', admin_campaigns_path
+      primary.item :payments, 'Payments', admin_payments_path
+      primary.item :approvals, 'Approvals', '#' do |approvals|
+        approvals.item :bios, bio_nav_item_caption, admin_bios_path
+        approvals.item :books, book_nav_item_caption, admin_book_versions_path
       end
-      primary.item :books, book_nav_item_caption, admin_book_versions_path do |books|
-        books.auto_highlight = false
-        books.dom_class = 'nav nav-tabs'
-        books.item :pending, 'Pending', admin_book_versions_path, highlights_on: -> { book_path?('pending') }
-        books.item :approved, 'Approved', admin_book_versions_path(status: :approved), highlights_on: -> { book_path?('approved') }
-        books.item :rejected, 'Rejected', admin_book_versions_path(status: :rejected), highlights_on: -> { book_path?('rejected') }
+      primary.item :manage, 'Manage', '#' do |manage|
+        manage.item :manage_authors, 'Authors', admin_authors_path
+        manage.item :manage_rewards, 'Rewards', admin_house_rewards_path
+        manage.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path
       end
-      primary.item :campaigns, 'Campaigns', admin_campaigns_path, highlights_on: ->{false} do |campaigns|
-        campaigns.auto_highlight = false
-        campaigns.dom_class = 'nav nav-tabs'
-        campaigns.item :active, 'Current', admin_campaigns_path, highlights_on: ->{ campaign_path?('current') }
-        campaigns.item :inactive, 'Past', admin_campaigns_path(status: :past), highlights_on: ->{ campaign_path?('past') }
-      end
-      primary.item :payments, 'Payments', admin_payments_path, highlights_on: ->{ payment_path?('pending') } do |payments|
-        payments.auto_highlight = false
-        payments.dom_class = 'nav nav-tabs'
-        payments.item :pending, 'Pending', admin_payments_path, highlights_on: ->{ payment_path?('pending') }
-        payments.item :approved, 'Approved', admin_payments_path(status: :approved), highlights_on: ->{ payment_path?('approved') }
-        payments.item :completed, 'Completed', admin_payments_path(status: :completed), highlights_on: ->{ payment_path?('completed') }
-        payments.item :failed, 'Failed', admin_payments_path(status: :failed), highlights_on: ->{ payment_path?('failed') }
-        payments.item :refunded, 'Refunded', admin_payments_path(status: :refunded), highlights_on: ->{ payment_path?('refunded') }
-      end
-      primary.item :inquiries, inquiry_nav_item_caption, admin_inquiries_path do |inquiries|
-        inquiries.auto_highlight = false
-        inquiries.dom_class = 'nav nav-tabs'
-        inquiries.item :active, 'Active', admin_inquiries_path, highlights_on: -> { inquiry_path?(false) }
-        inquiries.item :archived, 'Archived', admin_inquiries_path(archived: true), highlights_on: -> { inquiry_path?(true) }
-      end
-      primary.item :rewards, 'Rewards', admin_house_rewards_path
-      primary.item :reward_fulfillment, 'Reward fulfillment', admin_fulfillments_path
       primary.item :sign_out, 'Sign out', destroy_administrator_session_path, method: :delete
     end
   end

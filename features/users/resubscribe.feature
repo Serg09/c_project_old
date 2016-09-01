@@ -9,9 +9,9 @@ Feature: Resubscribe
     And I am signed in as a user with "john@doe.com/please01"
 
     When I am on the user home page
-    Then I should see "View" within the main menu
+    Then I should see "Profile" within the main menu
 
-    When I click "View" within the main menu
+    When I click "Profile" within the main menu
     Then I should see "My profile" within the page title
 
     When I click "Edit"

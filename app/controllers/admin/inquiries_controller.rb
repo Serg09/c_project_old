@@ -32,7 +32,7 @@ class Admin::InquiriesController < ApplicationController
   end
 
   def requested_archived?
-    html_true?(params[:archived])
+    params[:status] == 'archived'
   end
 
   def requested_inquiries

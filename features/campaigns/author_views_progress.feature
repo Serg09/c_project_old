@@ -16,7 +16,7 @@ Feature: View progress of a campaign as an author
 
     When I am signed in as an author with "john@doe.com/please01"
     And I am on the welcome page
-    Then I should see "Books" within the main menu
+    Then I should see "My books" within the main menu
 
     When I click "My books" within the main menu
     Then I should see "My books" within the page title

@@ -4,9 +4,7 @@ class Admin::CampaignsController < ApplicationController
   before_filter :load_campaign, only: [:show]
 
   def index
-    @campaigns = (params[:status] || 'current') == 'current' ?
-      Campaign.current :
-      Campaign.past
+    @campaigns = Campaign.send(params[:status] || :unstarted)
     @campaigns = @campaigns.paginate(page: params[:page])
   end
 

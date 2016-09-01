@@ -4,7 +4,7 @@
 .container.container-default
   .row
     .col-md-6
-      =render_navigation context: :admin, level: 2
+      =render_status_nav(Bio::STATUSES){|h| admin_bios_path h}
       %table#bios-table.table.table-striped
         %tr
           %th Author

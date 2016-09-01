@@ -8,9 +8,9 @@ Feature: Submit a biography
     And I am signed in as an author with "john@doe.com/please01"
 
     When I am on the author home page
-    Then I should see "Bio" within the main menu
+    Then I should see "My bio" within the main menu
 
-    When I click "Bio" within the main menu
+    When I click "My bio" within the main menu
     Then I should see "New bio" within the page title
 
     When I fill in "Text" with "I sure have been writing words for a long time now. I'm starting to get pretty good at it, too."
@@ -28,5 +28,5 @@ Feature: Submit a biography
 
     When an administrator has approved the bio for author john@doe.com
     And I am on the author home page
-    When I click "Bio" within the main menu
+    When I click "My bio" within the main menu
     Then I should see "I sure have been writing words for a long time" within the main content
