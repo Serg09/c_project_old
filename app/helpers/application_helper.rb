@@ -14,7 +14,7 @@ module ApplicationHelper
 
   def render_status_nav(statuses, &path_helper)
     current_status = params[:status] || statuses.first.downcase
-    content_tag(:ul, class: 'nav nav-tabs') do
+    content_tag(:ul, id: 'status-nav', class: 'nav nav-tabs') do
       statuses.map do |status|
         css = (status.downcase == current_status) ? 'active' : ''
         content_tag(:li, role: 'presentation', class: css) do

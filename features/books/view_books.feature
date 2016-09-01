@@ -14,9 +14,9 @@ Feature: View books
       | Bill Trouble    | Downright Unacceptable   | rejected |
 
     When I am on the welcome page
-    Then I should see "Books" within the main menu
+    Then I should see "Browse books" within the main menu
 
-    When I click "Books" within the main menu
+    When I click "Browse books" within the main menu
     Then I should see "Books" within the page title
     And I should see the following books
       | Author          | Title                    |
