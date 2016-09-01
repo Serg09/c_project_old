@@ -4,12 +4,17 @@
 .container
   .row
     .col-md-6
-      %table#author-table.table.table-striped
+      %table#authors-table.table.table-striped
         %tr
           %th Last name
           %th First name
+          %th &nbsp;
         -@authors.each do |author|
           %tr
             %td= author.last_name
             %td= author.first_name
+            %td
+              .btn-group
+                =link_to edit_admin_author_path(author), class: 'btn btn-xs btn-info edit-button', title: 'Click here to edit this author' do
+                  %span.glyphicon.glyphicon-pencil{ 'aria-hidden' => true }
       =link_to 'Add', new_admin_author_path, class: 'btn btn-primary', title: 'Click here to add a new author.'

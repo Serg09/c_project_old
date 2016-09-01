@@ -21,6 +21,6 @@ Feature: Add an author
     And I click "Save"
     Then I should see "The author was created successfully" within the notification area
     And I should see "Authors" within the page title
-    And I should see the following author table
+    And I should see the following authors table
       | Last name | First name |
       | Hemingway | Earnest    |
