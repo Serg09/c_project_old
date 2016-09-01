@@ -6,6 +6,7 @@ RSpec.describe Bio, type: :model do
   let (:attributes) do
     {
       author_id: author.id,
+      author_type: 'User',
       text: 'This is some stuff about me. Dig it.',
       photo_id: photo.id,
       links_attributes: [
@@ -42,6 +43,13 @@ RSpec.describe Bio, type: :model do
     it 'points to an user record' do
       bio = Bio.new(attributes)
       expect(bio.author.first_name).to eq author.first_name
+    end
+  end
+
+  describe '#author_type' do
+    it 'is required' do
+      bio = Bio.new(attributes.except(:author_type))
+      expect(bio).to have_at_least(1).error_on :author_type
     end
   end
 
@@ -134,7 +142,7 @@ RSpec.describe Bio, type: :model do
   describe '#photo_file' do
     let (:attributes) do
       {
-        author_id: author.id,
+        author: author,
         photo_file: photo_file,
         text: 'This is some stuff about me. Dig it.',
         links_attributes: [
@@ -152,7 +160,7 @@ RSpec.describe Bio, type: :model do
     it 'creates an image record on save' do
       expect do
         bio = Bio.new attributes
-        bio.save
+        bio.save!
       end.to change(Image, :count).by(1)
     end
 

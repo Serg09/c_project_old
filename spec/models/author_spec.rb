@@ -70,4 +70,12 @@ RSpec.describe Author, type: :model do
       ]
     end
   end
+
+  describe '#bio' do
+
+    it 'is a reference to the author\'s bio' do
+      author = Author.new attributes
+      expect(author.bio).to be_nil
+    end
+  end
 end

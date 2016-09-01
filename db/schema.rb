@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160831024938) do
+ActiveRecord::Schema.define(version: 20160901222757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,13 +58,14 @@ ActiveRecord::Schema.define(version: 20160831024938) do
   add_index "authors", ["last_name", "first_name"], name: "index_authors_on_last_name_and_first_name", unique: true, using: :btree
 
   create_table "bios", force: :cascade do |t|
-    t.integer  "author_id",                      null: false
-    t.text     "text",                           null: false
+    t.integer  "author_id",                                   null: false
+    t.text     "text",                                        null: false
     t.integer  "photo_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.text     "links"
-    t.string   "status",     default: "pending", null: false
+    t.string   "status",                  default: "pending", null: false
+    t.string   "author_type", limit: 100,                     null: false
   end
 
   create_table "book_versions", force: :cascade do |t|

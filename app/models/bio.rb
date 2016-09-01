@@ -15,13 +15,13 @@
 class Bio < ActiveRecord::Base
   include Approvable
 
-  before_save :process_photo_file
+  before_save :process_photo_file, if: :photo_file
 
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, polymorphic: true
   belongs_to :photo, class_name: Image
   validates_associated :links
   serialize :links, Link
-  validates_presence_of :author_id, :text
+  validates_presence_of :author_id, :author_type, :text
   
   attr_accessor :photo_file
 
@@ -50,8 +50,6 @@ class Bio < ActiveRecord::Base
   private
 
   def process_photo_file
-    return unless photo_file
-
     image = Image.find_or_create_from_file(photo_file, author)
     self.photo_id = image.id
   end
