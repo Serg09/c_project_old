@@ -1,5 +1,6 @@
-Given /^there is an (?:author|user) named "(\S+) ([^"]+)" with email address "([^"]+)"$/ do |first_name, last_name, email|
-  FactoryGirl.create(:user, first_name: first_name, last_name: last_name, email: email)
+Given /^there is an (author|user) named "(\S+) ([^"]+)" with email address "([^"]+)"$/ do |type, first_name, last_name, email|
+  user = FactoryGirl.create(:user, first_name: first_name, last_name: last_name, email: email)
+  FactoryGirl.create(:approved_bio, author: user) if type == 'author'
 end
 
 Given /^there is an? (?:author|user) with email (?:address )?"([^"]+)" and password "([^"]+)"$/ do |email, password|
@@ -45,11 +46,6 @@ end
 
 Then /^(#{USER}) should be subscribed$/ do |user|
   expect(user).to be_subscribed
-end
-
-Given /^there is an author named "(\S+) ([^"]+)"$/ do |first_name, last_name|
-  author = FactoryGirl.create(:user, first_name: first_name, last_name: last_name)
-  FactoryGirl.create(:approved_bio, author: author)
 end
 
 Given /^there is a user named "(\S+) ([^"]+)"$/ do |first_name, last_name|

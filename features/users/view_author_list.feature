@@ -4,9 +4,9 @@ Feature: View a list of authors
   I want to be able to see a list of authors
 
   Scenario: A user views the list of authors
-    Given there is an author named "John Doe"
-    And there is an author named "Robin Banks"
-    And there is an author named "Michael Hunt"
+    Given there is an author named "John Doe" with email address "john@doe.com"
+    And there is an author named "Robin Banks" with email address "robin@banks.com"
+    And there is an author named "Michael Hunt" with email address "michael@hunt.com"
     And there is a user named "Jane Doe"
 
     When I am on the welcome page
