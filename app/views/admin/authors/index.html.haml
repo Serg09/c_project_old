@@ -17,4 +17,6 @@
               .btn-group
                 =link_to edit_admin_author_path(author), class: 'btn btn-xs btn-info edit-button', title: 'Click here to edit this author' do
                   %span.glyphicon.glyphicon-pencil{ 'aria-hidden' => true }
+                =link_to admin_author_path(author), method: :delete, class: 'btn btn-xs btn-danger delete-button', title: 'Click here to remove this author', 'data-confirm' => 'Are you sure you want to delete this author?' do
+                  %span.glyphicon.glyphicon-remove{ 'aria-hidden' => true }
       =link_to 'Add', new_admin_author_path, class: 'btn btn-primary', title: 'Click here to add a new author.'
