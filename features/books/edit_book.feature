@@ -5,7 +5,7 @@ Feature: Edit a book
 
   Scenario: An author updates a book
     Given there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has an approved book titled "My Book Aboat Me"
+    And user john@doe.com has an approved book titled "My Book Aboat Me"
     And I am signed in as an author with "john@doe.com/please01"
 
     When I am on the author home page

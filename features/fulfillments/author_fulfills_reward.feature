@@ -10,7 +10,7 @@ Feature: Author fulfills reward
       | Electronic copy of the book | false                     |
 
     And there is an author with email "john@doe.com" and password "please01"
-    And author john@doe.com has a book titled "How To Raise Money"
+    And user john@doe.com has a book titled "How To Raise Money"
     And the book "How To Raise Money" has a campaign
     And the campaign for book "How To Raise Money" has the following rewards
       | Description                 | House reward                | Physical address required |

@@ -21,9 +21,11 @@ USER = Transform /user (.+@.+)/ do |email|
   user 
 end
 
-AUTHOR = Transform /author (.+@.+)/ do |email|
-  author = User.find_by(email: email)
-  expect(author).not_to be_nil, "User with email \"#{email}\" not found"
+AUTHOR = Transform /author ""/ do |full_name|
+  first_name, last_name = full_name.split(/\s+/)
+  author = Author.find_by first_name: first_name,
+                          last_name: last_name
+  expect(author).not_to be_nil, "Author with name \"#{full_name}\" not found"
   author
 end
 

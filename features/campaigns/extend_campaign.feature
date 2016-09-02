@@ -6,7 +6,7 @@ Feature: Extend a campaign
   Scenario: An author exents a campaign
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has a book titled "Just a Little Bit Longer"
+    And user john@doe.com has a book titled "Just a Little Bit Longer"
     And book "Just a Little Bit Longer" has a campaign targeting $1,000 by 4/30/2016
     And I am signed in as an author with "john@doe.com/please01"
 

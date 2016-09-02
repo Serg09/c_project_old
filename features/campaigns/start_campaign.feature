@@ -6,8 +6,8 @@ Feature: Start a campaign
   Background:
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has an approved bio
-    And author john@doe.com has an approved book titled "Things I Know That You Don't"
+    And user john@doe.com has an approved bio
+    And user john@doe.com has an approved book titled "Things I Know That You Don't"
     And the book "Things I Know That You Don't" has a unstarted campaign targeting $1,000 by 4/30/2016
     And I am signed in as an author with "john@doe.com/please01"
 

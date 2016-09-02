@@ -11,7 +11,7 @@ Feature: Add a reward
       | Electronic copy of the book |
 
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has a book titled "How To Raise Money"
+    And user john@doe.com has a book titled "How To Raise Money"
     And book "How To Raise Money" has an unstarted campaign targeting $1,000 by 4/30/2016
     And I am signed in as an author with "john@doe.com/please01"
 

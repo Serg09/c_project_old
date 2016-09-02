@@ -6,8 +6,8 @@ Feature: Remove a campaign
   Scenario: An author successfully removes a scenario
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has an approved book titled "Words and Things"
-    And author john@doe.com has an unstarted campaign for "Words and Things" targeting $5,000 by 4/30/2016
+    And user john@doe.com has an approved book titled "Words and Things"
+    And user john@doe.com has an unstarted campaign for "Words and Things" targeting $5,000 by 4/30/2016
     And I am signed in as an author with "john@doe.com/please01"
 
     When I am on the welcome page

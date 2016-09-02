@@ -4,7 +4,7 @@ Feature: View books
   I need to be able to see the books in the system
 
   Scenario: A user views the books
-    Given authors have submitted the following books
+    Given users have submitted the following books
       | Author          | Title                    | Status   |
       | John Doe        | My Anonymous Life        | approved |
       | Jane Doe        | My Anonymous Husband     | approved |

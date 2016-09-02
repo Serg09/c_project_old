@@ -8,8 +8,8 @@ Feature: Make a contribution
   Background:
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has an approved book titled "Great Stuff To Know"
-    And author john@doe.com has an approved bio
+    And user john@doe.com has an approved book titled "Great Stuff To Know"
+    And user john@doe.com has an approved bio
     And book "Great Stuff To Know" has an active campaign
     And the campaign for book "Great Stuff To Know" has the following rewards
       | Description     | Min. contribution | Physical address required |

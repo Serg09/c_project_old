@@ -5,7 +5,7 @@ Feature: Approve a book
 
   Scenario: An administrator approves a book
     Given there is an author named "John Doe" with email "john@doe.com" and password "please01"
-    And author john@doe.com submitted a book titled "I Like Books" on 3/2/2016
+    And user john@doe.com submitted a book titled "I Like Books" on 3/2/2016
 
     And there is an administrator with email "admin@cs.com" and password "please01"
     And I am signed in as an administrator with "admin@cs.com/please01"
