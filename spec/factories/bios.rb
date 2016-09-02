@@ -15,4 +15,10 @@ FactoryGirl.define do
       status 'superseded'
     end
   end
+
+  factory :author_bio, class: Bio do
+    association :author, factory: :author
+    text { Faker::Lorem.paragraphs(3).join("\n")}
+    status 'approved'
+  end
 end

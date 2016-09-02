@@ -1,7 +1,7 @@
 module Admin::AuthorsHelper
   def edit_author_bio_link(author)
-    link_to author_bio_path(author), class: "btn #{author_bio_button_class(author)}", title: 'Click here to edit the bio for this author' do
-      content_tag :span, class: 'glyphicon glyphicon-file', 'aria-hidden' => true
+    link_to author_bio_path(author), class: "bio-button btn btn-xs #{author_bio_button_class(author)}", title: 'Click here to edit the bio for this author' do
+      content_tag :span, '', class: 'glyphicon glyphicon-file', 'aria-hidden' => true
     end
   end
 

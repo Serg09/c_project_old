@@ -68,7 +68,10 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :authors
+    resources :authors do
+      resources :bios, only: [:new, :create]
+    end
+    resources :bios, only: [:edit, :update]
     resources :inquiries, only: [:index, :show] do
       member do
         patch :archive
