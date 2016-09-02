@@ -53,7 +53,7 @@ class Admin::BiosController < ApplicationController
   private
 
   def bio_params
-    params.require(:bio).permit(:text, :photo_file, link_attributes: [:site, :url])
+    params.require(:bio).permit(:text, :photo_file, links_attributes: [:site, :url])
   end
 
   def bios_by_status

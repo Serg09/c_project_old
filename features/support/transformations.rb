@@ -21,7 +21,7 @@ USER = Transform /user (.+@.+)/ do |email|
   user 
 end
 
-AUTHOR = Transform /author ""/ do |full_name|
+AUTHOR = Transform /author "([^"]+)"/ do |full_name|
   first_name, last_name = full_name.split(/\s+/)
   author = Author.find_by first_name: first_name,
                           last_name: last_name

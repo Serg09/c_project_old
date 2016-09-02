@@ -17,3 +17,7 @@ end
 Given /^(#{USER}) has an approved bio$/ do |user|
   FactoryGirl.create(:approved_bio, author: user)
 end
+
+Given /^(#{AUTHOR}) has a bio$/ do |author|
+  FactoryGirl.create(:approved_bio, author: author)
+end

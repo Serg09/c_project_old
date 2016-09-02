@@ -5,4 +5,4 @@
   .row
     .col-md-6
       =form_for([:admin, @bio.author, @bio]) do |f|
-        =render 'bios/form_fields', f: f, bio: @bio, submit_caption: 'Save'
+        =render 'bios/form_fields', f: f, bio: @bio, submit_caption: 'Save', cancel_path: admin_authors_path

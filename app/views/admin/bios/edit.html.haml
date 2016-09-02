@@ -1,0 +1,8 @@
+-content_for :page_title do
+  Edit author bio
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for([:admin, @bio]) do |f|
+        =render 'bios/form_fields', f: f, bio: @bio, submit_caption: 'Save', cancel_path: admin_authors_path
