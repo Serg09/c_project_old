@@ -3,7 +3,7 @@
 # Table name: images
 #
 #  id              :integer          not null, primary key
-#  user_id         :integer          not null
+#  owner_id         :integer          not null
 #  image_binary_id :integer          not null
 #  hash_id         :string(40)       not null
 #  mime_type       :string(20)       not null
@@ -15,14 +15,14 @@ class Image < ActiveRecord::Base
   MAX_IMAGE_WIDTH = 1024
   MAX_IMAGE_HEIGHT = 1024
 
-  belongs_to :user
+  belongs_to :owner, polymorphic: true
   belongs_to :image_binary
   has_many :bios, foreign_key: 'photo_id'
   has_many :cover_of_book_versions, foreign_key: 'cover_image_id', class_name: 'BookVersion'
   has_many :sample_of_book_versions, foreign_key: 'sample_id', class_name: 'BookVersion'
   has_many :reward_photos, foreign_key: 'photo_id', class_name: 'Reward'
 
-  validates_presence_of :user_id, :image_binary_id, :hash_id
+  validates_presence_of :owner_id, :owner_type, :image_binary_id, :hash_id
   validates_length_of :hash_id, is: 40
   validates_uniqueness_of :hash_id
 
@@ -49,12 +49,12 @@ class Image < ActiveRecord::Base
 
     # see if the image is already present in the database
     hash_id = hash_id(data)
-    image = find_by(hash_id: hash_id, user_id: user.id)
+    image = find_by(hash_id: hash_id, owner_id: user.id)
 
     # create the image record if it doesn't exist
     unless image
       image_binary = ImageBinary.create!(data: data)
-      image = create!(user: user,
+      image = create!(owner: user,
                       image_binary: image_binary,
                       hash_id: hash_id,
                       mime_type: file.content_type)
@@ -64,7 +64,7 @@ class Image < ActiveRecord::Base
   end
 
   def can_be_viewed_by?(user)
-    return true if user_id == user.id && references.any?{|r| r.visible_to_owner?}
+    return true if owner_id == user.id && references.any?{|r| r.visible_to_owner?}
     references.any?{|r| r.visible_to_public?}
   end
 

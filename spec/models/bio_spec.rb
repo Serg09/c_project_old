@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Bio, type: :model do
   let (:author) { FactoryGirl.create(:user) }
-  let (:photo) { FactoryGirl.create(:image, user: author) }
+  let (:photo) { FactoryGirl.create(:image, owner: author) }
   let (:attributes) do
     {
       author_id: author.id,

@@ -1,10 +1,9 @@
-@wip
 Feature: Edit an author bio
   As an administrator
   In order to supply (or update) a bio for an author that does not have a user account
   I need to be able to edit the bio
 
-  Scenario: Add a bio
+  Scenario: Add a new bio
     Given there is an author named "H.G. Wells"
     And there is an administrator with email "joe@admin.com" and password "please01"
     And I am signed in as an administrator with "joe@admin.com/please01"
@@ -26,3 +25,7 @@ Feature: Edit an author bio
     And I click "Save"
     Then I should see "The bio was created successfully" within the notification area
     And I should see "Authors" within the page title
+
+  @wip
+  Scenario: Edit an existing bio
+    Given I still need to write this
