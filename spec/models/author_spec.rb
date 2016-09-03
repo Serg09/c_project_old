@@ -56,6 +56,13 @@ RSpec.describe Author, type: :model do
     end
   end
 
+  describe '#books' do
+    it 'is a list of books written by the author' do
+      author = Author.new attributes
+      expect(author).to have(0).books
+    end
+  end
+
   describe '::by_name' do
     let!(:a1) do
       FactoryGirl.create :author, last_name: 'Smith',
