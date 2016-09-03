@@ -17,6 +17,7 @@ class BookCreator
     genres = (attributes || {}).delete(:genres) || []
     @book = author.books.new
     @book_version = @book.versions.new(attributes.merge(book: @book))
+    @book_version.approve if author.is_a? Author
     genres.map{|id| Genre.find(id)}.each do |genre|
       @book_version.genres << genre
     end
