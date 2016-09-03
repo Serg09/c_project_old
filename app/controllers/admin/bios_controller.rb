@@ -16,7 +16,7 @@ class Admin::BiosController < ApplicationController
   end
 
   def create
-    @bio = @author.build_bio bio_params
+    @bio = @author.build_bio bio_params.merge(status: 'approved')
     flash[:notice] = 'The bio was created successfully.' if @bio.save
     respond_with @bio, location: admin_authors_path
   end
