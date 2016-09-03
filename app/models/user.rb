@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   include NamedThing
 
   has_many :bios, as: :author
-  has_many :books, foreign_key: :author_id
+  has_many :books, as: :author
   has_many :book_versions, through: :books, source: :versions
   has_many :campaigns, through: :books
 

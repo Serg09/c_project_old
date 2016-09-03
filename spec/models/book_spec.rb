@@ -5,6 +5,7 @@ RSpec.describe Book, type: :model do
   let (:attributes) do
     {
       author_id: author.id,
+      author_type: 'User'
     }
   end
 
@@ -17,6 +18,13 @@ RSpec.describe Book, type: :model do
     it 'is required' do
       book = Book.new attributes.except(:author_id)
       expect(book).to have_at_least(1).error_on :author_id
+    end
+  end
+
+  describe '#author_type' do
+    it 'is required' do
+      book = Book.new attributes.except(:author_type)
+      expect(book).to have_at_least(1).error_on :author_type
     end
   end
 
