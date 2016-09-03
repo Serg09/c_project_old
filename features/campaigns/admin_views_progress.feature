@@ -6,7 +6,7 @@ Feature: Administrator views campaign progress
   Scenario: An administrator views the progress of a campaign
     Given today is 3/2/2016
     And there is an author named "John Doe" with email address "john@doe.com"
-    And author john@doe.com has a book titled "Some Words of Mine"
+    And user john@doe.com has a book titled "Some Words of Mine"
     And book "Some Words of Mine" has a campaign targeting $1,000 by 4/30/2016
     And the campaign for the book "Some Words of Mine" has received the following contributions
       | Email              | Amount |      Date |

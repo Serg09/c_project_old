@@ -6,8 +6,8 @@ Feature: View progress of a campaign as an author
   Scenario: An author views the progress of his campaign
     Given today is 3/2/2016
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has an approved book titled "How to Raise Money"
-    And author john@doe.com has a campaign for "How to Raise Money" targeting $1,000 by 4/30/2016
+    And user john@doe.com has an approved book titled "How to Raise Money"
+    And user john@doe.com has a campaign for "How to Raise Money" targeting $1,000 by 4/30/2016
     And the campaign for the book "How to Raise Money" has received the following contributions
       | Email          |      Date | Amount |
       | user1@user.com | 2/28/2016 |  50.00 |

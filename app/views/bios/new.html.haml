@@ -5,6 +5,6 @@
   .row
     .col-md-6
       =form_for([@author, @bio]) do |f|
-        =render 'form_fields', f: f
+        =render 'form_fields', f: f, bio: @bio, submit_caption: 'Submit', cancel_path: bios_path
     .col-md-6
       =render 'hint'

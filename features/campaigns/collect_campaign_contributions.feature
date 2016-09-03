@@ -6,7 +6,7 @@ Feature: Collect campaign contributions
   Background:
     Given today is 2/27/2016
     And there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has a book titled "Show Me the Money"
+    And user john@doe.com has a book titled "Show Me the Money"
     And the book "Show Me the Money" has a campaign targeting $1,000 by 3/31/2016
 
     When it is 4/1/2016

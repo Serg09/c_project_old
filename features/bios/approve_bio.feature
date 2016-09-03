@@ -5,7 +5,7 @@ Feature: Approve a bio
 
   Background:
     Given there is an author named "John Doe" with email "john@doe.com" and password "please01"
-    And author john@doe.com submitted the following bio on 2/27/2015
+    And user john@doe.com submitted the following bio on 2/27/2015
       | Text     | I'm, like, a writer, and stuff.  |
       | Facebook | http://www.facebook.com/john_doe |
       | LinkedIn | http://www.linkedin.com/john_doe |

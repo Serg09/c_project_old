@@ -1,5 +1,5 @@
-Given /^(#{AUTHOR}) has an? (.*)?campaign for "([^"]+)" targeting (#{DOLLAR_AMOUNT}) by (#{DATE})$/ do |author, state, title, target_amount, target_date|
-  book_version = author.book_versions.find_by_title(title)
+Given /^(#{USER}) has an? (.*)?campaign for "([^"]+)" targeting (#{DOLLAR_AMOUNT}) by (#{DATE})$/ do |user, state, title, target_amount, target_date|
+  book_version = user.book_versions.find_by_title(title)
   expect(book_version).not_to be_nil
   state = state.present? ? state.strip : 'active'
   FactoryGirl.create(:campaign, book: book_version.book,

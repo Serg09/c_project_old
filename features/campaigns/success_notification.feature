@@ -5,7 +5,7 @@ Feature: Success notifications
 
   Background:
     Given there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has a book titled "Tell Me When"
+    And user john@doe.com has a book titled "Tell Me When"
     And the book "Tell Me When" has a campaign targeting $500
 
   Scenario: An author receives a notification when the campaign reaches its goal

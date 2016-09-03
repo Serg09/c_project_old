@@ -5,7 +5,7 @@ Feature: Add a campaign
 
   Scenario: An author successfully creates a campaign for a book
     Given there is an author with email address "john@doe.com" and password "please01"
-    And author john@doe.com has an approved book titled "Things I Know That You Don't"
+    And user john@doe.com has an approved book titled "Things I Know That You Don't"
     And I am signed in as an author with "john@doe.com/please01"
     And today is 3/2/2016
 

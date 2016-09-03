@@ -5,7 +5,8 @@ RSpec.describe Image, type: :model do
   let (:image_binary) { FactoryGirl.create(:image_binary) }
   let (:attributes) do
     {
-      user_id: user.id,
+      owner_id: user.id,
+      owner_type: 'User',
       image_binary_id: image_binary.id,
       hash_id: Image.hash_id(image_binary.data),
       mime_type: 'image/jpeg'
@@ -27,10 +28,17 @@ RSpec.describe Image, type: :model do
     end
   end
 
-  describe '#user_id' do
+  describe '#owner_id' do
     it 'is required' do
-      image = Image.new attributes.except(:user_id)
-      expect(image).to have_at_least(1).error_on :user_id
+      image = Image.new attributes.except(:owner_id)
+      expect(image).to have_at_least(1).error_on :owner_id
+    end
+  end
+
+  describe '#owner_type' do
+    it 'is required' do
+      image = Image.new attributes.except(:owner_type)
+      expect(image).to have_at_least(1).error_on :owner_type
     end
   end
 
@@ -64,10 +72,10 @@ RSpec.describe Image, type: :model do
     end
   end
 
-  describe '#user' do
-    it 'is a reference to the user that owns the image' do
+  describe '#owner' do
+    it 'is a reference to the user or author that owns the image' do
       image = Image.new attributes
-      expect(image.user.full_name).to eq user.full_name
+      expect(image.owner.full_name).to eq user.full_name
     end
   end
 

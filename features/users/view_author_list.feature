@@ -8,6 +8,8 @@ Feature: View a list of authors
     And there is an author named "Robin Banks" with email address "robin@banks.com"
     And there is an author named "Michael Hunt" with email address "michael@hunt.com"
     And there is a user named "Jane Doe"
+    And there is an author named "Pat Conroy"
+    And author "Pat Conroy" has a bio
 
     When I am on the welcome page
     Then I should see "Browse authors" within the main menu
@@ -17,5 +19,6 @@ Feature: View a list of authors
     And I should see the following author records
       | First name | Last name |
       | Robin      | Banks     |
+      | Pat        | Conroy    |
       | John       | Doe       |
       | Michael    | Hunt      |

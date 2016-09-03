@@ -26,7 +26,7 @@ Feature: Submit a biography
     And I should see "This bio is under review. We will review it as soon as we can." within the main content
     And "info@crowdscribed.com" should receive an email with subject "New bio submission"
 
-    When an administrator has approved the bio for author john@doe.com
+    When an administrator has approved the bio for user john@doe.com
     And I am on the author home page
     When I click "My bio" within the main menu
     Then I should see "I sure have been writing words for a long time" within the main content
