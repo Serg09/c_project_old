@@ -177,4 +177,49 @@ RSpec.describe Bio, type: :model do
       expect(bio.photo_id).to be Image.last.id
     end
   end
+
+  describe '::browsable' do
+    let (:author1) do
+      FactoryGirl.create :author, first_name: "Steven",
+                                  last_name: "King"
+    end
+    let (:author2) do
+      FactoryGirl.create :author, first_name: "Pat",
+                                  last_name: "Conroy"
+    end
+    let (:user1) do
+      FactoryGirl.create :user, first_name: "Jane",
+                               last_name: "Austen"
+    end
+    let (:user2) do
+      FactoryGirl.create :user, first_name: "William",
+                               last_name: "Wordsworth"
+    end
+    let!(:bios) do
+      [user1, user2, author1, author2].map do |a|
+        FactoryGirl.create(:approved_bio, author: a)
+      end
+    end
+
+    let (:user_without_approved_bio) do
+      FactoryGirl.create :user, first_name: 'John',
+                                last_name: 'Doe'
+    end
+    let!(:unapproved_bio) do
+      FactoryGirl.create :pending_bio, author: user_without_approved_bio
+    end
+
+
+    it 'returns a list of bios from users and authors' do
+      expect(Bio.browsable).to include(
+        user1.active_bio,
+        user2.active_bio,
+        author1.bio,
+        author2.bio)
+    end
+
+    it 'omits unapproved bios' do
+      expect(Bio.browsable).not_to include unapproved_bio
+    end
+  end
 end

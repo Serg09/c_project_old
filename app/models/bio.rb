@@ -25,6 +25,30 @@ class Bio < ActiveRecord::Base
   
   attr_accessor :photo_file
 
+  def self.browsable
+    sql = <<-EOS
+      (select
+        bios.*,
+        authors.first_name,
+        authors.last_name
+      from bios
+        inner join authors on authors.id = bios.author_id
+          and bios.author_type = 'Author'
+      where bios.status = 'approved'
+      union
+      select
+        bios.*,
+        users.first_name,
+        users.last_name
+      from bios
+        inner join users on users.id = bios.author_id
+          and bios.author_type = 'User'
+      where bios.status = 'approved'
+      order by last_name, first_name) as bios
+    EOS
+    from sql
+  end
+
   def links_attributes=(list)
     if list
       self.links = list.map do |attr|
