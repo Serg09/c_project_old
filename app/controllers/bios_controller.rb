@@ -41,11 +41,7 @@ class BiosController < ApplicationController
   end
 
   def browse
-    #TODO include authors table in this query
-    @bios = Bio.
-      approved.
-      joins("inner join users on users.id = bios.author_id and bios.author_type = 'User'").
-      order('users.last_name, users.first_name')
+    @bios = Bio.browsable
     @bio_rows = @bios.each_slice(3)
   end
 

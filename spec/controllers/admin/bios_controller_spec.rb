@@ -45,6 +45,11 @@ RSpec.describe Admin::BiosController, type: :controller do
           post :create, author_id: author, bio: attributes
         end.to change(Bio, :count).by(1)
       end
+
+      it 'automatically approves the bio' do
+        post :create, author_id: author, bio: attributes
+        expect(author.bio).to be_approved
+      end
     end
 
     describe 'get :edit' do
