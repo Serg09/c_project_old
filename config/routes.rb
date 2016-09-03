@@ -70,6 +70,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :authors do
       resources :bios, only: [:new, :create]
+      resources :books, only: [:index, :new, :create]
     end
     resources :bios, only: [:edit, :update]
     resources :inquiries, only: [:index, :show] do
