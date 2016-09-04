@@ -31,7 +31,8 @@ class Campaign < ActiveRecord::Base
   scope :current, ->{where('target_date >= ?', Date.today)}
   scope :past, ->{where('target_date < ?', Date.today)}
   scope :by_target_date, ->{order('target_date desc')}
-  scope :not_unsubscribed, ->{joins(book: :author).where('users.unsubscribed = ?', false)}
+  scope :not_unsubscribed, ->{joins("inner join books on books.id = campaigns.book_id inner join users on users.id = books.author_id and books.author_type = 'User'").
+                              where('users.unsubscribed = ?', false)}
 
   STATUSES = %w(Unstarted Active Collecting Collected Cancelling Cancelled)
   aasm(:state, whiny_transitions: false) do

@@ -11,7 +11,17 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w(angular.js jquery.js jquery-ui.js jquery_ujs.js wysiwyg.js wysiwyg.css)
 # Controllers
 Rails.application.config.assets.precompile += %w(bios.js books.js book_versions.js campaigns.js contributions.js fulfillments.js inquiries.js pages.js payments.js rewards.js subscribers.js)
-Rails.application.config.assets.precompile += %w(bios.js book_versions.js campaigns.js confirmations.js fulfillments.js house_rewards.js inquiries.js payments.js subscribers.js users.js).map{|c| "admin/#{c}"}
+Rails.application.config.assets.precompile += %w(bios.js
+                                                 books.js
+                                                 book_versions.js
+                                                 campaigns.js
+                                                 confirmations.js
+                                                 fulfillments.js
+                                                 house_rewards.js
+                                                 inquiries.js
+                                                 payments.js
+                                                 subscribers.js
+                                                 users.js).map{|c| "admin/#{c}"}
 # Angular apps
 Rails.application.config.assets.precompile += %w(controllers/contribution_controller.js)
 

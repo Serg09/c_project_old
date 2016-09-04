@@ -9,10 +9,10 @@
 #
 
 class Book < ActiveRecord::Base
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, polymorphic: true
   has_many :versions, class_name: 'BookVersion', dependent: :destroy, autosave: true
   has_many :campaigns
-  validates_presence_of :author_id
+  validates_presence_of :author_id, :author_type
 
   def active_campaign
     return nil unless author.active_bio

@@ -72,5 +72,5 @@
 .row
   .col-md-6
     .form-group
-      =f.submit 'Submit', class: 'btn btn-primary', title: 'Click here to submit the book.'
-      =link_to 'Back', books_path, class: 'btn btn-default', title: 'Click here to return to the list of books.'
+      =f.submit submit_caption, class: 'btn btn-primary', title: submit_tool_tip
+      =link_to 'Back', back_path, class: 'btn btn-default', title: back_tool_tip

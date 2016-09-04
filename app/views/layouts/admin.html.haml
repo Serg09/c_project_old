@@ -6,6 +6,8 @@
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
     = csrf_meta_tags
+    -if content_for :header
+      =yield :header
   %body
     =render 'shared/admin_navigation'
     #admin-content
@@ -22,3 +24,5 @@
         .row
           .col-md-12
             Crowdscribed 2014 | All Rights Reserved
+    -if content_for :after_footer
+      =yield :after_footer

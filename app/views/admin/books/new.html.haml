@@ -1,0 +1,8 @@
+-content_for :page_title do
+  New book for #{h @author.full_name}
+
+.container.container-default
+  .row
+    .col-md-12
+      =form_for([:admin, @author, @book_creator]) do |f|
+        =render 'book_versions/form_fields', f: f, book_resource: @book_creator, submit_caption: 'Save', submit_tool_tip: 'Click here to save this book.', back_path: admin_author_books_path(@author), back_tool_tip: 'Click here to return to the list of books for this author.'

@@ -3,4 +3,4 @@
 
 .container.container-default
   =form_for(@book_creator) do |f|
-    =render 'book_versions/form_fields', f: f, book_resource: @book_creator
+    =render 'book_versions/form_fields', f: f, book_resource: @book_creator, submit_caption: 'Submit', submit_tool_tip: 'Click here to submit this book.', back_path: books_path, back_tool_tip: 'Click here to return to the list of books.'
