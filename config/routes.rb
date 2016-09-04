@@ -117,6 +117,7 @@ Rails.application.routes.draw do
   get 'pages/our_team'
   get 'pages/author_portal'
   get 'pages/why'
+  get 'pages/community_standards'
   get 'pages/klososky'
   get 'pages/rewilding'
   get 'pages/discipling'
