@@ -7,8 +7,13 @@
       %table#books-table.table.table-striped
         %tr
           %th Title
+          %th &nbsp;
         -@books.each do |book|
           %tr
             %td= book.public_title
+            %td
+              .btn-group
+                =link_to edit_admin_book_path(book), class: 'btn btn-xs btn-info edit-button', title: 'Click here to edit this book.' do
+                  %span.glyphicon.glyphicon-pencil{ 'aria-hidden' => true }
       =will_paginate @subscribers, renderer: BootstrapPagination::Rails
       =link_to 'Add', new_admin_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book for this author.'

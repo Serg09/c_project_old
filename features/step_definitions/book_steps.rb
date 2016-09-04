@@ -10,6 +10,10 @@ Given /^(#{USER}) has a book titled "([^"]+)"$/ do |user, title|
   FactoryGirl.create(:approved_book, author: user, title: title)
 end
 
+Given /^(#{AUTHOR}) has a book titled "([^"]+)"$/ do |author, title|
+  FactoryGirl.create(:approved_book, author: author, title: title)
+end
+
 Given /^there is a book titled "([^"]+)"$/ do |title|
   FactoryGirl.create(:approved_book, title: title)
 end

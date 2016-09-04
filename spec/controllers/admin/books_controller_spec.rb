@@ -57,20 +57,6 @@ RSpec.describe Admin::BooksController, type: :controller do
       end
     end
 
-    describe 'PATCH #update' do
-      it 'redirects to the author books index page' do
-        patch :update, id: book, book: attributes
-        expect(response).to redirect_to admin_author_books_path(author)
-      end
-
-      it 'updates the book version' do
-        expect do
-          patch :update, id: book, book: attributes
-          book.approved_version.reload
-        end.to change(book.approved_version, :title).to('War and Peace')
-      end
-    end
-
     describe 'DELETE #destroy' do
       let!(:book) { FactoryGirl.create(:book, author: author) }
 
@@ -131,20 +117,6 @@ RSpec.describe Admin::BooksController, type: :controller do
       it 'redirects to the home page' do
         get :edit, id: book
         expect(response).to redirect_to root_path
-      end
-    end
-
-    describe 'PATCH #update' do
-      it 'redirects to the home page' do
-        patch :update, id: book, book: attributes
-        expect(response).to redirect_to root_path
-      end
-
-      it 'does not update the book version' do
-        expect do
-          patch :update, id: book, book: attributes
-          book.approved_version.reload
-        end.not_to change(book.approved_version, :title)
       end
     end
 

@@ -1,6 +1,6 @@
 class Admin::BookVersionsController < ApplicationController
   before_filter :authenticate_administrator!
-  before_filter :load_book_version, only: [:show, :approve, :reject]
+  before_filter :load_book_version, only: [:show, :update, :approve, :reject]
   respond_to :html
   layout 'admin'
 
@@ -10,6 +10,13 @@ class Admin::BookVersionsController < ApplicationController
 
   def show
     authorize! :show, @book_version
+  end
+
+  def update
+    @book_version.update_attributes book_version_params.except(:genres)
+    update_genres
+    flash[:notice] = 'The book was updated successfully.' if @book_version.save
+    respond_with @book_version, location: admin_author_books_path(@book_version.book.author_id)
   end
 
   def approve
@@ -40,5 +47,36 @@ class Admin::BookVersionsController < ApplicationController
 
   def load_book_version
     @book_version = BookVersion.find(params[:id])
+  end
+
+  def book_version_params
+    params.require(:book_version).permit(:title,
+                                         :short_description,
+                                         :long_description,
+                                         :cover_image_file,
+                                         :sample_file,
+                                         genres: [])
+  end
+
+  def set_diff(current, target)
+    to_add = target - current
+    to_remove = current - target
+    [to_add, to_remove]
+  end
+
+  def genres_from_params
+    genre_ids = params[:book_version][:genres]
+    if genre_ids
+      Genre.find(genre_ids)
+    else
+      []
+    end
+  end
+
+  def update_genres
+    to_add, to_remove = set_diff(@book_version.genres,
+                                 genres_from_params)
+    to_add.each{|g| @book_version.genres << g}
+    to_remove.each{|g| @book_version.genres.delete g}
   end
 end

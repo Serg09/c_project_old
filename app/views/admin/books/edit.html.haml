@@ -1,2 +1,8 @@
-%h1 Admin::Books#edit
-%p Find me in app/views/admin/books/edit.html.haml
+-content_for :page_title do
+  Edit book
+
+.container.container-default
+  .row
+    .col-md-12
+      =form_for([:admin, @book.approved_version]) do |f|
+        =render 'book_versions/form_fields', f: f, book_resource: @book.approved_version, submit_caption: 'Save', submit_tool_tip: 'Click here to save this book.', back_path: admin_author_books_path(@author), back_tool_tip: 'Click here to return to the list of books for this author.'
