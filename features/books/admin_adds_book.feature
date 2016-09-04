@@ -1,4 +1,3 @@
-@wip
 Feature: Add a book administratively
   As an administrator
   In order to information available for a book for which the author does not have a user account

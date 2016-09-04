@@ -1,13 +1,17 @@
 class Admin::BooksController < ApplicationController
   respond_to :html
+  layout 'admin'
 
+  before_action :authenticate_administrator!
   before_action :load_author, only: [:index, :new, :create]
   before_action :load_book, only: [:edit, :update, :destroy]
 
   def index
+    @books = @author.books.paginate(page: params[:page])
   end
 
   def new
+    @book_creator = BookCreator.new @author
   end
 
   def create
@@ -27,6 +31,8 @@ class Admin::BooksController < ApplicationController
   end
 
   def destroy
+    flash[:notice] = 'The book was removed successfully.' if @book.destroy
+    respond_with @book, location: admin_author_books_path(@author)
   end
 
   private

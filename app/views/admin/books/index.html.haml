@@ -1,2 +1,14 @@
-%h1 Admin::Books#index
-%p Find me in app/views/admin/books/index.html.haml
+-content_for :page_title do
+  Books for #{h @author.full_name}
+
+.container.container-default
+  .row
+    .col-md-6
+      %table#books-table.table.table-striped
+        %tr
+          %th Title
+        -@books.each do |book|
+          %tr
+            %td= book.public_title
+      =will_paginate @subscribers, renderer: BootstrapPagination::Rails
+      =link_to 'Add', new_admin_author_book_path(@author), class: 'btn btn-primary', title: 'Click here to add a new book for this author.'

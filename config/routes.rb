@@ -73,7 +73,7 @@ Rails.application.routes.draw do
       resources :books, only: [:index, :new, :create]
     end
     resources :bios, only: [:edit, :update]
-    resources :books, only: [:edit, :update]
+    resources :books, only: [:edit, :update, :destroy]
     resources :inquiries, only: [:index, :show] do
       member do
         patch :archive

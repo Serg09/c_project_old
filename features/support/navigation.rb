@@ -22,7 +22,7 @@ module Navigation
     when "the main menu" then "#main-menu"
     when "the status menu" then "#status-nav"
     when "the main content" then "#main-content"
-    when "the admin content" then "#admin-content"
+    when /the admin(?:istration)? content/ then "#admin-content"
     when "the page title" then "#page-title"
     when "the book title" then "#book-title"
     when /the notifications? area/ then "#notifications"
