@@ -13,8 +13,10 @@ SimpleNavigation::Configuration.run do |navigation|
       about.item :our_team, 'Our team', pages_our_team_path
     end
     primary.item :services, 'Services' do |services_item|
+      services_item.item :fees_and_expenses, 'Fees & Expenses', pages_fees_and_expenses_path
       services_item.item :a_la_carte, 'A La Carte Pricing', pages_a_la_carte_pricing_path
       services_item.item :printing_costs, 'Printing Costs', pages_printing_costs_path
+      services_item.item :traditional_vs_pod, 'Traditional vs. POD', pages_traditional_vs_pod_path
       services_item.item :author_portal, 'Author Portal', pages_author_portal_path
       services_item.item :faqs, 'FAQs', pages_faqs_path
     end
