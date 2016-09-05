@@ -21,6 +21,7 @@ FactoryGirl.define do
 
     factory :rejected_book_version do
       status 'rejected'
+      comments { Faker::Lorem.paragraph(1) }
     end
   end
 end

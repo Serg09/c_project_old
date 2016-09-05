@@ -9,6 +9,7 @@ FactoryGirl.define do
 
     factory :rejected_bio do
       status 'rejected'
+      comments { Faker::Lorem.paragraphs(1) }
     end
 
     factory :superseded_bio do
