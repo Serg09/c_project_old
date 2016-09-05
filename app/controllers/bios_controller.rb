@@ -23,16 +23,13 @@ class BiosController < ApplicationController
 
   def index
     if user_signed_in?
-      # Show the most recent non-rejected bio
-      @bio = @author.working_bio
+      # Show the most recent bio
+      @bio = @author.bios.order('created_at desc').first
       if @bio
         render :show
       else
         redirect_to new_bio_path
       end
-    elsif administrator_signed_in?
-      redirect_to admin_bios_path
-      return
     else
       @bio = @author.try(:active_bio)
       not_found! unless @bio
@@ -47,9 +44,7 @@ class BiosController < ApplicationController
 
   def show
     not_found! unless @bio.approved? || can?(:show, @bio)
-    respond_with @bio do |format|
-      format.html{ render :show, layout: administrator_signed_in? ? 'admin' : 'application' }
-    end
+    respond_with @bio
   end
 
   def edit
@@ -63,7 +58,8 @@ class BiosController < ApplicationController
     else
       @bio.update_attributes bio_params
     end
-    flash[:notice] = "Your bio has been updated successfully and is waiting for administrative approval." if @bio.save
+    succeeded = @bio.rejected? ? @bio.resubmit! : @bio.save
+    flash[:notice] = "Your bio has been updated successfully and is waiting for administrative approval." if succeeded
     respond_with @bio, location: bio_path(@bio)
   end
 

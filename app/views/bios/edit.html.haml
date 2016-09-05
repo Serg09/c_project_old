@@ -8,3 +8,10 @@
         =render 'form_fields', f: f, bio: @bio, submit_caption: 'Submit', cancel_path: bios_path
     .col-md-6
       =render 'hint'
+      -if @bio.rejected? && @bio.comments.present?
+        .panel.panel-danger
+          .panel-heading Bio Rejected
+          .panel-body
+            This bio was rejected because it does not comply with our
+            #{h link_to 'community standards', pages_community_standards_path, target: '_blank'}.
+            %p= @bio.comments
