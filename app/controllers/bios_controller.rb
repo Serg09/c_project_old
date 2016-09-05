@@ -60,7 +60,7 @@ class BiosController < ApplicationController
     end
     succeeded = @bio.rejected? ? @bio.resubmit! : @bio.save
     flash[:notice] = "Your bio has been updated successfully and is waiting for administrative approval." if succeeded
-    respond_with @bio, location: bio_path(@bio)
+    respond_with @bio, location: (@bio.id ? bio_path(@bio) : nil)
   end
 
   private
