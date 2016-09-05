@@ -36,6 +36,11 @@ Feature: Approve a bio
 
   Scenario: An administrator rejects a pending bio
     When I click "Reject" within the admin content
+    Then I should see "Reject the Bio for John Doe" within the page title
+
+    When I fill in "Comments" with "Try again"
+    And I click "Reject"
+
     Then I should see "The bio has been rejected successfully." within the notification area
     And I should see the following bios table
       | Author   | Date submitted |

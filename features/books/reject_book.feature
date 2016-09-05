@@ -23,6 +23,10 @@ Feature: Reject a book
     Then I should see "I Like Books" within the page title
 
     When I click "Reject" within the admin content
+    Then I should see "Reject I Like Books" within the page title
+    Then I fill in "Comment" with "I don't like the looks of this."
+    And I click "Reject"
+
     Then I should see "Books" within the page title
     And I should see "The book has been rejected successfully." within the notification area
     And "john@doe.com" should receive an email with subject "Your book has been rejected"

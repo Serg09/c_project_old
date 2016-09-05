@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def reject_path(resource)
-    "reject_admin_#{resource.class.name.underscore}_path"
+    "prereject_admin_#{resource.class.name.underscore}_path"
   end
 
   def render_status_nav(statuses, &path_helper)

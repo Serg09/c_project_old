@@ -1,0 +1,13 @@
+-content_for :page_title do
+  Reject the Bio for #{h @bio.author.full_name}
+
+.container.container-default
+  .row
+    .col-md-6
+      =form_for(@bio, url: reject_admin_bio_path(@bio)) do |f|
+        .form-group
+          =f.label :comments, class: 'control-label'
+          =f.text_area :comments, class: 'form-control', autofocus: true
+          =help_blocks(@bio, :comments)
+        =f.submit 'Reject', class: 'btn btn-primary', title: 'Click here to reject the book.'
+        =link_to 'Cancel', admin_book_version_path(@bio), class: 'btn btn-default', title: 'Click to to return to the approval form.'

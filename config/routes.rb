@@ -84,12 +84,14 @@ Rails.application.routes.draw do
     resources :bios, only: [:index, :show] do
       member do
         patch :approve
+        get :prereject
         patch :reject
       end
     end
     resources :book_versions, only: [:show, :index] do
       member do
         patch :approve
+        get :prereject
         patch :reject
       end
     end
