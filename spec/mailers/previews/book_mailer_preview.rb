@@ -2,10 +2,10 @@
 class BookMailerPreview < ActionMailer::Preview
 
   def approval
-    BookMailer.submission Book.approved.first || FactoryGirl.create(:approved_book)
+    BookMailer.approval BookVersion.approved.first || FactoryGirl.create(:approved_book_version)
   end
 
   def rejection
-    BookMailer.rejection Book.rejected.first || FactoryGirl.create(:rejected_book)
+    BookMailer.rejection BookVersion.rejected.first || FactoryGirl.create(:rejected_book_version)
   end
 end
