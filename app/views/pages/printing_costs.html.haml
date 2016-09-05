@@ -1,0 +1,33 @@
+-content_for :page_title do
+  Printing costs
+
+.container.container-default
+  %h1 Printing Costs
+  .row
+    .col-md-8
+      %p
+        Cost of printing varies by volume. There is a per-order handling fee
+        which is a flat charge, regardless of the number of books printed of
+        that title. In the following table and graph, you can see that per-unit
+        cost drops significantly as volume increases. The fee is per order,
+        therefore if multiple titles are ordered by one person at once
+        (therefore packaged together), the fee is the same.
+        %span{ title: 'Shipping is UPS ground by default. 2nd day air and overnight are available for an additional charge. There also is a 30% shipping discount for orders 250-499 lbs, and 50% discount 500 lbs and higher.' }
+          Shipping
+          %sup 1
+        and taxes aren’t included as those are absorbed by the customer. This is
+        based on economy printing option; express and rush service each are
+        ten percent additional, respectively.
+
+      =render 'printing_costs_charts'
+      
+  .row
+    .col-md-8
+      %table.footnotes
+        %tr
+          %th 1
+          %td
+            %p
+              Shipping is UPS ground by default. 2nd day air and overnight are
+              available for an additional charge. There also is a 30% shipping
+              discount for orders 250-499 lbs, and 50% discount 500 lbs and higher.
