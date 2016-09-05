@@ -1,0 +1,9 @@
+.panel.panel-danger
+  .panel-heading Rejected
+  .panel-body
+    %p
+      This book has been rejected by the administrator because it does
+      not conform to our
+      #{h link_to 'community standards', pages_community_standards_path, target: '_blank' }.
+    -if @book_version.comments.present?
+      %p= @book_version.comments
