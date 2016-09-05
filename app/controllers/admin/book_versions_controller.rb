@@ -1,6 +1,6 @@
 class Admin::BookVersionsController < ApplicationController
   before_filter :authenticate_administrator!
-  before_filter :load_book_version, only: [:show, :update, :approve, :reject]
+  before_filter :load_book_version, only: [:show, :update, :approve, :prereject, :reject]
   respond_to :html
   layout 'admin'
 
@@ -29,8 +29,12 @@ class Admin::BookVersionsController < ApplicationController
     end
   end
 
+  def prereject
+  end
+
   def reject
     authorize! :reject, @book_version
+    @book_version.update_attributes rejection_params
     if @book_version.reject!
       BookMailer.rejection(@book_version).deliver_now unless @book_version.author.unsubscribed?
       redirect_to admin_book_versions_path, notice: 'The book has been rejected successfully.'
@@ -56,6 +60,10 @@ class Admin::BookVersionsController < ApplicationController
                                          :cover_image_file,
                                          :sample_file,
                                          genres: [])
+  end
+
+  def rejection_params
+    params.require(:book_version).permit(:comments)
   end
 
   def set_diff(current, target)

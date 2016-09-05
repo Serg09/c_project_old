@@ -45,9 +45,9 @@ RSpec.describe BiosController, type: :controller do
       let!(:bio) { FactoryGirl.create(:rejected_bio, author: author) }
 
       describe 'get :index' do
-        it 'redirects to the new bio path' do
+        it 'is successful' do
           get :index
-          expect(response).to redirect_to new_bio_path
+          expect(response).to have_http_status :success
         end
       end
     end

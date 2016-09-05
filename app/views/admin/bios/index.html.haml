@@ -11,6 +11,6 @@
           %th Date submitted
         -@bios.each do |bio|
           %tr
-            %td= link_to bio.author.full_name, bio_path(bio)
+            %td= link_to bio.author.full_name, admin_bio_path(bio)
             %td= format_date(bio.created_at)
       =will_paginate @bios, renderer: BootstrapPagination::Rails

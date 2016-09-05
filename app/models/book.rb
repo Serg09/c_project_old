@@ -60,10 +60,12 @@ class Book < ActiveRecord::Base
     @working_version = nil
   end
 
+  def most_recent_version
+    versions.order('created_at desc').first
+  end
+
   def rejected?
-    rejected_version.present? &&
-      approved_version.blank? &&
-      pending_version.blank?
+    most_recent_version.rejected?
   end
 
   def rejected_version

@@ -1,6 +1,6 @@
 class Admin::BiosController < ApplicationController
   before_action :authenticate_administrator!
-  before_action :load_bio, only: [:approve, :reject, :edit, :update]
+  before_action :load_bio, only: [:show, :approve, :prereject, :reject, :edit, :update]
   before_action :load_author, only: [:new, :create]
   layout 'admin'
   respond_to :html
@@ -33,24 +33,32 @@ class Admin::BiosController < ApplicationController
   def approve
     authorize! :approve, @bio
     if @bio.approve!
-      redirect_to bios_path, notice: "The bio has been approved successfully."
       BioMailer.approval(@bio).deliver_now unless @bio.author.unsubscribed?
+      redirect_to admin_bios_path, notice: "The bio has been approved successfully."
     else
       render :show
     end
   end
 
+  def prereject
+  end
+
   def reject
     authorize! :reject, @bio
+    @bio.update_attributes rejection_attributes
     if @bio.reject!
-      redirect_to bios_path, notice: "The bio has been rejected successfully."
       BioMailer.rejection(@bio).deliver_now unless @bio.author.unsubscribed?
+      redirect_to admin_bios_path, notice: "The bio has been rejected successfully."
     else
       render :show
     end
   end
 
   private
+
+  def rejection_attributes
+    params.require(:bio).permit(:comments)
+  end
 
   def bio_params
     params.require(:bio).permit(:text, :photo_file, links_attributes: [:site, :url])

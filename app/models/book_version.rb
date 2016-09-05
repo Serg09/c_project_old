@@ -42,6 +42,8 @@ class BookVersion < ActiveRecord::Base
      :short_description,
      :long_description,
      :cover_image_id,
+     :status,
+     :comments,
      :sample_id].each do |field|
        result.send("#{field}=", self.send(field))
      end

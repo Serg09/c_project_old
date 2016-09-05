@@ -2,5 +2,7 @@
   Edit book
 
 .container.container-default
+  -if @book_version.rejected?
+    =render 'rejection_notice', book_version: @book_version
   =form_for([@book, @book_version]) do |f|
     =render 'form_fields', f: f, book_resource: @book_version, submit_caption: 'Submit', submit_tool_tip: 'Click here to submit this book.', back_path: books_path, back_tool_tip: 'Click here to return to the list of books.'

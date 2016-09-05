@@ -28,6 +28,10 @@ module Approvable
       event :supersede do
         transitions from: :approved, to: :superseded
       end
+
+      event :resubmit do
+        transitions from: :rejected, to: :pending
+      end
     end
 
     scope :by_date, -> { order('created_at DESC') }

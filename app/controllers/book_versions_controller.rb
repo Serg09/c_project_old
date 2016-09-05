@@ -17,7 +17,7 @@ class BookVersionsController < ApplicationController
       redirect_to edit_book_version_path(@book.pending_version)
       return
     end
-    @book_version = @book.working_version.new_copy
+    @book_version = @book.most_recent_version.new_copy
     authorize! :create, @book_version
   end
 
