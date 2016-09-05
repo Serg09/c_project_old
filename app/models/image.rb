@@ -30,7 +30,7 @@ class Image < ActiveRecord::Base
     Digest::SHA1.hexdigest(data)
   end
 
-  def self.find_or_create_from_file(file, user)
+  def self.find_or_create_from_file(file, owner)
     file.rewind if file.eof?
     file_data = file.read
     if file_data.length == 0
@@ -49,12 +49,12 @@ class Image < ActiveRecord::Base
 
     # see if the image is already present in the database
     hash_id = hash_id(data)
-    image = find_by(hash_id: hash_id, owner_id: user.id)
+    image = find_by(hash_id: hash_id, owner_id: owner.id, owner_type: owner.class.name)
 
     # create the image record if it doesn't exist
     unless image
       image_binary = ImageBinary.create!(data: data)
-      image = create!(owner: user,
+      image = create!(owner: owner,
                       image_binary: image_binary,
                       hash_id: hash_id,
                       mime_type: file.content_type)
