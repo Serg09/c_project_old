@@ -1,5 +1,5 @@
 -content_for :page_title do
-  Fees and Expenses
+  Book Prices
 
 .container.container-default
   .row
@@ -42,9 +42,9 @@
         ten percent additional, respectively. If an author orders copies of
         their own book to ship directly to themselves, Crowdscribed adds a
         25% markup to the printing cost, since there is no net revenue in
-        these cases.
-
-      =image_tag 'pages/printing_costs_graph.png', class: 'img img-responsive'
+        these cases. For a more detailed explanation of printing costs,
+        select “Printing Costs” under the “Services tab", or
+        #{h link_to 'click here', pages_printing_costs_path }.
 
       %table.footnotes
         %tr
