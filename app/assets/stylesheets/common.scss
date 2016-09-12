@@ -1,6 +1,6 @@
 @import 'mixins';
 
-#top_bar {
+#top-bar {
   height: 45px;
   background: #00ADDE;
   padding-top: .4em;
@@ -9,7 +9,7 @@
   a {
     color: #FFF;
   }
-  font-size: larger;
+  font-size: 90%;
 }
 
 #main-content {
@@ -22,7 +22,6 @@
 .nav.navbar-nav li a {
   text-transform: uppercase;
   font-family: 'Maven-Pro', arial, helvetica, sans-serif;
-  font-size: 16px;
 }
 
 .title-bar {
@@ -37,7 +36,7 @@ h1 {
   font-family: "Quicksand", Arial, Helvetica, sans-serif;
   color: #F90;
   font-weight: bold;
-  font-size: 26px;
+  font-size: 180%;
   line-height: 27px;
 }
 
@@ -45,14 +44,14 @@ h2 {
   font-family: "Quicksand", Arial, Helvetica, sans-serif;
   color: #333;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 150%;
   line-height: 24px;
 }
 
 body {
   color: #747474;
   font-family: "PT-Sans", Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 20px;
   p {
     margin-bottom: 20px;
@@ -91,7 +90,7 @@ body > footer {
   padding: 2em 0;
   text-shadow: 1px 2px 1px #000;
   font-family: 'PT Sans', Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-size: 95%;
   line-height: 20px;
   text-align: center;
   a {
@@ -151,6 +150,7 @@ ul.footer-menu{
 }
 
 table.footnotes {
+  font-size: smaller;
   margin-top: 1em;
   border-top: 1px solid #CCC;
   th {
