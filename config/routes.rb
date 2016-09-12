@@ -113,7 +113,7 @@ Rails.application.routes.draw do
 
   get 'pages/welcome'
   get 'pages/package_pricing'
-  get 'pages/fees_and_expenses'
+  get 'pages/book_prices'
   get 'pages/a_la_carte_pricing'
   get 'pages/traditional_vs_pod'
   get 'pages/faqs'
