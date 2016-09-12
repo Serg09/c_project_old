@@ -35,7 +35,7 @@ Given /^I am signed in as an? (?:author|user) with "([^\/]+)\/([^"]+)"$/ do |ema
     fill_in 'Password', with: password
     click_on 'Sign in'
   end
-  within('#top_bar') do
+  within('#top-bar') do
     expect(page).to have_content ('Sign out')
   end
 end
