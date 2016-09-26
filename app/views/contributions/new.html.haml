@@ -37,10 +37,10 @@
           .col-sm-4{ 'ng-if' => 'reward.photo_id' }
             %img.img.img-responsive.img-rounded{ 'ng-src' => '/images/{{reward.photo_id}}' }
         .row.reward-option{ 'ng-class' => '{selected: !selectedRewardId}' }
-          .col-sm-2
+          .col-sm-3
             %label{ for: 'custom_amount', 'aria-hidden' => true } Amount
             %input#custom_amount.form-control.custom-reward-amount{ type: 'number', 'ng-model' => 'customContributionAmount', 'ng-focus' => 'clearSelection()' }
-          .col-sm-10
+          .col-sm-9
             .reward-header Choose your amount
             %div{ 'ng-show' => 'availableRewards.length > 0' }
               Select one of the following:
