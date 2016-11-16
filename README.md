@@ -47,9 +47,9 @@ Setup the database
 rake db:setup
 ```
 
-Start the web server and the resque workers
+Start the web server and the resque workers. (You'll need to have the [heroku tookbelt](https://blog.heroku.com/the_heroku_toolbelt) installed.)
 ```
-foreman start
+heroku local -p 3000
 ```
 
 ### Contribution guidelines ###
