@@ -11,9 +11,15 @@ http://www.crowdscribed.com/
 sudo apt-get install postgresql postgresql-contrib
 sudo -u postgres createuser --superuser $USER
 sudo -u postgres psql
+```
+Add a new role "app_user"
+```
+CREATE ROLE app_user SUPERUSER CREATEDB CREATEROLE LOGIN;
+```
+[Install PostgreSQL](https://help.ubuntu.com/community/PostgreSQL) client and server;
 
+```
 sudo apt-get install postgresql-client
-
 sudo apt-get install postgresql-server-dev-9.5 # or whatever version is current
 ```
 
@@ -34,8 +40,15 @@ sudo apt-get install redis-server
 
 Clone the repo
 ```
-git clone git@bitbucket.org:dgknght/crowdscribe.git
+git clone git@bitbucket.org:crowdscribed/crowdscribed.git
 ```
+
+If you see an error like this: ```Connection to bitbucket.org closed by remote host.
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights and the repository exists.```
+ 
+Check firewall settings. SSH connection should be set to port 22 
+
 
 Install gems
 ```
