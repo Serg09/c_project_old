@@ -97,5 +97,4 @@ Confirm the deployment at http://staging.crowdscribed.com.
 
 ### Who do I talk to? ###
 
-* [Doug Knight](mailto:doug.knight@crowdscribed.com)
-* [Christian Piatt](mailto:christian.piatt@crowdscribed.com)
+* [Sergey Skumatov](mailto:sskumatov@gmail.com)
