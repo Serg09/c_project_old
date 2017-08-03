@@ -16,7 +16,7 @@
     It is OK if my advisor contacts me by phone
 .form-group{ :class => form_group_class(author, :topic) }
   =f.label :topic, 'What interests you most about Crowdscribed?', class: 'control-label'
-  =f.text_area:topic, class: 'form-control'
+  =f.text_area :topic, class: 'form-control'
   =help_blocks author, :package_id
 .form-group{ :class => form_group_class(author, :username) }
   =f.label :username, class: 'control-label'
