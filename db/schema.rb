@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160905030200) do
+ActiveRecord::Schema.define(version: 20170206042733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20160905030200) do
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
     t.text     "comments"
+    t.string   "subtitle",          limit: 255
   end
 
   create_table "book_versions_genres", id: false, force: :cascade do |t|
@@ -152,8 +153,7 @@ ActiveRecord::Schema.define(version: 20160905030200) do
     t.boolean  "delivered",                   default: false, null: false
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.string   "first_name",      limit: 100
-    t.string   "last_name",       limit: 100
+    t.string   "recipient",       limit: 100
   end
 
   add_index "fulfillments", ["contribution_id"], name: "index_fulfillments_on_contribution_id", unique: true, using: :btree
@@ -225,6 +225,17 @@ ActiveRecord::Schema.define(version: 20160905030200) do
 
   add_index "payments", ["external_id"], name: "index_payments_on_external_id", unique: true, using: :btree
 
+  create_table "products", force: :cascade do |t|
+    t.integer  "book_id",                null: false
+    t.string   "caption",    limit: 256, null: false
+    t.string   "sku",        limit: 40,  null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "products", ["book_id", "caption"], name: "index_products_on_book_id_and_caption", unique: true, using: :btree
+  add_index "products", ["sku"], name: "index_products_on_sku", unique: true, using: :btree
+
   create_table "rewards", force: :cascade do |t|
     t.integer  "campaign_id",                                           null: false
     t.string   "description",               limit: 100,                 null: false
@@ -235,6 +246,7 @@ ActiveRecord::Schema.define(version: 20160905030200) do
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.integer  "photo_id"
+    t.integer  "quantity",                              default: 1,     null: false
   end
 
   add_index "rewards", ["campaign_id", "description"], name: "index_rewards_on_campaign_id_and_description", unique: true, using: :btree

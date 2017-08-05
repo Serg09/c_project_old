@@ -5,7 +5,7 @@ ruby '2.2.4'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0.6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -28,7 +28,7 @@ gem 'devise'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
-gem 'pg'
+gem 'pg', '~> 0.18.4'
 gem 'cancan'
 gem 'simple-navigation'
 gem 'will_paginate-bootstrap'
@@ -44,6 +44,7 @@ gem 'wysiwyg-rails'
 gem 'angularjs-rails'
 gem 'ng-rails-csrf'
 gem 'underscore-rails'
+gem 'sprockets', '3.6.3'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
